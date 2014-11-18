@@ -45,7 +45,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
             <li><a href="#">Settings</a></li>
-            <li><a href="{{ action('admin.logout') }}">Logout</a></li>
+            <li><a href="<% action('admin.logout') %>">Logout</a></li>
           </ul>
           <form class="navbar-form navbar-right">
             <input type="text" class="form-control" placeholder="Search...">

@@ -4,7 +4,7 @@
 
 var signControllers = angular.module('signControllers', []);
 
-signControllers.controller('SignCtrl', ['$scope', '$location', 'SignIn', function($scope, $location, SignIn) {
+signControllers.controller('SignCtrl', ['$scope', '$window', 'SignIn', function($scope, $window, SignIn) {
     $scope.alert = undefined;
 
     $scope.closeAlert = function() {
@@ -19,16 +19,14 @@ signControllers.controller('SignCtrl', ['$scope', '$location', 'SignIn', functio
             var success = function(data) {
                 console.log(data);
                 if(data[0] === true){
-                    //redirect to dashboard
-                    //$location.path('/adm');
-                    //window.location.reload();
+                    $window.location.href = '/adm/';
                 } else {
-                    $scope.alert = { msg: 'Bad login or password.', type: 'danger'};
+                    $scope.alert = { msg: data[1], type: 'danger'};
                 }
             };
 
             var error = function(data) {
-
+                $scope.alert = { msg: 'Some problems.', type: 'danger'};
             };
 
             SignIn.signIn($scope.user, success, error);
