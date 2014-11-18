@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="ino.backend.dashboard">
+<html lang="en" ng-app="adminApp">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,8 +19,14 @@
 
     <script type="text/javascript" src="/admin/vendors/angular/angular.min.js"></script>
     <script type="text/javascript" src="/admin/vendors/ui-bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>
-    <script type="text/javascript" src="/admin/js/app.js"></script>
-
+    <script src="/admin/vendors/angular/angular-route.min.js" type="text/javascript"></script>
+    <script src="/admin/vendors/angular/angular-resource.min.js" type="text/javascript"></script>
+    <script src="/admin/js/app.js" type="text/javascript"></script>
+    <script src="/admin/js/controllers.js" type="text/javascript"></script>
+    <script src="/admin/js/services.js" type="text/javascript"></script>
+    
+    
+    
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -57,20 +63,16 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
-            <li class="active"><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-            <li><a href="#"><i class="fa fa-users"></i> Users</a></li>
-            <li><a href="#"><i class="fa fa-newspaper-o"></i> Pages</a></li>
-            <li><a href="#"><i class="fa fa-list"></i> Products</a></li>
-            <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+          <ul class="nav nav-sidebar" ng-controller="activCtrl">
+            <li class="@{{cl[0]}}" ng-click="active(0)"><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li class="@{{cl[1]}}" ng-click="active(1)"><a href="#/users"><i class="fa fa-users"></i> Users</a></li>
+            <li class="@{{cl[2]}}" ng-click="active(2)"><a href="#/pages"><i class="fa fa-newspaper-o"></i> Pages</a></li>
+            <li class="@{{cl[3]}}" ng-click="active(3)"><a href="#/products"><i class="fa fa-list"></i> Products</a></li>
+            <li class="@{{cl[4]}}" ng-click="active(4)"><a href="#/settings"><i class="fa fa-gear"></i> Settings</a></li>
           </ul>
         </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          
-
-          @section('content')
-
-          @show
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-view>
+            
         </div>
       </div>
     </div>

@@ -46,3 +46,6 @@ Route::get('/test', function(){
     echo action('admin.signin');
     
 });
+
+
+Route::get('/angular/', ['uses' => 'AngularController@serve']);
