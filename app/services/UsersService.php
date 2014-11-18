@@ -1,0 +1,37 @@
+<?php
+
+
+class UsersService
+{
+    /**
+     *
+     * @var PermissionsService 
+     */
+    protected $ps = null;
+
+
+    public function __construct(PermissionsService $ps) {        
+        $this->ps = $ps;
+    }
+    
+    
+    /**
+     * Register user
+     * 
+     * @param string $email
+     * @param string $password
+     * @return \User
+     */
+    public function registerUser($email, $password)
+    {
+        $user = new User;
+        $user->email = $email;
+        $user->password = Hash::make($password);
+        
+        $user->save();
+        
+        //$this->ps->addToGroup();
+        return $user;
+    }
+    
+}
