@@ -21,8 +21,33 @@ class AuthController extends \Controller
     {
         return View::make('admin.signin');
     }
-    
+
     public function postSignin()
+    {
+        $response = [true, 'Success'];
+
+        $v = Validator::make(Input::all(), self::$signinValidation);
+
+        if($v->fails()){
+            $response = [
+                false,
+                'Invalid form data'
+            ];
+        }
+
+        $loginInfo = ['email' => Input::get('email'), 'password' => Input::get('password')];
+
+        if(!Auth::attempt($loginInfo, Input::get('remember'))){
+            $response = [
+                false,
+                'Invalid credentials'
+            ];
+        }
+
+        return \Response::json($response);
+    }
+
+    /*public function postSignin()
     {
         $v = Validator::make(Input::all(), self::$signinValidation);
         
@@ -43,7 +68,7 @@ class AuthController extends \Controller
         }
         
         return Redirect::intended(action('admin.dashboard'));
-    }
+    }*/
     
     public function getLogout()
     {

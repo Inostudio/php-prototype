@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="signApp">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -59,6 +59,12 @@
 
         </style>
 
+        <script src="/admin/vendors/angular/angular.min.js"></script>
+        <script src="/admin/vendors/ui-bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>
+        <script src="/admin/js/signApp.js"></script>
+        <script src="/admin/js/controllers/signControllers.js"></script>
+        <script src="/admin/js/services/signServices.js"></script>
+
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
           <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -68,34 +74,37 @@
 
     <body>
 
-        <div class="container">
-            
-            
+        <div class="container" ng-controller="SignCtrl">
 
-            <?=Form::open(['route' => 'admin.signin', 'method' => 'post', 'class' => 'form-signin']) ?>
 
-                @if($errors->has())
-                <div class="alert alert-danger col-sm-12">
-                    @foreach ($errors->all(':message') as $m)
-                        <?=$m?><br />
-                    @endforeach
+            <form class="form-signin" name="signForm" ng-submit="submitForm(signForm.$valid)" novalidate>
+                <div>
+                    <h2 class="form-signin-heading">Please sign in</h2>
                 </div>
-                @endif            
-            
-                @if (Session::has('signin_error'))
-                <div class="alert alert-danger">{{{Session::get('signin_error')}}}</div>
-                @endif
-                <h2 class="form-signin-heading">Please sign in</h2>
-                <label for="inputEmail" class="sr-only">Email address</label>
-                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" name="email" required autofocus>
-                <label for="inputPassword" class="sr-only">Password</label>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required>
+
+                <div>
+                    <alert ng-show="(alert !== undefined)" type="{{alert.type}}" close="closeAlert()">{{alert.msg}}</alert>
+                </div>
+
+                <div class="form-group" ng-class="{ 'has-error' : (signForm.email.$invalid) && submitted }">
+                    <input type="email" class="form-control" placeholder="Email address" name="email" ng-model="user.email" required autofocus ng-required="true" ng-change="closeAlert()">
+                    <span class="help-block" ng-show="(signForm.email.$error.required) && submitted">Email must be not empty</span>
+                    <span class="help-block" ng-show="(signForm.email.$invalid && !signForm.email.$error.required) && submitted">Email invalid</span>
+                </div>
+
+                <div class="form-group" ng-class="{ 'has-error' : (signForm.password.$invalid) && submitted }">
+                    <input type="password" class="form-control" placeholder="Password" name="password" required  ng-model="user.password" minlength="3" maxlength="32" ng-required="true" ng-change="closeAlert()">
+                    <span class="help-block" ng-show="(signForm.password.$error.required) && submitted">Password must be not empty</span>
+                    <span class="help-block" ng-show="(signForm.password.$error.minlength) && submitted">Password is too short.</span>
+                    <span class="help-block" ng-show="(signForm.password.$error.maxlength) && submitted">Password is too long.</span>
+                </div>
+
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="remember" value="1"> Remember me
+                        <input type="checkbox" name="remember" value="1" ng-model="user.remember"> Remember me
                     </label>
                 </div>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="signForm.$invalid && submitted">Sign in</button>
             </form>
 
         </div> <!-- /container -->
