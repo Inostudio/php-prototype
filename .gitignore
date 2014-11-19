@@ -6,7 +6,7 @@ composer.lock
 .env.php
 .DS_Store
 Thumbs.db
-<<<<<<< HEAD
+_ide_helper.php
 /nbproject/private/
 nbproject/
 .idea/
