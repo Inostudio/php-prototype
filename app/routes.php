@@ -25,6 +25,10 @@ Route::group(['namespace' => 'Front'], function(){
         'getSignup' => 'front.signup',
         'getLogout' => 'front.logout'
     ]);
+
+    Route::controller('profile', 'ProfileController', [
+        'getShow' => 'front.profile'
+    ]);
     
 });
 

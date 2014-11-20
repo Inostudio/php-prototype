@@ -18,6 +18,7 @@
     <!-- Bootstrap core CSS -->
     <link href="/front/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/front/css/sidebar.css">
 
     <!-- Custom styles for this template -->
     <link href="/front/css/main.css" rel="stylesheet">
@@ -46,7 +47,7 @@
           
         <ul class="nav navbar-nav pull-right">
             @if (Auth::user())
-                <li><a href="#"><i class="fa fa-user"></i> <% Auth::user()->email %></a></li>
+                <li><a href="<% action('front.profile') %>"><i class="fa fa-user"></i> <% Auth::user()->email %></a></li>
                 <li><a href="<% action('front.logout') %>"><i class="fa fa-signout"></i> Logout</a></li>
             @else
                 <li <?=$routeName=='front.signin' ? 'class="active"' : ''; ?>><a href="<% action('front.signin') %>"><i class="fa fa-sign-in"></i> Signin</a></li>
