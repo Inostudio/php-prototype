@@ -83,20 +83,35 @@
                 </div>
 
                 <div>
-                    <alert ng-show="(alert !== undefined)" type="{{alert.type}}" close="closeAlert()">{{alert.msg}}</alert>
+                    <alert ng-show="(alert !== undefined)" type="{{alert.type}}" close="closeAlert()">{{alert.msg}}</aler>
                 </div>
 
                 <div class="form-group" ng-class="{ 'has-error' : (signForm.email.$invalid) && submitted }">
-                    <input type="email" class="form-control" placeholder="Email address" name="email" ng-model="user.email" required autofocus ng-required="true" ng-change="closeAlert()">
-                    <span class="help-block" ng-show="(signForm.email.$error.required) && submitted">Email must be not empty</span>
-                    <span class="help-block" ng-show="(signForm.email.$invalid && !signForm.email.$error.required) && submitted">Email invalid</span>
+                    <input type="email" class="form-control" placeholder="Email address" name="email"
+                    ng-model="user.email" required autofocus ng-required="true" ng-change="closeAlert()">
+
+                    <span class="help-block" ng-show="(signForm.email.$error.required) && submitted">
+                        Email must be not empty
+                    </span>
+
+                    <span class="help-block" ng-show="(signForm.email.$invalid && !signForm.email.$error.required) && submitted">
+                        Email invalid
+                    </span>
                 </div>
 
                 <div class="form-group" ng-class="{ 'has-error' : (signForm.password.$invalid) && submitted }">
-                    <input type="password" class="form-control" placeholder="Password" name="password" required  ng-model="user.password" minlength="3" maxlength="32" ng-required="true" ng-change="closeAlert()">
-                    <span class="help-block" ng-show="(signForm.password.$error.required) && submitted">Password must be not empty</span>
-                    <span class="help-block" ng-show="(signForm.password.$error.minlength) && submitted">Password is too short.</span>
-                    <span class="help-block" ng-show="(signForm.password.$error.maxlength) && submitted">Password is too long.</span>
+                    <input type="password" class="form-control" placeholder="Password" name="password" required  ng-model="user.password" minlength="4" maxlength="32" ng-required="true" ng-change="closeAlert()">
+                    <span class="help-block" ng-show="(signForm.password.$error.required) && submitted">
+                        Password must be not empty
+                    </span>
+
+                    <span class="help-block" ng-show="(signForm.password.$error.minlength) && submitted">
+                        Password is too short.
+                    </span>
+                    
+                    <span class="help-block" ng-show="(signForm.password.$error.maxlength) && submitted">
+                        Password is too long.
+                    </span>
                 </div>
 
                 <div class="checkbox">

@@ -34,4 +34,16 @@ class UsersService
         return $user;
     }
     
+    /**
+     *
+     * Check exist user
+     *
+     * @param string @email
+     * @return bool
+    */
+
+    public function existUser($email)
+    {
+        return isset(User::where('email', '=', $email)->first()->email);
+    }
 }

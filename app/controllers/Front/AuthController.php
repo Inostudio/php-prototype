@@ -7,6 +7,7 @@ use \View;
 use \Input;
 use \Validator;
 use \Redirect;
+use \Response;
 
 class AuthController extends \Controller
 {
@@ -47,29 +48,31 @@ class AuthController extends \Controller
     /**
      * Handle signin form
      * 
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response
      */
     public function postSignin()
     {
+        $response = [true, 'Success'];
+
         $v = Validator::make(Input::all(), self::$signinValidation);
-        
+
         if($v->fails()){
-            return Redirect::route('front.signin')
-                        ->withInput()
-                        ->withErrors($v)
-                        ->with('form_errors', 'Invalid form data');
+            $response = [
+                false,
+                'Invalid form data'
+            ];
         }
-        
+
         $loginInfo = ['email' => Input::get('email'), 'password' => Input::get('password')];
-        
+
         if(!Auth::attempt($loginInfo, Input::get('remember'))){
-            
-            return Redirect::route('front.signin')
-                    ->withInput()
-                    ->with('form_errors', "Invalid credentials");            
+            $response = [
+                false,
+                'Invalid credentials'
+            ];
         }
-        
-        return Redirect::intended('/');
+
+        return Response::json($response);
     }
     
     /**
@@ -85,23 +88,34 @@ class AuthController extends \Controller
     /**
      * Handle signup requet
      * 
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response
      */
     public function postSignup()
     {
+        $response = [true, 'Success'];
+
         $v = Validator::make(Input::all(), self::$signupValidation);
         
         if($v->fails()){
-            return Redirect::route('front.signup')
-                        ->withInput()
-                        ->withErrors($v)
-                        ->with('form_errors', 'Invalid form data');
+            $response = [
+                false,
+                'Invalid form data'
+            ];
         }
         
-        $user = $this->users->registerUser(Input::get('email'), Input::get('password'));
-        Auth::login($user);
         
-        return Redirect::intended('/');        
+        if(($this->users->existUser(Input::get('email'))) === false) {
+            $user = $this->users->registerUser(Input::get('email'), Input::get('password'));
+            Auth::login($user);    
+        } else {
+            $response = [
+                false,
+                'This user already is exists'
+            ];   
+        }
+                
+        
+        return Response::json($response);        
     }
     
     /**

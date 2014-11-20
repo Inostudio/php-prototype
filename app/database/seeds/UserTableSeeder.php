@@ -9,7 +9,7 @@ class UserTableSeeder extends Seeder
         foreach (range(1, 100) as $id){
             User::create([
                 'id' => $id,
-                'password' => Hash::make('123'),
+                'password' => Hash::make('1234'),
                 'email' => "user$id@laravel.dev"
             ]);
         }

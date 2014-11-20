@@ -7,6 +7,7 @@ use \View;
 use \Input;
 use \Validator;
 use \Redirect;
+use \Response;
 
 
 class AuthController extends \Controller
@@ -44,36 +45,13 @@ class AuthController extends \Controller
             ];
         }
 
-        return \Response::json($response);
+        return Response::json($response);
     }
-
-    /*public function postSignin()
-    {
-        $v = Validator::make(Input::all(), self::$signinValidation);
-        
-        if($v->fails()){
-            return Redirect::route('admin.signin')
-                        ->withInput()
-                        ->withErrors($v)
-                        ->with('signin_error', 'Invalid form data');
-        }
-        
-        $loginInfo = ['email' => Input::get('email'), 'password' => Input::get('password')];
-        
-        if(!Auth::attempt($loginInfo, Input::get('remember'))){
-            
-            return Redirect::route('admin.signin')
-                    ->withInput()
-                    ->with('signin_error', "Invalid credentials");            
-        }
-        
-        return Redirect::intended(action('admin.dashboard'));
-    }*/
     
     public function getLogout()
     {
         Auth::logout();
-        return \Redirect::route('admin.signin');
+        return Redirect::route('admin.signin');
     }
     
 }
