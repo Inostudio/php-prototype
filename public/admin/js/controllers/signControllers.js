@@ -17,7 +17,6 @@ signControllers.controller('SignCtrl', ['$scope', '$window', 'SignIn', function(
         $scope.submitted = true;
         if(isValid) {
             var success = function(data) {
-                console.log(data);
                 if(data[0] === true){
                     $window.location.href = '/adm/';
                 } else {

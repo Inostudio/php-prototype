@@ -4,7 +4,7 @@
 
 ?>
 <!DOCTYPE html>
-<html lang="en" ng-app="ino.prototype.home">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,6 +25,10 @@
     <script type="text/javascript" src="/front/vendors/angular/angular.min.js"></script>
     <script type="text/javascript" src="/front/vendors/ui-bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>
     <script type="text/javascript" src="/front/js/app.js"></script>
+    <script type="text/javascript" src="/front/js/signApp.js"></script>
+    <script type="text/javascript" src="/front/js/controllers/signControllers.js"></script>
+    <script type="text/javascript" src="/front/js/services/signServices.js"></script>
+
     
     
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -42,11 +46,11 @@
           
         <ul class="nav navbar-nav pull-right">
             @if (Auth::user())
-                <li><a href="#"><i class="fa fa-user"></i> {{Auth::user()->email}}</a></li>
-                <li><a href="{{action('front.logout')}}"><i class="fa fa-signout"></i> Logout</a></li>                
+                <li><a href="#"><i class="fa fa-user"></i> <% Auth::user()->email %></a></li>
+                <li><a href="<% action('front.logout') %>"><i class="fa fa-signout"></i> Logout</a></li>
             @else
-                <li <?=$routeName=='front.signin' ? 'class="active"' : ''; ?>><a href="{{action('front.signin')}}"><i class="fa fa-sign-in"></i> Signin</a></li>
-                <li <?=$routeName=='front.signup' ? 'class="active"' : ''; ?>><a href="{{action('front.signup')}}"><i class="fa fa-plus-square"></i> Signup</a></li>
+                <li <?=$routeName=='front.signin' ? 'class="active"' : ''; ?>><a href="<% action('front.signin') %>"><i class="fa fa-sign-in"></i> Signin</a></li>
+                <li <?=$routeName=='front.signup' ? 'class="active"' : ''; ?>><a href="<% action('front.signup') %>"><i class="fa fa-plus-square"></i> Signup</a></li>
             @endif
         </ul>
           
@@ -89,7 +93,7 @@
 
     <div class="footer">
       <div class="container">
-        <p class="text-muted">Inostudio &copy; {{ date('Y') }}</p>
+        <p class="text-muted">Inostudio &copy; <% date('Y') %></p>
       </div>
     </div>
   </body>
