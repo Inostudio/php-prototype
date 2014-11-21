@@ -53,4 +53,13 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 //        'password_confirmation' => 'required|alpha_num|between:4,18',
 //    );
 
+    public function getFullName()
+    {
+        return $this->profile->first_name . " " . $this->profile->last_name;
+    }
+
+    public function profile()
+    {
+        return $this->hasOne('UserProfile');
+    }
 }

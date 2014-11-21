@@ -1,5 +1,11 @@
 @extends('front.layout')
 
+@section('include')
+    <script type="text/javascript" src="/front/js/signApp.js"></script>
+    <script type="text/javascript" src="/front/js/controllers/signControllers.js"></script>
+    <script type="text/javascript" src="/front/js/services/signServices.js"></script>
+@stop
+
 @section('content')
 <div class="container" ng-app="signApp">
     <div id="signupbox" style="margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
@@ -59,7 +65,7 @@
                     <div class="form-group">
                         <div class="input-group" ng-class="{ 'has-error' : !confirm() && submitted }">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                            <input type="password" name="password_confirm" class="form-control" placeholder="Password confirm" ng-model="user.password_confirm" ng-change="closeAlert()">
+                            <input type="password" name="password_confirm" class="form-control" placeholder="Confirm password" ng-model="user.password_confirm" ng-change="closeAlert()">
                         </div>
 
                         <span class="help-block" ng-show="submitted && !confirm()">

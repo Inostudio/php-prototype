@@ -1,26 +1,32 @@
 @extends('front.layout')
 
+@section('include')
+
+
+    <script type="text/javascript" src="/front/js/profileApp.js"></script>
+    <script type="text/javascript" src="/front/js/controllers/profileControllers.js"></script>
+    <script type="text/javascript" src="/front/js/services/profileServices.js"></script>
+@stop
+
 @section('content')
 
-<?php /* @var $faker Faker\Generator */ ?>
-
 <!-- Begin page content -->
-<div class="container">
+<div class="container" ng-app="profileApp">
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <div id="sidebar-wrapper">
+        <div id="sidebar-wrapper" ng-controller="NavbarCtrl">
             <ul class="sidebar-nav">
-                <li class="sidebar-brand">
-                    <a href="#">
+                <li class="sidebar-brand active" ng-class="{ 'active' : isActive('/') }">
+                    <a href="#/">
                         Профиль
                     </a>
                 </li>
-                <li  class="active">
-                    <a href="#">Редактировать профиль</a>
+                <li ng-class="{ 'active' : isActive('/edit_password') }">
+                    <a href="#/edit_password">Смена пароля</a>
                 </li>
-                <li>
-                    <a href="#">Фото в профиле</a>
+                <li ng-class="{ 'active' : isActive('/photo') }">
+                    <a href="#/photo">Фото в профиле</a>
                 </li>
             </ul>
         </div>
@@ -30,11 +36,8 @@
         <div id="page-content-wrapper">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <h1>Simple Sidebar</h1>
-                        <p>This template has a responsive menu toggling system. The menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will appear/disappear. On small screens, the page content will be pushed off canvas.</p>
-                        <p>Make sure to keep all page content within the <code>#page-content-wrapper</code>.</p>
-                        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-9 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" ng-view>
+
                     </div>
                 </div>
             </div>

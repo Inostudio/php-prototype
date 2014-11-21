@@ -24,11 +24,12 @@
     <link href="/front/css/main.css" rel="stylesheet">
 
     <script type="text/javascript" src="/front/vendors/angular/angular.min.js"></script>
+    <script type="text/javascript" src="/front/vendors/angular/angular-route.min.js"></script>
     <script type="text/javascript" src="/front/vendors/ui-bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>
-    <script type="text/javascript" src="/front/js/app.js"></script>
-    <script type="text/javascript" src="/front/js/signApp.js"></script>
-    <script type="text/javascript" src="/front/js/controllers/signControllers.js"></script>
-    <script type="text/javascript" src="/front/js/services/signServices.js"></script>
+
+    @section('include')
+
+    @show
 
     
     

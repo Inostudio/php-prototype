@@ -1,5 +1,11 @@
 @extends('front.layout')
 
+@section('include')
+    <script type="text/javascript" src="/front/js/signApp.js"></script>
+    <script type="text/javascript" src="/front/js/controllers/signControllers.js"></script>
+    <script type="text/javascript" src="/front/js/services/signServices.js"></script>
+@stop
+
 @section('content')
 <!-- Begin page content -->
 <div class="container" ng-app="signApp">
