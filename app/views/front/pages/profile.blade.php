@@ -17,7 +17,7 @@
         <!-- Sidebar -->
         <div id="sidebar-wrapper" ng-controller="NavbarCtrl">
             <ul class="sidebar-nav">
-                <li class="sidebar-brand active" ng-class="{ 'active' : isActive('/') }">
+                <li class="sidebar-brand active" ng-class="{ 'active' : isActive('/') || isActive('/edit') }">
                     <a href="#/">
                         Профиль
                     </a>

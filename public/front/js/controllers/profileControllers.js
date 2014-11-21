@@ -11,6 +11,9 @@ profileControllers.controller('NavbarCtrl', ['$scope', '$location', function($sc
 }]);
 
 profileControllers.controller('ShowCtrl', ['$scope', function($scope) {
+    $scope.click = function(){
+        alert('edit');
+    }
 }]);
 
 profileControllers.controller('EditCtrl', ['$scope', function($scope) {

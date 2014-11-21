@@ -14,6 +14,10 @@ profileApp.config(['$routeProvider', function ($routeProvider) {
             templateUrl: '/angular/?id=profilePartials.profile',
             controller: 'ShowCtrl'
         }).
+        when('/edit', {
+            templateUrl: '/angular/?id=profilePartials.profile',
+            controller: 'ShowCtrl'
+        }).
         when('/edit_password', {
             templateUrl: '/angular/?id=profilePartials.edit_password',
             controller: 'EditCtrl'
