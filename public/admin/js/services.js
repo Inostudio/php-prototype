@@ -18,8 +18,6 @@ groupServices.factory('AddGroup', ['$resource',
     });
 }]);
 
-
-
 groupServices.factory('RemoveGroup', ['$resource',
   function($resource, $groupId){
     return $resource('/adm/removeGroup', {}, {
@@ -27,3 +25,9 @@ groupServices.factory('RemoveGroup', ['$resource',
     });
 }]);
 
+groupServices.factory('EditGroup', ['$resource',
+  function($resource, $groupId, $title, $groupDescription){
+    return $resource('/adm/editGroup', {}, {
+      query: {method:'POST', params:{id: $groupId, gN:$title, gD: $groupDescription}, isArray:true}
+    });
+}]);

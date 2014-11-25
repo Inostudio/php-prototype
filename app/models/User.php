@@ -52,5 +52,8 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 //        'password' => 'required|alpha_num|between:4,18|confirmed',
 //        'password_confirmation' => 'required|alpha_num|between:4,18',
 //    );
-
+     
+     public function groups() {
+        return $this->belongsToMany('Group');
+    }
 }
