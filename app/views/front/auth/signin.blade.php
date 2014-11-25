@@ -25,7 +25,7 @@
                     <div>
                         <alert ng-show="(alert !== undefined)" type="{{alert.type}}" close="closeAlert()">
                             {{alert.msg}}
-                        </aler>
+                        </alert>
                     </div>
 
                     <div class="form-group" ng-class="{ 'has-error' : (signForm.email.$invalid) && submitted }">

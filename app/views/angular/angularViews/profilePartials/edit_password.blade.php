@@ -8,18 +8,18 @@
         </div>
 
         <div class="form-group">
-            <div class="input-group" ng-class="{ 'has-error' : (signForm.email.$invalid) && submitted }">
+            <div class="input-group" ng-class="{ 'has-error' : (signForm.oldPassword.$invalid) && submitted }">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                <input type="password" name="email" class="form-control" placeholder="Old password"
-                ng-model="user.email" ng-change="closeAlert()" required>
+                <input type="password" name="oldPassword" class="form-control" placeholder="Old password"
+                ng-model="user.old_password" ng-change="closeAlert()" required>
             </div>
 
-            <span class="help-block" ng-show="(signForm.email.$error.required && submitted)">
-                Email must be not empty
+            <span class="help-block" ng-show="(signForm.oldPassword.$error.required && submitted)">
+                Old password must be not empty
             </span>
 
             <span class="help-block"
-                ng-show="(signForm.email.$invalid && !signForm.email.$error.required && submitted)">
+                ng-show="(signForm.oldPassword.$invalid && !signForm.oldPassword.$error.required && submitted)">
                 Email invalid
             </span>
         </div>
@@ -28,21 +28,21 @@
             <div class="input-group" ng-class="{ 'has-error' : (signForm.password.$invalid) && submitted }">
 
                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                <input type="password" name="password" class="form-control" placeholder="New password" ng-model="user.password"
+                <input type="password" name="password" class="form-control" placeholder="New password" ng-model="user.new_password"
                     minlength="4" maxlength="32" ng-change="closeAlert()" required>
             </div>
 
             <span class="help-block"
                 ng-show="(signForm.password.$error.required) && submitted">
-                Password must be not empty
+                New password must be not empty
             </span>
 
             <span class="help-block" ng-show="(signForm.password.$error.minlength) && submitted">
-                Password is too short.
+                New password is too short.
             </span>
 
             <span class="help-block" ng-show="(signForm.password.$error.maxlength) && submitted">
-                Password is too long.
+                New password is too long.
             </span>
         </div>
 
@@ -53,7 +53,7 @@
             </div>
 
             <span class="help-block" ng-show="submitted && !confirm()">
-                Password and password confirm don't match.
+                New password and password confirm don't match.
             </span>
         </div>
 

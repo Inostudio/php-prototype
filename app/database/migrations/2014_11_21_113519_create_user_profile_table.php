@@ -15,10 +15,10 @@ class CreateUserProfileTable extends Migration {
         Schema::create('user_profile', function($table){
             $table->increments('id');
             $table->integer('user_id');
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
-            $table->string('phone')->nullable();
-            $table->string('image')->nullable();
+            $table->string('first_name')->default('');
+            $table->string('last_name')->default('');
+            $table->string('phone')->default('');
+            $table->string('image')->default('');
             $table->timestamps();
         });
 	}

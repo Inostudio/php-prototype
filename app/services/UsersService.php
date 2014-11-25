@@ -29,7 +29,11 @@ class UsersService
         $user->password = Hash::make($password);
         
         $user->save();
-        
+
+        $userProfile = new UserProfile;
+        $userProfile->user_id = $user->id;
+        $userProfile->save();
+
         //$this->ps->addToGroup();
         return $user;
     }

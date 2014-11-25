@@ -5,16 +5,13 @@
 var profileApp = angular.module('profileApp', [
     'ngRoute',
     'profileControllers',
-    'profileServices'
+    'profileServices',
+    'ui.bootstrap'
 ]);
 
 profileApp.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
         when('/', {
-            templateUrl: '/angular/?id=profilePartials.profile',
-            controller: 'ShowCtrl'
-        }).
-        when('/edit', {
             templateUrl: '/angular/?id=profilePartials.profile',
             controller: 'ShowCtrl'
         }).

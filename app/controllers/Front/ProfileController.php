@@ -29,4 +29,35 @@ class ProfileController extends \BaseController
     {
         return Response::json([]);
     }
+
+    /**
+     * Change user's profile data
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function postChangeProfile()
+    {
+        $userProfile = \UserProfile::where('user_id', Auth::user()->id)->first();
+
+        $userProfile->first_name = Input::get('first_name');
+        $userProfile->last_name = Input::get('last_name');
+        $userProfile->phone = Input::get('phone');
+
+        $userProfile->save();
+
+        return Response::json(['Success']);
+    }
+
+    public function postChangePassword()
+    {
+        /*$userProfile = \UserProfile::where('user_id', Auth::user()->id)->first();
+
+        $userProfile->first_name = Input::get('first_name');
+        $userProfile->last_name = Input::get('last_name');
+        $userProfile->phone = Input::get('phone');
+
+        $userProfile->save();*/
+
+        return Response::json(Input::all());
+    }
 }
