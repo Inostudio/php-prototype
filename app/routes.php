@@ -46,6 +46,11 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function(){
         'getSignin' => 'admin.signin',
         'getLogout' => 'admin.logout'
     ]);
+    
+    Route::post('/groupInfo', ['uses' => 'DashboardController@postGroups']);
+    Route::post('/addGroup', ['uses' => 'DashboardController@postAddGroup']);
+    Route::post('/removeGroup', ['uses' => 'DashboardController@postRemoveGroups']);
+    Route::post('/editGroup', ['uses' => 'DashboardController@postEditGroups']);
 });
 
 Route::get('/test', function(){
@@ -56,3 +61,7 @@ Route::get('/test', function(){
 
 
 Route::get('/angular/', ['uses' => 'AngularController@serve']);
+
+
+
+//Route::post('/groupInfo', array('before' => 'auth', "uses"=>"DashboardController@postGroups"));
