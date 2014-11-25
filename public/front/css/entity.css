@@ -1,0 +1,11 @@
+.entity{
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+    .entity .image{
+        width: 100px;
+        height: 100px;
+        float: left;
+        margin: 5px;
+    }
