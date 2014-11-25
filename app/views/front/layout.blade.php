@@ -18,8 +18,9 @@
     <!-- Bootstrap core CSS -->
     <link href="/front/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <!--@codereview move into a special templatec -->
     <link rel="stylesheet" type="text/css" href="/front/css/sidebar.css">
-
+ 
     <!-- Custom styles for this template -->
     <link href="/front/css/main.css" rel="stylesheet">
 
@@ -30,8 +31,6 @@
     @section('include')
 
     @show
-
-    
     
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -48,7 +47,7 @@
           
         <ul class="nav navbar-nav pull-right">
             @if (Auth::user())
-                <li><a href="<% action('front.profile') %>"><i class="fa fa-user"></i> <% Auth::user()->email %></a></li>
+                <li <?=$routeName=='front.profile' ? 'class="active"' : ''; ?>><a href="<% action('front.profile') %>"><i class="fa fa-user"></i> <% Auth::user()->email %></a></li>
                 <li><a href="<% action('front.logout') %>"><i class="fa fa-signout"></i> Logout</a></li>
             @else
                 <li <?=$routeName=='front.signin' ? 'class="active"' : ''; ?>><a href="<% action('front.signin') %>"><i class="fa fa-sign-in"></i> Signin</a></li>
@@ -70,6 +69,7 @@
             <li <?=$routeName=='front.home' ? 'class="active"' : ''; ?> ><a href="/">Home</a></li>
             <li <?=$routeName=='front.about' ? 'class="active"' : ''; ?>><a href="<?=action('front.about');?>">About</a></li>
             <li <?=$routeName=='front.contact' ? 'class="active"' : ''; ?>><a href="<?=action('front.contact');?>">Contact</a></li>
+            <li <?=$routeName=='front.entity.index' ? 'class="active"' : ''; ?>><a href="<?=action('front.entity.index');?>">Entities</a></li>
             <?php if(0){ ?>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>

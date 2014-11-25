@@ -19,6 +19,8 @@
     <link href="/admin/css/main.css" rel="stylesheet">
 
     <script type="text/javascript" src="/admin/vendors/angular/angular.min.js"></script>
+    <script type="text/javascript" src="/admin/vendors/ui-grid/ui-grid.min.js"></script>
+    
     <script type="text/javascript" src="/admin/vendors/ui-bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>
     <script src="/admin/vendors/angular/angular-route.min.js" type="text/javascript"></script>
     <script src="/admin/vendors/angular/angular-resource.min.js" type="text/javascript"></script>

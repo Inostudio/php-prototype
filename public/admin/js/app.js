@@ -3,12 +3,12 @@
 var adminApp = angular.module('adminApp', [
     'ngRoute',
     'adminControllers',
+
     'groupServices',
     'ngAnimate',
     'mgcrea.ngStrap',
     'mgcrea.ngStrap.alert',
     'ui.grid', 'ui.grid.edit', 'ui.grid.cellNav'
-    //
 ]);
 
 /*
@@ -48,6 +48,10 @@ adminApp.config(['$routeProvider',
       when('/groups/:groupId', {
         templateUrl:  '/angular/?id=adminPartials.groups',
         controller: 'GroupRemoveCtrl'
+      })
+     .when('/entities', {
+        templateUrl: '/angular/?id=adminPartials.entities',
+        controller: 'EntityCtrl'
       });
   }]);
   
@@ -67,3 +71,4 @@ adminApp.config(['$routeProvider',
         $scope.cl[act] = "active";
     };
   }]);
+

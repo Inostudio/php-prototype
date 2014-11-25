@@ -36,10 +36,10 @@
      </tr>
     </tbody>
   </table>
-    <!--
-    <%Auth::user()->groups[0]->title%>
+
+<!--    <%Auth::user()->groups[0]->title%>-->
     
-    -->
+
     
     <!--<div ui-grid="gridOptions" ui-grid-edit class="grid"></div>-->
     

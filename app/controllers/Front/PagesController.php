@@ -20,7 +20,7 @@ class PagesController extends \BaseController
     {
         return \View::make('front.pages.about', [
             'faker' => \Faker\Factory::create('ru_RU')
-        ]);        
+        ]);
     }
     
     

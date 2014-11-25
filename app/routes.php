@@ -30,6 +30,14 @@ Route::group(['namespace' => 'Front'], function(){
         'getShow' => 'front.profile'
     ]);
     
+    Route::resource('entity', 'EntityController', [
+        'names' => [
+            'create' => 'front.entity.create',
+            'index' => 'front.entity.index',
+            'show' => 'front.entity.show'
+        ]
+    ]);
+    
 });
 
 
