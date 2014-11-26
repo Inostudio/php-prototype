@@ -42,12 +42,39 @@ class UsersService
      *
      * Check exist user
      *
-     * @param string @email
+     * @param string $email
      * @return bool
     */
 
     public function existUser($email)
     {
         return isset(User::where('email', '=', $email)->first()->email);
+    }
+
+    /**
+     *
+     * Change user's password
+     *
+     * @param integer $idUser
+     * @param string $password
+     * @return void
+     */
+
+    public function changePassword($idUser, $password)
+    {
+        $user = User::find($idUser);
+        $user->password = Hash::make($password);
+        $user->save();
+    }
+
+    public function changeProfile($idUser, $data)
+    {
+        $user = User::find($idUser);
+
+        $user->profile->first_name = $data['first_name'];
+        $user->profile->last_name = $data['last_name'];
+        $user->profile->phone = $data['phone'];
+
+        $user->save();
     }
 }

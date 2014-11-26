@@ -27,7 +27,7 @@ profileServices.factory('Profile', ['$http', function($http) {
                 data: JSON.stringify({
                     old_password: data.old_password,
                     new_password: data.new_password,
-                    password_confirm: data.password_confirm
+                    new_password_confirmation: data.password_confirm
                 }),
                 headers: {'Content-Type': 'application/json'}
             })
