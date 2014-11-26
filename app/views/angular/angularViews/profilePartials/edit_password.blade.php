@@ -1,6 +1,6 @@
 <div class="panel-body">
 
-    <form name="signForm" class="form-vertical" novalidate ng-submit="submitForm(signForm.$valid && confirm())">
+    <form name="passwordForm" class="form-vertical" novalidate ng-submit="submitForm(passwordForm.$valid && confirm())">
         <div>
             <alert ng-show="(alert !== undefined)" type="{{alert.type}}" close="closeAlert()">
                 {{alert.msg}}
@@ -8,24 +8,24 @@
         </div>
 
         <div class="form-group">
-            <div class="input-group" ng-class="{ 'has-error' : (signForm.oldPassword.$invalid) && submitted }">
+            <div class="input-group" ng-class="{ 'has-error' : (passwordForm.oldPassword.$invalid) && submitted }">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                 <input type="password" name="oldPassword" class="form-control" placeholder="Old password"
                 ng-model="user.old_password" ng-change="closeAlert()" required>
             </div>
 
-            <span class="help-block" ng-show="(signForm.oldPassword.$error.required && submitted)">
+            <span class="help-block" ng-show="(passwordForm.oldPassword.$error.required && submitted)">
                 Old password must be not empty
             </span>
 
             <span class="help-block"
-                ng-show="(signForm.oldPassword.$invalid && !signForm.oldPassword.$error.required && submitted)">
+                ng-show="(passwordForm.oldPassword.$invalid && !passwordForm.oldPassword.$error.required && submitted)">
                 Email invalid
             </span>
         </div>
 
         <div class="form-group">
-            <div class="input-group" ng-class="{ 'has-error' : (signForm.password.$invalid) && submitted }">
+            <div class="input-group" ng-class="{ 'has-error' : (passwordForm.password.$invalid) && submitted }">
 
                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                 <input type="password" name="password" class="form-control" placeholder="New password" ng-model="user.new_password"
@@ -33,15 +33,15 @@
             </div>
 
             <span class="help-block"
-                ng-show="(signForm.password.$error.required) && submitted">
+                ng-show="(passwordForm.password.$error.required) && submitted">
                 New password must be not empty
             </span>
 
-            <span class="help-block" ng-show="(signForm.password.$error.minlength) && submitted">
+            <span class="help-block" ng-show="(passwordForm.password.$error.minlength) && submitted">
                 New password is too short.
             </span>
 
-            <span class="help-block" ng-show="(signForm.password.$error.maxlength) && submitted">
+            <span class="help-block" ng-show="(passwordForm.password.$error.maxlength) && submitted">
                 New password is too long.
             </span>
         </div>
@@ -70,7 +70,7 @@
             <div class="col-md-offset-5 col-md-8">
 
                 <button id="btn-signup" type="submit" class="btn btn-info"
-                    ng-disabled="signForm.$invalid && submitted ||
+                    ng-disabled="passwordForm.$invalid && submitted ||
                     !confirm() && submitted"><i class="fa fa-sign-in"></i> &nbsp Change
                 </button>
             </div>

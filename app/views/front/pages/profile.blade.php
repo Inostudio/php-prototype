@@ -1,7 +1,7 @@
 @extends('front.layout')
 
 @section('include')
-
+    <link rel="stylesheet" type="text/css" href="/front/css/profile.css">
 
     <script type="text/javascript" src="/front/js/profileApp.js"></script>
     <script type="text/javascript" src="/front/js/controllers/profileControllers.js"></script>

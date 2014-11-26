@@ -29,9 +29,9 @@ class ProfileController extends \BaseController
     ];
 
     protected static $changeProfileValidation = [
-        'first_name' => 'required|alpha_num',
-        'last_name' => 'required|alpha_num|between:4,18|confirmed',
-        'phone' => 'required|alpha_num|between:4,18'
+        'first_name' => 'required|alpha_num|between:2,32',
+        'last_name' => 'required|alpha_num|between:2,32',
+        'phone' => 'required'
     ];
 
     /**

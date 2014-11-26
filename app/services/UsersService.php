@@ -71,9 +71,9 @@ class UsersService
     {
         $user = User::find($idUser);
 
-        $user->first_name = $data->first_name;
-        $user->last_name = $data->last_name;
-        $user->phone = $data->phone;
+        $user->profile->first_name = $data['first_name'];
+        $user->profile->last_name = $data['last_name'];
+        $user->profile->phone = $data['phone'];
 
         $user->save();
     }

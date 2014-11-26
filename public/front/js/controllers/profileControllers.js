@@ -30,23 +30,36 @@ profileControllers.controller('ShowCtrl', ['$scope', '$location', 'Profile', fun
 
     $scope.cancel = function() {
         $scope.editing = false;
+        $scope.submitted = false;
     };
 
-    $scope.apply = function(){
-        var success = function(data) {
-            $scope.user = {
-                first_name: $scope.temp.first_name,
-                last_name: $scope.temp.last_name,
-                phone: $scope.temp.phone
-            }
-            $scope.editing = false;
-        };
+    $scope.submitted = false;
 
-        var error = function(data) {
-            $scope.alert = { msg: 'Some problems.', type: 'danger'};
-        };
+    $scope.apply = function(isValid){
+        $scope.submitted = true;
+        if(isValid) {
+            var success = function(data) {
+                if(data[0] === true) {
+                    $scope.user = {
+                        first_name: $scope.temp.first_name,
+                        last_name: $scope.temp.last_name,
+                        phone: $scope.temp.phone
+                    }
 
-        Profile.changeProfile($scope.temp, success, error);
+                    $scope.editing = false;
+
+                    $scope.alert = { msg: data[1], type: 'success'};
+                } else {
+                    $scope.alert = { msg: data[1], type: 'danger'};
+                }
+            };
+
+            var error = function(data) {
+                $scope.alert = { msg: 'Some problems', type: 'danger'};
+            };
+
+            Profile.changeProfile($scope.temp, success, error);
+        }
     };
 }]);
 
@@ -57,13 +70,11 @@ profileControllers.controller('EditCtrl', ['$scope', 'Profile', function($scope,
         $scope.alert = undefined;
     };
 
-
-
     $scope.submitForm = function (isValid) {
         $scope.submitted = true;
         if(isValid) {
             var success = function(data) {
-                if (data[0] == true) {
+                if (data[0] === true) {
                     $scope.alert = { msg: data[1], type: 'success'};
                     $scope.cleareForm();
                 } else {
@@ -72,14 +83,12 @@ profileControllers.controller('EditCtrl', ['$scope', 'Profile', function($scope,
             };
 
             var error = function(data) {
-                $scope.alert = { msg: 'Some problems with connection', type: 'danger'};
+                $scope.alert = { msg: 'Some problems', type: 'danger'};
             };
 
             Profile.changePassword($scope.user, success, error);
         }
     }
-
-
 
     $scope.cleareForm = function() {
         $scope.user = {
