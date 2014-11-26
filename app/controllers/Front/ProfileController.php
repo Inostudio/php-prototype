@@ -7,9 +7,33 @@ use \Response;
 use \View;
 use \Input;
 use \Redirect;
+use \Validator;
 
 class ProfileController extends \BaseController
 {
+    /**
+     *
+     * @var \UsersService
+     */
+    protected $users = null;
+
+    public function __construct(\UsersService $us)
+    {
+        $this->users = $us;
+    }
+
+    protected static $changePasswordValidation = [
+        'old_password' => 'required|alpha_num',
+        'new_password' => 'required|alpha_num|between:4,18|confirmed',
+        'new_password_confirmation' => 'required|alpha_num|between:4,18'
+    ];
+
+    protected static $changeProfileValidation = [
+        'first_name' => 'required|alpha_num',
+        'last_name' => 'required|alpha_num|between:4,18|confirmed',
+        'phone' => 'required|alpha_num|between:4,18'
+    ];
+
     /**
      * Show layout profile page
      *
@@ -37,27 +61,44 @@ class ProfileController extends \BaseController
      */
     public function postChangeProfile()
     {
-        $userProfile = \UserProfile::where('user_id', Auth::user()->id)->first();
+        $response = [true, 'Success'];
 
-        $userProfile->first_name = Input::get('first_name');
-        $userProfile->last_name = Input::get('last_name');
-        $userProfile->phone = Input::get('phone');
+        $v = Validator::make(Input::all(), self::$changeProfileValidation);
 
-        $userProfile->save();
+        if($v->fails()){
+            $response = [
+                false,
+                'Invalid form data'
+            ];
+        } else {
+            $this->users->changeProfile(Auth::user()->id, Input::all());
+        }
 
-        return Response::json(['Success']);
+        return Response::json($response);
     }
+
+
 
     public function postChangePassword()
     {
-        /*$userProfile = \UserProfile::where('user_id', Auth::user()->id)->first();
+        $response = [true, 'Success'];
 
-        $userProfile->first_name = Input::get('first_name');
-        $userProfile->last_name = Input::get('last_name');
-        $userProfile->phone = Input::get('phone');
+        $v = Validator::make(Input::all(), self::$changePasswordValidation);
 
-        $userProfile->save();*/
+        if($v->fails()){
+            $response = [
+                false,
+                'Invalid form data'
+            ];
+        } else if (!\Hash::check(Input::get('old_password'), Auth::user()->password)) {
+            $response = [
+                false,
+                'Invalid old password'
+            ];
+        } else {
+            $this->users->changePassword(Auth::user()->id, Input::get('new_password'));
+        }
 
-        return Response::json(Input::all());
+        return Response::json($response);
     }
 }

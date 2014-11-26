@@ -1,6 +1,6 @@
 <div class="panel-body">
 
-    <form name="signForm" class="form-vertical" novalidate ng-submit="submitForm(signForm.$valid)">
+    <form name="signForm" class="form-vertical" novalidate ng-submit="submitForm(signForm.$valid && confirm())">
         <div>
             <alert ng-show="(alert !== undefined)" type="{{alert.type}}" close="closeAlert()">
                 {{alert.msg}}

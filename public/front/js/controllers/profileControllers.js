@@ -57,27 +57,40 @@ profileControllers.controller('EditCtrl', ['$scope', 'Profile', function($scope,
         $scope.alert = undefined;
     };
 
-    $scope.submitted = false;
+
 
     $scope.submitForm = function (isValid) {
         $scope.submitted = true;
         if(isValid) {
             var success = function(data) {
-                console.log(data);
+                if (data[0] == true) {
+                    $scope.alert = { msg: data[1], type: 'success'};
+                    $scope.cleareForm();
+                } else {
+                    $scope.alert = { msg: data[1], type: 'danger'};
+                }
             };
 
             var error = function(data) {
+                $scope.alert = { msg: 'Some problems with connection', type: 'danger'};
             };
 
             Profile.changePassword($scope.user, success, error);
         }
     }
 
-    $scope.user = {
-        old_password: '',
-        new_password: '',
-        password_confirm: ''
-    }
+
+
+    $scope.cleareForm = function() {
+        $scope.user = {
+            old_password: '',
+            new_password: '',
+            password_confirm: ''
+        }
+
+        $scope.submitted = false;
+    };
+    $scope.cleareForm();
 
     $scope.confirm = function(){
         return ($scope.user.new_password === $scope.user.password_confirm);
