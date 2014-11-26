@@ -22,35 +22,35 @@ adminApp.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
       when('/', {
-        templateUrl:  '/angular/?id=adminPartials.dashboard', 
+        templateUrl:  '/angular/?ns=admin&id=adminPartials.dashboard',
         controller: 'AdminCtrl'
       }).
       when('/users', {
-        templateUrl:  '/angular/?id=adminPartials.users',
+        templateUrl:  '/angular/?ns=admin&id=adminPartials.users',
         controller: 'AdminCtrl'
       }).
       when('/pages', {
-        templateUrl:  '/angular/?id=adminPartials.pages',
+        templateUrl:  '/angular/?ns=admin&id=adminPartials.pages',
         controller: 'AdminCtrl'
       }).
       when('/products', {
-        templateUrl:  '/angular/?id=adminPartials.products',
+        templateUrl:  '/angular/?ns=admin&id=adminPartials.products',
         controller: 'AdminCtrl'
       }).
       when('/settings', {
-        templateUrl:  '/angular/?id=adminPartials.settings',
+        templateUrl:  '/angular/?ns=admin&id=adminPartials.settings',
         controller: 'AdminCtrl'
       }).
       when('/groups', {
-        templateUrl:  '/angular/?id=adminPartials.groups',
+        templateUrl:  '/angular/?ns=admin&id=adminPartials.groups',
         controller: 'GroupCtrl'
       }).
       when('/groups/:groupId', {
-        templateUrl:  '/angular/?id=adminPartials.groups',
+        templateUrl:  '/angular/?ns=admin&id=adminPartials.groups',
         controller: 'GroupRemoveCtrl'
       })
      .when('/entities', {
-        templateUrl: '/angular/?id=adminPartials.entities',
+        templateUrl: '/angular/?ns=admin&id=adminPartials.entities',
         controller: 'EntityCtrl'
       });
   }]);

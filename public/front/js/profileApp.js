@@ -12,15 +12,15 @@ var profileApp = angular.module('profileApp', [
 profileApp.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
         when('/', {
-            templateUrl: '/angular/?id=profilePartials.profile',
+            templateUrl: '/angular/?ns=front&id=profilePartials.profile',
             controller: 'ShowCtrl'
         }).
         when('/edit_password', {
-            templateUrl: '/angular/?id=profilePartials.edit_password',
+            templateUrl: '/angular/?ns=front&id=profilePartials.edit_password',
             controller: 'EditCtrl'
         }).
         when('/photo', {
-            templateUrl: '/angular/?id=profilePartials.photo',
+            templateUrl: '/angular/?ns=front&id=profilePartials.photo',
             controller: 'PhotoCtrl'
         }).
         otherwise({
