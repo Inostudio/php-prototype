@@ -6,13 +6,6 @@ namespace Admin;
 
 class DashboardController extends \BaseController
 {
-    public static function rules ($id=0, $merge=[]) {
-    return array_merge(
-        [
-            'title' => 'required|unique:groups' . ($id ? ",id,$id" : '')
-        ], 
-        $merge);
-    }
     
     protected $rulesAddGroup = [
         'title' => 'required|unique:groups'
@@ -75,6 +68,6 @@ class DashboardController extends \BaseController
             }
         }
  
-        return \Response::json([$result, $message, $groups = \Group::all()]);
+        return \Response::json([$result, $message]);
     }
 }

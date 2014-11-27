@@ -15,47 +15,8 @@
         </div>
     </form>
     <h3 class="sub-header">List of groups</h3>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Id</th>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-     <tr ng-repeat="group in groups">
-        <td>{{group.id}}</td>
-        <td contentEditable="true" ng-model="contentTitle">{{group.title}}</td>
-        <td contentEditable="true" ng-model="contentDescription">{{group.description}}</td>
-        <td>
-            <a class="fa fa-edit" ng-click="editGroup(group, contentTitle, contentDescription)" style="cursor: pointer;"></a>
-            <a class="fa fa-remove" ng-click="removeGroup(group)" style="cursor: pointer;"></a>
-        </td>
-     </tr>
-    </tbody>
-  </table>
-    <!--
-    <%Auth::user()->groups[0]->title%>
     
-    -->
-    
-    <!--<div ui-grid="gridOptions" ui-grid-edit class="grid"></div>-->
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    <div ui-grid="gridOptions" ui-grid-edit class="grid"></div>
     
 </div>
 

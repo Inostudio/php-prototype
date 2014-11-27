@@ -6,8 +6,7 @@ var adminApp = angular.module('adminApp', [
     'groupServices',
     'ngAnimate',
     'mgcrea.ngStrap',
-    'mgcrea.ngStrap.alert',
-    'ui.grid', 'ui.grid.edit', 'ui.grid.cellNav'
+    'mgcrea.ngStrap.alert'
     //
 ]);
 
@@ -51,19 +50,9 @@ adminApp.config(['$routeProvider',
       });
   }]);
   
-  adminApp.controller('activCtrl', ['$scope',
-  function($scope) {
-    //$scope.active = "active";
-    $scope.cl = ["active", "", "", "", "", ""];
-    
-    $scope.active = function(act){
-        $scope.cl[0] = "";
-        $scope.cl[1] = "";
-        $scope.cl[2] = "";
-        $scope.cl[3] = "";
-        $scope.cl[4] = "";
-        $scope.cl[5] = "";
-        
-        $scope.cl[act] = "active";
-    };
+  adminApp.controller('activCtrl', ['$scope', '$location',
+  function($scope, $location) {
+      $scope.isActive = function(path){
+        return path === $location.path();  
+      };
   }]);
