@@ -3,6 +3,7 @@
  */
 
 var profileApp = angular.module('profileApp', [
+    'ngImgCrop',
     'ngRoute',
     'profileControllers',
     'profileServices',

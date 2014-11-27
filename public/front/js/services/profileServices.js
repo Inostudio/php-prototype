@@ -33,6 +33,30 @@ profileServices.factory('Profile', ['$http', function($http) {
             })
                 .success(success)
                 .error(error);
+        },
+        uploadCropped: function(data, success, error) {
+            $http({
+                url: '/profile/upload-cropped',
+                method: 'POST',
+                data: JSON.stringify({
+                    croppedImage: data
+                }),
+                headers: {'Content-Type': 'application/json'}
+            })
+                .success(success)
+                .error(error);
+        },
+        uploadImage: function(data, success, error) {
+            $http({
+                url: '/profile/upload-image',
+                method: 'POST',
+                data: JSON.stringify({
+                    sourceImage: data
+                }),
+                headers: {'Content-Type': 'application/json'}
+            })
+                .success(success)
+                .error(error);
         }
     };
 }]);

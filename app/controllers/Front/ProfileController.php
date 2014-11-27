@@ -8,6 +8,9 @@ use \View;
 use \Input;
 use \Redirect;
 use \Validator;
+use Gaufrette\Filesystem;
+use Gaufrette\Adapter\Local as LocalAdapter;
+use Gaufrette\File;
 
 class ProfileController extends \BaseController
 {
@@ -100,5 +103,29 @@ class ProfileController extends \BaseController
         }
 
         return Response::json($response);
+    }
+
+    public function postUploadImage()
+    {
+        define('UPLOAD_DIR', 'public/users/' . Auth::user()->id . '/');
+        $img = Input::get('sourceImage');
+        $img = str_replace('data:image/jpeg;base64,', '', $img);
+        $img = str_replace(' ', '+', $img);
+        $data = base64_decode($img);
+        $file = UPLOAD_DIR . uniqid() . '.jpg';
+        $success = file_put_contents($file, $data);
+        return Response::json($success);
+    }
+
+    public function postUploadCropped()
+    {
+        define('UPLOAD_DIR', 'public/users/' . Auth::user()->id . '/');
+        $img = Input::get('croppedImage');
+        $img = str_replace('data:image/png;base64,', '', $img);
+        $img = str_replace(' ', '+', $img);
+        $data = base64_decode($img);
+        $file = UPLOAD_DIR . uniqid() . '.png';
+        $success = file_put_contents($file, $data);
+        return Response::json($success);
     }
 }
