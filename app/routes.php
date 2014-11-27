@@ -62,9 +62,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function(){
 });
 
 Route::get('/test', function(){
-    
-    echo action('admin.signin');
-    
+    //echo action('admin.signin');
+    return View::make('hello2');
 });
 
 
