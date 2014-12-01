@@ -10,7 +10,7 @@ profileControllers.controller('NavbarCtrl', ['$scope', '$location', function($sc
     };
 }]);
 
-profileControllers.controller('ShowCtrl', ['$scope', '$location', 'Profile', function($scope, $location, Profile) {
+profileControllers.controller('ShowCtrl', ['$scope', '$location', 'Profile', '$modal', function($scope, $location, Profile, $modal) {
 
     $scope.alert = undefined;
     $scope.closeAlert = function() {
@@ -61,6 +61,23 @@ profileControllers.controller('ShowCtrl', ['$scope', '$location', 'Profile', fun
             Profile.changeProfile($scope.temp, success, error);
         }
     };
+
+    $scope.open = function (size) {
+
+        var modalInstance = $modal.open({
+            templateUrl: 'myModalContent.html',
+            controller: 'ModalInstanceCtrl',
+            size: size
+        });
+
+        modalInstance.result.then(function (Image) {
+            $scope.image = Image;
+            $scope.alert = { msg: 'The photo successfully changed ', type: 'success'};
+        }, function () {
+            //$log.info('Modal dismissed at: ' + new Date());
+        });
+
+    };
 }]);
 
 profileControllers.controller('EditCtrl', ['$scope', 'Profile', function($scope, Profile) {
@@ -106,32 +123,7 @@ profileControllers.controller('EditCtrl', ['$scope', 'Profile', function($scope,
     };
 }]);
 
-profileControllers.controller('PhotoCtrl', ['$scope', '$modal', function($scope, $modal) {
-
-
-    $scope.open = function (size) {
-
-        var modalInstance = $modal.open({
-            templateUrl: 'myModalContent.html',
-            controller: 'ModalInstanceCtrl',
-            size: size,
-            resolve: {
-                items: function () {
-                    return $scope.items;
-                }
-            }
-        });
-
-        modalInstance.result.then(function (selectedItem) {
-            $scope.selected = selectedItem;
-        }, function () {
-            //$log.info('Modal dismissed at: ' + new Date());
-        });
-
-    };
-}]);
-
-profileControllers.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', 'Profile', function ($scope, $modalInstance, Profile) {
+profileControllers.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', 'Profile', '$timeout', function ($scope, $modalInstance, Profile, $timeout) {
     $scope.myImage='';
     $scope.myCroppedImage='';
 
@@ -179,12 +171,17 @@ profileControllers.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', 
         height: '0px'
     }
 
+    $scope.apply = false;
     $scope.ok = function () {
-        //$modalInstance.close($scope.selected.item);
+        $scope.apply = true;
     };
 
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+    $scope.cancelChoose = function () {
+        $scope.uploaded = false;
+    };
+
+    $scope.cancelUpload = function () {
+        $scope.apply = !$scope.apply;
     };
 
     $scope.init = false;
@@ -198,10 +195,11 @@ profileControllers.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', 
     $scope.upload = function() {
         var success = function(data) {
             if (data[0] === true) {
-                console.log(data);//$scope.alert = { msg: data[1], type: 'success'};
+                //console.log(data);//$scope.alert = { msg: data[1], type: 'success'};
             } else {
-                console.log(data);//$scope.alert = { msg: data[1], type: 'danger'};
+                //console.log(data);//$scope.alert = { msg: data[1], type: 'danger'};
             }
+            $modalInstance.close($scope.myCroppedImage);
         };
 
         var error = function(data) {
@@ -210,5 +208,16 @@ profileControllers.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', 
 
         Profile.uploadCropped($scope.myCroppedImage, success, error);
         Profile.uploadImage($scope.myImage, success, error);
+    }
+
+    $scope.choose = function() {
+        /*var input = document.querySelector('#fileInput');
+
+        $timeout(function() {
+            alert('s');
+            $scope.file.click();
+            angular.element(input).triggerHandler('click');
+        }, 0);*/
+
     }
 }]);

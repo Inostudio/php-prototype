@@ -12,8 +12,11 @@
     </div>
     <div class="panel-body">
       <div class="row">
-        <div class="col-md-3 col-lg-3 " align="center"> <img alt="User Pic" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle"> </div>
-        <div class=" col-md-9 col-lg-9 ">
+        <div class="col-md-4 col-lg-4" align="center">
+            <img alt="User Pic" ng-init="image = '<% $user->getPhoto() %>'" src="{{image}}" class="img-circle">
+            <button class="btn btn-default" ng-click="open('lg')">Change photo</button>
+        </div>
+        <div class=" col-md-8 col-lg-8 ">
             <form name="form" novalidate>
               <table class="table table-user-information">
                 <tbody>
@@ -116,3 +119,50 @@
         </div>
     </div>
 </div>
+
+
+<style>
+.cropArea {
+    background: #E4E4E4;
+    overflow: hidden;
+    width: 500px;
+    height: 350px;
+}
+</style>
+
+<script type="text/ng-template" id="myModalContent.html">
+    <div style="display: inline-block; background: #efefef; width: 100%;" ng-style="">
+        <div class="modal-header">
+            <h3 class="modal-title" ng-show="!uploaded">Choose your photo</h3>
+            <h3 class="modal-title" ng-show="uploaded && !apply">Choose a miniature</h3>
+            <h3 class="modal-title" ng-show="apply">Upload your photo</h3>
+        </div>
+        <div class="modal-body" style="height: 600px;border: dashed 3px #c5cacd; margin: 15px; background: #fff">
+            <div>
+                <div ng-hide="uploaded">
+                    Select an image file:
+                    <input type="file" ng-model="fileInput" id="fileInput" ng-click="Init()" />
+                    <div class="uploadcare-dialog-big-button" ng-click="choose()">
+                    Choose a local file
+                    </div>
+                </div>
+                <section ng-hide="!uploaded">
+                    <div class="cropArea small" ng-style="ImageStyle" style="float: left; margin: 40px">
+                        <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
+                    </div>
+                    <div style="margin: 40px">
+                        <div>Cropped Image:</div>
+                        <div ><img ng-src="{{myCroppedImage}}" /></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer" ng-hide="!uploaded" style="background: #fff3be; border-top: 1px solid #efe2a9">
+        <button class="btn btn-primary" ng-click="upload()" ng-hide="!apply" style="float: left">Upload</button>
+        <button class="btn btn-warning" ng-click="cancelUpload()" ng-hide="!apply" style="float: right">Cancel</button>
+        <button class="btn btn-primary" ng-click="ok()" ng-hide="apply" style="float: left">OK</button>
+        <button class="btn btn-warning" ng-click="cancelChoose()" ng-hide="apply" style="float: right">Cancel</button>
+    </div>
+</script>

@@ -30,9 +30,6 @@
                 <li ng-class="{ 'active' : isActive('/edit_password') }">
                     <a href="#/edit_password/">Смена пароля</a>
                 </li>
-                <li ng-class="{ 'active' : isActive('/photo') }">
-                    <a href="#/photo/">Фото в профиле</a>
-                </li>
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -41,7 +38,7 @@
         <div id="page-content-wrapper">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-9 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" ng-view>
+                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" ng-view>
 
                     </div>
                 </div>
