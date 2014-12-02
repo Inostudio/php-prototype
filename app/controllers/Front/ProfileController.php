@@ -123,7 +123,7 @@ class ProfileController extends \BaseController
         return base64_decode($img);
     }
 
-    protected  function uploadImage($file, $format, $name)
+    protected function uploadImage($file, $format, $name)
     {
         define('UPLOAD_DIR', 'public/users/'. Auth::user()->id . '/');
         $localAdapter = new LocalAdapter(UPLOAD_DIR, true);

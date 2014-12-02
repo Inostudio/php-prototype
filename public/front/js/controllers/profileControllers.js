@@ -62,19 +62,21 @@ profileControllers.controller('ShowCtrl', ['$scope', '$location', 'Profile', '$m
         }
     };
 
-    $scope.open = function (size) {
-
+    $scope.photo = function (size) {
         var modalInstance = $modal.open({
-            templateUrl: 'myModalContent.html',
-            controller: 'ModalInstanceCtrl',
-            size: size
+            templateUrl: 'editPhoto.html',
+            controller: 'EditPhotoCtrl',
+            size: size,
+            resolve: {
+                imageUrl: function() {
+                    return $scope.imageUrl;
+                }
+            }
         });
 
         modalInstance.result.then(function (Image) {
             $scope.image = Image;
-            $scope.alert = { msg: 'The photo successfully changed ', type: 'success'};
-        }, function () {
-            //$log.info('Modal dismissed at: ' + new Date());
+            $scope.alert = { msg: 'The thumbnail successfully changed ', type: 'success'};
         });
 
     };
@@ -123,11 +125,17 @@ profileControllers.controller('EditCtrl', ['$scope', 'Profile', function($scope,
     };
 }]);
 
-profileControllers.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', 'Profile', '$timeout', function ($scope, $modalInstance, Profile, $timeout) {
-    $scope.myImage='';
-    $scope.myCroppedImage='';
+profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Profile', 'imageUrl', function ($scope, $modalInstance, Profile, imageUrl) {
+    $scope.myImage = "";
+    $scope.myCroppedImage = "";
 
-    $scope.uploaded = false;
+    $scope.init = false;
+    $scope.Init = function() {
+        if(!$scope.init) {
+            $scope.init = true;
+            angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
+        }
+    }
 
     var handleFileSelect=function(evt) {
         var file=evt.currentTarget.files[0];
@@ -143,7 +151,7 @@ profileControllers.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', 
                 var ratio = img.height / img.width;
 
                 $scope.$apply(function($scope){
-                    var height = 0, width = 0, maxHeight = 330, maxWidth = 450;
+                    var height = 0, width = 0, maxHeight = 564, maxWidth = 832;
 
                     if(img.height > maxHeight && img.width > maxWidth) {
                         var d = img.height / maxHeight;
@@ -162,37 +170,44 @@ profileControllers.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', 
             img.src = reader.result;
         };
         reader.readAsDataURL(file);
+        $scope.changeToUploadNewPhoto();
     };
 
+    var img = new Image;
+    img.onload = function() {
+        $scope.myImage= this.src;
+        var ratio = img.height / img.width;
 
+        $scope.$apply(function($scope){
+            var height = 0, width = 0, maxHeight = 564, maxWidth = 832;
 
-    $scope.ImageStyle = {
-        width: '0px',
-        height: '0px'
-    }
+            if(img.height > maxHeight && img.width > maxWidth) {
+                var d = img.height / maxHeight;
+                height = maxHeight;
+                width = img.width / d;
+            }
+            else {
+                height = img.height;
+                width = img.width;
+            }
 
-    $scope.apply = false;
-    $scope.ok = function () {
-        $scope.apply = true;
+            $scope.ImageStyle = {
+                width: width + 'px',
+                height: height + 'px'
+            }
+        });
+
+    };
+    img.src = imageUrl;
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
     };
 
-    $scope.cancelChoose = function () {
-        $scope.uploaded = false;
-    };
+    //Upload data
+    $scope.upload = function(load) {
+        load = typeof load !== 'undefined' ? load : 'all';
 
-    $scope.cancelUpload = function () {
-        $scope.apply = !$scope.apply;
-    };
-
-    $scope.init = false;
-    $scope.Init = function() {
-        if(!$scope.init) {
-            $scope.init = true;
-            angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
-        }
-    }
-
-    $scope.upload = function() {
         var success = function(data) {
             if (data[0] === true) {
                 //console.log(data);//$scope.alert = { msg: data[1], type: 'success'};
@@ -206,18 +221,28 @@ profileControllers.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', 
             console.log(data);//$scope.alert = { msg: 'Some problems', type: 'danger'};
         };
 
+        if(load === 'all') {
+            Profile.uploadImage($scope.myImage, success, error);
+        }
         Profile.uploadCropped($scope.myCroppedImage, success, error);
-        Profile.uploadImage($scope.myImage, success, error);
     }
 
-    $scope.choose = function() {
-        /*var input = document.querySelector('#fileInput');
+    //organization of transitions
+    $scope.select = 'ChangeThumbnail';
 
-        $timeout(function() {
-            alert('s');
-            $scope.file.click();
-            angular.element(input).triggerHandler('click');
-        }, 0);*/
-
+    $scope.changeToUploadNewPhoto = function() {
+        $scope.select = 'UploadPhoto';
     }
+
+    $scope.changeToSelectNewPhoto = function() {
+        $scope.select = 'NewPhoto';
+    }
+
+    $scope.changeToThumbnail = function() {
+        $scope.select = 'ChangeThumbnail';
+    }
+
+    $scope.isActive = function(value) {
+        return value == $scope.select;
+    };
 }]);
