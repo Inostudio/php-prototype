@@ -10,6 +10,9 @@ class DashboardController extends \BaseController
     protected $rulesAddGroup = [
         'title' => 'required|unique:groups'
     ];
+    protected $rulesAddPermission = [
+        'title' => 'required|unique:permissions'
+    ];
     
     public function getIndex()
     {
@@ -18,15 +21,16 @@ class DashboardController extends \BaseController
         
     }
     
-    public function postGroups()
+    public function postGroup()
     {
         $groups = \Group::all();
         return \Response::json($groups);
     }
     
-    public function postRemoveGroups(){
+    public function postRemoveGroup(){
         $result = true;
         \DB::table('groups')->where('id', '=', \Input::get("groupId"))->delete();
+        \DB::table('group_permission')->where('group_id', '=', \Input::get("groupId"))->delete();
         
         return \Response::json([$result]);
     }
@@ -48,7 +52,7 @@ class DashboardController extends \BaseController
         return \Response::json(["res" => $result, "id" => $id, "message" => $message]);
     }
     
-    public function postEditGroups(){
+    public function postEditGroup(){
         $result = true;
         $message = '';
         $group = \DB::table('groups')->where('title', \Input::get('title'))
@@ -70,4 +74,95 @@ class DashboardController extends \BaseController
  
         return \Response::json([$result, $message]);
     }
+    
+    public function postPermission()
+    {
+        $groups = \Permission::all();
+        return \Response::json($groups);
+    }
+    
+    public function postAddPermission(){
+        $result = true;
+        $id = -1;
+        $message = "";
+                
+        $validator = \Validator::make(\Input::all(), $this->rulesAddPermission);
+
+        if($validator->fails()) {
+            $result = false;
+            $message = $validator->messages()->first();
+        } else {
+            $id = \DB::table("permissions")->insertGetId(array("title" => \Input::get("title"), "description" => (empty(\Input::get("permissionDescription"))) ? NULL : \Input::get("permissionDescription")));
+        }
+        
+        return \Response::json(["res" => $result, "id" => $id, "message" => $message]);
+    }
+    public function postRemovePermission(){
+        $result = true;
+        \DB::table('permissions')->where('id', '=', \Input::get("permissionId"))->delete();
+        
+        return \Response::json([$result]);
+    }
+    
+    
+    public function postEditPermission(){
+        $result = true;
+        $message = '';
+        $permission = \DB::table('permissions')->where('title', \Input::get('title'))
+                ->where('id', '<>', (\Input::get("permissionId")))
+                ->first();
+        
+        if ($permission != null){
+            $message = "The title has already been taken.";
+            $result = false;
+        } else {
+            if(trim(\Input::get("title")) != ""){
+                \DB::table('permissions')->where('id', (\Input::get("permissionId")))
+                ->update(array('title' => (\Input::get("title")), 'description' => (\Input::get("permissionDescription"))));
+            } else {
+                $result = false;
+                $message = 'The title field is required.'; 
+            }
+        }
+ 
+        return \Response::json([$result, $message]);
+    }
+    
+    public function postGroupOptions(){
+
+        $group = \DB::table('groups')
+                ->where('id', '=', \Input::get('groupId'))
+                ->first();
+        
+        $permissionToGroup = \DB::table('groups')
+                ->join('group_permission', 'groups.id', '=', 'group_permission.group_id')
+                ->join('permissions', 'group_permission.permission_id', '=', 'permissions.id')
+                ->where('group_id', '=', \Input::get('groupId'))
+                ->select('permissions.description as permission_description',
+                        'permissions.id as permission_id',
+                        'permissions.title as permission_title')
+                ->get();
+        
+        $permissions = \DB::table('permissions')->get();
+        
+        return \Response::json([$group, [$permissionToGroup], [$permissions]]);
+    }
+    
+    public function postChangePermissionsInGroup(){
+
+        $res = true;
+        if(\Input::get("accept")){
+            \DB::table('group_permission')
+                    ->where('group_id', '=', \Input::get('groupId'))
+                    ->where('permission_id', '=', \Input::get('permId'))
+                    ->delete();
+        } else {
+            \DB::table('group_permission')->insert(
+                array('group_id' => \Input::get('groupId'), 'permission_id' => \Input::get('permId'))
+            );
+        }
+        
+        return \Response::json([$res]);
+    }
+    
 }

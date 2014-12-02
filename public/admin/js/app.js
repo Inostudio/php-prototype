@@ -4,18 +4,12 @@ var adminApp = angular.module('adminApp', [
     'ngRoute',
     'adminControllers',
     'groupServices',
+    'permissionServices',
     'ngAnimate',
     'mgcrea.ngStrap',
     'mgcrea.ngStrap.alert'
-    //
-]);
 
-/*
-adminApp.config(function($modalProvider) {
-  angular.extend($modalProvider.defaults, {
-    animation: 'am-flip-x'
-  });
-});*/
+]);
 
 adminApp.config(['$routeProvider',
   function($routeProvider) {
@@ -44,20 +38,23 @@ adminApp.config(['$routeProvider',
         templateUrl:  '/angular/?ns=admin&id=adminPartials.groups',
         controller: 'GroupCtrl'
       }).
-      when('/groups/:groupId', {
-        templateUrl:  '/angular/?ns=admin&id=adminPartials.groups',
-        controller: 'GroupRemoveCtrl'
+      when('/permissions', {
+        templateUrl:  '/angular/?ns=admin&id=adminPartials.permissions',
+        controller: 'PermissionCtrl'
       })
      .when('/entities', {
         templateUrl: '/angular/?ns=admin&id=adminPartials.entities',
         controller: 'EntityCtrl'
+      }).
+      when('/groups/:groupId', {
+        templateUrl:  '/angular/?ns=admin&id=adminPartials.groupOptions',
+        controller: 'GroupOptionsCtrl'
       });
   }]);
-  
 
   adminApp.controller('activCtrl', ['$scope', '$location',
   function($scope, $location) {
-      $scope.isActive = function(path){
-        return path === $location.path();  
+      $scope.isActive = function(path){  
+            return ((path === $location.path()) || (($location.path().indexOf('/groups/') === 0) && (path === '/groupsPermis')));  
       };
   }]);

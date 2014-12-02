@@ -55,15 +55,23 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function(){
         'getLogout' => 'admin.logout'
     ]);
     
-    Route::post('/groupInfo', ['uses' => 'DashboardController@postGroups']);
+    Route::post('/groupInfo', ['uses' => 'DashboardController@postGroup']);
     Route::post('/addGroup', ['uses' => 'DashboardController@postAddGroup']);
-    Route::post('/removeGroup', ['uses' => 'DashboardController@postRemoveGroups']);
-    Route::post('/editGroup', ['uses' => 'DashboardController@postEditGroups']);
+    Route::post('/removeGroup', ['uses' => 'DashboardController@postRemoveGroup']);
+    Route::post('/editGroup', ['uses' => 'DashboardController@postEditGroup']);
+    
+    Route::post('/permissionInfo', ['uses' => 'DashboardController@postPermission']);
+    Route::post('/addPermission', ['uses' => 'DashboardController@postAddPermission']); 
+    Route::post('/removePermission', ['uses' => 'DashboardController@postRemovePermission']);
+    Route::post('/editPermission', ['uses' => 'DashboardController@postEditPermission']);
+    
+    Route::post('/groupOptions', ['uses' => 'DashboardController@postGroupOptions']);
+    Route::post('/changePermissionsInGroup', ['uses' => 'DashboardController@postChangePermissionsInGroup']);
 });
 
 Route::get('/test', function(){
     //echo action('admin.signin');
-    return View::make('hello2');
+    //return View::make('hello2');
 });
 
 
