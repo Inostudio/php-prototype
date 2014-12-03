@@ -13,7 +13,7 @@
     <div class="panel-body">
       <div class="row">
         <div class="col-md-4 col-lg-4" align="center">
-            <img alt="User Pic" ng-init="imageUrl = '<% $user->getPhoto() %>'; imageCroppedUrl = '<% $user->getCroppedPhoto() %>'; image = imageCroppedUrl" src="{{image}}" class="img-rounded" ng-click="photo('lg')">
+            <img alt="User Pic" ng-init="exists = '<% $user->existsPhoto() %>';imageUrl = '<% $user->getPhoto() %>'; imageCroppedUrl = '<% $user->getCroppedPhoto() %>'; image = imageCroppedUrl" src="{{image}}" class="img-rounded" ng-click="photo('lg')">
             <!--
             <button class="btn btn-default" ng-click="edit_thumbnail('lg')">Edit thumbnail</button>
             <button class="btn btn-default" ng-click="upload_new_photo('lg')">Upload a new photo</button>
@@ -142,7 +142,7 @@
             <div ng-show="isActive('ChangeThumbnail')">
                 <section>
                     <div class="cropArea small" ng-style="ImageStyle" style="height: 600px; margin: 0 auto;">
-                        <img-crop image="myImage" result-image="myCroppedImage" result-image-format="image/jpeg" area-type="square" result-image-size="80" on-change="MyFunct()"></img-crop>
+                        <img-crop image="myImage" result-image="myCroppedImage" result-image-format="image/jpeg" area-type="square"></img-crop>
                     </div>
                 </section>
             </div>
@@ -159,14 +159,14 @@
 
             <div ng-show="isActive('UploadPhoto')">
                 <div class="cropArea small" ng-style="NewPhotoImageStyle" style="height: 600px; margin: 0 auto;">
-                    <img-crop image="NewPhoto" result-image="NewPhotoCroppedImage" result-image-format="image/jpeg" area-type="square"  result-image-size="200"></img-crop>
+                    <img-crop image="NewPhoto" result-image="NewPhotoCroppedImage" result-image-format="image/jpeg" area-type="square"></img-crop>
                 </div>
             </div>
 
         </div>
     </div>
 
-    <div class="modal-footer" style="background: #fff3be; border-top: 1px solid #efe2a9">
+    <div class="modal-footer" style="background: #fff3be; border-top: 1px solid #efe2a9" ng-hide="new && isActive('NewPhoto')">
         <div ng-show="isActive('NewPhoto')">
             <button class="btn btn-primary" ng-click="changeToThumbnail()">Choose a thumbnail</button>
         </div>
