@@ -13,7 +13,7 @@
     <div class="panel-body">
       <div class="row">
         <div class="col-md-4 col-lg-4" align="center">
-            <img alt="User Pic" ng-init="imageUrl = '<% $user->getPhoto() %>'; imageCroppedUrl = '<% $user->getCroppedPhoto() %>'" src="{{imageCroppedUrl}}" class="img-rounded" ng-click="photo('lg')">
+            <img alt="User Pic" ng-init="imageUrl = '<% $user->getPhoto() %>'; imageCroppedUrl = '<% $user->getCroppedPhoto() %>'; image = imageCroppedUrl" src="{{image}}" class="img-rounded" ng-click="photo('lg')">
             <!--
             <button class="btn btn-default" ng-click="edit_thumbnail('lg')">Edit thumbnail</button>
             <button class="btn btn-default" ng-click="upload_new_photo('lg')">Upload a new photo</button>
@@ -142,7 +142,7 @@
             <div ng-show="isActive('ChangeThumbnail')">
                 <section>
                     <div class="cropArea small" ng-style="ImageStyle" style="height: 600px; margin: 0 auto;">
-                        <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
+                        <img-crop image="myImage" result-image="myCroppedImage" result-image-format="image/jpeg" area-type="square" result-image-size="80" on-change="MyFunct()"></img-crop>
                     </div>
                 </section>
             </div>
@@ -158,8 +158,8 @@
             </div>
 
             <div ng-show="isActive('UploadPhoto')">
-                <div class="cropArea small" ng-style="ImageStyle" style="height: 600px; margin: 0 auto;">
-                    <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
+                <div class="cropArea small" ng-style="NewPhotoImageStyle" style="height: 600px; margin: 0 auto;">
+                    <img-crop image="NewPhoto" result-image="NewPhotoCroppedImage" result-image-format="image/jpeg" area-type="square"  result-image-size="200"></img-crop>
                 </div>
             </div>
 
@@ -177,12 +177,12 @@
             </div>
 
             <div style="float: right">
-                <button class="btn btn-primary" ng-click="upload('thumbnail')">OK</button>
+                <button class="btn btn-primary" ng-click="upload(myCroppedImage)">OK</button>
                 <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
             </div>
         </div>
         <div ng-show="isActive('UploadPhoto')">
-            <button class="btn btn-primary" ng-click="upload()" style="float: left">Upload</button>
+            <button class="btn btn-primary" ng-click="upload(NewPhotoCroppedImage, NewPhoto)" style="float: left">Upload</button>
             <button class="btn btn-warning" ng-click="changeToSelectNewPhoto()" style="float: right">Cancel</button>
         </div>
     </div>

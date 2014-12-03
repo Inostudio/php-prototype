@@ -136,11 +136,11 @@ class ProfileController extends \BaseController
 
     public function postUploadImage()
     {
-        return Response::json($this->uploadImage(Input::get('sourceImage'), 'jpeg', 'FullImage.jpg'));
+        return Response::json($this->uploadImage(Input::get('sourceImage'), 'jpeg', 'FullImage.jpeg'));
     }
 
     public function postUploadCropped()
     {
-        return Response::json($this->uploadImage(Input::get('croppedImage'), 'png', 'CroppedImage.png'));
+        return Response::json($this->uploadImage(Input::get('croppedImage'), 'jpeg', 'CroppedImage.jpeg'));
     }
 }

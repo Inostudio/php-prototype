@@ -129,6 +129,10 @@ profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Pro
     $scope.myImage = "";
     $scope.myCroppedImage = "";
 
+    $scope.NewPhoto = "";
+    $scope.NewPhotoCroppedImage = "";
+
+
     $scope.init = false;
     $scope.Init = function() {
         if(!$scope.init) {
@@ -142,7 +146,7 @@ profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Pro
         var reader = new FileReader();
         reader.onload = function (evt) {
             $scope.$apply(function($scope){
-                $scope.myImage=evt.target.result;
+                $scope.NewPhoto=evt.target.result;
                 $scope.uploaded = true;
             });
             var img = new Image;
@@ -159,7 +163,7 @@ profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Pro
                         width = img.width / d;
                     }
 
-                    $scope.ImageStyle = {
+                    $scope.NewPhotoImageStyle = {
                         width: width + 'px',
                         height: height + 'px'
                     }
@@ -205,8 +209,7 @@ profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Pro
     };
 
     //Upload data
-    $scope.upload = function(load) {
-        load = typeof load !== 'undefined' ? load : 'all';
+    $scope.upload = function(CroppedImage, FullImage) {
 
         var success = function(data) {
             if (data[0] === true) {
@@ -214,17 +217,17 @@ profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Pro
             } else {
                 //console.log(data);//$scope.alert = { msg: data[1], type: 'danger'};
             }
-            $modalInstance.close($scope.myCroppedImage);
+            $modalInstance.close(CroppedImage);
         };
 
         var error = function(data) {
             console.log(data);//$scope.alert = { msg: 'Some problems', type: 'danger'};
         };
 
-        if(load === 'all') {
-            Profile.uploadImage($scope.myImage, success, error);
+        if(FullImage !== undefined) {
+            Profile.uploadImage(FullImage, success, error);
         }
-        Profile.uploadCropped($scope.myCroppedImage, success, error);
+        Profile.uploadCropped(CroppedImage, success, error);
     }
 
     //organization of transitions
@@ -245,4 +248,9 @@ profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Pro
     $scope.isActive = function(value) {
         return value == $scope.select;
     };
+
+    $scope.MyFunct = function(v) {
+        //console.log($dataUrl);
+        console.log(this.$dataURI);
+    }
 }]);
