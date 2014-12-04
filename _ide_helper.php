@@ -1,7 +1,7 @@
 <?php
 /**
  * An helper file for Laravel 4, to provide autocomplete information to your IDE
- * Generated for Laravel 4.2.11 on 2014-11-27.
+ * Generated for Laravel 4.2.11 on 2014-12-04.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -10906,9 +10906,9 @@ namespace {
          * session and deletes the old session from persistence.
          *
          * @param int $lifetime Sets the cookie lifetime for the session cookie. A null value
-         *                          will leave the system settings unchanged, 0 sets the cookie
-         *                          to expire with browser session. Time is in seconds, and is
-         *                          not a Unix timestamp.
+         *                      will leave the system settings unchanged, 0 sets the cookie
+         *                      to expire with browser session. Time is in seconds, and is
+         *                      not a Unix timestamp.
          * @return bool True if session invalidated, false if error.
          * @api 
          * @static 
@@ -10923,9 +10923,9 @@ namespace {
          *
          * @param bool $destroy Whether to delete the old session or leave it to garbage collection.
          * @param int $lifetime Sets the cookie lifetime for the session cookie. A null value
-         *                          will leave the system settings unchanged, 0 sets the cookie
-         *                          to expire with browser session. Time is in seconds, and is
-         *                          not a Unix timestamp.
+         *                       will leave the system settings unchanged, 0 sets the cookie
+         *                       to expire with browser session. Time is in seconds, and is
+         *                       not a Unix timestamp.
          * @return bool True if session migrated, false if error.
          * @api 
          * @static 
