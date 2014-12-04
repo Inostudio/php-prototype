@@ -2,12 +2,16 @@
 
 @section('include')
 <link rel="stylesheet" type="text/css" href="/front/css/entity.css" media="all" />
-@show
+@stop
 
 
 @section('content')
 
-<?php /* @var $faker Faker\Generator */ ?>
+<?php /* @var $faker Faker\Generator */ 
+        
+    $categories[0] = 'All';
+
+?>
 
 <div class="container">
 
@@ -23,25 +27,17 @@
 
                       <div class="form-group">
                           <label>Search phrase</label>
-                          <input type="text" name="" id="" class="form-control" />
+                          <input type="text" name="phrase" id="" class="form-control" value="<%%Input::get('phrase')%%>" />
                       </div>
                       
                       <div class="form-group">
-                          <label>Type</label>
-                          <select name="" id="" class="form-control">
-                              <?php foreach (range(1, 10) as $t){ ?>
-                              <option value=""><?=ucfirst($faker->word);?></option>
-                              <?php } ?>
-                          </select>
+                          <label>Categories</label>                          
+                          <?=Form::select('category_id', $categories, Input::get('category_id'), ['class' => 'form-control', 'style' => 'width: 249px;'])?>
                       </div>
                       
                       <div class="form-group">
-                          <label>Order by</label>
-                          <select name="" id="" class="form-control">
-                              <?php foreach (range(1, 3) as $t){ ?>
-                              <option value=""><?=ucfirst($faker->word);?></option>
-                              <?php } ?>
-                          </select>
+                          <label>Show order</label>                          
+                          <?=Form::select('order', $orderOptions, Input::get('order'), ['class' => 'form-control']); ?>
                       </div>
 
                       <div class="checkbox">
@@ -56,7 +52,7 @@
                   </form>
 
               </div>
-            </div>            
+            </div>
 
 
         </div>
@@ -65,44 +61,27 @@
 
             <div style="overflow: hidden;">
                 <nav class="pull-right" >
-                    <ul class="pagination" style="margin-top: 0;">
-                        <li><a href="#"><span aria-hidden="true">&laquo;</span><span class="sr-only">Previous</span></a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#"><span aria-hidden="true">&raquo;</span><span class="sr-only">Next</span></a></li>
-                    </ul>
+                    <?=$articles->links();?>
                 </nav>
                 
-                <p class="text-info pull-left">We have found 50 entities</p>
+                <p class="text-info pull-left">We have found <?=$articles->getTotal();?> entities</p>
             </div>
 
-            <?php foreach (range(1, 10) as $f){ ?>
+            <?php foreach ($articles as $article){ /* @var $article Article */ ?>
             <div class="entity">
                 <div style="background:<?=$faker->hexcolor?>" class="image"></div>
                 
                 <div class="description">
-                    <h4><a href=""><?=$faker->text(90);?></a></h4>
+                    <h4><a href="<?=action('front.articles.show', ['articles' => $article->id]);?>"><?=$article->title;?></a></h4>
                     <p class="additional"><?=$faker->company?> | <?=$faker->date();?></p>
-                    <p><?=$faker->text(300);?></p>
-                    
+                    <p><?=Str::limit($article->body, 200);?></p>
                 </div>
                 
             </div>
             <?php } ?>
             
             <nav>
-                <ul class="pagination">
-                    <li><a href="#"><span aria-hidden="true">&laquo;</span><span class="sr-only">Previous</span></a></li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li><a href="#"><span aria-hidden="true">&raquo;</span><span class="sr-only">Next</span></a></li>
-                </ul>
+                <?=$articles->links();?>
             </nav>
 
 
@@ -131,7 +110,6 @@
 
 
         </div>        
-
 
     </div>
 

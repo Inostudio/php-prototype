@@ -23,5 +23,4 @@ class EntityController extends \Controller
     {
         return View::make('front.entity.show');
     }
-    
 }

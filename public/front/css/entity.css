@@ -9,3 +9,18 @@
         float: left;
         margin: 5px;
     }
+    
+    .entity .description{
+        margin-left: 112px;
+    }
+    
+    .entity .description>h4{
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+    
+    .entity .description .additional{
+        margin: 4px 0;
+        color: #888;
+    }
+    
