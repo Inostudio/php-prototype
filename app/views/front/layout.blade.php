@@ -1,5 +1,7 @@
 <?php
 
+    use Illuminate\Support\Str;
+
     $routeName = Route::getCurrentRoute()->getName();
 
 ?>
@@ -63,14 +65,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Ino Prototype</a>
+          <a class="navbar-brand" href="/">Ino Prototype</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li <?=$routeName=='front.home' ? 'class="active"' : ''; ?> ><a href="/">Home</a></li>
             <li <?=$routeName=='front.about' ? 'class="active"' : ''; ?>><a href="<?=action('front.about');?>">About</a></li>
             <li <?=$routeName=='front.contact' ? 'class="active"' : ''; ?>><a href="<?=action('front.contact');?>">Contact</a></li>
-            <li <?=$routeName=='front.entity.index' ? 'class="active"' : ''; ?>><a href="<?=action('front.entity.index');?>">Entities</a></li>
+            <li <?=Str::startsWith($routeName, 'front.articles') ? 'class="active"' : ''; ?>><a href="<?=action('front.articles.index');?>">Articles</a></li>
             <?php if(0){ ?>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>

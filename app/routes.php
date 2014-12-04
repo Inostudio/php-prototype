@@ -38,6 +38,20 @@ Route::group(['namespace' => 'Front'], function(){
         ]
     ]);
     
+    Route::resource('articles', 'ArticlesController', [
+        'names' => [
+            
+            'create' => 'front.articles.create',
+            'index' => 'front.articles.index',
+            'show' => 'front.articles.show',
+            'destroy' => 'front.articles.destroy',
+            'update' => 'front.articles.update',
+            'edit' => 'front.articles.edit',
+            'store' => 'front.articles.store'
+
+        ]
+    ]);
+    
 });
 
 

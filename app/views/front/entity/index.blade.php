@@ -82,8 +82,14 @@
             <?php foreach (range(1, 10) as $f){ ?>
             <div class="entity">
                 <div style="background:<?=$faker->hexcolor?>" class="image"></div>
-                <h4><?=$faker->sentence();?></h4>
-                <p><?=$faker->text();?></p>
+                
+                <div class="description">
+                    <h4><a href=""><?=$faker->text(90);?></a></h4>
+                    <p class="additional"><?=$faker->company?> | <?=$faker->date();?></p>
+                    <p><?=$faker->text(300);?></p>
+                    
+                </div>
+                
             </div>
             <?php } ?>
             
