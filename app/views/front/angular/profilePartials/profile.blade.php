@@ -12,8 +12,14 @@
     </div>
     <div class="panel-body">
       <div class="row">
-        <div class="col-md-3 col-lg-3 " align="center"> <img alt="User Pic" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle"> </div>
-        <div class=" col-md-9 col-lg-9 ">
+        <div class="col-md-4 col-lg-4" align="center">
+            <img alt="User Pic" ng-init="exists = '<% $user->existsPhoto() %>';imageUrl = '<% $user->getPhoto() %>'; imageCroppedUrl = '<% $user->getCroppedPhoto() %>'; image = imageCroppedUrl" src="{{image}}" class="img-rounded" ng-click="photo('lg')">
+            <!--
+            <button class="btn btn-default" ng-click="edit_thumbnail('lg')">Edit thumbnail</button>
+            <button class="btn btn-default" ng-click="upload_new_photo('lg')">Upload a new photo</button>
+            -->
+        </div>
+        <div class=" col-md-8 col-lg-8 ">
             <form name="form" novalidate>
               <table class="table table-user-information">
                 <tbody>
@@ -116,3 +122,68 @@
         </div>
     </div>
 </div>
+
+
+<style>
+.cropArea {
+    background: #E4E4E4;
+    overflow: hidden;
+    width: 500px;
+    height: 350px;
+}
+</style>
+
+<script type="text/ng-template" id="editPhoto.html">
+    <div style="display: inline-block; background: #efefef; width: 100%;" ng-style="">
+        <div class="modal-header">
+            <h3 class="modal-title">Choose a new thumbnail</h3>
+        </div>
+        <div class="modal-body" style="height: 600px;border: dashed 3px #c5cacd; margin: 15px; background: #fff; ">
+            <div ng-show="isActive('ChangeThumbnail')">
+                <section>
+                    <div class="cropArea small" ng-style="ImageStyle" style="height: 600px; margin: 0 auto;">
+                        <img-crop image="myImage" result-image="myCroppedImage" result-image-format="image/jpeg" area-type="square"></img-crop>
+                    </div>
+                </section>
+            </div>
+
+            <div ng-show="isActive('NewPhoto')">
+                <div>
+                    Select an image file:
+                    <input type="file" ng-model="fileInput" id="fileInput" ng-click="Init()" />
+                    <div class="uploadcare-dialog-big-button" ng-click="choose()">
+                    Choose a local file
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="isActive('UploadPhoto')">
+                <div class="cropArea small" ng-style="NewPhotoImageStyle" style="height: 600px; margin: 0 auto;">
+                    <img-crop image="NewPhoto" result-image="NewPhotoCroppedImage" result-image-format="image/jpeg" area-type="square"></img-crop>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-footer" style="background: #fff3be; border-top: 1px solid #efe2a9" ng-hide="new && isActive('NewPhoto')">
+        <div ng-show="isActive('NewPhoto')">
+            <button class="btn btn-primary" ng-click="changeToThumbnail()">Choose a thumbnail</button>
+        </div>
+
+        <div ng-show="isActive('ChangeThumbnail')">
+            <div style="float: left">
+                <button class="btn btn-primary" ng-click="changeToSelectNewPhoto()">Upload a new photo</button>
+            </div>
+
+            <div style="float: right">
+                <button class="btn btn-primary" ng-click="upload(myCroppedImage)">OK</button>
+                <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+            </div>
+        </div>
+        <div ng-show="isActive('UploadPhoto')">
+            <button class="btn btn-primary" ng-click="upload(NewPhotoCroppedImage, NewPhoto)" style="float: left">Upload</button>
+            <button class="btn btn-warning" ng-click="changeToSelectNewPhoto()" style="float: right">Cancel</button>
+        </div>
+    </div>
+</script>

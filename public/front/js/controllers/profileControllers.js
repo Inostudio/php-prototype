@@ -10,7 +10,7 @@ profileControllers.controller('NavbarCtrl', ['$scope', '$location', function($sc
     };
 }]);
 
-profileControllers.controller('ShowCtrl', ['$scope', '$location', 'Profile', function($scope, $location, Profile) {
+profileControllers.controller('ShowCtrl', ['$scope', '$location', 'Profile', '$modal', function($scope, $location, Profile, $modal) {
 
     $scope.alert = undefined;
     $scope.closeAlert = function() {
@@ -61,6 +61,29 @@ profileControllers.controller('ShowCtrl', ['$scope', '$location', 'Profile', fun
             Profile.changeProfile($scope.temp, success, error);
         }
     };
+
+    $scope.photo = function (size) {
+        var modalInstance = $modal.open({
+            templateUrl: 'editPhoto.html',
+            controller: 'EditPhotoCtrl',
+            size: size,
+            resolve: {
+                imageUrl: function() {
+                    return $scope.imageUrl;
+                },
+                exists: function () {
+                    return $scope.exists;
+                }
+            }
+        });
+
+        modalInstance.result.then(function (Image) {
+            $scope.image = Image;
+            $scope.exists = true;
+            $scope.alert = { msg: 'The thumbnail successfully changed ', type: 'success'};
+        });
+
+    };
 }]);
 
 profileControllers.controller('EditCtrl', ['$scope', 'Profile', function($scope, Profile) {
@@ -106,5 +129,158 @@ profileControllers.controller('EditCtrl', ['$scope', 'Profile', function($scope,
     };
 }]);
 
-profileControllers.controller('PhotoCtrl', ['$scope', function($scope) {
+profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Profile', 'imageUrl', 'exists', function ($scope, $modalInstance, Profile, imageUrl, exists) {
+    //organization of transitions
+    $scope.select = 'ChangeThumbnail';
+
+    $scope.changeToUploadNewPhoto = function() {
+        $scope.select = 'UploadPhoto';
+    }
+
+    $scope.changeToSelectNewPhoto = function() {
+        $scope.select = 'NewPhoto';
+    }
+
+    $scope.changeToThumbnail = function() {
+        $scope.select = 'ChangeThumbnail';
+    }
+
+    $scope.isActive = function(value) {
+        return value == $scope.select;
+    };
+
+    $scope.myImage = "";
+    $scope.myCroppedImage = "";
+
+    $scope.NewPhoto = "";
+    $scope.NewPhotoCroppedImage = "";
+
+
+    $scope.init = false;
+    $scope.Init = function() {
+        if(!$scope.init) {
+            $scope.init = true;
+            angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
+        }
+    }
+
+
+
+    var handleFileSelect=function(evt) {
+        var file=evt.currentTarget.files[0];
+        var reader = new FileReader();
+        reader.onload = function (evt) {
+            $scope.$apply(function($scope){
+                $scope.NewPhoto=evt.target.result;
+                $scope.uploaded = true;
+            });
+            var img = new Image;
+
+            img.onload = function() {
+                var ratio = img.height / img.width;
+
+                $scope.$apply(function($scope){
+                    var height = 0, width = 0, maxHeight = 564, maxWidth = 832;
+
+                    if(img.height > maxHeight && img.width > maxWidth) {
+                        var d = img.height / maxHeight;
+                        height = maxHeight;
+                        width = img.width / d;
+                    }
+                    else if (img.height > maxHeight && img.width < maxWidth) {
+                        width = img.width / ratio;
+                        height = maxHeight;
+                    }
+                    else if (img.height < maxHeight && img.width > maxWidth) {
+                        width = maxWidth;
+                        height = img.height / ratio;
+                    }
+                    else {
+                        height = img.height;
+                        width = img.width;
+                    }
+
+                    $scope.NewPhotoImageStyle = {
+                        width: width + 'px',
+                        height: height + 'px'
+                    }
+                });
+
+            };
+
+            img.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+        $scope.changeToUploadNewPhoto();
+    };
+
+
+    if(exists) {
+        var img = new Image;
+        img.onload = function() {
+            $scope.myImage= this.src;
+            var ratio = img.height / img.width;
+
+            $scope.$apply(function($scope){
+                var height = 0, width = 0, maxHeight = 564, maxWidth = 832;
+
+                if(img.height > maxHeight && img.width > maxWidth) {
+                    var d = img.height / maxHeight;
+                    height = maxHeight;
+                    width = img.width / d;
+                }
+                else if (img.height > maxHeight && img.width < maxWidth) {
+                    width = img.width / ratio;
+                    height = maxHeight;
+                }
+                else if (img.height < maxHeight && img.width > maxWidth) {
+                    width = maxWidth;
+                    height = img.height / ratio;
+                }
+                else {
+                    height = img.height;
+                    width = img.width;
+                }
+
+                $scope.ImageStyle = {
+                    width: width + 'px',
+                    height: height + 'px'
+                }
+            });
+
+        };
+        img.src = imageUrl;
+    } else {
+        $scope.select = 'NewPhoto';
+        $scope.new = true;
+    }
+
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
+
+    //Upload data
+    $scope.upload = function(CroppedImage, FullImage) {
+
+        var success = function(data) {
+            if (data[0] === true) {
+                //console.log(data);//$scope.alert = { msg: data[1], type: 'success'};
+            } else {
+                //console.log(data);//$scope.alert = { msg: data[1], type: 'danger'};
+            }
+            $modalInstance.close(CroppedImage);
+        };
+
+        var error = function(data) {
+            console.log(data);//$scope.alert = { msg: 'Some problems', type: 'danger'};
+        };
+
+        if(FullImage !== undefined) {
+            Profile.uploadImage(FullImage, success, error);
+        }
+        Profile.uploadCropped(CroppedImage, success, error);
+    }
+
+
 }]);

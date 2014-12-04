@@ -3,6 +3,7 @@
  */
 
 var profileApp = angular.module('profileApp', [
+    'ngImgCrop',
     'ngRoute',
     'profileControllers',
     'profileServices',
@@ -18,10 +19,6 @@ profileApp.config(['$routeProvider', function ($routeProvider) {
         when('/edit_password', {
             templateUrl: '/angular/?ns=front&id=profilePartials.edit_password',
             controller: 'EditCtrl'
-        }).
-        when('/photo', {
-            templateUrl: '/angular/?ns=front&id=profilePartials.photo',
-            controller: 'PhotoCtrl'
         }).
         otherwise({
             redirectTo: '/'
