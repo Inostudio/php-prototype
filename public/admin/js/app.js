@@ -5,6 +5,7 @@ var adminApp = angular.module('adminApp', [
     'adminControllers',
     'groupServices',
     'permissionServices',
+    'pagesServices',
     'ngAnimate',
     'mgcrea.ngStrap',
     'mgcrea.ngStrap.alert'
@@ -24,7 +25,7 @@ adminApp.config(['$routeProvider',
       }).
       when('/pages', {
         templateUrl:  '/angular/?ns=admin&id=adminPartials.pages',
-        controller: 'AdminCtrl'
+        controller: 'PagesCtrl'
       }).
       when('/products', {
         templateUrl:  '/angular/?ns=admin&id=adminPartials.products',

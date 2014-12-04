@@ -67,6 +67,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function(){
     
     Route::post('/groupOptions', ['uses' => 'DashboardController@postGroupOptions']);
     Route::post('/changePermissionsInGroup', ['uses' => 'DashboardController@postChangePermissionsInGroup']);
+
+    Route::get('/allPage', ['uses' => 'StaticPageController@getAllPage']);
 });
 
 Route::get('/test', function(){

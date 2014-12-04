@@ -1,4 +1,4 @@
-var adminControllers = angular.module('adminControllers', ['ui.grid', 'ui.grid.edit']);
+var adminControllers = angular.module('adminControllers', ['ui.grid', 'ui.grid.edit', 'ngDrop']);
 
 
 adminControllers.controller('AdminCtrl', ['$scope',
@@ -369,4 +369,8 @@ adminControllers.controller('GroupOptionsCtrl', ['$scope', '$routeParams', 'Grou
             
         });   
         
+}]);
+
+adminControllers.controller('PagesCtrl', ['$scope', 'Pages', function($scope, Pages) {
+    //$scope.pages = Pages.query();
 }]);

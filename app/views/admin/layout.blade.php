@@ -42,7 +42,9 @@
     <script src="/admin/js/controllers.js" type="text/javascript"></script>
     <script src="/admin/js/services.js" type="text/javascript"></script>
     
-    
+    @section('include')
+
+    @show
 
     <style type="text/css">
         .grid {

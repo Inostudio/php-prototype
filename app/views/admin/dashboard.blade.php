@@ -1,5 +1,11 @@
 @extends('admin.layout')
 
+@section('include')
+    <script type="text/javascript" src="/admin/vendors/directives/js/ng-drop.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/admin/vendors/directives/css/ng-drop.css">
+@stop
+
 @section('content')
 
     <h1 class="page-header">Dashboard</h1>

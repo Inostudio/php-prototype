@@ -76,3 +76,11 @@ groupServices.factory('ChangePermissionsInGroup', ['$resource',
       query: {method:'POST', params:{gId: $groupId, accept: $accept, permId: $permId}, isArray:true}
     });
 }]);
+
+var pagesServices = angular.module('pagesServices', ['ngResource']);
+
+pagesServices.factory('Pages', ['$resource', function($resource) {
+    return $resource('/adm/allPage', {}, {
+        query: {method:'GET', params:{}, isArray:true}
+    });
+}]);

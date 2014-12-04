@@ -1,5 +1,7 @@
 <?php
 
+namespace Admin;
+
 class StaticPageController extends \BaseController {
 
 	/**
@@ -8,9 +10,11 @@ class StaticPageController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function getAllPage()
 	{
-		//
+		$pages = \Page::where('user_id', '=', \Auth::user()->id)->get();
+        //$status = $pages[0]->status;
+        return \Response::json($pages);
 	}
 
 	/**
