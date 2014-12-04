@@ -12,6 +12,9 @@
         "fzaninotto/faker": "1.5.*@dev",
         "knplabs/gaufrette": "0.1.*"
 	},
+    "require-dev": {
+        "way/generators": "~2.0"
+    },
 	"autoload": {
 		"classmap": [
 			"app/commands",
