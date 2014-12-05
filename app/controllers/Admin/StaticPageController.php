@@ -2,7 +2,20 @@
 
 namespace Admin;
 
+use Illuminate\Support\Facades\Input;
+
 class StaticPageController extends \BaseController {
+
+    /**
+     *
+     * @var PermissionsService
+     */
+    protected $pages = null;
+
+
+    public function __construct(\PagesService $ps) {
+        $this->pages = $ps;
+    }
 
 	/**
 	 * Display a listing of the resource.
@@ -10,12 +23,29 @@ class StaticPageController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function getAllPage()
+	public function getAllPages()
 	{
 		$pages = \Page::where('user_id', '=', \Auth::user()->id)->get();
         //$status = $pages[0]->status;
         return \Response::json($pages);
 	}
+
+    public function postAddPage()
+    {
+        $page_id = $this->pages->createPage(
+            Input::get('title'),
+            Input::get('body'),
+            Input::get('url'),
+            Input::get('status'));
+        return \Response::json([$page_id]);
+    }
+
+    public function getAllStatuses()
+    {
+        $statuses = \Status::all();
+        //$status = $pages[0]->status;
+        return \Response::json($statuses);
+    }
 
 	/**
 	 * Show the form for creating a new resource.

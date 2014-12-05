@@ -1,4 +1,4 @@
-var adminControllers = angular.module('adminControllers', ['ui.grid', 'ui.grid.edit', 'ngDrop']);
+var adminControllers = angular.module('adminControllers', ['ui.grid', 'ui.grid.edit']);
 
 
 adminControllers.controller('AdminCtrl', ['$scope',
@@ -371,6 +371,34 @@ adminControllers.controller('GroupOptionsCtrl', ['$scope', '$routeParams', 'Grou
         
 }]);
 
-adminControllers.controller('PagesCtrl', ['$scope', 'Pages', function($scope, Pages) {
-    //$scope.pages = Pages.query();
+adminControllers.controller('PagesCtrl', ['$scope', 'AddPage', 'Status', 'Pages', function($scope, AddPage, Status, Pages) {
+    $scope.create = false;
+    $scope.pages = Pages.query();
+    $scope.statuses = Status.query();
+
+    $scope.save = function(page) {
+
+        AddPage.query({title: page.title, body: page.body, status: page.status, url: page.url}, function(res) {
+            clearNewPage()
+        });
+        $scope.pages = Pages.query(function(){
+            $scope.create = false;
+        });
+    }
+
+    $scope.show = function(id) {
+        console.log(id);
+    }
+
+    $scope.createPage = function() {
+        $scope.create = true;
+    }
+
+    $scope.showAllPages = function() {
+        $scope.create = false;
+    }
+
+    var clearNewPage = function() {
+        $scope.page = {};
+    }
 }]);

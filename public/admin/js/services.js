@@ -80,7 +80,24 @@ groupServices.factory('ChangePermissionsInGroup', ['$resource',
 var pagesServices = angular.module('pagesServices', ['ngResource']);
 
 pagesServices.factory('Pages', ['$resource', function($resource) {
-    return $resource('/adm/allPage', {}, {
+    return $resource('/adm/allPages', {}, {
+        query: {method:'GET', params:{}, isArray:true}
+    });
+}]);
+
+pagesServices.factory('AddPage', ['$resource', function($resource, $title, $body, $status, $url) {
+    return $resource('/adm/addPage', {}, {
+        query: {method:'POST', params:{
+            title: $title,
+            body: $body,
+            status_id: $status,
+            url: $url
+        }, isArray:true}
+    });
+}]);
+
+pagesServices.factory('Status', ['$resource', function($resource) {
+    return $resource('/adm/allStatuses', {}, {
         query: {method:'GET', params:{}, isArray:true}
     });
 }]);
