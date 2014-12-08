@@ -101,3 +101,19 @@ pagesServices.factory('Status', ['$resource', function($resource) {
         query: {method:'GET', params:{}, isArray:true}
     });
 }]);
+
+pagesServices.factory('GetPage', ['$resource', function($resource, $id) {
+    return $resource('/adm/getPage', {}, {
+        query: {method:'POST', params:{
+            id: $id
+        }, isArray:false}
+    });
+}]);
+
+pagesServices.factory('DeletePage', ['$resource', function($resource, $id) {
+    return $resource('/adm/deletePage', {}, {
+        query: {method:'POST', params:{
+            id: $id
+        }, isArray:true}
+    });
+}]);

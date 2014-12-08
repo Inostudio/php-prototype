@@ -5,9 +5,9 @@ class StatusTableSeeder extends Seeder {
 
 	public function run()
 	{
-        Status::create(['title' => 'private']);
-		Status::create(['title' => 'public']);
-        Status::create(['title' => 'draw']);
+        Status::create(['title' => 'Private']);
+		Status::create(['title' => 'Public']);
+        Status::create(['title' => 'Draw']);
 	}
 
 }

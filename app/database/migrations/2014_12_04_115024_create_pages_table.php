@@ -21,6 +21,8 @@ class CreatePagesTable extends Migration {
 			$table->integer('user_id');
             $table->string('url');
 			$table->timestamps();
+
+            $table->softDeletes();
 		});
 	}
 

@@ -14,7 +14,7 @@ class PagesService
         $page->title = $title;
         $page->body = $body;
         $page->user_id = Auth::user()->id;
-        //$page->url = $url;
+        $page->url = $url;
         $page->status_id = $status_id;
         $page->save();
 

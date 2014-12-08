@@ -22,7 +22,7 @@
     <script type="text/javascript" src="/admin/vendors/angular/angular.min.js"></script>
     <script type="text/javascript" src="/admin/vendors/ui-grid/ui-grid.min.js"></script>
     
-    <script type="text/javascript" src="/admin/vendors/ui-bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>
+    <script type="text/javascript" src="/admin/vendors/ui-bootstrap/ui-bootstrap-tpls-0.12.0.min.js"></script>
     <script src="/admin/vendors/angular/angular-route.min.js" type="text/javascript"></script>
     <script src="/admin/vendors/angular/angular-resource.min.js" type="text/javascript"></script>
     <script src="/admin/vendors/angular/angular-animate.js" type="text/javascript"></script>

@@ -3,13 +3,11 @@
 var adminApp = angular.module('adminApp', [
     'ngRoute',
     'adminControllers',
+    'pagesControllers',
     'groupServices',
     'permissionServices',
     'pagesServices',
     'ngAnimate',
-    'mgcrea.ngStrap',
-    'mgcrea.ngStrap.alert'
-
 ]);
 
 adminApp.config(['$routeProvider',

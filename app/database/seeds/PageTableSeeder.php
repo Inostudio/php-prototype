@@ -15,6 +15,7 @@ class PageTableSeeder extends Seeder {
                 'title' => $faker->sentence(),
                 'body' => $faker->text(800),
                 'status_id' => 1,
+                'url' => $faker->url,
                 'user_id' => 1
 			]);
 		}

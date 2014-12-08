@@ -35,7 +35,7 @@
                                         <div class="well well-sm">
                                             <form class="form form-inline " role="form">
                                                 <div class="form-group" style="width: 100%">
-                                                    <select class="form-control" style="width: 100%" ng-model="page.status">
+                                                    <select class="form-control" style="width: 100%" ng-model="page.status_id">
                                                         <option ng-repeat="status in statuses" value="{{status.id}}">{{status.title}}</option>
                                                     </select>
                                                 </div>
@@ -74,12 +74,14 @@
             <tbody>
                 <tr ng-repeat="page in pages">
                     <th>{{page.id}}</th>
-                    <th><span ng-click="show(page.id)">{{page.title}}</span></th>
+                    <th><span>{{page.title}}</span></th>
                     <th> <p>{{page.body}}</p></th>
                     <th>url</th>
 
-                    <th><button disabled class="btn btn-default">{{statuses[page.status_id].title}}</button></th>
-                    <th>delete</th>
+                    <th><button disabled class="btn btn-default">{{statuses[page.status_id - 1].title}}</button></th>
+                    <th ng-click="show(page.id)">Show</th>
+                    <th ng-click="confirmDelete(page.id)">Delete</th>
+                    <th ng-click="edit(page.id)">Edit</th>
                 </tr>
             </tbody>
         </table>
@@ -91,3 +93,16 @@
         <p></p>
     </div>
 </div>
+
+<script type="text/ng-template" id="ConfirmDelete.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Deleting!</h3>
+    </div>
+    <div class="modal-body">
+        Are you sure that you want delete this page?
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>

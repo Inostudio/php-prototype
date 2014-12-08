@@ -1,4 +1,5 @@
-var adminControllers = angular.module('adminControllers', ['ui.grid', 'ui.grid.edit']);
+var adminControllers = angular.module('adminControllers', ['ui.grid', 'ui.grid.edit','mgcrea.ngStrap',
+    'mgcrea.ngStrap.alert', 'ui.bootstrap']);
 
 
 adminControllers.controller('AdminCtrl', ['$scope',
@@ -371,14 +372,16 @@ adminControllers.controller('GroupOptionsCtrl', ['$scope', '$routeParams', 'Grou
         
 }]);
 
-adminControllers.controller('PagesCtrl', ['$scope', 'AddPage', 'Status', 'Pages', function($scope, AddPage, Status, Pages) {
+var pagesControllers = angular.module('pagesControllers', ['ui.bootstrap']);
+
+pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status', 'Pages', 'GetPage', 'DeletePage', function($scope, $modal, AddPage, Status, Pages, GetPage, DeletePage) {
     $scope.create = false;
     $scope.pages = Pages.query();
     $scope.statuses = Status.query();
 
     $scope.save = function(page) {
 
-        AddPage.query({title: page.title, body: page.body, status: page.status, url: page.url}, function(res) {
+        AddPage.query({title: page.title, body: page.body, status: page.status, url: page.url}, function() {
             clearNewPage()
         });
         $scope.pages = Pages.query(function(){
@@ -390,7 +393,42 @@ adminControllers.controller('PagesCtrl', ['$scope', 'AddPage', 'Status', 'Pages'
         console.log(id);
     }
 
+    $scope.edit = function(id) {
+        $scope.page = GetPage.query({id: id});
+
+        $scope.create = true;
+    }
+
+    var deletePage = function (id) {
+        DeletePage.query({id: id}, function(res) {
+            index = 0;
+            for(i = 0; i < $scope.pages.length; i++) {
+                if($scope.pages[i].id == id) {
+                    index = i;
+                    break;
+                }
+            }
+            $scope.pages.splice(index, 1);
+        });
+    }
+
+    $scope.confirmDelete = function(id) {
+        console.log($modal);
+        var modalInstance = $modal.open({
+            templateUrl: 'ConfirmDelete.html',
+            controller: 'ModalConfirmDeleteCtrl',
+            size: 'sm'
+        });
+
+        modalInstance.result.then(function () {
+            deletePage(id);
+        });
+
+
+    }
+
     $scope.createPage = function() {
+        clearNewPage();
         $scope.create = true;
     }
 
@@ -402,3 +440,14 @@ adminControllers.controller('PagesCtrl', ['$scope', 'AddPage', 'Status', 'Pages'
         $scope.page = {};
     }
 }]);
+
+pagesControllers.controller('ModalConfirmDeleteCtrl', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+        $scope.ok = function () {
+            $modalInstance.close();
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss();
+        };
+}]);
+
