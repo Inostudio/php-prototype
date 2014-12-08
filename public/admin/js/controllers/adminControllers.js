@@ -32,7 +32,7 @@ adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'Remove
     });
     
     //Redirect to permission
-    $scope.$on('EventForRedirectToCroupOptions', function (event, id) {
+    $scope.$on('EventForRedirectToGroupOptions', function (event, id) {
         alertError.hide();
         alertSuccess.hide();
         
@@ -44,12 +44,12 @@ adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'Remove
           { name: 'id', enableCellEdit: false, width: '5%', enableFiltering: false },
           { name: 'title', displayName: 'Title', width: '20%' },
           { name: 'description', displayName: 'Description' , width: '30%', enableFiltering: false },
-          { name: 'permissioms', displayName: 'Permissions' , width: '15%', enableFiltering: false,  enableSorting: false, 
-            cellTemplate: '<span class="fa fa-edit" ng-click="$emit(\'EventForRedirectToCroupOptions\', row.entity.id)" style="cursor: pointer; padding-left: 40%;"></span>'},
+          { name: 'permissions', displayName: 'Permissions' , width: '15%', enableFiltering: false,  enableSorting: false, enableCellEdit: false,//permissioms
+            cellTemplate: '<span class="fa fa-edit" ng-click="$emit(\'EventForRedirectToGroupOptions\', row.entity.id)" style="cursor: pointer; padding-left: 40%;"></span>'},
           { name: 'remove', displayName: 'Remove' , width: '10%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
               cellTemplate: '<span class="fa fa-close" ng-click="$emit(\'EventForDropGroup\', row.entity.id)" style="cursor: pointer; padding-left: 40%;"></span>' }
     ];
-      //$scope.gridOptions.data = [];1
+      //$scope.gridOptions.data = [];
     $scope.msg = {};
     $scope.gridOptions.onRegisterApi = function(gridApi){
         //set gridApi on scope
@@ -181,7 +181,6 @@ adminControllers.controller('PermissionCtrl', ['$scope', '$alert', 'Permission',
         //Получение
         Permission.queryInfo(function(res){
           $scope.gridOptions_perm.data = res;
-          //console.log(res);
         });
       
         //Добавление
@@ -242,7 +241,7 @@ adminControllers.controller('PermissionCtrl', ['$scope', '$alert', 'Permission',
             //set gridApi on scope
            //$scope.gridApi = gridApi;
            gridApi.edit.on.afterCellEdit($scope,function(rowEntity, colDef, newValue, oldValue){
-                console.log('edited row id:' + rowEntity.id + ' Column:' + colDef.name + ' newValue:' + newValue + ' oldValue:' + oldValue);
+                //console.log('edited row id:' + rowEntity.id + ' Column:' + colDef.name + ' newValue:' + newValue + ' oldValue:' + oldValue);
                 alertError.hide();
                 alertSuccess.hide();
 
@@ -281,7 +280,6 @@ adminControllers.controller('PermissionCtrl', ['$scope', '$alert', 'Permission',
                         } else {
                             if(oldValue !== newValue)
                             {
-                                //alert("Title");
                                 EditPermission.query({permissionId: rowEntity.id, title: newValue, permissionDescription: oldPermission.description}, function(answer){
                                     if(answer[0] === false){
                                         alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
@@ -326,12 +324,13 @@ adminControllers.controller('GroupOptionsCtrl', ['$scope', '$routeParams', 'Grou
                 cellTemplate: '<span class="fa" ng-class="{\' fa-check\': row.entity.accept, \'fa-close \':!row.entity.accept}" ng-click="$emit(\'EventChangeGroup\', row.entity.id, row.entity.accept)" style="cursor: pointer; padding-left: 40%;"></span>'}
         ];
         
-        //cellTemplate: '<span ng-click="$emit(\'EventChangeGroup\', row.entity.id)" style="cursor: pointer; padding-left: 40%;">{{row.entity.accept}}</span>'
+        //Получение
         GroupOptions.query({groupId: $routeParams.groupId}, function(answer){
             $scope.groupTitle = answer[0].title;
             $scope.groupDescription = answer[0].description;
             $scope.groupId = answer[0].id;
             
+            //console.log(answer);
             angular.forEach(answer[2][0], function(permission) {
                 permission.accept = 0;
                 angular.forEach(answer[1][0], function(group) {
@@ -343,11 +342,9 @@ adminControllers.controller('GroupOptionsCtrl', ['$scope', '$routeParams', 'Grou
             });
             
             $scope.gridOptions_groupOptions.data = answer[2][0];
-            
         });
         
-        
-        
+        //Изменение разрешений группы
         $scope.$on('EventChangeGroup', function (event, id, accept) {
             alertSuccess.hide();
             ChangePermissionsInGroup.query({groupId: $scope.groupId, accept : accept, permId: id}, function(answer){
@@ -367,6 +364,249 @@ adminControllers.controller('GroupOptionsCtrl', ['$scope', '$routeParams', 'Grou
                 }
             });
             
-        });   
+        });    
+}]);
+
+adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser', 'RemoveUser', 'EditUser',
+    function($scope, $alert, User, AddUser, RemoveUser, EditUser) {
+        var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container-for-users'});
+        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container-for-users'});
         
+        $scope.unavailable = false;
+        
+        //$scope.users_grid = { enableFiltering: true };
+        $scope.users_grid = {
+            /*pagingPageSizes: [25, 50, 75],
+            pagingPageSize: 25,*/
+            enableFiltering: false
+        };
+        
+        $scope.users_grid.columnDefs = [
+            { name: 'id', enableCellEdit: false, width: '8%'},
+            { name: 'email', enableCellEdit: true, width: '15%'},
+            { name: 'firstName', enableCellEdit: false, width: '10%'},
+            { name: 'lastName', enableCellEdit: false, width: '10%'},
+            { name: 'phone', enableCellEdit: false, width: '20%', enableSorting: false},
+            { name: 'groups', displayName: 'Groups' , width: '8%', enableCellEdit: false,  enableSorting: false,
+                cellTemplate: '<span class="fa fa-edit" ng-click="$emit(\'EventForRedirectToUserOptions\', row.entity.id)" style="cursor: pointer; padding-left: 40%;"></span>'},
+            { name: 'remove', displayName: 'Remove' , width: '8%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
+              cellTemplate: '<span class="fa fa-close" ng-click="$emit(\'EventForDropUser\', row.entity.id)" style="cursor: pointer; padding-left: 40%;"></span>' }
+        ];
+        //Получение
+        $scope.currentPage = 1;
+        var offset = 0;
+        var limit =  5;
+        User.queryInfo({lim: limit, off: offset}, function(res){
+            var arr  = [];
+            //console.log(res);
+            angular.forEach(res[0], function(user) {
+                arr.push(user);
+            });
+            $scope.users_grid.data = arr;
+
+            $scope.countUsers = res[1];
+            $scope.totalPage = Math.ceil(res[1] / limit);
+        });
+        
+        $scope.nextPage = function(){
+            if(($scope.currentPage + 1) <= $scope.totalPage) {
+                $scope.currentPage++;
+                $scope.unavailable = true;
+                offset += limit;
+                User.queryInfo({lim: limit, off: offset}, function(res){
+                    var arr  = [];
+                    angular.forEach(res[0], function(user) {
+                        arr.push(user);
+                    });
+                    $scope.users_grid.data = arr;
+                    $scope.unavailable = false;
+                    //console.log(res);
+                });
+            }
+            //console.log($scope.currentPage * limit);
+            //console.log($scope.countUsers);
+        };
+        
+        $scope.prevPage = function(){
+            if(($scope.currentPage - 1) >= 1) {
+                $scope.currentPage--;
+                $scope.unavailable = true;
+                offset -= limit;
+                User.queryInfo({lim: limit, off: offset}, function(res){
+                    var arr  = [];
+                    angular.forEach(res[0], function(user) {
+                        arr.push(user);
+                    });
+                    $scope.users_grid.data = arr;
+                    $scope.unavailable = false;
+                });
+                $scope.totalPage = Math.ceil($scope.countUsers / limit);
+            }
+        };
+        
+        //Добавление
+        $scope.addUser = function(){
+            alertError.hide();
+            alertSuccess.hide();
+            
+            if($scope.email === undefined){
+                alertError = $alert({title: 'The email field is required.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                return;
+            }
+            
+            if(($scope.userPassword === undefined) || ($scope.userPassword === "")){
+                 alertError = $alert({title: 'The password field is required.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                 return;
+            }
+            if(($scope.userPassword.length < 4)){
+                 alertError = $alert({title: 'Minimum password length of 4 characters.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                 return;
+            }
+            
+            if(($scope.userPassword !== $scope.userConfirmPassword)){
+                 alertError = $alert({title: 'Don\'t match confirm password.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                 return;
+            }
+            
+            AddUser.query({email: $scope.email, password: $scope.userPassword}, function(answer){
+                if(!answer[0]){
+                    alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                } else {
+                    alertSuccess = $alert({title: 'The user has been successfully added', placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
+                    
+                    //.log($scope.currentPage * limit);
+                    //console.log($scope.countUsers);
+                    if(($scope.currentPage === $scope.totalPage) &&($scope.currentPage * limit > $scope.countUsers)){
+                        var newUser = {
+                            id: answer[2],
+                            email: $scope.email
+                        };
+                        $scope.users_grid.data.push(newUser);
+                    }
+                    $scope.countUsers++;
+                    $scope.totalPage = Math.ceil($scope.countUsers / limit);
+                    
+                    $scope.email = "";
+                    $scope.userConfirmPassword = "";
+                    $scope.userPassword = "";
+                }
+            });
+        };
+        
+        //Удаление
+        $scope.$on('EventForDropUser', function (event, id) {
+            alertError.hide();
+            alertSuccess.hide();
+
+            RemoveUser.query({userId: id}, function(answer){
+                if(answer[0])
+                {
+                    alertSuccess = $alert({title: 'User has been successfully removed', placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
+                    var oldUsers = $scope.users_grid.data;
+
+                    $scope.users_grid.data = [];
+                    angular.forEach(oldUsers, function(user) {
+                      if (user.id !== id) 
+                          $scope.users_grid.data.push(user);
+                    });
+                    $scope.countUsers--;
+                }
+            });
+        });
+        
+        //Редактирование
+        $scope.msg = {};
+        $scope.users_grid.onRegisterApi = function(gridApi){
+            gridApi.edit.on.afterCellEdit($scope,function(rowEntity, colDef, newValue, oldValue){
+                alertError.hide();
+                alertSuccess.hide();
+                
+                if(newValue.trim() === ''){
+                    alertError = $alert({title: 'Field email is empty!', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                    angular.forEach($scope.users_grid.data, function(user) {
+                        if (user.id === rowEntity.id) 
+                            user.email = oldValue;
+                    });
+                } else {
+                    var str = newValue;
+                    var a = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,6})+$/;
+                    if(str.search(a) === -1){
+                        alertError = $alert({title: 'Email is invalid!', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                    } else {
+                        if(newValue.trim() !== oldValue)
+                        {
+                            EditUser.query({userId: rowEntity.id, email: newValue}, function(answer){
+                                if(answer[0] === false){
+                                    alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                                } else
+                                {
+                                    alertSuccess = $alert({title: 'User has been successfully edited', placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        };
+        
+        $scope.$on('EventForRedirectToUserOptions', function (event, id) {
+            alertError.hide();
+            alertSuccess.hide();
+            window.location = '#/users/' + id;
+        });
+}]);
+
+adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParams', 'UserOptions', 'ChangeGroupByUser',
+    function($scope, $alert, $routeParams, UserOptions, ChangeGroupByUser) {
+        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container_option_for_users'});
+        
+        $scope.gridOptions_userOptions = { enableFiltering: true };
+        $scope.gridOptions_userOptions.columnDefs = [
+            { name: 'id', displayName: 'Id', enableCellEdit: false, width: '5%', enableFiltering: false },
+            { name: 'title', displayName: 'Title', width: '10%', enableCellEdit: false },
+            { name: 'description', displayName: 'Description' , width: '30%', enableFiltering: false, enableCellEdit: false },
+            { name: 'accept', displayName: 'Accept' , width: '5%', enableFiltering: false, enableCellEdit: false,
+                cellTemplate: '<span class="fa" ng-class="{\' fa-check\': row.entity.accept, \'fa-close \':!row.entity.accept}" ng-click="$emit(\'EventChangeUser\', row.entity.id, row.entity.accept)" style="cursor: pointer; padding-left: 40%;"></span>'}
+        ];
+
+        //Получение
+        UserOptions.query({userId: $routeParams.userId}, function(answer){
+            $scope.userEmail = answer[0].email;
+            $scope.lastName = answer[0].lastName;
+            $scope.firstName = answer[0].firstName;
+            $scope.userId = answer[0].id;
+            
+            angular.forEach(answer[2][0], function(group) {
+                group.accept = 0;
+                angular.forEach(answer[1][0], function(user) {
+                    if(group.id === user.group_id){
+                        group.accept = 1;
+                    }
+                });
+            });
+        
+            $scope.gridOptions_userOptions.data = answer[2][0];
+            //console.log(answer);
+        });
+        
+        //Изменение групп пользователя
+        $scope.$on('EventChangeUser', function (event, id, accept) {
+            alertSuccess.hide();
+            ChangeGroupByUser.query({userId: $scope.userId, accept : accept, groupId: id}, function(answer){
+                if(answer[0]){
+                    angular.forEach($scope.gridOptions_userOptions.data, function(group) {    //Проверяем, существует ли право с таким именем
+                        if(group.id === id){
+                            if(accept){
+                                group.accept = 0;
+                                alertSuccess = $alert({title: 'User was successfully removed from the group', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option_for_users', duration: 3});
+                            }
+                            else {
+                                group.accept = 1;
+                                alertSuccess = $alert({title: 'The user has been successfully added to the group', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option_for_users', duration: 3});
+                            }
+                        }
+                    });
+                }
+            });
+        });
 }]);

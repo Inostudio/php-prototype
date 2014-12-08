@@ -67,6 +67,13 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function(){
     
     Route::post('/groupOptions', ['uses' => 'DashboardController@postGroupOptions']);
     Route::post('/changePermissionsInGroup', ['uses' => 'DashboardController@postChangePermissionsInGroup']);
+    
+    Route::post('/users', ['uses' => 'DashboardController@postUsers']);
+    Route::post('/addUsers', ['uses' => 'DashboardController@postAddUser']);
+    Route::post('/removeUser', ['uses' => 'DashboardController@postRemoveUser']);
+    Route::post('/editUser', ['uses' => 'DashboardController@postEditUser']);
+    Route::post('/userOptions', ['uses' => 'DashboardController@postUserOptions']); 
+    Route::post('/changeGroupByUser', ['uses' => 'DashboardController@postChangeGroupByUser']); 
 });
 
 Route::get('/test', function(){

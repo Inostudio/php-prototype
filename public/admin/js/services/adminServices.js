@@ -76,3 +76,46 @@ groupServices.factory('ChangePermissionsInGroup', ['$resource',
       query: {method:'POST', params:{gId: $groupId, accept: $accept, permId: $permId}, isArray:true}
     });
 }]);
+
+var userServices = angular.module('userServices', ['ngResource']);
+userServices.factory('User', ['$resource',
+  function($resource, $lim, $off){
+    return $resource('/adm/users', {}, {
+      queryInfo: {method:'POST', params:{lim: $lim, off: $off}, isArray:true}
+    });
+}]);
+
+userServices.factory('AddUser', ['$resource',
+  function($resource, $email, $password){
+    return $resource('/adm/addUsers', {}, {
+      query: {method:'POST', params:{email: $email, password: $password}, isArray:true}
+    });
+}]);
+
+userServices.factory('RemoveUser', ['$resource',
+  function($resource, $userId){
+    return $resource('/adm/removeUser', {}, {
+      query: {method:'POST', params:{id: $userId}, isArray:true}
+    });
+}]);
+
+userServices.factory('EditUser', ['$resource',
+  function($resource, $email, $userId){
+    return $resource('/adm/editUser', {}, {
+      query: {method:'POST', params:{email: $email, userId: $userId}, isArray:true}
+    });
+}]);
+
+userServices.factory('UserOptions', ['$resource',
+  function($resource, $userId){
+    return $resource('/adm/userOptions', {}, {
+      query: {method:'POST', params:{uId: $userId}, isArray:true}
+    });
+}]);
+
+userServices.factory('ChangeGroupByUser', ['$resource',
+  function($resource, $userId, $accept, $groupId){
+    return $resource('/adm/changeGroupByUser', {}, {
+      query: {method:'POST', params:{uId: $userId, accept: $accept, gId: $groupId}, isArray:true}
+    });
+}]);

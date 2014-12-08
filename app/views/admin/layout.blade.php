@@ -39,8 +39,8 @@
     
     
     <script src="/admin/js/app.js" type="text/javascript"></script>
-    <script src="/admin/js/controllers.js" type="text/javascript"></script>
-    <script src="/admin/js/services.js" type="text/javascript"></script>
+    <script src="/admin/js/controllers/adminControllers.js" type="text/javascript"></script>
+    <script src="/admin/js/services/adminServices.js" type="text/javascript"></script>
     
     
 
@@ -94,7 +94,7 @@
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
             <li ng-class="{'active' : isActive('/')}"><a href="#/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-            <li ng-class="{'active' : isActive('/users')}"><a href="#/users"><i class="fa fa-users"></i> Users</a></li>
+            <li ng-class="{'active' : isActive('/users') || isActive('/userGroups')}"><a href="#/users"><i class="fa fa-users"></i> Users</a></li>
             <li ng-class="{'active' : isActive('/groups') || isActive('/groupsPermis')}"><a href="#/groups"><i class="fa fa-group"></i> Groups</a></li>
             <li ng-class="{'active' : isActive('/permissions')}"><a href="#/permissions"><i class="fa fa-legal"></i> Permissions</a></li>
             <li ng-class="{'active' : isActive('/pages')}"><a href="#/pages"><i class="fa fa-newspaper-o"></i> Pages</a></li>

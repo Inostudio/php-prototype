@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: user
- * Date: 21.11.2014
- * Time: 15:43
- */
 
 class UserProfileTableSeeder extends Seeder
 {

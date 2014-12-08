@@ -5,6 +5,7 @@ var adminApp = angular.module('adminApp', [
     'adminControllers',
     'groupServices',
     'permissionServices',
+    'userServices',
     'ngAnimate',
     'mgcrea.ngStrap',
     'mgcrea.ngStrap.alert'
@@ -20,7 +21,7 @@ adminApp.config(['$routeProvider',
       }).
       when('/users', {
         templateUrl:  '/angular/?ns=admin&id=adminPartials.users',
-        controller: 'AdminCtrl'
+        controller: 'UsersCtrl'
       }).
       when('/pages', {
         templateUrl:  '/angular/?ns=admin&id=adminPartials.pages',
@@ -49,12 +50,17 @@ adminApp.config(['$routeProvider',
       when('/groups/:groupId', {
         templateUrl:  '/angular/?ns=admin&id=adminPartials.groupOptions',
         controller: 'GroupOptionsCtrl'
+      }).
+      when('/users/:userId', {
+        templateUrl:  '/angular/?ns=admin&id=adminPartials.userOptions',
+        controller: 'UserOptionsCtrl'
       });
   }]);
 
   adminApp.controller('activCtrl', ['$scope', '$location',
   function($scope, $location) {
       $scope.isActive = function(path){  
-            return ((path === $location.path()) || (($location.path().indexOf('/groups/') === 0) && (path === '/groupsPermis')));  
+            return ((path === $location.path()) || (($location.path().indexOf('/groups/') === 0) && (path === '/groupsPermis'))
+                    || (($location.path().indexOf('/users/') === 0) && (path === '/userGroups')));  
       };
   }]);
