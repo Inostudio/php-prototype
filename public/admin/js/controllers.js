@@ -1,5 +1,5 @@
 var adminControllers = angular.module('adminControllers', ['ui.grid', 'ui.grid.edit','mgcrea.ngStrap',
-    'mgcrea.ngStrap.alert', 'ui.bootstrap']);
+    'mgcrea.ngStrap.alert']);
 
 
 adminControllers.controller('AdminCtrl', ['$scope',
@@ -374,29 +374,58 @@ adminControllers.controller('GroupOptionsCtrl', ['$scope', '$routeParams', 'Grou
 
 var pagesControllers = angular.module('pagesControllers', ['ui.bootstrap']);
 
-pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status', 'Pages', 'GetPage', 'DeletePage', function($scope, $modal, AddPage, Status, Pages, GetPage, DeletePage) {
-    $scope.create = false;
-    $scope.pages = Pages.query();
-    $scope.statuses = Status.query();
+pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status', 'Pages', 'GetPage', 'DeletePage', 'SavePage', function($scope, $modal, AddPage, Status, Pages, GetPage, DeletePage, SavePage) {
+    var Init = function() {
+        $scope.createPage = false;
+        $scope.showPage = false;
+
+        $scope.statuses = Status.query();
+        $scope.pages = Pages.query();
+    }();
+
+    //Work with front
+    var showAllPages = function() {
+        $scope.createPage = false;
+        $scope.showPage = false;
+    }
+
+    var showOnePage = function() {
+        showAllPages();
+        $scope.showPage = true;
+    }
+
+    var showNewPage = function() {
+        showAllPages();
+        $scope.createPage = true;
+    }
+    //---------------
 
     $scope.save = function(page) {
+        if(page.id === undefined) {
+            AddPage.query({title: page.title, body: page.body, status: page.status_id, url: page.url}, function() {
+                clearNewPage()
+            });
+        } else {
+            SavePage.query({id: page.id, title: page.title, body: page.body, status: page.status_id, url: page.url}, function() {
+                clearNewPage()
+            });
+        }
 
-        AddPage.query({title: page.title, body: page.body, status: page.status, url: page.url}, function() {
-            clearNewPage()
-        });
         $scope.pages = Pages.query(function(){
-            $scope.create = false;
+            $scope.createPage = false;
         });
     }
 
     $scope.show = function(id) {
-        console.log(id);
+        $scope.page = GetPage.query({id: id}, function() {
+            showOnePage();
+        });
     }
 
     $scope.edit = function(id) {
-        $scope.page = GetPage.query({id: id});
-
-        $scope.create = true;
+        $scope.page = GetPage.query({id: id}, function() {
+            showNewPage();
+        });
     }
 
     var deletePage = function (id) {
@@ -413,7 +442,6 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status
     }
 
     $scope.confirmDelete = function(id) {
-        console.log($modal);
         var modalInstance = $modal.open({
             templateUrl: 'ConfirmDelete.html',
             controller: 'ModalConfirmDeleteCtrl',
@@ -423,17 +451,15 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status
         modalInstance.result.then(function () {
             deletePage(id);
         });
-
-
     }
 
-    $scope.createPage = function() {
+    $scope.createPageAction = function() {
         clearNewPage();
-        $scope.create = true;
+        showNewPage();
     }
 
     $scope.showAllPages = function() {
-        $scope.create = false;
+        showAllPages();
     }
 
     var clearNewPage = function() {

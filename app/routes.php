@@ -70,6 +70,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function(){
 
     Route::get('/allPages', ['uses' => 'StaticPageController@getAllPages']);
     Route::post('/addPage', ['uses' => 'StaticPageController@postAddPage']);
+    Route::post('/savePage', ['uses' => 'StaticPageController@postSavePage']);
     Route::get('/allStatuses', ['uses' => 'StaticPageController@getAllStatuses']);
     Route::post('/getPage', ['uses' => 'StaticPageController@postGetPage']);
     Route::post('/deletePage', ['uses' => 'StaticPageController@postDeletePage']);

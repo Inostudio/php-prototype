@@ -117,3 +117,15 @@ pagesServices.factory('DeletePage', ['$resource', function($resource, $id) {
         }, isArray:true}
     });
 }]);
+
+pagesServices.factory('SavePage', ['$resource', function($resource, $id, $title, $body, $status, $url) {
+    return $resource('/adm/savePage', {}, {
+        query: {method:'POST', params:{
+            id: $id,
+            title: $title,
+            body: $body,
+            status_id: $status,
+            url: $url
+        }, isArray:true}
+    });
+}]);

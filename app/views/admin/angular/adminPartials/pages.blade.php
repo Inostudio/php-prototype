@@ -1,4 +1,4 @@
-<div ng-show="create">
+<div ng-show="createPage">
     <div class="">
         <div class="row">
             <div class="col-md-12">
@@ -57,8 +57,16 @@
     </div>
 </div>
 
-<div ng-hide="create" class="col-md-12">
-    <button type="button" class="btn btn-default" style="float: right" ng-click="createPage()">Create</button>
+<div ng-show="showPage">
+    <button type="button" class="btn btn-default" style="float: right" ng-click="showAllPages()">Back</button>
+    <th><span ng-bind-html="page.title"></span></th>
+    <th> <p ng-bind-html="page.body"></p></th>
+    <% Request::root() %>/<th>{{page.url}}</th>
+    <th><button disabled class="btn btn-default">{{statuses[page.status_id - 1].title}}</button></th>
+</div>
+
+<div ng-hide="createPage || showPage" class="col-md-12">
+    <button type="button" class="btn btn-default" style="float: right" ng-click="createPageAction()">Create</button>
     <div class="span8">
         <table class="table">
             <thead>
@@ -76,7 +84,7 @@
                     <th>{{page.id}}</th>
                     <th><span>{{page.title}}</span></th>
                     <th> <p>{{page.body}}</p></th>
-                    <th>url</th>
+                    <th>{{page.url}}</th>
 
                     <th><button disabled class="btn btn-default">{{statuses[page.status_id - 1].title}}</button></th>
                     <th ng-click="show(page.id)">Show</th>
@@ -85,12 +93,6 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-    <div >
-        <span>{{page.id}}</span>
-        <p></p>
-        <p>{{page.status_id}}</p>
-        <p></p>
     </div>
 </div>
 

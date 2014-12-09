@@ -73,6 +73,18 @@ class StaticPageController extends \BaseController {
         return \Response::json([$page_id]);
     }
 
+    public function postSavePage()
+    {
+        $page = Page::find(Input::get('id'));
+        $page->title = Input::get('title');
+        $page->body = Input::get('body');
+        $page->url = Input::get('url');
+        $page->status_id = Input::get('status');
+        $page->title = Input::get('title');
+        $page->save();
+        return \Response::json(['Success']);
+    }
+
     public function getAllStatuses()
     {
         $statuses = \Status::all();

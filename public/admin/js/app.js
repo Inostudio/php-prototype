@@ -8,6 +8,7 @@ var adminApp = angular.module('adminApp', [
     'permissionServices',
     'pagesServices',
     'ngAnimate',
+    'ngSanitize'
 ]);
 
 adminApp.config(['$routeProvider',
