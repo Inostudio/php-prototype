@@ -12,7 +12,7 @@ class CreateUserProfileTable extends Migration {
 	 */
 	public function up()
 	{
-        Schema::create('user_profile', function($table){
+        Schema::create('user_profile', function(Blueprint $table){
             $table->increments('id');
             $table->integer('user_id');
             $table->string('first_name')->default('');
@@ -20,6 +20,8 @@ class CreateUserProfileTable extends Migration {
             $table->string('phone')->default('');
             $table->string('image')->default('');
             $table->timestamps();
+
+            $table->softDeletes();
         });
 	}
 

@@ -12,12 +12,14 @@ class CreateGroupsTable extends Migration {
 	 */
 	public function up()
 	{
-            Schema::create('groups', function($table){
-                $table->increments('id');
-                $table->string('title')->unique();
-                $table->string('description')->nullable();
-                $table->timestamps();
-            });
+        Schema::create('groups', function(Blueprint $table){
+            $table->increments('id');
+            $table->string('title')->unique();
+            $table->string('description')->nullable();
+            $table->timestamps();
+
+            $table->softDeletes();
+        });
 	}
 
 	/**
@@ -27,7 +29,7 @@ class CreateGroupsTable extends Migration {
 	 */
 	public function down()
 	{
-            Schema::drop('groups');
+        Schema::drop('groups');
 	}
 
 }

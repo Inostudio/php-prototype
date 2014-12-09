@@ -12,3 +12,4 @@ _ide_helper_models.php
 nbproject/
 .idea/
 /public/users/
+/app/storage/debugbar/

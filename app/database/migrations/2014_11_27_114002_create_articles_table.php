@@ -21,6 +21,8 @@ class CreateArticlesTable extends Migration {
 			$table->integer('category_id');
 			$table->tinyInteger('status');
 			$table->timestamps();
+
+            $table->softDeletes();
 		});
 	}
 

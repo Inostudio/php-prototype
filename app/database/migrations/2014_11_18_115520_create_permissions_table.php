@@ -12,12 +12,14 @@ class CreatePermissionsTable extends Migration {
 	 */
 	public function up()
 	{
-            Schema::create('permissions', function($table){
-                $table->increments('id');
-                $table->string('title')->unique();
-                $table->string('description')->nullable();
-                $table->timestamps();
-            });
+        Schema::create('permissions', function(Blueprint $table){
+            $table->increments('id');
+            $table->string('title')->unique();
+            $table->string('description')->nullable();
+            $table->timestamps();
+
+            $table->softDeletes();
+        });
 	}
 
 	/**

@@ -12,12 +12,14 @@ class CreateUserToGroupsTable extends Migration {
 	 */
 	public function up()
 	{
-            Schema::create('group_user', function($table){
-                $table->increments('id');
-                $table->integer('user_id');
-                $table->integer('group_id');
-                $table->timestamps();
-            });
+        Schema::create('group_user', function(Blueprint $table){
+            $table->increments('id');
+            $table->integer('user_id');
+            $table->integer('group_id');
+            $table->timestamps();
+
+            $table->softDeletes();
+        });
 	}
 
 	/**

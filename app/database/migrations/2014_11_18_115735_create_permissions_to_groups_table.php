@@ -12,12 +12,14 @@ class CreatePermissionsToGroupsTable extends Migration {
 	 */
 	public function up()
 	{
-            Schema::create('group_permission', function($table){
-                $table->increments('id');
-                $table->integer('permission_id');
-                $table->integer('group_id');
-                $table->timestamps();
-            });
+        Schema::create('group_permission', function(Blueprint $table){
+            $table->increments('id');
+            $table->integer('permission_id');
+            $table->integer('group_id');
+            $table->timestamps();
+
+            $table->softDeletes();
+        });
 	}
 
 	/**
@@ -27,7 +29,7 @@ class CreatePermissionsToGroupsTable extends Migration {
 	 */
 	public function down()
 	{
-            Schema::drop('group_permission');
+        Schema::drop('group_permission');
 	}
 
 }

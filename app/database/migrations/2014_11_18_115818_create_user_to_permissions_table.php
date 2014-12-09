@@ -12,12 +12,14 @@ class CreateUserToPermissionsTable extends Migration {
 	 */
 	public function up()
 	{
-            Schema::create('permission_user', function($table){
-                $table->increments('id');
-                $table->integer('permission_id');
-                $table->integer('user_id');
-                $table->timestamps();
-            });
+        Schema::create('permission_user', function(Blueprint $table){
+            $table->increments('id');
+            $table->integer('permission_id');
+            $table->integer('user_id');
+            $table->timestamps();
+
+            $table->softDeletes();
+        });
 	}
 
 	/**
@@ -27,7 +29,7 @@ class CreateUserToPermissionsTable extends Migration {
 	 */
 	public function down()
 	{
-            Schema::drop('permission_user');
+        Schema::drop('permission_user');
 	}
 
 }
