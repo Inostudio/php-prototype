@@ -81,6 +81,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function(){
     
     Route::post('/groupOptions', ['uses' => 'DashboardController@postGroupOptions']);
     Route::post('/changePermissionsInGroup', ['uses' => 'DashboardController@postChangePermissionsInGroup']);
+
     
     Route::post('/users', ['uses' => 'DashboardController@postUsers']);
     Route::post('/addUsers', ['uses' => 'DashboardController@postAddUser']);
@@ -88,6 +89,16 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function(){
     Route::post('/editUser', ['uses' => 'DashboardController@postEditUser']);
     Route::post('/userOptions', ['uses' => 'DashboardController@postUserOptions']); 
     Route::post('/changeGroupByUser', ['uses' => 'DashboardController@postChangeGroupByUser']); 
+
+
+    Route::get('/allPages', ['uses' => 'StaticPageController@getAllPages']);
+    Route::post('/addPage', ['uses' => 'StaticPageController@postAddPage']);
+    Route::post('/savePage', ['uses' => 'StaticPageController@postSavePage']);
+    Route::get('/allStatuses', ['uses' => 'StaticPageController@getAllStatuses']);
+    Route::post('/getPage', ['uses' => 'StaticPageController@postGetPage']);
+    Route::post('/deletePage', ['uses' => 'StaticPageController@postDeletePage']);
+
+
 });
 
 Route::get('/test', function(){

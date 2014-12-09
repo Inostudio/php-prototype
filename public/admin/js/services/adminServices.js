@@ -77,6 +77,7 @@ groupServices.factory('ChangePermissionsInGroup', ['$resource',
     });
 }]);
 
+
 var userServices = angular.module('userServices', ['ngResource']);
 userServices.factory('User', ['$resource',
   function($resource, $lim, $off){
@@ -117,5 +118,57 @@ userServices.factory('ChangeGroupByUser', ['$resource',
   function($resource, $userId, $accept, $groupId){
     return $resource('/adm/changeGroupByUser', {}, {
       query: {method:'POST', params:{uId: $userId, accept: $accept, gId: $groupId}, isArray:true}
+    });
+}]);
+var pagesServices = angular.module('pagesServices', ['ngResource']);
+
+pagesServices.factory('Pages', ['$resource', function($resource) {
+    return $resource('/adm/allPages', {}, {
+        query: {method:'GET', params:{}, isArray:true}
+    });
+}]);
+
+pagesServices.factory('AddPage', ['$resource', function($resource, $title, $body, $status, $url) {
+    return $resource('/adm/addPage', {}, {
+        query: {method:'POST', params:{
+            title: $title,
+            body: $body,
+            status_id: $status,
+            url: $url
+        }, isArray:true}
+    });
+}]);
+
+pagesServices.factory('Status', ['$resource', function($resource) {
+    return $resource('/adm/allStatuses', {}, {
+        query: {method:'GET', params:{}, isArray:true}
+    });
+}]);
+
+pagesServices.factory('GetPage', ['$resource', function($resource, $id) {
+    return $resource('/adm/getPage', {}, {
+        query: {method:'POST', params:{
+            id: $id
+        }, isArray:false}
+    });
+}]);
+
+pagesServices.factory('DeletePage', ['$resource', function($resource, $id) {
+    return $resource('/adm/deletePage', {}, {
+        query: {method:'POST', params:{
+            id: $id
+        }, isArray:true}
+    });
+}]);
+
+pagesServices.factory('SavePage', ['$resource', function($resource, $id, $title, $body, $status, $url) {
+    return $resource('/adm/savePage', {}, {
+        query: {method:'POST', params:{
+            id: $id,
+            title: $title,
+            body: $body,
+            status_id: $status,
+            url: $url
+        }, isArray:true}
     });
 }]);

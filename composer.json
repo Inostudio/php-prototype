@@ -10,7 +10,8 @@
         "laravelbook/ardent": "2.*",
         "doctrine/dbal": "~2.3",
         "fzaninotto/faker": "1.5.*@dev",
-        "knplabs/gaufrette": "0.1.*"
+        "knplabs/gaufrette": "0.1.*",
+        "barryvdh/laravel-debugbar": "1.8.*@dev"
 	},
     "require-dev": {
         "way/generators": "~2.0"
@@ -27,7 +28,7 @@
 		],
         "psr-4": {
 			"App\\": "app/"
-		}        
+		}
         
 	},
 	"scripts": {

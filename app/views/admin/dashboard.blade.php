@@ -1,5 +1,8 @@
 @extends('admin.layout')
 
+@section('include')
+@stop
+
 @section('content')
 
     <h1 class="page-header">Dashboard</h1>

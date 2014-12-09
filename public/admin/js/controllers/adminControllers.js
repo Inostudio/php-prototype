@@ -1,4 +1,5 @@
-var adminControllers = angular.module('adminControllers', ['ui.grid', 'ui.grid.edit']);
+var adminControllers = angular.module('adminControllers', ['ui.grid', 'ui.grid.edit','mgcrea.ngStrap',
+    'mgcrea.ngStrap.alert']);
 
 
 adminControllers.controller('AdminCtrl', ['$scope',
@@ -584,7 +585,7 @@ adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParam
                     }
                 });
             });
-        
+
             $scope.gridOptions_userOptions.data = answer[2][0];
             //console.log(answer);
         });
@@ -609,4 +610,109 @@ adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParam
                 }
             });
         });
+}]);
+
+var pagesControllers = angular.module('pagesControllers', ['ui.bootstrap']);
+
+pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status', 'Pages', 'GetPage', 'DeletePage', 'SavePage', function($scope, $modal, AddPage, Status, Pages, GetPage, DeletePage, SavePage) {
+    var Init = function() {
+        $scope.createPage = false;
+        $scope.showPage = false;
+
+        $scope.statuses = Status.query();
+        $scope.pages = Pages.query();
+    }();
+
+    //Work with front
+    var showAllPages = function() {
+        $scope.createPage = false;
+        $scope.showPage = false;
+    }
+
+    var showOnePage = function() {
+        showAllPages();
+        $scope.showPage = true;
+    }
+
+    var showNewPage = function() {
+        showAllPages();
+        $scope.createPage = true;
+    }
+    //---------------
+
+    $scope.save = function(page) {
+        if(page.id === undefined) {
+            AddPage.query({title: page.title, body: page.body, status: page.status_id, url: page.url}, function() {
+                clearNewPage()
+            });
+        } else {
+            SavePage.query({id: page.id, title: page.title, body: page.body, status: page.status_id, url: page.url}, function() {
+                clearNewPage()
+            });
+        }
+
+        $scope.pages = Pages.query(function(){
+            $scope.createPage = false;
+        });
+    }
+
+    $scope.show = function(id) {
+        $scope.page = GetPage.query({id: id}, function() {
+            showOnePage();
+        });
+    }
+
+    $scope.edit = function(id) {
+        $scope.page = GetPage.query({id: id}, function() {
+            showNewPage();
+        });
+    }
+
+    var deletePage = function (id) {
+        DeletePage.query({id: id}, function(res) {
+            index = 0;
+            for(i = 0; i < $scope.pages.length; i++) {
+                if($scope.pages[i].id == id) {
+                    index = i;
+                    break;
+                }
+            }
+            $scope.pages.splice(index, 1);
+        });
+    }
+
+    $scope.confirmDelete = function(id) {
+        var modalInstance = $modal.open({
+            templateUrl: 'ConfirmDelete.html',
+            controller: 'ModalConfirmDeleteCtrl',
+            size: 'sm'
+        });
+
+        modalInstance.result.then(function () {
+            deletePage(id);
+        });
+    }
+
+    $scope.createPageAction = function() {
+        clearNewPage();
+        showNewPage();
+    }
+
+    $scope.showAllPages = function() {
+        showAllPages();
+    }
+
+    var clearNewPage = function() {
+        $scope.page = {};
+    }
+}]);
+
+pagesControllers.controller('ModalConfirmDeleteCtrl', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+        $scope.ok = function () {
+            $modalInstance.close();
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss();
+        };
 }]);

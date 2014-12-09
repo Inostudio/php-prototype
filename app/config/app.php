@@ -122,7 +122,7 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
         'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
-        'Way\Generators\GeneratorsServiceProvider',       
+        'Way\Generators\GeneratorsServiceProvider',
         'Barryvdh\Debugbar\ServiceProvider'
 	),
 
