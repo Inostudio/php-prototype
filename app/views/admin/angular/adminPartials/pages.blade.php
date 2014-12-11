@@ -57,14 +57,6 @@
     </div>
 </div>
 
-<div ng-show="showPage">
-    <button type="button" class="btn btn-default" style="float: right" ng-click="showAllPages()">Back</button>
-    <th><span ng-bind-html="page.title"></span></th>
-    <th> <p ng-bind-html="page.body"></p></th>
-    <% Request::root() %>/<th>{{page.url}}</th>
-    <th><button disabled class="btn btn-default">{{statuses[page.status_id - 1].title}}</button></th>
-</div>
-
 <div ng-hide="createPage || showPage" class="col-md-12">
     <button type="button" class="btn btn-default" style="float: right" ng-click="createPageAction()">Create</button>
     <div class="span8">
@@ -87,7 +79,7 @@
                     <th>{{page.url}}</th>
 
                     <th><button disabled class="btn btn-default">{{statuses[page.status_id - 1].title}}</button></th>
-                    <th ng-click="show(page.id)">Show</th>
+                    <th ng-click="show(page.url)">Show</th>
                     <th ng-click="confirmDelete(page.id)">Delete</th>
                     <th ng-click="edit(page.id)">Edit</th>
                 </tr>

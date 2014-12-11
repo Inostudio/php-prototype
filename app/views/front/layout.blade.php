@@ -70,7 +70,7 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li <?=$routeName=='front.home' ? 'class="active"' : ''; ?> ><a href="/">Home</a></li>
-            <li <?=$routeName=='front.about' ? 'class="active"' : ''; ?>><a href="<?=action('front.about');?>">About</a></li>
+            <li <?=$routeName=='front.about' ? 'class="active"' : ''; ?>><a href="/about">About</a></li>
             <li <?=$routeName=='front.contact' ? 'class="active"' : ''; ?>><a href="<?=action('front.contact');?>">Contact</a></li>
             <li <?=Str::startsWith($routeName, 'front.articles') ? 'class="active"' : ''; ?>><a href="<?=action('front.articles.index');?>">Articles</a></li>
             <?php if(0){ ?>

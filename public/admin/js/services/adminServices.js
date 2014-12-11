@@ -123,13 +123,13 @@ userServices.factory('ChangeGroupByUser', ['$resource',
 var pagesServices = angular.module('pagesServices', ['ngResource']);
 
 pagesServices.factory('Pages', ['$resource', function($resource) {
-    return $resource('/adm/allPages', {}, {
-        query: {method:'GET', params:{}, isArray:true}
+    return $resource('/adm/page/all-pages', {}, {
+        query: {method:'POST', params:{}, isArray:true}
     });
 }]);
 
 pagesServices.factory('AddPage', ['$resource', function($resource, $title, $body, $status, $url) {
-    return $resource('/adm/addPage', {}, {
+    return $resource('/adm/page/add-page', {}, {
         query: {method:'POST', params:{
             title: $title,
             body: $body,
@@ -140,13 +140,13 @@ pagesServices.factory('AddPage', ['$resource', function($resource, $title, $body
 }]);
 
 pagesServices.factory('Status', ['$resource', function($resource) {
-    return $resource('/adm/allStatuses', {}, {
-        query: {method:'GET', params:{}, isArray:true}
+    return $resource('/adm/page/all-statuses', {}, {
+        query: {method:'POST', params:{}, isArray:true}
     });
 }]);
 
 pagesServices.factory('GetPage', ['$resource', function($resource, $id) {
-    return $resource('/adm/getPage', {}, {
+    return $resource('/adm/page/get-page', {}, {
         query: {method:'POST', params:{
             id: $id
         }, isArray:false}
@@ -154,7 +154,7 @@ pagesServices.factory('GetPage', ['$resource', function($resource, $id) {
 }]);
 
 pagesServices.factory('DeletePage', ['$resource', function($resource, $id) {
-    return $resource('/adm/deletePage', {}, {
+    return $resource('/adm/page/delete-page', {}, {
         query: {method:'POST', params:{
             id: $id
         }, isArray:true}
@@ -162,7 +162,7 @@ pagesServices.factory('DeletePage', ['$resource', function($resource, $id) {
 }]);
 
 pagesServices.factory('SavePage', ['$resource', function($resource, $id, $title, $body, $status, $url) {
-    return $resource('/adm/savePage', {}, {
+    return $resource('/adm/page/save-page', {}, {
         query: {method:'POST', params:{
             id: $id,
             title: $title,

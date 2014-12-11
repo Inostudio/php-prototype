@@ -614,7 +614,7 @@ adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParam
 
 var pagesControllers = angular.module('pagesControllers', ['ui.bootstrap']);
 
-pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status', 'Pages', 'GetPage', 'DeletePage', 'SavePage', function($scope, $modal, AddPage, Status, Pages, GetPage, DeletePage, SavePage) {
+pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status', 'Pages', 'GetPage', 'DeletePage', 'SavePage', '$window', '$location', function($scope, $modal, AddPage, Status, Pages, GetPage, DeletePage, SavePage, $window, $location) {
     var Init = function() {
         $scope.createPage = false;
         $scope.showPage = false;
@@ -656,10 +656,8 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status
         });
     }
 
-    $scope.show = function(id) {
-        $scope.page = GetPage.query({id: id}, function() {
-            showOnePage();
-        });
+    $scope.show = function(url) {
+        $window.open('http://' + $location.host() + ':' + $location.port() + '/' + url);
     }
 
     $scope.edit = function(id) {
