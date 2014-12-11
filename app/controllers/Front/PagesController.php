@@ -36,14 +36,9 @@ class PagesController extends \BaseController
 
     public function showPage($url)
     {
-        if($url === null) {
-            //Redirect 404 page not found
-        }
-
         $page = \Page::where('url', $url)->first();
-        if($page === null) {
+        if($page === null || $page->status->title !== 'Public') {
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-            //return Redirect::to('404');
         }
 
         return \View::make('front.pages.static', [

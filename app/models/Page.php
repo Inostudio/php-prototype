@@ -14,6 +14,6 @@ class Page extends \Eloquent {
 
     public function status()
     {
-        return $this->hasOne('Status');
+        return $this->belongsTo('Status');
     }
 }

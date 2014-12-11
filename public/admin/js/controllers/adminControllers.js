@@ -616,6 +616,9 @@ var pagesControllers = angular.module('pagesControllers', ['ui.bootstrap']);
 
 pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status', 'Pages', 'GetPage', 'DeletePage', 'SavePage', '$window', '$location', function($scope, $modal, AddPage, Status, Pages, GetPage, DeletePage, SavePage, $window, $location) {
     var Init = function() {
+        $scope.submitted = false;
+        $scope.urlRule = /^\w+$/;
+
         $scope.createPage = false;
         $scope.showPage = false;
 
@@ -627,6 +630,7 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status
     var showAllPages = function() {
         $scope.createPage = false;
         $scope.showPage = false;
+        $scope.submitted = false;
     }
 
     var showOnePage = function() {
@@ -640,20 +644,28 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status
     }
     //---------------
 
-    $scope.save = function(page) {
-        if(page.id === undefined) {
-            AddPage.query({title: page.title, body: page.body, status: page.status_id, url: page.url}, function() {
-                clearNewPage()
-            });
-        } else {
-            SavePage.query({id: page.id, title: page.title, body: page.body, status: page.status_id, url: page.url}, function() {
-                clearNewPage()
-            });
-        }
+    $scope.save = function(page, valid) {
+        $scope.submitted = true;
+        if(valid)
+        {
+            function saved() {
+                $scope.pages = Pages.query(function(){
+                    $scope.createPage = false;
+                    clearNewPage();
+                });
+            }
 
-        $scope.pages = Pages.query(function(){
-            $scope.createPage = false;
-        });
+
+            if(page.id === undefined) {
+                AddPage.query({title: page.title, body: page.body, status: page.status_id, url: page.url}, function() {
+                    saved();
+                });
+            } else {
+                SavePage.query({id: page.id, title: page.title, body: page.body, status: page.status_id, url: page.url}, function() {
+                    saved();
+                });
+            }
+        }
     }
 
     $scope.show = function(url) {
