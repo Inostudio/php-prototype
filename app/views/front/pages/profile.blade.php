@@ -6,6 +6,7 @@
 
 
     <script src="/front/vendors/directives/js/ng-img-crop.js"></script>
+    <script src="/front/vendors/directives/js/ng-droplet.min.js"></script>
     <script type="text/javascript" src="/front/js/profileApp.js"></script>
     <script type="text/javascript" src="/front/js/controllers/profileControllers.js"></script>
     <script type="text/javascript" src="/front/js/services/profileServices.js"></script>

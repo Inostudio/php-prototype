@@ -147,14 +147,23 @@
                 </section>
             </div>
 
-            <div ng-show="isActive('NewPhoto')">
-                <div>
-                    Select an image file:
+            <div ng-show="isActive('NewPhoto')" style="height: inherit;">
+                <div style="height: inherit;">
                     <input type="file" ng-model="fileInput" id="fileInput" ng-click="Init()" />
-                    <div class="uploadcare-dialog-big-button" ng-click="choose()">
-                    Choose a local file
-                    </div>
+                    <input type="button" class="button upload-files" value="Uploading..." ng-show="interface.isUploading()" />
+                    <droplet ng-model="interface">
+                     Drag And Drop your file here
+                        <!--Select an image file:-->
+                        <!--<input type="file" ng-flow-btn id="browseButton" />-->
+
+                        <!--<div class="uploadcare-dialog-big-button" ng-click="choose()">
+
+                        Choose a local file
+                        </div>-->
+                    </droplet>
                 </div>
+
+
             </div>
 
             <div ng-show="isActive('UploadPhoto')">

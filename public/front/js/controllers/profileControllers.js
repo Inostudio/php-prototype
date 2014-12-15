@@ -2,7 +2,26 @@
  * Created by user on 21.11.2014.
  */
 
-var profileControllers = angular.module('profileControllers', []);
+var profileControllers = angular.module('profileControllers', ['ngDroplet'],  function() {});//.config(['flowFactoryProvider', function (flowFactoryProvider, $scope) {
+//flowFactoryProvider.factory = fustyFlowFactory;
+//    flowFactoryProvider.on('catchAll', function (event) {
+//        console.log(event);
+//    });
+    /*flowFactoryProvider.on('catchAll', function (event) {
+        //console.log('catchAll', arguments);
+    });*/
+//}]);;
+
+//$scope.$addFile('flow::filesSubmitted', function (file) {
+//products.save($scope.product)
+    /*.$promise.then(function(result) {
+        $scope.product = result;
+        if ($scope.product.id) {
+            $flow.opts.target = apiUrl + '/products/' + $scope.product.id + '/images';
+            $flow.upload();
+        }
+    });*/
+//});
 
 profileControllers.controller('NavbarCtrl', ['$scope', '$location', function($scope, $location){
     $scope.isActive = function (viewLocation) {
@@ -130,44 +149,8 @@ profileControllers.controller('EditCtrl', ['$scope', 'Profile', function($scope,
 }]);
 
 profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Profile', 'imageUrl', 'exists', function ($scope, $modalInstance, Profile, imageUrl, exists) {
-    //organization of transitions
-    $scope.select = 'ChangeThumbnail';
 
-    $scope.changeToUploadNewPhoto = function() {
-        $scope.select = 'UploadPhoto';
-    }
-
-    $scope.changeToSelectNewPhoto = function() {
-        $scope.select = 'NewPhoto';
-    }
-
-    $scope.changeToThumbnail = function() {
-        $scope.select = 'ChangeThumbnail';
-    }
-
-    $scope.isActive = function(value) {
-        return value == $scope.select;
-    };
-
-    $scope.myImage = "";
-    $scope.myCroppedImage = "";
-
-    $scope.NewPhoto = "";
-    $scope.NewPhotoCroppedImage = "";
-
-
-    $scope.init = false;
-    $scope.Init = function() {
-        if(!$scope.init) {
-            $scope.init = true;
-            angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
-        }
-    }
-
-
-
-    var handleFileSelect=function(evt) {
-        var file=evt.currentTarget.files[0];
+    var addImage = function(file) {
         var reader = new FileReader();
         reader.onload = function (evt) {
             $scope.$apply(function($scope){
@@ -212,6 +195,62 @@ profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Pro
         };
         reader.readAsDataURL(file);
         $scope.changeToUploadNewPhoto();
+    }
+
+    $scope.$on('$dropletReady', function whenDropletReady() {
+        $scope.interface.allowedExtensions(['png', 'jpg', 'bmp', 'gif', 'svg', 'torrent']);
+    });
+
+    $scope.$on('$dropletFileAdded', function whenDropletReady() {
+        console.log($scope.interface.getFiles($scope.interface.FILE_TYPES.VALID));
+        console.log($scope.interface);
+        var lenght = $scope.interface.getFiles($scope.interface.FILE_TYPES.VALID).length;
+        addImage($scope.interface.getFiles($scope.interface.FILE_TYPES.VALID)[lenght-1].file);
+    });
+
+    $scope.$watch($scope.interface, function() {
+
+    })
+
+    //$scope.pic = "";
+    //organization of transitions
+    $scope.select = 'ChangeThumbnail';
+
+    $scope.changeToUploadNewPhoto = function() {
+        $scope.select = 'UploadPhoto';
+    }
+
+    $scope.changeToSelectNewPhoto = function() {
+        $scope.select = 'NewPhoto';
+    }
+
+    $scope.changeToThumbnail = function() {
+        $scope.select = 'ChangeThumbnail';
+    }
+
+    $scope.isActive = function(value) {
+        return value == $scope.select;
+    };
+
+    $scope.myImage = "";
+    $scope.myCroppedImage = "";
+
+    $scope.NewPhoto = "";
+    $scope.NewPhotoCroppedImage = "";
+
+
+    $scope.init = false;
+    $scope.Init = function() {
+        if(!$scope.init) {
+            $scope.init = true;
+            angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
+        }
+    }
+
+
+
+    var handleFileSelect=function(evt) {
+        addImage(evt.currentTarget.files[0]);
     };
 
 
@@ -284,3 +323,4 @@ profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Pro
 
 
 }]);
+
