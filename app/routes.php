@@ -88,6 +88,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function(){
     Route::post('/editUser', ['uses' => 'DashboardController@postEditUser']);
     Route::post('/userOptions', ['uses' => 'DashboardController@postUserOptions']); 
     Route::post('/changeGroupByUser', ['uses' => 'DashboardController@postChangeGroupByUser']); 
+    Route::post('/searchUsers', ['uses' => 'DashboardController@postSearchUsers']); 
+  //  Route::post('/sortUsers', ['uses' => 'DashboardController@postSortUsers']); 
 });
 
 Route::get('/test', function(){

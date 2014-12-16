@@ -9,5 +9,10 @@
 class UserProfile extends Eloquent {
 
     protected $table = 'user_profile';
+    
+    public function user()
+    {
+        return $this->belongsTo('User');
+    }
 
 } 

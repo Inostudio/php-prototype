@@ -12,7 +12,7 @@ adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'Remove
     var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
     var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
     
-    //Удаление
+    //Удаление +++
     $scope.$on('EventForDropGroup', function (event, id) {
         alertError.hide();
         alertSuccess.hide();
@@ -125,7 +125,7 @@ adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'Remove
     
     /*Grid ---------------End*/
     
-    //Получение
+    //Получение +++
     Group.queryInfo(function(res){
       $scope.gridOptions.data = res;
     });
@@ -330,11 +330,10 @@ adminControllers.controller('GroupOptionsCtrl', ['$scope', '$routeParams', 'Grou
             $scope.groupDescription = answer[0].description;
             $scope.groupId = answer[0].id;
             
-            //console.log(answer);
             angular.forEach(answer[2][0], function(permission) {
                 permission.accept = 0;
-                angular.forEach(answer[1][0], function(group) {
-                    if(group.permission_id === permission.id){
+                angular.forEach(answer[1][0][0].permissions, function(group) {
+                    if(group.id === permission.id){
                         permission.accept = 1;
                         isAccept = 1;
                     }
@@ -367,14 +366,13 @@ adminControllers.controller('GroupOptionsCtrl', ['$scope', '$routeParams', 'Grou
         });    
 }]);
 
-adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser', 'RemoveUser', 'EditUser',
-    function($scope, $alert, User, AddUser, RemoveUser, EditUser) {
+adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser', 'RemoveUser', 'EditUser', 'SearchUsers',
+    function($scope, $alert, User, AddUser, RemoveUser, EditUser, SearchUsers) {
         var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container-for-users'});
         var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container-for-users'});
         
         $scope.unavailable = false;
         
-        //$scope.users_grid = { enableFiltering: true };
         $scope.users_grid = {
             /*pagingPageSizes: [25, 50, 75],
             pagingPageSize: 25,*/
@@ -384,67 +382,81 @@ adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser',
         $scope.users_grid.columnDefs = [
             { name: 'id', enableCellEdit: false, width: '8%'},
             { name: 'email', enableCellEdit: true, width: '15%'},
-            { name: 'firstName', enableCellEdit: false, width: '10%'},
-            { name: 'lastName', enableCellEdit: false, width: '10%'},
+            { name: 'first_name', enableCellEdit: false, width: '10%'},
+            { name: 'last_name', enableCellEdit: false, width: '10%'},
             { name: 'phone', enableCellEdit: false, width: '20%', enableSorting: false},
             { name: 'groups', displayName: 'Groups' , width: '8%', enableCellEdit: false,  enableSorting: false,
                 cellTemplate: '<span class="fa fa-edit" ng-click="$emit(\'EventForRedirectToUserOptions\', row.entity.id)" style="cursor: pointer; padding-left: 40%;"></span>'},
             { name: 'remove', displayName: 'Remove' , width: '8%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
               cellTemplate: '<span class="fa fa-close" ng-click="$emit(\'EventForDropUser\', row.entity.id)" style="cursor: pointer; padding-left: 40%;"></span>' }
         ];
-        //Получение
+        
+        //Получение +++
         $scope.currentPage = 1;
         var offset = 0;
-        var limit =  5;
-        User.queryInfo({lim: limit, off: offset}, function(res){
-            var arr  = [];
-            //console.log(res);
-            angular.forEach(res[0], function(user) {
-                arr.push(user);
-            });
-            $scope.users_grid.data = arr;
-
-            $scope.countUsers = res[1];
-            $scope.totalPage = Math.ceil(res[1] / limit);
-        });
+        var limit =  9;
+        $scope.action = 0;
+        var searchText = '';
         
+        getUsers(limit, offset, 'asc', 'id');
+       
         $scope.nextPage = function(){
             if(($scope.currentPage + 1) <= $scope.totalPage) {
-                $scope.currentPage++;
-                $scope.unavailable = true;
-                offset += limit;
-                User.queryInfo({lim: limit, off: offset}, function(res){
-                    var arr  = [];
-                    angular.forEach(res[0], function(user) {
-                        arr.push(user);
-                    });
-                    $scope.users_grid.data = arr;
-                    $scope.unavailable = false;
-                    //console.log(res);
-                });
+                //console.log($scope.action);
+                if($scope.action === 0) {   //Обычный просмотр
+                    $scope.currentPage++;
+                    $scope.unavailable = true;
+                    offset += limit;
+                    getUsers(limit, offset, 'asc', 'id');
+                } else if($scope.action === 1){     //Поиск
+                    $scope.currentPage++;
+                    $scope.unavailable = true;
+                    offset += limit;
+                    getFindUsers(searchText, limit, offset, 'asc', 'id');
+                } else if($scope.action === 2){         //сортировка
+                    $scope.currentPage++;
+                    $scope.unavailable = true;
+                    offset += limit; 
+                    getUsers(limit, offset, $scope.direction, $scope.field);
+                } else if ($scope.action === 3) {   //Сортировка с поиском
+                    $scope.currentPage++;
+                    $scope.unavailable = true;
+                    offset += limit;
+                    getFindUsers(searchText, limit, offset, $scope.dirFindSort, $scope.fieldFindSort);
+                }
             }
-            //console.log($scope.currentPage * limit);
-            //console.log($scope.countUsers);
         };
         
         $scope.prevPage = function(){
+            
             if(($scope.currentPage - 1) >= 1) {
-                $scope.currentPage--;
-                $scope.unavailable = true;
-                offset -= limit;
-                User.queryInfo({lim: limit, off: offset}, function(res){
-                    var arr  = [];
-                    angular.forEach(res[0], function(user) {
-                        arr.push(user);
-                    });
-                    $scope.users_grid.data = arr;
-                    $scope.unavailable = false;
-                });
-                $scope.totalPage = Math.ceil($scope.countUsers / limit);
+                if($scope.action === 0)     //Обычный просмотр
+                {
+                    $scope.currentPage--;
+                    $scope.unavailable = true;
+                    offset -= limit;
+                    getUsers(limit, offset, 'asc', 'id');
+                } else if ($scope.action === 1){            //Поиск
+                    $scope.currentPage--;
+                    $scope.unavailable = true;
+                    offset -= limit;
+                    getFindUsers(searchText, limit, offset, 'asc', 'id');
+                } else if($scope.action === 2) {            //сортировка
+                    $scope.currentPage--;
+                    $scope.unavailable = true;
+                    offset -= limit;
+                    console.log(offset, limit);
+                    getUsers(limit, offset, $scope.direction, $scope.field); 
+                } else if ($scope.action === 3) {   //Сортировка с поиском
+                    $scope.currentPage--;
+                    $scope.unavailable = true;
+                    offset -= limit;
+                    getFindUsers(searchText, limit, offset, $scope.dirFindSort, $scope.fieldFindSort);
+                }
             }
         };
         
-        //Добавление
+        //Добавление +++
         $scope.addUser = function(){
             alertError.hide();
             alertSuccess.hide();
@@ -482,18 +494,29 @@ adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser',
                             email: $scope.email
                         };
                         $scope.users_grid.data.push(newUser);
+                         
+                        $scope.countUsers++;
+                        $scope.totalPage = Math.ceil($scope.countUsers / limit);
+                        //console.log('$scope.totalPage: ' + $scope.totalPage);
+                    } else {
+                        $scope.countUsers++;
+                        $scope.totalPage = Math.ceil($scope.countUsers / limit);
+                        
+                        offset = limit * ($scope.totalPage-1);
+                        $scope.currentPage = $scope.totalPage;
+                        getUsers(limit, offset, 'asc', 'id');              
                     }
-                    $scope.countUsers++;
-                    $scope.totalPage = Math.ceil($scope.countUsers / limit);
                     
                     $scope.email = "";
                     $scope.userConfirmPassword = "";
                     $scope.userPassword = "";
+                    
                 }
             });
         };
         
-        //Удаление
+        
+        //Удаление +++
         $scope.$on('EventForDropUser', function (event, id) {
             alertError.hide();
             alertSuccess.hide();
@@ -514,9 +537,10 @@ adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser',
             });
         });
         
-        //Редактирование
+        //Редактирование +++
         $scope.msg = {};
         $scope.users_grid.onRegisterApi = function(gridApi){
+            //Редактирование
             gridApi.edit.on.afterCellEdit($scope,function(rowEntity, colDef, newValue, oldValue){
                 alertError.hide();
                 alertSuccess.hide();
@@ -547,13 +571,103 @@ adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser',
                     }
                 }
             });
+            
+            //Сортировка
+            gridApi.core.on.sortChanged($scope, function(arg1, arg2) {
+                console.log($scope.action);
+                if(arg2.length !== 0){
+                    if(($scope.action === 1) || ($scope.action === 3)){    //Сортировка с поиском
+                        $scope.currentPage = 1;
+                        $scope.action = 3;
+                        $scope.dirFindSort = arg2[0].sort.direction;
+                        $scope.fieldFindSort = arg2[0].name;
+                        
+                        offset = 0;
+                        getFindUsers(searchText, limit, offset, $scope.dirFindSort, $scope.fieldFindSort);                      
+                    } else {
+                        $scope.currentPage = 1;
+                        $scope.action = 2;
+                        $scope.field = arg2[0].name;
+                        $scope.direction = arg2[0].sort.direction;
+                        offset = 0;
+                        getUsers(limit, offset, $scope.direction, $scope.field);  
+                    }
+                }
+            });                       
         };
-        
+    
         $scope.$on('EventForRedirectToUserOptions', function (event, id) {
             alertError.hide();
             alertSuccess.hide();
             window.location = '#/users/' + id;
         });
+        
+        $scope.search = function(){
+            $scope.action = 1;  //Установка действия
+            offset = 0;
+            searchText = $scope.searchText;
+            SearchUsers.query({text: searchText, lim: limit, off: offset, direction: 'asc', field: 'id'}, function(res){
+                arr = [];
+                angular.forEach(res[0], function(user) {
+                    user.first_name = user.profile.first_name;
+                    user.last_name = user.profile.last_name;
+                    user.phone = user.profile.phone;
+                    arr.push(user);
+                });
+                $scope.users_grid.data = arr;
+
+                $scope.countUsers = res[1];
+                $scope.totalPage = Math.ceil(res[1] / limit);
+            });
+            $scope.currentPage = 1;
+        };
+        
+        $scope.reset = function(){
+            $scope.action = 0;  //Установка обычного просмотра
+            $scope.searchText = "";
+            offset = 0;
+            
+            //Делаем запрос
+            getUsers(limit, offset, 'asc', 'id');          
+            $scope.currentPage = 1;
+        };
+        
+        //Запрос пользователей(Просто запрос, сортировка)
+        function getUsers(limit, offset, direction, field){
+            User.queryInfo({lim: limit, off: offset, direction: direction, field: field}, function(res){
+                var arr  = [];
+                //console.log(res);
+                                
+                angular.forEach(res[0], function(user) {
+                    user.first_name = user.profile.first_name;
+                    user.last_name = user.profile.last_name;
+                    user.phone = user.profile.phone;
+                    arr.push(user);
+                });
+                $scope.users_grid.data = arr;
+
+                $scope.countUsers = res[1];
+                $scope.totalPage = Math.ceil(res[1] / limit);
+                $scope.unavailable = false;
+            });
+        };
+        
+        function getFindUsers(searchText, limit, offset, direction, field){
+            SearchUsers.query({text: searchText, lim: limit, off: offset, direction: direction, field: field}, function(res){
+                arr = [];
+                angular.forEach(res[0], function(user) {
+                    user.first_name = user.profile.first_name;
+                    user.last_name = user.profile.last_name;
+                    user.phone = user.profile.phone;
+                    arr.push(user);
+                });
+                $scope.users_grid.data = arr;
+
+                $scope.countUsers = res[1];
+                $scope.totalPage = Math.ceil(res[1] / limit);
+                $scope.unavailable = false;
+            });
+        };
 }]);
 
 adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParams', 'UserOptions', 'ChangeGroupByUser',
@@ -569,17 +683,18 @@ adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParam
                 cellTemplate: '<span class="fa" ng-class="{\' fa-check\': row.entity.accept, \'fa-close \':!row.entity.accept}" ng-click="$emit(\'EventChangeUser\', row.entity.id, row.entity.accept)" style="cursor: pointer; padding-left: 40%;"></span>'}
         ];
 
-        //Получение
+        //Получение групп, в которых состоит пользователь+++
         UserOptions.query({userId: $routeParams.userId}, function(answer){
+            //console.log(answer);
             $scope.userEmail = answer[0].email;
-            $scope.lastName = answer[0].lastName;
-            $scope.firstName = answer[0].firstName;
+            $scope.lastName = answer[0].profile.last_name;
+            $scope.firstName = answer[0].profile.first_name;
             $scope.userId = answer[0].id;
             
             angular.forEach(answer[2][0], function(group) {
                 group.accept = 0;
-                angular.forEach(answer[1][0], function(user) {
-                    if(group.id === user.group_id){
+                angular.forEach(answer[1][0][0].groups, function(user) {
+                    if(group.id === user.id){
                         group.accept = 1;
                     }
                 });
@@ -589,10 +704,11 @@ adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParam
             //console.log(answer);
         });
         
-        //Изменение групп пользователя
+        //Включение/исключение пользователя из группы+++
         $scope.$on('EventChangeUser', function (event, id, accept) {
             alertSuccess.hide();
             ChangeGroupByUser.query({userId: $scope.userId, accept : accept, groupId: id}, function(answer){
+                //console.log(answer);
                 if(answer[0]){
                     angular.forEach($scope.gridOptions_userOptions.data, function(group) {    //Проверяем, существует ли право с таким именем
                         if(group.id === id){
