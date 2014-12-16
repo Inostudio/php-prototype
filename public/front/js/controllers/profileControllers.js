@@ -156,8 +156,7 @@ profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Pro
         var reader = new FileReader();
         reader.onload = function (evt) {
             $scope.$apply(function($scope){
-                $scope.NewPhoto=evt.target.result;
-                $scope.uploaded = true;
+
             });
             var img = new Image;
 
@@ -197,6 +196,9 @@ profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Pro
                         height: height + 'px'
                     }
 
+
+                    $scope.NewPhoto = evt.target.result;
+
                     $scope.changeToUploadNewPhoto();
                 });
 
@@ -234,12 +236,23 @@ profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Pro
         }
     });*/
 
+    $scope.onDragLeave = function(e){
+        console.log('log');
+        if (e.dragItem)
+            alert("Item: " + e.dragItem.text + " is dragged at position: { x: " + e.mousePos.x + ", y: " + e.mousePos.y + " }");
+    }
 
     $scope.$watch('interface.getFiles(interface.FILE_TYPES.VALID)', function() {
+        console.log('watch');
         if($scope.initInterface) {
-            var lenght = $scope.interface.getFiles($scope.interface.FILE_TYPES.VALID).length;
+            var models = $scope.interface.getFiles($scope.interface.FILE_TYPES.VALID);
+            var lenght = models.length;
             if(lenght !==0) {
+                $scope.NewPhoto = '';
                 addImage($scope.interface.getFiles($scope.interface.FILE_TYPES.VALID)[lenght-1].file);
+                for(var i = models.length - 1; i >= 0; i --) {
+                    models[i].deleteFile();
+                }
             }
         }
 
@@ -255,6 +268,9 @@ profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Pro
 
     $scope.changeToSelectNewPhoto = function() {
         $scope.select = 'NewPhoto';
+
+        //clear canvas when change view
+        $scope.NewPhoto = '';
     }
 
     $scope.changeToThumbnail = function() {
@@ -284,6 +300,9 @@ profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Pro
 
     var handleFileSelect=function(evt) {
         addImage(evt.currentTarget.files[0]);
+
+        //clear input value
+        angular.element(document.querySelector('#fileInput')).val(null);
     };
 
 
