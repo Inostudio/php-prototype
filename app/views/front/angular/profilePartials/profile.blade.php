@@ -149,10 +149,13 @@
 
             <div ng-show="isActive('NewPhoto')" style="height: inherit;">
                 <div style="height: inherit;">
-                    <input type="file" ng-model="fileInput" id="fileInput" ng-click="Init()" />
+
                     <input type="button" class="button upload-files" value="Uploading..." ng-show="interface.isUploading()" />
                     <droplet ng-model="interface">
-                     Drag And Drop your file here
+                    <div style="width: 100%; height: 100%; margin: 20px">
+                        Drag And Drop your file here
+                    </div>
+
                         <!--Select an image file:-->
                         <!--<input type="file" ng-flow-btn id="browseButton" />-->
 
@@ -161,6 +164,9 @@
                         Choose a local file
                         </div>-->
                     </droplet>
+                    <div ng-repeat="model in interface.getFiles(interface.FILE_TYPES.VALID)">
+                        {{model.name}}
+                    </div>
                 </div>
 
 
