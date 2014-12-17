@@ -18,10 +18,12 @@ class ProfileController extends \BaseController
      * @var \UsersService
      */
     protected $users = null;
+    protected $uploadService = null;
 
-    public function __construct(\UsersService $us)
+    public function __construct(\UsersService $us, \UploadFileService $ups)
     {
         $this->users = $us;
+        $this->uploadService = $ups;
     }
 
     protected static $changePasswordValidation = [
@@ -108,39 +110,24 @@ class ProfileController extends \BaseController
         return Response::json($response);
     }
 
-    /**
-     * Decode image from base64
-     *
-     * @param string $img
-     * @param string $format
-     *
-     * @return string
-     */
-    protected function decoderImage($img, $format)
-    {
-        $img = str_replace('data:image/'. $format . ';base64,', '', $img);
-        $img = str_replace(' ', '+', $img);
-        return base64_decode($img);
-    }
-
-    protected function uploadImage($file, $format, $name)
-    {
-        define('UPLOAD_DIR', 'public/users/'. Auth::user()->id . '/');
-        $localAdapter = new LocalAdapter(UPLOAD_DIR, true);
-        $filesystem = new Filesystem($localAdapter);
-        $data = $this->decoderImage($file, $format);
-        $file = new File($name, $filesystem);
-        $file->setContent($data);
-        return $file->exists();
-    }
 
     public function postUploadImage()
     {
-        return Response::json($this->uploadImage(Input::get('sourceImage'), 'jpeg', 'FullImage.jpeg'));
+        return Response::json($this->uploadService->uploadImage(
+            Input::get('sourceImage'),
+            'FullImage.jpeg',
+            'public/users/'. Auth::user()->id . '/',
+            'jpeg'
+        ));
     }
 
     public function postUploadCropped()
     {
-        return Response::json($this->uploadImage(Input::get('croppedImage'), 'jpeg', 'CroppedImage.jpeg'));
+        return Response::json($this->uploadService->uploadImage(
+            Input::get('croppedImage'),
+            'CroppedImage.jpeg',
+            'public/users/'. Auth::user()->id . '/',
+            'jpeg'
+        ));
     }
 }
