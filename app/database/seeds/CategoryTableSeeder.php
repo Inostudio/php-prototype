@@ -10,7 +10,7 @@ class CategoryTableSeeder extends Seeder {
         DB::table('categories')->delete();
 		$faker = Faker::create();
 
-		foreach(range(1, 20) as $index)
+		foreach(range(1, 10) as $index)
 		{
 			Category::create([
                 'id' => $index,

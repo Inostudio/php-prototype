@@ -80,9 +80,9 @@ groupServices.factory('ChangePermissionsInGroup', ['$resource',
 
 var userServices = angular.module('userServices', ['ngResource']);
 userServices.factory('User', ['$resource',
-  function($resource, $lim, $off){
+  function($resource, $lim, $off, $direction, $field){
     return $resource('/adm/users', {}, {
-      queryInfo: {method:'POST', params:{lim: $lim, off: $off}, isArray:true}
+      queryInfo: {method:'POST', params:{lim: $lim, off: $off, direction: $direction, field: $field}, isArray:true}
     });
 }]);
 
@@ -120,6 +120,7 @@ userServices.factory('ChangeGroupByUser', ['$resource',
       query: {method:'POST', params:{uId: $userId, accept: $accept, gId: $groupId}, isArray:true}
     });
 }]);
+
 var pagesServices = angular.module('pagesServices', ['ngResource']);
 
 pagesServices.factory('Pages', ['$resource', function($resource) {
@@ -170,5 +171,12 @@ pagesServices.factory('SavePage', ['$resource', function($resource, $id, $title,
             status_id: $status,
             url: $url
         }, isArray:true}
+    });
+}]);
+
+userServices.factory('SearchUsers', ['$resource',
+  function($resource, $text, $lim, $off, $direction, $field){
+    return $resource('/adm/searchUsers', {}, {
+      query: {method:'POST', params:{sText: $text, lim: $lim, off: $off, direction: $direction, field: $field}, isArray:true}
     });
 }]);

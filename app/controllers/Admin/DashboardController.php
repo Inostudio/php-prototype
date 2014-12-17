@@ -3,6 +3,7 @@
 namespace Admin;
 
 //use \Response;
+use Illuminate\Support\Facades\Input;
 
 class DashboardController extends \BaseController
 {
@@ -11,12 +12,17 @@ class DashboardController extends \BaseController
      * @var \UsersService
      */
     protected $users = null;
-
+    protected $groups = null;
+    protected $permissions = null;
     
-    public function __construct(\UsersService $us) 
+    public function __construct(\UsersService $us, \GroupsService $gs, \PermissionsService $ps) 
     {
+        $this->groups = $gs;
         $this->users = $us;
+        $this->permissions = $ps;
     }
+    
+    
     
     protected $rulesAddGroup = [
         'title' => 'required|unique:groups'
@@ -34,20 +40,21 @@ class DashboardController extends \BaseController
         return \View::make('admin.dashboard');  
     }
     
+    // Получение групп +++
     public function postGroup()
     {
         $groups = \Group::all();
         return \Response::json($groups);
     }
     
-    public function postRemoveGroup(){
-        $result = true;
-        \DB::table('groups')->where('id', '=', \Input::get("groupId"))->delete();
-        \DB::table('group_permission')->where('group_id', '=', \Input::get("groupId"))->delete();
+    // Удаление группы +++
+    public function postRemoveGroup(){      
+        $this->groups->removeGroup(Input::get("groupId"));
         
-        return \Response::json([$result]);
+        return \Response::json([true]);
     }
     
+    //Добавление группы +++
     public function postAddGroup(){
         $result = true;
         $id = -1;
@@ -59,26 +66,26 @@ class DashboardController extends \BaseController
             $result = false;
             $message = $validator->messages()->first();
         } else {
-            $id = \DB::table("groups")->insertGetId(array("title" => \Input::get("title"), "description" => (empty(\Input::get("groupDescription"))) ? NULL : \Input::get("groupDescription")));
+            $id = $this->groups->addGroup(Input::get("title"), Input::get("groupDescription"));
         }
         
         return \Response::json(["res" => $result, "id" => $id, "message" => $message]);
     }
     
+    //Редактирование группы +++
     public function postEditGroup(){
         $result = true;
         $message = '';
-        $group = \DB::table('groups')->where('title', \Input::get('title'))
-                ->where('id', '<>', (\Input::get("groupId")))
+        $group = \Group::where('title', '=', Input::get('title'))
+                ->where('id', '<>', Input::get("groupId"))
                 ->first();
-        
+
         if ($group != null){
             $message = "The title has already been taken.";
             $result = false;
         } else {
             if(trim(\Input::get("title")) != ""){
-                \DB::table('groups')->where('id', (\Input::get("groupId")))
-                ->update(array('title' => (\Input::get("title")), 'description' => (\Input::get("groupDescription"))));
+                $this->groups->editGroup(Input::get("title"), Input::get("groupDescription"), Input::get("groupId"));
             } else {
                 $result = false;
                 $message = 'The title field is required.'; 
@@ -88,12 +95,14 @@ class DashboardController extends \BaseController
         return \Response::json([$result, $message]);
     }
     
+    //Получение списка прав +++
     public function postPermission()
     {
-        $groups = \Permission::all();
-        return \Response::json($groups);
+        $permissions = \Permission::all();
+        return \Response::json($permissions);
     }
     
+    //Добавление права +++
     public function postAddPermission(){
         $result = true;
         $id = -1;
@@ -105,34 +114,32 @@ class DashboardController extends \BaseController
             $result = false;
             $message = $validator->messages()->first();
         } else {
-            $id = \DB::table("permissions")->insertGetId(array("title" => \Input::get("title"), "description" => (empty(\Input::get("permissionDescription"))) ? NULL : \Input::get("permissionDescription")));
+            $id = $this->permissions->addPermission(Input::get("title"), (empty(\Input::get("permissionDescription"))) ? NULL : \Input::get("permissionDescription"));
         }
         
         return \Response::json(["res" => $result, "id" => $id, "message" => $message]);
     }
+    
+    //Удаление права +++
     public function postRemovePermission(){
-        $result = true;
-        \DB::table('permissions')->where('id', '=', \Input::get("permissionId"))->delete();
-        \DB::table('group_permission')->where('permission_id', '=', \Input::get("permissionId"))->delete(); //
         
-        return \Response::json([$result]);
+        $this->permissions->removePermission(Input::get("permissionId"));
+        return \Response::json([true]);
     }
     
-    
+    //Редактирование права +++
     public function postEditPermission(){
         $result = true;
         $message = '';
-        $permission = \DB::table('permissions')->where('title', \Input::get('title'))
-                ->where('id', '<>', (\Input::get("permissionId")))
-                ->first();
-        
+        $permission = \Permission::where('title', '=', Input::get('title'))
+                ->where('id', '<>', Input::get("permissionId"))->first();
+
         if ($permission != null){
             $message = "The title has already been taken.";
             $result = false;
         } else {
             if(trim(\Input::get("title")) != ""){
-                \DB::table('permissions')->where('id', (\Input::get("permissionId")))
-                ->update(array('title' => (\Input::get("title")), 'description' => (\Input::get("permissionDescription"))));
+                $this->permissions->editPermission(Input::get("permissionId"), Input::get("title"), Input::get("permissionDescription"));     
             } else {
                 $result = false;
                 $message = 'The title field is required.'; 
@@ -142,59 +149,28 @@ class DashboardController extends \BaseController
         return \Response::json([$result, $message]);
     }
     
+    //Получение прав группы +++
     public function postGroupOptions(){
 
-        $group = \DB::table('groups')
-                ->where('id', '=', \Input::get('groupId'))
-                ->first();
-        
-        $permissionToGroup = \DB::table('groups')
-                ->join('group_permission', 'groups.id', '=', 'group_permission.group_id')
-                ->join('permissions', 'group_permission.permission_id', '=', 'permissions.id')
-                ->where('group_id', '=', \Input::get('groupId'))
-                ->select(//'permissions.description as permission_description',
-                        'permissions.id as permission_id'//,
-                        //'permissions.title as permission_title'
-                        )
-                ->get();
-        
-        $permissions = \DB::table('permissions')->get();
-        
-        return \Response::json([$group, [$permissionToGroup], [$permissions]]);
-    }
-    
-    public function postChangePermissionsInGroup(){
+        $group = \Group::where('id', '=', Input::get('groupId'))->first(); 
 
-        $res = true;
-        if(\Input::get("accept")){
-            \DB::table('group_permission')
-                    ->where('group_id', '=', \Input::get('groupId'))
-                    ->where('permission_id', '=', \Input::get('permId'))
-                    ->delete();
-        } else {
-            \DB::table('group_permission')->insert(
-                array('group_id' => \Input::get('groupId'), 'permission_id' => \Input::get('permId'))
-            );
-        }
-        
-        return \Response::json([$res]);
+        return \Response::json([$group, [$this->permissions->permissionToGroup(Input::get('groupId'))], [\Permission::all()]]);
     }
     
+    //Изменение прав группы +++
+    public function postChangePermissionsInGroup(){
+        $this->permissions->permissionAccept(Input::get('groupId'), Input::get('permId'), Input::get("accept"));
+        
+        return \Response::json([true]);
+    } 
+    
+    //Получение пользователей +++
     public function postUsers(){
-        $users = \DB::table('users')
-                    ->join('user_profile', 'users.id', '=', 'user_profile.user_id')
-                    ->select('users.id as id',
-                        'users.email as email',
-                        'user_profile.first_name as firstName',
-                        'user_profile.last_name as lastName',
-                        'user_profile.phone as phone');
-        $lenth = $users->count();
-        $users = $users->skip(\Input::get('off'))->take(\Input::get('lim'))
-                    ->get();
         
-        return \Response::json([$users, $lenth]);
+        return \Response::json([$this->users->getPageOfUsers(Input::get('off'), Input::get('lim'), Input::get('direction'), Input::get('field')), $this->users->countUsers()]);
     }
     
+    //Добавление пользователя +++
     public function postAddUser(){
         $status = true;
         $message = '';
@@ -212,15 +188,15 @@ class DashboardController extends \BaseController
         return \Response::json([$status, $message, $id]);
     }
     
+    //Удаление пользователя +++
     public function postRemoveUser(){
         $result = true;
-        \DB::table('users')->where('id', '=', \Input::get("userId"))->delete();
-        \DB::table('user_profile')->where('user_id', '=', \Input::get("userId"))->delete();
-        \DB::table('group_user')->where('user_id', '=', \Input::get("userId"))->delete();
+        $this->users->removeUser(Input::get("userId"));
         
         return \Response::json([$result]);
     }
     
+    //Редактирование пользователя +++
     public function postEditUser(){
         $result = true;
         $message = '';
@@ -230,50 +206,27 @@ class DashboardController extends \BaseController
             $result = false;
             $message = $validator->messages()->first();
         } else {
-            \DB::table('users')->where('id', (\Input::get("userId")))
-                ->update(array('email' => (\Input::get("email"))));
+            $this->users->editUser(Input::get("userId"), Input::get("email"));
         }
         
         return \Response::json([$result, $message]);
     }
     
+    //Получение групп, в которых состоит пользователь +++
     public function postUserOptions(){
-
-        $user = \DB::table('users')
-                ->join('user_profile', 'users.id', '=', 'user_profile.user_id')
-                ->where('users.id', '=', \Input::get('userId'))
-                ->select('users.id as id',
-                        'users.email as email',
-                        'user_profile.first_name as firstName',
-                        'user_profile.last_name as lastName')
-                ->first();
         
-        $groupToUser = \DB::table('users')
-                ->join('group_user', 'users.id', '=', 'group_user.user_id')
-                ->join('groups', 'group_user.group_id', '=', 'groups.id')
-                ->where('user_id', '=', \Input::get('userId'))
-                ->select('groups.id as group_id')
-                ->get();
-      
-        $groups = \DB::table('groups')->get();
-
-        return \Response::json([$user, [$groupToUser], [$groups]]);
+        return \Response::json([\User::with('profile')->find(Input::get('userId')), [$this->users->groupsToUser(Input::get('userId'))], [\Group::all()]]);
     }
     
+    //Включение/исключение пользователя из группы +++
     public function postChangeGroupByUser(){
-        $res = true;
-        
-         if(\Input::get("accept")){
-            \DB::table('group_user')
-                    ->where('group_id', '=', \Input::get('groupId'))
-                    ->where('user_id', '=', \Input::get('userId'))
-                    ->delete();
-        } else {
-            \DB::table('group_user')->insert(
-                array('group_id' => \Input::get('groupId'), 'user_id' => \Input::get('userId'))
-            );
-        }
-
-        return \Response::json([$res]);
+        $this->users->groupAccept(Input::get('groupId'), Input::get('userId'), Input::get("accept"));
+         
+        return \Response::json([true]);
     }
+    
+    //Поиск пользователей
+    public function postSearchUsers(){
+        return \Response::json($this->users->searchUsers(Input::get('text'), Input::get('lim'), Input::get('off'), Input::get('direction'), Input::get('field')));
+    }    
 }

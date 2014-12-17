@@ -19,8 +19,14 @@
     </form>
     <h3 class="sub-header">List of users</h3>
     <div>
-        <span>Page: {{currentPage}}</span><br>
-        <span>Total page: {{totalPage}}</span><br>
+        <div class="form-inline">
+            <form name="form2" novalidate>
+                <input type="text" class="form-control" placeholder="Search" ng-model="searchText" required>
+                <button class="btn btn-primary" ng-click="search()" ng-disabled="form2.$invalid">Search</button>
+                <button class="btn btn-primary" ng-click="reset()">Reset/First</button>
+            </form>
+        </div>
+        <span style="float: right">Page: {{currentPage}}/{{totalPage}}</span><br>
     </div>
     <div ui-grid="users_grid" ui-grid-edit></div>
     <div style="margin-top: 5px;">

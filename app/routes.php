@@ -26,27 +26,30 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function(){
         'getSignin' => 'admin.signin',
         'getLogout' => 'admin.logout'
     ]);
-
+    
     Route::post('/groupInfo', ['uses' => 'DashboardController@postGroup']);
     Route::post('/addGroup', ['uses' => 'DashboardController@postAddGroup']);
     Route::post('/removeGroup', ['uses' => 'DashboardController@postRemoveGroup']);
     Route::post('/editGroup', ['uses' => 'DashboardController@postEditGroup']);
-
+    
     Route::post('/permissionInfo', ['uses' => 'DashboardController@postPermission']);
-    Route::post('/addPermission', ['uses' => 'DashboardController@postAddPermission']);
+    Route::post('/addPermission', ['uses' => 'DashboardController@postAddPermission']); 
     Route::post('/removePermission', ['uses' => 'DashboardController@postRemovePermission']);
     Route::post('/editPermission', ['uses' => 'DashboardController@postEditPermission']);
-
+    
     Route::post('/groupOptions', ['uses' => 'DashboardController@postGroupOptions']);
     Route::post('/changePermissionsInGroup', ['uses' => 'DashboardController@postChangePermissionsInGroup']);
-
-
+    
     Route::post('/users', ['uses' => 'DashboardController@postUsers']);
     Route::post('/addUsers', ['uses' => 'DashboardController@postAddUser']);
     Route::post('/removeUser', ['uses' => 'DashboardController@postRemoveUser']);
     Route::post('/editUser', ['uses' => 'DashboardController@postEditUser']);
-    Route::post('/userOptions', ['uses' => 'DashboardController@postUserOptions']);
-    Route::post('/changeGroupByUser', ['uses' => 'DashboardController@postChangeGroupByUser']);
+    Route::post('/userOptions', ['uses' => 'DashboardController@postUserOptions']); 
+    Route::post('/changeGroupByUser', ['uses' => 'DashboardController@postChangeGroupByUser']); 
+    Route::post('/searchUsers', ['uses' => 'DashboardController@postSearchUsers']); 
+  //  Route::post('/sortUsers', ['uses' => 'DashboardController@postSortUsers']); z
+    
+
 
 
     Route::controller('page', 'StaticPageController');//, [
@@ -109,7 +112,7 @@ Route::group(['namespace' => 'Front'], function(){
     Route::controller('page', 'PagesController', [
         'showPage' => 'front.page'
     ]);
-
-    //Route for static pages
+    
+        //Route for static pages
     Route::get('/{namePage}', 'PagesController@showPage');
 });

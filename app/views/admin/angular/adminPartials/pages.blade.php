@@ -96,7 +96,7 @@
         Are you sure that you want delete this page?
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="ok()">OK</button>
-        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-primary" ng-click="$emit('modal-ok')">OK</button>
+        <button class="btn btn-warning" ng-click="$emit('modal-cancel')">Cancel</button>
     </div>
 </script>
