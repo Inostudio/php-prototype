@@ -2,7 +2,26 @@
  * Created by user on 21.11.2014.
  */
 
-var profileControllers = angular.module('profileControllers', []);
+var profileControllers = angular.module('profileControllers', ['ngDroplet'],  function() {});//.config(['flowFactoryProvider', function (flowFactoryProvider, $scope) {
+//flowFactoryProvider.factory = fustyFlowFactory;
+//    flowFactoryProvider.on('catchAll', function (event) {
+//        console.log(event);
+//    });
+    /*flowFactoryProvider.on('catchAll', function (event) {
+        //console.log('catchAll', arguments);
+    });*/
+//}]);;
+
+//$scope.$addFile('flow::filesSubmitted', function (file) {
+//products.save($scope.product)
+    /*.$promise.then(function(result) {
+        $scope.product = result;
+        if ($scope.product.id) {
+            $flow.opts.target = apiUrl + '/products/' + $scope.product.id + '/images';
+            $flow.upload();
+        }
+    });*/
+//});
 
 profileControllers.controller('NavbarCtrl', ['$scope', '$location', function($scope, $location){
     $scope.isActive = function (viewLocation) {
@@ -130,6 +149,116 @@ profileControllers.controller('EditCtrl', ['$scope', 'Profile', function($scope,
 }]);
 
 profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Profile', 'imageUrl', 'exists', function ($scope, $modalInstance, Profile, imageUrl, exists) {
+
+    $scope.initInterface = false;
+
+    var addImage = function(file) {
+        var reader = new FileReader();
+        reader.onload = function (evt) {
+            $scope.$apply(function($scope){
+
+            });
+            var img = new Image;
+
+            img.onload = function() {
+                var ratio = img.height / img.width;
+
+                $scope.$apply(function($scope){
+                    var height = 0, width = 0, maxHeight = 564, maxWidth = 832;
+
+                    if(img.height > maxHeight && img.width > maxWidth) {
+                        var d1 = img.height / maxHeight;
+                        var d2 = img.width / maxWidth;
+                        if(d1 > d2) {
+                            height = maxHeight;
+                            width = img.width / d1;
+                        } else {
+                            width = maxWidth;
+                            height = img.height / d2;
+                        }
+
+                    }
+                    else if (img.height > maxHeight && img.width < maxWidth) {
+                        width = img.width / ratio;
+                        height = maxHeight;
+                    }
+                    else if (img.height < maxHeight && img.width > maxWidth) {
+                        width = maxWidth;
+                        height = img.height / ratio;
+                    }
+                    else {
+                        height = img.height;
+                        width = img.width;
+                    }
+
+                    $scope.NewPhotoImageStyle = {
+                        width: width + 'px',
+                        height: height + 'px'
+                    }
+
+
+                    $scope.NewPhoto = evt.target.result;
+
+                    $scope.changeToUploadNewPhoto();
+                });
+
+            };
+
+            img.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+
+    }
+
+    $scope.$on('$dropletReady', function whenDropletReady() {
+
+        $scope.interface.allowedExtensions(['png', 'jpg', 'bmp', 'gif', 'svg', 'torrent']);
+        $scope.initInterface = true;
+    });
+
+    $scope.$on('$dropletFileAdded', function whenDropletReady() {
+        /*console.log($scope.interface.getFiles($scope.interface.FILE_TYPES.VALID));
+        console.log($scope.interface);
+        var lenght = $scope.interface.getFiles($scope.interface.FILE_TYPES.VALID).length;
+        if(lenght !==0) {
+            addImage($scope.interface.getFiles($scope.interface.FILE_TYPES.VALID)[lenght-1].file);
+        }*/
+    });
+
+
+    /*$scope.$on('$dropletSuccess', function whenDropletReady() {
+        console.log('success');
+        console.log($scope.interface.getFiles($scope.interface.FILE_TYPES.VALID));
+        console.log($scope.interface);
+        var lenght = $scope.interface.getFiles($scope.interface.FILE_TYPES.VALID).length;
+        if(lenght !==0) {
+            addImage($scope.interface.getFiles($scope.interface.FILE_TYPES.VALID)[lenght-1].file);
+        }
+    });*/
+
+    $scope.onDragLeave = function(e){
+        console.log('log');
+        if (e.dragItem)
+            alert("Item: " + e.dragItem.text + " is dragged at position: { x: " + e.mousePos.x + ", y: " + e.mousePos.y + " }");
+    }
+
+    $scope.$watch('interface.getFiles(interface.FILE_TYPES.VALID)', function() {
+        console.log('watch');
+        if($scope.initInterface) {
+            var models = $scope.interface.getFiles($scope.interface.FILE_TYPES.VALID);
+            var lenght = models.length;
+            if(lenght !==0) {
+                $scope.NewPhoto = '';
+                addImage($scope.interface.getFiles($scope.interface.FILE_TYPES.VALID)[lenght-1].file);
+                for(var i = models.length - 1; i >= 0; i --) {
+                    models[i].deleteFile();
+                }
+            }
+        }
+
+    }, true);
+
+    //$scope.pic = "";
     //organization of transitions
     $scope.select = 'ChangeThumbnail';
 
@@ -139,6 +268,9 @@ profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Pro
 
     $scope.changeToSelectNewPhoto = function() {
         $scope.select = 'NewPhoto';
+
+        //clear canvas when change view
+        $scope.NewPhoto = '';
     }
 
     $scope.changeToThumbnail = function() {
@@ -167,51 +299,10 @@ profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Pro
 
 
     var handleFileSelect=function(evt) {
-        var file=evt.currentTarget.files[0];
-        var reader = new FileReader();
-        reader.onload = function (evt) {
-            $scope.$apply(function($scope){
-                $scope.NewPhoto=evt.target.result;
-                $scope.uploaded = true;
-            });
-            var img = new Image;
+        addImage(evt.currentTarget.files[0]);
 
-            img.onload = function() {
-                var ratio = img.height / img.width;
-
-                $scope.$apply(function($scope){
-                    var height = 0, width = 0, maxHeight = 564, maxWidth = 832;
-
-                    if(img.height > maxHeight && img.width > maxWidth) {
-                        var d = img.height / maxHeight;
-                        height = maxHeight;
-                        width = img.width / d;
-                    }
-                    else if (img.height > maxHeight && img.width < maxWidth) {
-                        width = img.width / ratio;
-                        height = maxHeight;
-                    }
-                    else if (img.height < maxHeight && img.width > maxWidth) {
-                        width = maxWidth;
-                        height = img.height / ratio;
-                    }
-                    else {
-                        height = img.height;
-                        width = img.width;
-                    }
-
-                    $scope.NewPhotoImageStyle = {
-                        width: width + 'px',
-                        height: height + 'px'
-                    }
-                });
-
-            };
-
-            img.src = reader.result;
-        };
-        reader.readAsDataURL(file);
-        $scope.changeToUploadNewPhoto();
+        //clear input value
+        angular.element(document.querySelector('#fileInput')).val(null);
     };
 
 
@@ -284,3 +375,4 @@ profileControllers.controller('EditPhotoCtrl', ['$scope', '$modalInstance', 'Pro
 
 
 }]);
+

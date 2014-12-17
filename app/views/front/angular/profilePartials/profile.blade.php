@@ -131,6 +131,40 @@
     width: 500px;
     height: 350px;
 }
+
+div.class1 droplet {
+   display: inline-block;
+   z-index: 2;
+   position: relative;
+   border-radius: 2px;
+   width: 100%;
+   height: 100%;
+   background-color: rgba(255, 255, 255, .1);
+   margin-top: -5px;
+   padding-top: 5px;
+   transition: box-shadow 0.35s;
+}
+
+div.class1 droplet comment:after {
+    content: "Drag Image...";
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: inline-block;
+    z-index: -1;
+    font-family: Lato, Arial, Tahoma, Helvetica, sans-serif;
+    color: rgba(0, 0, 0, .45);
+    text-decoration: none;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 300px;
+    text-align: center;
+}
+
+div.class1 droplet.event-dragover comment:after {
+    content: "...And Drop!";
+}
+
 </style>
 
 <script type="text/ng-template" id="editPhoto.html">
@@ -138,23 +172,32 @@
         <div class="modal-header">
             <h3 class="modal-title">Choose a new thumbnail</h3>
         </div>
-        <div class="modal-body" style="height: 600px;border: dashed 3px #c5cacd; margin: 15px; background: #fff; ">
+        <div class="modal-body" ng-style="isActive('NewPhoto') ? {'padding': '0'} : {}" style="height: 600px;border: dashed 3px #c5cacd; margin: 15px; background: #fff;">
             <div ng-show="isActive('ChangeThumbnail')">
                 <section>
                     <div class="cropArea small" ng-style="ImageStyle" style="height: 600px; margin: 0 auto;">
-                        <img-crop image="myImage" result-image="myCroppedImage" result-image-format="image/jpeg" area-type="square"></img-crop>
+                        <img-crop image="myImage" ng-style="ImageStyle" result-image="myCroppedImage" result-image-format="image/jpeg" area-type="square"></img-crop>
                     </div>
                 </section>
             </div>
 
-            <div ng-show="isActive('NewPhoto')">
-                <div>
-                    Select an image file:
-                    <input type="file" ng-model="fileInput" id="fileInput" ng-click="Init()" />
-                    <div class="uploadcare-dialog-big-button" ng-click="choose()">
-                    Choose a local file
-                    </div>
+            <div ng-show="isActive('NewPhoto')" style="height: inherit;">
+                <div class="class1" style="height: inherit; position: relative;">
+                    <droplet ng-model="interface">
+
+                        <div style="position: absolute; top: 240px; left: 300px;">
+                            <div style="position:absolute; width: 270px; height: 66px;" class="uploadcare-dialog-big-button" ng-click="choose()">
+                                Choose a local file
+                            </div>
+                            <input style="border-radius: 100px;position:absolute;opacity: 0; width: 270px; height: 66px;" type="file" ng-model="fileInput" id="fileInput" ng-click="Init()"/>
+                        </div>
+                        <div>
+                            <comment></comment>
+                        </div>
+                    </droplet>
                 </div>
+
+
             </div>
 
             <div ng-show="isActive('UploadPhoto')">

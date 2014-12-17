@@ -1,4 +1,4 @@
-var adminControllers = angular.module('adminControllers', ['ui.grid', 'ui.grid.edit','mgcrea.ngStrap',
+var adminControllers = angular.module('adminControllers', ['ui.grid', 'ui.grid.edit',
     'mgcrea.ngStrap.alert']);
 
 
