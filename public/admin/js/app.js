@@ -8,8 +8,10 @@ var adminApp = angular.module('adminApp', [
     'permissionServices',
     'userServices',
     'pagesServices',
+    'resourceServices',
     'ngAnimate',
-    'ngSanitize'
+    'ngSanitize',
+    'ngImgCrop'
 ]);
 
 adminApp.config(['$routeProvider',
@@ -54,6 +56,10 @@ adminApp.config(['$routeProvider',
       when('/users/:userId', {
         templateUrl:  '/angular/?ns=admin&id=adminPartials.userOptions',
         controller: 'UserOptionsCtrl'
+      }).
+      when('/resources', {
+          templateUrl:  '/angular/?ns=admin&id=adminPartials.resources',
+          controller: 'ResourcesCtrl'
       });
   }]);
 

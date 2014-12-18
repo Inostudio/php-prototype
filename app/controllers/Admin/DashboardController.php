@@ -4,6 +4,7 @@ namespace Admin;
 
 //use \Response;
 use Illuminate\Support\Facades\Input;
+use Symfony\Component\HttpFoundation\Response;
 
 class DashboardController extends \BaseController
 {
@@ -14,12 +15,14 @@ class DashboardController extends \BaseController
     protected $users = null;
     protected $groups = null;
     protected $permissions = null;
+    protected $resources = null;
     
-    public function __construct(\UsersService $us, \GroupsService $gs, \PermissionsService $ps) 
+    public function __construct(\UsersService $us, \GroupsService $gs, \PermissionsService $ps, \ResourceService $rs)
     {
         $this->groups = $gs;
         $this->users = $us;
         $this->permissions = $ps;
+        $this->resources = $rs;
     }
     
     
@@ -36,8 +39,7 @@ class DashboardController extends \BaseController
     
     public function getIndex()
     {
-        
-        return \View::make('admin.dashboard');  
+        return \View::make('admin.layout');
     }
     
     // Получение групп +++
@@ -228,5 +230,27 @@ class DashboardController extends \BaseController
     //Поиск пользователей
     public function postSearchUsers(){
         return \Response::json($this->users->searchUsers(Input::get('text'), Input::get('lim'), Input::get('off'), Input::get('direction'), Input::get('field')));
-    }    
+    }
+
+    public function postAddResource()
+    {
+        $title = Input::get('title');
+        $file = Input::get('file');
+        return $this->resources->add($title, $file);
+    }
+
+    public function postShowResources()
+    {
+        return \Resource::all();
+    }
+
+    public function postDeleteResources()
+    {
+        return [$this->resources->delete(Input::get('id'))];
+    }
+
+    public function postEditResources()
+    {
+        return \Response::json($this->resources->edit(Input::get('id'), Input::get('title')));
+    }
 }

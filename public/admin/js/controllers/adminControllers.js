@@ -2,10 +2,9 @@ var adminControllers = angular.module('adminControllers', ['ui.grid', 'ui.grid.e
     'mgcrea.ngStrap.alert']);
 
 
-adminControllers.controller('AdminCtrl', ['$scope',
-  function($scope) {
+adminControllers.controller('AdminCtrl', ['$scope', function($scope) {
       
- }]);
+}]);
  
 adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'RemoveGroup', 'EditGroup', '$alert',
     function($scope, Group, AddGroup, RemoveGroup, EditGroup, $alert) {
@@ -728,14 +727,68 @@ adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParam
         });
 }]);
 
+adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResource', 'DeleteResource', 'EditResource', function($scope, AddResource, AllResource, DeleteResource, EditResource) {
+    $scope.resource = {
+        title: '',
+        file: ''
+    }
+
+    $scope.resources = [];
+
+    function getAllResources() {
+        $scope.resources = AllResource.query(function(res){
+            //console.log(res);
+        });
+    };
+    getAllResources();
 
 
 
+    $scope.add = function(resource) {
+        AddResource.query({
+            title: resource.title,
+            file: resource.file
+        }, function(res) {
+            $scope.resources.push(res);
+        });
+    }
 
+    var handleFileSelect=function(evt) {
+        var file=evt.currentTarget.files[0];
+        var reader = new FileReader();
+        reader.onload = function (evt) {
+            $scope.resource.file = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+    };
 
+    angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
 
+    $scope.delete = function(id) {
+        DeleteResource.query({id: id}, function (res) {
+            getAllResources();
+        });
+    }
 
+    $scope.edit = function(id) {
+        for(var i = 0 ; i < $scope.resources.length; i++) {
+            if($scope.resources[i].id === id) {
+                $scope.editRes = $scope.resources[i];
+                break;
+            }
+        }
+    }
 
+    $scope.saveEdit = function (res) {
+        EditResource.query({
+            id: res.id,
+            title: res.title
+        }, function () {
+            $scope.editRes = {};
+            getAllResources();
+        })
+    }
+}]);
 
 var pagesControllers = angular.module('pagesControllers', ['mgcrea.ngStrap']);
 

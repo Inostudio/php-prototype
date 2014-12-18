@@ -180,3 +180,38 @@ userServices.factory('SearchUsers', ['$resource',
       query: {method:'POST', params:{sText: $text, lim: $lim, off: $off, direction: $direction, field: $field}, isArray:true}
     });
 }]);
+
+var resourceServices = angular.module('resourceServices', ['ngResource']);
+
+resourceServices.factory('AddResource', ['$resource', function($resource, $title, $file){
+    return $resource('/adm/addResource', {}, {
+        query: {method:'POST', params:{
+            title: $title,
+            file: $file
+        }, isArray:false}
+    });
+}]);
+
+resourceServices.service('AllResource', ['$resource', function($resource){
+    return $resource('/adm/showResources', {}, {
+        query: {method:'POST', params:{}, isArray:true}
+    });
+}]);
+
+
+resourceServices.service('DeleteResource', ['$resource', function($resource, $id){
+    return $resource('/adm/deleteResource', {}, {
+        query: {method:'POST', params:{
+            id: $id
+        }, isArray:true}
+    });
+}]);
+
+resourceServices.service('EditResource', ['$resource', function($resource, $id, $title){
+    return $resource('/adm/editResource', {}, {
+        query: {method:'POST', params:{
+            id: $id,
+            title: $title
+        }, isArray:false}
+    });
+}]);

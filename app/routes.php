@@ -48,7 +48,12 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function(){
     Route::post('/changeGroupByUser', ['uses' => 'DashboardController@postChangeGroupByUser']); 
     Route::post('/searchUsers', ['uses' => 'DashboardController@postSearchUsers']); 
   //  Route::post('/sortUsers', ['uses' => 'DashboardController@postSortUsers']); z
-    
+
+
+    Route::post('/addResource', ['uses' => 'DashboardController@postAddResource']);
+    Route::post('/showResources', ['uses' => 'DashboardController@postShowResources']);
+    Route::post('/deleteResource', ['uses' => 'DashboardController@postDeleteResources']);
+    Route::post('/editResource', ['uses' => 'DashboardController@postEditResources']);
 
 
 
@@ -115,4 +120,5 @@ Route::group(['namespace' => 'Front'], function(){
     
         //Route for static pages
     Route::get('/{namePage}', 'PagesController@showPage');
+
 });

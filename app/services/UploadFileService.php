@@ -33,20 +33,4 @@ class UploadFileService {
 
         return $file->exists();
     }
-
-    /*public function uploadResource($file)
-    {
-
-    }*/
-
-    /*public function uploadImage($file, $format, $name)
-    {
-        define('UPLOAD_DIR', 'public/users/'. Auth::user()->id . '/');
-        $localAdapter = new LocalAdapter(UPLOAD_DIR, true);
-        $filesystem = new Filesystem($localAdapter);
-        $data = $this->decoderImage($file, $format);
-        $file = new File($name, $filesystem);
-        //$file->setContent($data);
-        return $file->exists();
-    }*/
 } 

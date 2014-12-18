@@ -10,6 +10,8 @@
 
     <title>InoPrototypeDesigner</title>
 
+
+    <link rel="stylesheet" type="text/css" href="/front/vendors/directives/css/ng-img-crop.css">
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/libraries.min.css">    <!---Эта штука нужна для анимации всплывающих окон-->
     <link href="/admin/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -29,6 +31,8 @@
     <script src="/admin/vendors/angular/angular-animate.js" type="text/javascript"></script>
     <script src="/admin/vendors/angular/angular-strap.min.js" type="text/javascript"></script>
     <script src="/admin/vendors/angular/angular-strap.tpl.js" type="text/javascript"></script>
+
+    <script src="/front/vendors/directives/js/ng-img-crop.js"></script>
     
     <!--Для grid---->
 
@@ -103,6 +107,7 @@
             <li ng-class="{'active' : isActive('/pages')}"><a href="#/pages"><i class="fa fa-newspaper-o"></i> Pages</a></li>
             <li ng-class="{'active' : isActive('/products')}"><a href="#/products"><i class="fa fa-list"></i> Products</a></li>
             <li ng-class="{'active' : isActive('/settings')}"><a href="#/settings"><i class="fa fa-gear"></i> Settings</a></li>
+            <li ng-class="{'active' : isActive('/resources')}"><a href="#/resources"><i class="fa fa-gear"></i> Resources</a></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-view></div>
