@@ -50,10 +50,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function(){
   //  Route::post('/sortUsers', ['uses' => 'DashboardController@postSortUsers']); z
 
 
-    Route::post('/addResource', ['uses' => 'DashboardController@postAddResource']);
-    Route::post('/showResources', ['uses' => 'DashboardController@postShowResources']);
-    Route::post('/deleteResource', ['uses' => 'DashboardController@postDeleteResources']);
-    Route::post('/editResource', ['uses' => 'DashboardController@postEditResources']);
+    Route::post('/addResource', ['uses' => 'ResourceController@postAddResource']);
+    Route::post('/showResources', ['uses' => 'ResourceController@postShowResources']);
+    Route::post('/deleteResource', ['uses' => 'ResourceController@postDeleteResources']);
 
 
 

@@ -15,7 +15,7 @@ class DashboardController extends \BaseController
     protected $users = null;
     protected $groups = null;
     protected $permissions = null;
-    protected $resources = null;
+
     
     public function __construct(\UsersService $us, \GroupsService $gs, \PermissionsService $ps, \ResourceService $rs)
     {
@@ -232,25 +232,5 @@ class DashboardController extends \BaseController
         return \Response::json($this->users->searchUsers(Input::get('text'), Input::get('lim'), Input::get('off'), Input::get('direction'), Input::get('field')));
     }
 
-    public function postAddResource()
-    {
-        $title = Input::get('title');
-        $file = Input::get('file');
-        return $this->resources->add($title, $file);
-    }
 
-    public function postShowResources()
-    {
-        return \Resource::all();
-    }
-
-    public function postDeleteResources()
-    {
-        return [$this->resources->delete(Input::get('id'))];
-    }
-
-    public function postEditResources()
-    {
-        return \Response::json($this->resources->edit(Input::get('id'), Input::get('title')));
-    }
 }

@@ -7,31 +7,26 @@
     }
 </style>
 
+<h1 class="page-header">Resources</h1>
+<div id="alerts-container"></div>
 <div>
-    <form ng-submit="add(resource)">
-        <input type="text" ng-model="resource.title" />
-        <br/>
-
-        <div>Select an image file: <input type="file" id="fileInput"/></div>
-        <!--
-        <div class="cropArea">
-            <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
+    <h3 class="sub-header">Add resource</h3>
+    <form name="form" ng-submit="add(resource)">
+        <div class="form-inline" novalidate>
+            <div class="input-group">
+                <input type="text" class="form-control" name="title" placeholder="Title" ng-model="resource.title" required />
+            </div>
+            <div class="input-group">
+                <input type="file" id="fileInput" name="file"/>
+            </div>
+            <button type="submit" class="btn btn-default" ng-disabled="form.$invalid">Добавить</button>
         </div>
-        <div>Cropped Image:</div>
-        <div>
-            <img ng-src="{{myCroppedImage}}" />
-        </div>
-        -->
-        <input type="submit" />
     </form>
+    <h3 class="sub-header">List of resources</h3>
+
+
 
     <br/>
-
-    <form ng-submit="saveEdit(editRes)">
-        <input type="hidden" ng-model="editRes.id" />
-        <input type="text" ng-model="editRes.title" />
-        <input type="submit" />
-    </form>
 
     <table class="table">
         <thead>
@@ -45,11 +40,10 @@
         <tbody>
             <tr ng-repeat="res in resources">
                 <th>{{res.title}}</th>
-                <th>{{'resources/pics/'+ res.title + '.jpg'}}</th>
-                <th><img src="{{res.url}}" style="max-height: 200px; max-width: 200px"/></th>
+                <th>{{res.url}}</th>
+                <th><img ng-src="{{res.url}}" style="max-height: 200px; max-width: 200px"/></th>
                 <th>
                     <button class="btn" ng-click="delete(res.id)">Delete</button>
-                    <button class="btn" ng-click="edit(res.id)">Edit</button>
                 </th>
             </tr>
         </tbody>

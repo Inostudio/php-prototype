@@ -727,7 +727,11 @@ adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParam
         });
 }]);
 
-adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResource', 'DeleteResource', 'EditResource', function($scope, AddResource, AllResource, DeleteResource, EditResource) {
+adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResource', 'DeleteResource', '$alert', function($scope, AddResource, AllResource, DeleteResource, $alert) {
+
+    var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
+    var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
+
     $scope.resource = {
         title: '',
         file: ''
@@ -745,11 +749,46 @@ adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResou
 
 
     $scope.add = function(resource) {
-        AddResource.query({
-            title: resource.title,
-            file: resource.file
-        }, function(res) {
-            $scope.resources.push(res);
+        if(resource.file === '') {
+            $alert({title: 'Please select a file', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
+        } else {
+            AddResource.query({
+                title: resource.title,
+                file: resource.file
+            }, function(res) {
+                console.log(res);
+                if(res[0] === true) {
+                    $scope.resources.push(res[1]);
+                    $alert({title: 'The resource has been successfully added', placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+
+                    $scope.resource = {
+                        title: '',
+                        file: ''
+                    }
+                    angular.element(document.querySelector('#fileInput')).val(null);
+                } else {
+                    $alert({title: res[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
+                }
+            });
+        }
+    }
+
+    $scope.delete = function(id) {
+        DeleteResource.query({id: id}, function (res) {
+            console.log(res);
+            if(res[0] === true) {
+                var index = 0;
+                for(i = 0; i < $scope.resources.length; i++) {
+                    if($scope.resources[i].id === id) {
+                        index = i;
+                        break;
+                    }
+                }
+                $scope.resources.splice(index, 1);
+                $alert({title: 'The resource has been successfully deleted', placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+            } else {
+                $alert({title: res[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
+            }
         });
     }
 
@@ -764,30 +803,7 @@ adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResou
 
     angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
 
-    $scope.delete = function(id) {
-        DeleteResource.query({id: id}, function (res) {
-            getAllResources();
-        });
-    }
 
-    $scope.edit = function(id) {
-        for(var i = 0 ; i < $scope.resources.length; i++) {
-            if($scope.resources[i].id === id) {
-                $scope.editRes = $scope.resources[i];
-                break;
-            }
-        }
-    }
-
-    $scope.saveEdit = function (res) {
-        EditResource.query({
-            id: res.id,
-            title: res.title
-        }, function () {
-            $scope.editRes = {};
-            getAllResources();
-        })
-    }
 }]);
 
 var pagesControllers = angular.module('pagesControllers', ['mgcrea.ngStrap']);

@@ -23,61 +23,43 @@ class ResourceService {
     public function __construct(UploadFileService $uploadService)
     {
         $this->us = $uploadService;
-        $this->localAdapter = new LocalAdapter('public/resources/pics');
+        $this->localAdapter = new LocalAdapter('public');
         $this->filesystem = new Filesystem($this->localAdapter);
     }
 
     public function add($title, $file)
     {
-        $response = false;
+        $result = [false, 'Unknown'];
 
-        $fileName = $title . '.jpg';
-        if ($this->us->uploadImage($file, $fileName, $this->path, 'jpeg')) {
-            $res = new Resource;
-            $res->title = $title;
-            $res->url = $this->url . $fileName;
-            $res->path = $this->path . $fileName;
-            $res->save();
-
-            $response = true;
+        if(!(Resource::where('title', '=', $title)->first())) {
+            $fileName = substr(md5($title), 9, 19) . '.jpg';
+            if ($this->us->uploadImage($file, $fileName, $this->path, 'jpeg')) {
+                $res = new Resource;
+                $res->title = $title;
+                $res->url = $this->url . $fileName;
+                $res->path = $this->path . $fileName;
+                $result = [$res->save(), $res];
+            }
+        } else {
+            $result[1] = 'This resource is exist';
         }
-        return $response ? $res : null;
-    }
-
-    public function delete($id)
-    {
-        $result = false;
-        $resource = Resource::find($id);
-        if($resource) {
-            $resource = $resource->first();
-
-
-            $file = new File($resource->title.'.jpg', $this->filesystem);
-            $file->delete();
-            $result = $resource->delete();
-        }
-
 
         return $result;
     }
 
-    public function edit($id, $title)
+    public function delete($id)
     {
-        $result = false;
+        $result = [false, 'Unknown'];
 
         $resource = Resource::find($id);
         if($resource) {
             $resource = $resource->first();
-            $resource->title = $title;
 
-            $file = new File($resource->title.'.jpg', $this->filesystem);
-            return $file->setName($title.'.jpg');
-
-
-            $resource->save();
-
-
-            $result = true;
+            $file = new File($resource->url, $this->filesystem);
+            $file->delete();
+            $result = [$resource->delete()];
+        } else {
+            $result[1] = 'Resource didn\'t found';
         }
 
         return $result;

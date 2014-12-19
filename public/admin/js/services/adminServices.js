@@ -188,7 +188,7 @@ resourceServices.factory('AddResource', ['$resource', function($resource, $title
         query: {method:'POST', params:{
             title: $title,
             file: $file
-        }, isArray:false}
+        }, isArray:true}
     });
 }]);
 
@@ -204,14 +204,5 @@ resourceServices.service('DeleteResource', ['$resource', function($resource, $id
         query: {method:'POST', params:{
             id: $id
         }, isArray:true}
-    });
-}]);
-
-resourceServices.service('EditResource', ['$resource', function($resource, $id, $title){
-    return $resource('/adm/editResource', {}, {
-        query: {method:'POST', params:{
-            id: $id,
-            title: $title
-        }, isArray:false}
     });
 }]);
