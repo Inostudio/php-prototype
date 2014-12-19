@@ -111,3 +111,21 @@ body {
     border-color: rgb(53, 126, 189);
 }
 .glyphicon { margin-right:5px; }
+
+.actionCol {
+    margin-bottom: 0;
+}
+
+.actionCol:hover {
+    cursor: pointer;
+    color: #428BCA;
+}
+
+.modal {
+    z-index: 10000;
+    
+}
+
+.modal-backdrop {
+    z-index: 9000;
+}

@@ -737,10 +737,54 @@ adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParam
 
 
 
-var pagesControllers = angular.module('pagesControllers', ['mgcrea.ngStrap']);
+var pagesControllers = angular.module('pagesControllers', ['mgcrea.ngStrap', 'ui.grid', 'ui.grid.edit']);
 
-pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status', 'Pages', 'GetPage', 'DeletePage', 'SavePage', '$window', '$location', '$rootScope', function($scope, $modal, AddPage, Status, Pages, GetPage, DeletePage, SavePage, $window, $location, $rootScope) {
+pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status', 'Pages', 
+    'GetPage', 'DeletePage', 'SavePage', '$window', '$location', '$rootScope', function($scope, $modal, AddPage, Status, Pages, GetPage, DeletePage, SavePage, $window, $location, $rootScope) {
     
+    $scope.gridOptions_pagesGrid = { enableFiltering: true, rowHeight: 65 };
+    
+    $scope.gridOptions_pagesGrid.columnDefs = [
+        { name: 'title', displayName: 'Title', width: '10%', enableCellEdit: false },
+        { name: 'body', displayName: 'Short content' , width: '30%', enableFiltering: false, enableCellEdit: false },
+        { name: 'url', displayName: 'Url' , width: '5%', enableCellEdit: false},
+        { name: 'status', displayName: 'Status' , width: '5%', enableFiltering: false, enableCellEdit: false,
+            cellTemplate: '<p class="form-control" style="width: 50%; margin-left: 25%; margin-top: 10%">{{row.entity.status}}</p>'},
+        { name: 'actions', displayName: 'Actions' , width: '5%', enableFiltering: false, enableCellEdit: false,
+            cellTemplate: '<p ng-click="$emit(\'EventForEditPage\', row.entity.id)" class="actionCol" style="margin-left: 30%">Edit</p>\n\
+                <p ng-click="$emit(\'EventForDropPage\', row.entity.id)" class="actionCol" style="margin-left: 25%">Delete</p>\n\
+                <p ng-click="$emit(\'EventForShowPage\', row.entity.url)" class="actionCol" style="margin-left: 28%">Show</p>'
+    }];
+   
+   //+++
+    $scope.$on('EventForDropPage', function (event, id) {
+        $scope.modal = $modal({
+            show: true,
+            contentTemplate: 'ConfirmDelete.html'
+        });
+        $scope.del = id;
+    });
+    
+    //+++
+    $scope.$on('EventForEditPage', function (event, id) {
+        $scope.page = GetPage.query({id: id}, function(res) {
+            $rootScope.page = res;
+            $rootScope.pageActions = 'Edit static page';
+            
+            $scope.modalEditPage = $modal({
+                show: true,
+                contentTemplate: 'EditPage.html'
+            });
+            console.log(res);
+        });
+    });
+    
+    $scope.$on('EventForShowPage', function(event, url){
+        $window.open('http://' + $location.host() + ':' + $location.port() + '/' + url);
+    });
+    
+    //+++    
+    var arr = []; 
     var Init = function() {
         $scope.submitted = false;
         $scope.urlRule = /^\w+$/;
@@ -748,102 +792,63 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status
         $scope.createPage = false;
         $scope.showPage = false;
 
-        $scope.statuses = Status.query();
-        $scope.pages = Pages.query();
+        arr = [];
+        Pages.query(function(res){
+            $rootScope.statuses = res[1];
+            angular.forEach(res[0], function(page) {
+                arr.push({
+                    'title': page.title, 
+                    'body': page.body, 
+                    'url': page.url, 
+                    'status': res[1][page.status_id - 1].title,
+                    'id': page.id
+                });
+            });
+            
+            $scope.gridOptions_pagesGrid.data = arr;
+            console.log(res);
+        });
     }();
-
     
-    //Work with front
-    var showAllPages = function() {
-        $scope.createPage = false;
-        $scope.showPage = false;
-        $scope.submitted = false;
-    };
-
-    var showOnePage = function() {
-        showAllPages();
-        $scope.showPage = true;
-    };
-
-    var showNewPage = function() {
-        showAllPages();
-        $scope.createPage = true;
-    };
-    //---------------
 
     $scope.save = function(page, valid) {
-        $scope.submitted = true;
         if(valid)
         {
-            function saved() {
-                $scope.pages = Pages.query(function(){
-                    $scope.createPage = false;
-                    clearNewPage();
-                });
-            }
-
+            $scope.modalEditPage.hide();
 
             if(page.id === undefined) {
-                AddPage.query({title: page.title, body: page.body, status: page.status_id, url: page.url}, function() {
-                    saved();
+                AddPage.query({title: page.title, body: page.body, status: page.status_id, url: page.url}, function(res) {
+                    arr.push({id: res[0], title: page.title, body: page.body, status: $rootScope.statuses[page.status_id - 1].title, url: page.url});
                 });
             } else {
                 SavePage.query({id: page.id, title: page.title, body: page.body, status: page.status_id, url: page.url}, function() {
-                    saved();
+                    for(i=0; i < arr.length; i++){
+                        if(page.id === arr[i].id){
+                            arr[i] = page;
+                            arr[i].status = $rootScope.statuses[page.status_id - 1].title;
+                        }
+                    }
                 });
             }
         }
     };
-
-    $scope.show = function(url) {
-        $window.open('http://' + $location.host() + ':' + $location.port() + '/' + url);
-    };
-
-    $scope.edit = function(id) {
-        $scope.page = GetPage.query({id: id}, function() {
-            showNewPage();
-        });
-    };
-
+    
+    //+++
     var deletePage = function (id) {
         DeletePage.query({id: id}, function(res) {
             index = 0;
-            for(i = 0; i < $scope.pages.length; i++) {
-                if($scope.pages[i].id == id) {
+            for(i = 0; i < arr.length; i++) {
+                if(arr[i].id === id) {
                     index = i;
                     break;
                 }
             }
-            $scope.pages.splice(index, 1);
+            arr.splice(index, 1);
+            $scope.gridOptions_pagesGrid.data = arr;
         });
-    };
-
-
-    $scope.confirmDelete = function(id) {
-        $scope.modal = $modal({
-            show: true,
-            contentTemplate: 'ConfirmDelete.html'
-        });
-        $scope.del = id;
-    };
-
-    $scope.createPageAction = function() {
-        clearNewPage();
-        showNewPage();
-    };
-
-    $scope.showAllPages = function() {
-        showAllPages();
-    };
-
-    var clearNewPage = function() {
-        $scope.page = {};
-    };
-    
+    };  
+   
     $rootScope.$on('modal-ok', function(){
-        console.log('ok');
-        
-        
         deletePage($scope.del);
         $scope.modal.hide();
     });
@@ -851,5 +856,23 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status
     $rootScope.$on('modal-cancel', function(){
         $scope.modal.hide();
     });
-
-}]);
+    
+    $rootScope.$on('edit-cancel', function(){
+        $scope.modalEditPage.hide();
+    });
+    
+    $rootScope.$on('edit-ok', function(event, arg1, arg2){
+        $rootScope.submitted = true;
+        $scope.save(arg1, arg2);
+    });
+    
+    $scope.createPage = function(){
+        $rootScope.submitted = false;
+        $rootScope.page = {};
+        $rootScope.pageActions = 'Create new static page';
+        $scope.modalEditPage = $modal({
+            show: true,
+            contentTemplate: 'EditPage.html'
+        });
+    };
+ }]);
