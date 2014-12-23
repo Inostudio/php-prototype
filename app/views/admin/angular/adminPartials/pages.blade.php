@@ -1,3 +1,5 @@
+<div id="alerts-container_for_pages"></div>
+
 <button class="btn btn-primary" style="margin-bottom: 5px;" ng-click="createPage()">Create page</button>
 <script type="text/ng-template" id="EditPage.html">
     <div>

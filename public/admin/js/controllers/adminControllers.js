@@ -739,9 +739,11 @@ adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParam
 
 var pagesControllers = angular.module('pagesControllers', ['mgcrea.ngStrap', 'ui.grid', 'ui.grid.edit']);
 
-pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status', 'Pages', 
-    'GetPage', 'DeletePage', 'SavePage', '$window', '$location', '$rootScope', function($scope, $modal, AddPage, Status, Pages, GetPage, DeletePage, SavePage, $window, $location, $rootScope) {
-    
+pagesControllers.controller('PagesCtrl', ['$scope', '$alert', '$modal', 'AddPage', 'Status', 'Pages',
+    'GetPage', 'DeletePage', 'SavePage', '$window', '$location', '$rootScope', function($scope, $alert, $modal, AddPage, Status, Pages, GetPage, DeletePage, SavePage, $window, $location, $rootScope) {
+     
+    var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container_for_pages'});
+     
     $scope.gridOptions_pagesGrid = { enableFiltering: true, rowHeight: 65 };
     
     $scope.gridOptions_pagesGrid.columnDefs = [
@@ -775,7 +777,7 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status
                 show: true,
                 contentTemplate: 'EditPage.html'
             });
-            console.log(res);
+            //console.log(res);
         });
     });
     
@@ -806,12 +808,13 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status
             });
             
             $scope.gridOptions_pagesGrid.data = arr;
-            console.log(res);
+            //console.log(res);
         });
     }();
     
 
     $scope.save = function(page, valid) {
+        alertSuccess.hide();
         if(valid)
         {
             $scope.modalEditPage.hide();
@@ -819,6 +822,7 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status
             if(page.id === undefined) {
                 AddPage.query({title: page.title, body: page.body, status: page.status_id, url: page.url}, function(res) {
                     arr.push({id: res[0], title: page.title, body: page.body, status: $rootScope.statuses[page.status_id - 1].title, url: page.url});
+                    alertSuccess = $alert({title: 'Page has been added successfully', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_for_pages', duration: 3});
                 });
             } else {
                 SavePage.query({id: page.id, title: page.title, body: page.body, status: page.status_id, url: page.url}, function() {
@@ -829,6 +833,7 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status
                         }
                     }
                 });
+                alertSuccess = $alert({title: 'The page has been successfully edited', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_for_pages', duration: 3});
             }
         }
     };
@@ -849,8 +854,10 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$modal', 'AddPage', 'Status
     };  
    
     $rootScope.$on('modal-ok', function(){
+        alertSuccess.hide();
         deletePage($scope.del);
         $scope.modal.hide();
+        alertSuccess = $alert({title: 'The page has been successfully removed', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_for_pages', duration: 3});
     });
     
     $rootScope.$on('modal-cancel', function(){
