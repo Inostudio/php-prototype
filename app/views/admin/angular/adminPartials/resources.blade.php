@@ -23,29 +23,6 @@
         </div>
     </form>
     <h3 class="sub-header">List of resources</h3>
-
-
-
-    <br/>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Path</th>
-                <th>View</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="res in resources">
-                <th>{{res.title}}</th>
-                <th>{{res.url}}</th>
-                <th><img ng-src="{{res.url}}" style="max-height: 200px; max-width: 200px"/></th>
-                <th>
-                    <button class="btn" ng-click="delete(res.id)">Delete</button>
-                </th>
-            </tr>
-        </tbody>
-    </table>
 </div>
+
+<div ui-grid="gridOptions_resourcesGrid" ui-grid-edit class="resourcesGrid"></div>

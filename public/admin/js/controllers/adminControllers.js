@@ -735,19 +735,35 @@ adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResou
     $scope.resource = {
         title: '',
         file: ''
-    }
+    };
 
     $scope.resources = [];
+    
+    
 
     function getAllResources() {
         $scope.resources = AllResource.query(function(res){
             //console.log(res);
+            $scope.gridOptions_resourcesGrid.data = res;
         });
     };
     getAllResources();
 
-
-
+    $scope.gridOptions_resourcesGrid = { enableFiltering: true, rowHeight: 110 };
+    
+    $scope.gridOptions_resourcesGrid.columnDefs = [
+        { name: 'title', displayName: 'Title', width: '2%', enableCellEdit: false },
+        { name: 'url', displayName: 'Url' , width: '15%', enableFiltering: false, enableCellEdit: false, enableSorting: false },
+        { name: 'view', displayName: 'View' , width: '15%', enableCellEdit: false, enableFiltering: false, enableSorting: false, 
+            cellTemplate: '<img ng-src="{{row.entity.url}}" style="max-height: 150px; max-width: 150px; margin-left: 25%">' },
+        { name: 'action', displayName: 'Action' , width: '5%', enableCellEdit: false, enableFiltering: false, enableSorting: false, 
+            cellTemplate: '<button class="btn" ng-click="$emit(\'EventForDropResource\', row.entity.id)" style="margin-left: 25%; margin-top: 20%">Delete</button>'}
+    ];
+    
+    $scope.$on('EventForDropResource', function (event, id) {
+        $scope.delete(id);
+    });
+    
     $scope.add = function(resource) {
         if(resource.file === '') {
             $alert({title: 'Please select a file', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
@@ -765,14 +781,14 @@ adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResou
                     $scope.resource = {
                         title: '',
                         file: ''
-                    }
+                    };
                     angular.element(document.querySelector('#fileInput')).val(null);
                 } else {
                     $alert({title: res[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
                 }
             });
         }
-    }
+    };
 
     $scope.delete = function(id) {
         DeleteResource.query({id: id}, function (res) {
@@ -791,7 +807,7 @@ adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResou
                 $alert({title: res[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
             }
         });
-    }
+    };
 
     var handleFileSelect=function(evt) {
         var file=evt.currentTarget.files[0];
