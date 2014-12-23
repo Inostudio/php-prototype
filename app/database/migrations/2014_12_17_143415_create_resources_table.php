@@ -16,6 +16,7 @@ class CreateResourcesTable extends Migration {
         {
             $table->increments('id');
             $table->string('title')->unique();
+            $table->string('url')->unique();
             $table->string('path')->unique();
             $table->timestamps();
 

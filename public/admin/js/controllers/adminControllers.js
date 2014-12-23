@@ -758,6 +758,7 @@ adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResou
             }, function(res) {
                 console.log(res);
                 if(res[0] === true) {
+                    console.log(res[1]);
                     $scope.resources.push(res[1]);
                     $alert({title: 'The resource has been successfully added', placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
 
