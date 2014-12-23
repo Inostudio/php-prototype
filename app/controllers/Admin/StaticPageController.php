@@ -25,8 +25,9 @@ class StaticPageController extends \BaseController {
 	 */
 	public function postAllPages()
 	{
-		$pages = \Page::where('user_id', '=', \Auth::user()->id)->get();
-        return \Response::json($pages);
+            $pages = \Page::where('user_id', '=', \Auth::user()->id)->get();
+            $statuses = \Status::all();
+            return \Response::json([$pages, $statuses]);
 	}
 
     /**
