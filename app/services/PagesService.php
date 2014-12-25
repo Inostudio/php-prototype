@@ -8,6 +8,13 @@
 
 class PagesService
 {
+    /**
+     * @param $title
+     * @param $body
+     * @param $url
+     * @param $status_id
+     * @return mixed
+     */
     public function createPage($title, $body, $url, $status_id)
     {
         $page = new Page;

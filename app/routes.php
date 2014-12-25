@@ -1,7 +1,7 @@
 <?php
 
-Blade::setContentTags('<%', '%>'); 		// for variables and all things Blade
-Blade::setEscapedContentTags('<%%', '%%>'); 	// for escaped data
+Blade::setContentTags('<%', '%>');        // for variables and all things Blade
+Blade::setEscapedContentTags('<%%', '%%>');    // for escaped data
 
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +14,9 @@ Blade::setEscapedContentTags('<%%', '%%>'); 	// for escaped data
 |
 */
 
-Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function(){
+Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function () {
 
-    Route::group(['before' => 'auth.admin'], function(){
+    Route::group(['before' => 'auth.admin'], function () {
 
         Route::get('/', ['as' => 'admin.dashboard', 'uses' => 'DashboardController@getIndex']);
 
@@ -37,7 +37,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function(){
 
 Route::get('/angular/', ['uses' => 'AngularController@serve']);
 
-Route::group(['namespace' => 'Front'], function(){
+Route::group(['namespace' => 'Front'], function () {
 
     Route::get('/', ['as' => 'front.home', 'uses' => 'PagesController@home']);
     Route::get('/contact', ['as' => 'front.contact', 'uses' => 'PagesController@contact']);
@@ -52,7 +52,7 @@ Route::group(['namespace' => 'Front'], function(){
     Route::controller('profile', 'ProfileController', [
         'getShow' => 'front.profile'
     ]);
-    
+
     Route::resource('entity', 'EntityController', [
         'names' => [
             'create' => 'front.entity.create',
@@ -60,10 +60,10 @@ Route::group(['namespace' => 'Front'], function(){
             'show' => 'front.entity.show'
         ]
     ]);
-    
+
     Route::resource('articles', 'ArticlesController', [
         'names' => [
-            
+
             'create' => 'front.articles.create',
             'index' => 'front.articles.index',
             'show' => 'front.articles.show',
@@ -78,8 +78,8 @@ Route::group(['namespace' => 'Front'], function(){
     Route::controller('page', 'PagesController', [
         'showPage' => 'front.page'
     ]);
-    
-        //Route for static pages
+
+    //Route for static pages
     Route::get('/{namePage}', 'PagesController@showPage');
 
 });

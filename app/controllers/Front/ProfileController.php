@@ -11,6 +11,10 @@ use Gaufrette\File;
 use Gaufrette\Filesystem;
 use Gaufrette\Adapter\Local as LocalAdapter;
 
+/**
+ * Class ProfileController
+ * @package Front
+ */
 class ProfileController extends \BaseController
 {
     /**
@@ -18,20 +22,33 @@ class ProfileController extends \BaseController
      * @var \UsersService
      */
     protected $users = null;
+    /**
+     * @var null|\UploadFileService
+     */
     protected $uploadService = null;
 
+    /**
+     * @param \UsersService $us
+     * @param \UploadFileService $ups
+     */
     public function __construct(\UsersService $us, \UploadFileService $ups)
     {
         $this->users = $us;
         $this->uploadService = $ups;
     }
 
+    /**
+     * @var array
+     */
     protected static $changePasswordValidation = [
         'old_password' => 'required|alpha_num',
         'new_password' => 'required|alpha_num|between:4,18|confirmed',
         'new_password_confirmation' => 'required|alpha_num|between:4,18'
     ];
 
+    /**
+     * @var array
+     */
     protected static $changeProfileValidation = [
         'first_name' => 'required|alpha_num|between:2,32',
         'last_name' => 'required|alpha_num|between:2,32',
@@ -111,6 +128,9 @@ class ProfileController extends \BaseController
     }
 
 
+    /**
+     * @return mixed
+     */
     public function postUploadImage()
     {
         return Response::json($this->uploadService->uploadImage(
@@ -121,6 +141,9 @@ class ProfileController extends \BaseController
         ));
     }
 
+    /**
+     * @return mixed
+     */
     public function postUploadCropped()
     {
         return Response::json($this->uploadService->uploadImage(

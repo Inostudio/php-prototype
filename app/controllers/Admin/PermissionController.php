@@ -10,6 +10,10 @@ namespace Admin;
 
 use Illuminate\Support\Facades\Input;
 
+/**
+ * Class PermissionController
+ * @package Admin
+ */
 class PermissionController extends \BaseController
 {
     /**
@@ -19,16 +23,25 @@ class PermissionController extends \BaseController
     protected $permissions = null;
 
 
+    /**
+     * @param \PermissionsService $ps
+     */
     public function __construct(\PermissionsService $ps)
     {
         $this->permissions = $ps;
     }
 
+    /**
+     * @var array
+     */
     protected $rulesAddPermission = [
         'title' => 'required|unique:permissions'
     ];
 
     //Получение списка прав +++
+    /**
+     * @return mixed
+     */
     public function postShow()
     {
         $permissions = \Permission::all();
@@ -36,6 +49,9 @@ class PermissionController extends \BaseController
     }
 
     //Добавление права +++
+    /**
+     * @return mixed
+     */
     public function postAdd(){
         $result = true;
         $id = -1;
@@ -54,6 +70,9 @@ class PermissionController extends \BaseController
     }
 
     //Удаление права +++
+    /**
+     * @return mixed
+     */
     public function postRemove(){
 
         $this->permissions->removePermission(Input::get("permissionId"));
@@ -61,6 +80,9 @@ class PermissionController extends \BaseController
     }
 
     //Редактирование права +++
+    /**
+     * @return mixed
+     */
     public function postEdit(){
         $result = true;
         $message = '';
@@ -83,6 +105,9 @@ class PermissionController extends \BaseController
     }
 
     //Получение прав группы +++
+    /**
+     * @return mixed
+     */
     public function postGroupOptions(){
 
         $group = \Group::where('id', '=', Input::get('groupId'))->first();
@@ -91,6 +116,9 @@ class PermissionController extends \BaseController
     }
 
     //Изменение прав группы +++
+    /**
+     * @return mixed
+     */
     public function postChangePermissionsInGroup(){
         $this->permissions->permissionAccept(Input::get('groupId'), Input::get('permId'), Input::get("accept"));
 

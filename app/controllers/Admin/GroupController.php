@@ -11,6 +11,10 @@ namespace Admin;
 use Illuminate\Support\Facades\Input;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class GroupController
+ * @package Admin
+ */
 class GroupController extends \BaseController {
     /**
      *
@@ -19,21 +23,33 @@ class GroupController extends \BaseController {
 
     protected $groups = null;
 
+    /**
+     * @param \GroupsService $gs
+     */
     public function __construct( \GroupsService $gs) {
         $this->groups = $gs;
     }
 
+    /**
+     * @var array
+     */
     protected $rulesAddGroup = [
         'title' => 'required|unique:groups'
     ];
 
     // Получение групп +++
+    /**
+     * @return mixed
+     */
     public function postShow() {
         $groups = \Group::all();
         return \Response::json($groups);
     }
 
     // Удаление группы +++
+    /**
+     * @return mixed
+     */
     public function postRemove(){
         $this->groups->removeGroup(Input::get("groupId"));
 
@@ -41,6 +57,9 @@ class GroupController extends \BaseController {
     }
 
     //Добавление группы +++
+    /**
+     * @return mixed
+     */
     public function postAdd(){
         $result = true;
         $id = -1;
@@ -59,6 +78,9 @@ class GroupController extends \BaseController {
     }
 
     //Редактирование группы +++
+    /**
+     * @return mixed
+     */
     public function postEdit(){
         $result = true;
         $message = '';

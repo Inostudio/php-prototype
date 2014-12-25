@@ -5,6 +5,10 @@ namespace Admin;
 use Illuminate\Support\Facades\Input;
 use Page;
 
+/**
+ * Class StaticPageController
+ * @package Admin
+ */
 class StaticPageController extends \BaseController {
 
     /**
@@ -13,22 +17,24 @@ class StaticPageController extends \BaseController {
      */
     protected $pages = null;
 
+    /**
+     * @param \PagesService $ps
+     */
     public function __construct(\PagesService $ps) {
         $this->pages = $ps;
     }
 
-	/**
-	 * Display a listing of the resource.
-	 * GET /staticpage
-	 *
-	 * @return Response
-	 */
-	public function postShow()
-	{
-            $pages = \Page::all();//->get();//where('user_id', '=', \Auth::user()->id)->get();
-            $statuses = \Status::all();
-            return \Response::json([$pages, $statuses]);
-	}
+    /**
+     * Display a listing of the resource.
+     * GET /staticpage
+     *
+     * @return Response
+     */
+    public function postShow() {
+        $pages = \Page::all();//->get();//where('user_id', '=', \Auth::user()->id)->get();
+        $statuses = \Status::all();
+        return \Response::json([$pages, $statuses]);
+    }
 
     /**
      * Response information about page by id
@@ -36,8 +42,7 @@ class StaticPageController extends \BaseController {
      *
      * @return Response
      */
-    public function postGet()
-    {
+    public function postGet() {
         $page = \Page::find(Input::get('id'));
         return \Response::json($page);
     }
@@ -48,14 +53,12 @@ class StaticPageController extends \BaseController {
      *
      * @return Response
      */
-    public function postDelete()
-    {
+    public function postDelete() {
         $response = ['Success', ''];
 
         try {
             Page::destroy(Input::get('id'));
-        }
-        catch(\Exception $ex) {
+        } catch (\Exception $ex) {
             $response[0] = 'Fail';
             $response[1] = $ex->getMessage();
         }
@@ -63,8 +66,10 @@ class StaticPageController extends \BaseController {
         return \Response::json($response);
     }
 
-    public function postAdd()
-    {
+    /**
+     * @return mixed
+     */
+    public function postAdd() {
         $page_id = $this->pages->createPage(
             Input::get('title'),
             Input::get('body'),
@@ -73,8 +78,10 @@ class StaticPageController extends \BaseController {
         return \Response::json([$page_id]);
     }
 
-    public function postSave()
-    {
+    /**
+     * @return mixed
+     */
+    public function postSave() {
         $page = Page::find(Input::get('id'));
         $page->title = Input::get('title');
         $page->body = Input::get('body');
@@ -85,10 +92,11 @@ class StaticPageController extends \BaseController {
         return \Response::json(['Success']);
     }
 
-    public function postAllStatuses()
-    {
+    /**
+     * @return mixed
+     */
+    public function postAllStatuses() {
         $statuses = \Status::all();
-        //$status = $pages[0]->status;
         return \Response::json($statuses);
     }
 }

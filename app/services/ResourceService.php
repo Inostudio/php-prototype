@@ -10,16 +10,37 @@ use Gaufrette\File;
 use Gaufrette\Filesystem;
 use Gaufrette\Adapter\Local as LocalAdapter;
 
+/**
+ * Class ResourceService
+ */
 class ResourceService {
 
+    /**
+     * @var LocalAdapter
+     */
     protected $localAdapter;//new LocalAdapter('public/resources/pics');
+    /**
+     * @var Filesystem
+     */
     protected $filesystem;// = new Filesystem($localAdapter);
 
+    /**
+     * @var string
+     */
     protected $path = 'public/resources/pics/';
+    /**
+     * @var string
+     */
     protected $url = '/resources/pics/';
 
+    /**
+     * @var null|UploadFileService
+     */
     protected $us = null;
 
+    /**
+     * @param UploadFileService $uploadService
+     */
     public function __construct(UploadFileService $uploadService)
     {
         $this->us = $uploadService;
@@ -27,6 +48,11 @@ class ResourceService {
         $this->filesystem = new Filesystem($this->localAdapter);
     }
 
+    /**
+     * @param $title
+     * @param $file
+     * @return array
+     */
     public function add($title, $file)
     {
         $result = [false, 'Unknown'];
@@ -47,6 +73,10 @@ class ResourceService {
         return $result;
     }
 
+    /**
+     * @param $id
+     * @return array
+     */
     public function delete($id)
     {
         $result = [false, 'Unknown'];
