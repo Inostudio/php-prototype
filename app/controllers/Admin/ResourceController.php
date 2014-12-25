@@ -19,19 +19,19 @@ class ResourceController extends \BaseController {
         $this->resources = $rs;
     }
 
-    public function postAddResource()
+    public function postAdd()
     {
         $title = Input::get('title');
         $file = Input::get('file');
         return $this->resources->add($title, $file);
     }
 
-    public function postShowResources()
+    public function postShow()
     {
         return \Resource::all();
     }
 
-    public function postDeleteResources()
+    public function postDelete()
     {
         return $this->resources->delete(Input::get('id'));
     }

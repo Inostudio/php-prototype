@@ -23,9 +23,9 @@ class StaticPageController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function postAllPages()
+	public function postShow()
 	{
-            $pages = \Page::where('user_id', '=', \Auth::user()->id)->get();
+            $pages = \Page::all();//->get();//where('user_id', '=', \Auth::user()->id)->get();
             $statuses = \Status::all();
             return \Response::json([$pages, $statuses]);
 	}
@@ -36,7 +36,7 @@ class StaticPageController extends \BaseController {
      *
      * @return Response
      */
-    public function postGetPage()
+    public function postGet()
     {
         $page = \Page::find(Input::get('id'));
         return \Response::json($page);
@@ -48,7 +48,7 @@ class StaticPageController extends \BaseController {
      *
      * @return Response
      */
-    public function postDeletePage()
+    public function postDelete()
     {
         $response = ['Success', ''];
 
@@ -63,7 +63,7 @@ class StaticPageController extends \BaseController {
         return \Response::json($response);
     }
 
-    public function postAddPage()
+    public function postAdd()
     {
         $page_id = $this->pages->createPage(
             Input::get('title'),
@@ -73,7 +73,7 @@ class StaticPageController extends \BaseController {
         return \Response::json([$page_id]);
     }
 
-    public function postSavePage()
+    public function postSave()
     {
         $page = Page::find(Input::get('id'));
         $page->title = Input::get('title');

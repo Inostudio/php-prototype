@@ -26,52 +26,13 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function(){
         'getSignin' => 'admin.signin',
         'getLogout' => 'admin.logout'
     ]);
-    
-    Route::post('/groupInfo', ['uses' => 'DashboardController@postGroup']);
-    Route::post('/addGroup', ['uses' => 'DashboardController@postAddGroup']);
-    Route::post('/removeGroup', ['uses' => 'DashboardController@postRemoveGroup']);
-    Route::post('/editGroup', ['uses' => 'DashboardController@postEditGroup']);
-    
-    Route::post('/permissionInfo', ['uses' => 'DashboardController@postPermission']);
-    Route::post('/addPermission', ['uses' => 'DashboardController@postAddPermission']); 
-    Route::post('/removePermission', ['uses' => 'DashboardController@postRemovePermission']);
-    Route::post('/editPermission', ['uses' => 'DashboardController@postEditPermission']);
-    
-    Route::post('/groupOptions', ['uses' => 'DashboardController@postGroupOptions']);
-    Route::post('/changePermissionsInGroup', ['uses' => 'DashboardController@postChangePermissionsInGroup']);
-    
-    Route::post('/users', ['uses' => 'DashboardController@postUsers']);
-    Route::post('/addUsers', ['uses' => 'DashboardController@postAddUser']);
-    Route::post('/removeUser', ['uses' => 'DashboardController@postRemoveUser']);
-    Route::post('/editUser', ['uses' => 'DashboardController@postEditUser']);
-    Route::post('/userOptions', ['uses' => 'DashboardController@postUserOptions']); 
-    Route::post('/changeGroupByUser', ['uses' => 'DashboardController@postChangeGroupByUser']); 
-    Route::post('/searchUsers', ['uses' => 'DashboardController@postSearchUsers']); 
-  //  Route::post('/sortUsers', ['uses' => 'DashboardController@postSortUsers']); z
 
+    Route::controller('group', 'GroupController');
+    Route::controller('permission', 'PermissionController');
+    Route::controller('user', 'UserController');
+    Route::controller('resource', 'ResourceController');
+    Route::controller('page', 'StaticPageController');
 
-    Route::post('/addResource', ['uses' => 'ResourceController@postAddResource']);
-    Route::post('/showResources', ['uses' => 'ResourceController@postShowResources']);
-    Route::post('/deleteResource', ['uses' => 'ResourceController@postDeleteResources']);
-
-
-
-    Route::controller('page', 'StaticPageController');//, [
-    /*'names' => [
-        'postAllPages' => 'front.articles.create',
-        'postGetPage' => 'front.articles.index',
-        'postDeletePage' => 'front.articles.show',
-        'postAddPage' => 'front.articles.destroy',
-        'postSavePage' => 'front.articles.update',
-        'postAllStatuses' => 'front.articles.edit',
-        'store' => 'front.articles.store'
-    ]
-]);*/
-
-    /*Route::get('/{controller?}/{action?}', function($controller, $action){
-        $controller = ucfirst($controller);
-        return App::make("{$controller}Controller")->$action();
-    });*/
 });
 
 Route::get('/angular/', ['uses' => 'AngularController@serve']);
@@ -80,6 +41,7 @@ Route::group(['namespace' => 'Front'], function(){
 
     Route::get('/', ['as' => 'front.home', 'uses' => 'PagesController@home']);
     Route::get('/contact', ['as' => 'front.contact', 'uses' => 'PagesController@contact']);
+    Route::get('/about', ['as' => 'front.about', 'uses' => 'PagesController@about']);
 
     Route::controller('auth', 'AuthController', [
         'getSignin' => 'front.signin',
