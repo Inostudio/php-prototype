@@ -30,9 +30,20 @@
     </div>
     <div ui-grid="users_grid" ui-grid-edit></div>
     <div style="margin-top: 5px;">
-        <button type="button" class="btn btn-success" ng-click="prevPage()" ng-disabled="unavailable">Previous page</button>
-        <button type="button" class="btn btn-success" ng-click="nextPage()" ng-disabled="unavailable">Next page</button>
+        <button type="button" class="btn btn-success" ng-click="prevPage()" ng-disabled="unavailablePrev">Previous page</button>
+        <button type="button" class="btn btn-success" ng-click="nextPage()" ng-disabled="unavailableNext">Next page</button>
     </div>
 </div>
 
-
+<script type="text/ng-template" id="ConfirmDelete.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Deleting!</h3>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to delete this user?
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="$emit('okDeleteUser')">OK</button>
+        <button class="btn btn-warning" ng-click="$emit('cancelDeleteUser')">Cancel</button>
+    </div>
+</script>

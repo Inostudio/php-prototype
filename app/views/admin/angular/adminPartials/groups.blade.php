@@ -18,3 +18,16 @@
     <div ui-grid="gridOptions" ui-grid-edit class="grid"></div> 
 </div>
 
+<script type="text/ng-template" id="ConfirmDelete.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Deleting!</h3>
+    </div>
+    <div class="modal-body">
+        Are you sure that you want delete this group?
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="$emit('okDeleteGroup')">OK</button>
+        <button class="btn btn-warning" ng-click="$emit('cancelDeleteGroup')">Cancel</button>
+    </div>
+</script>
+

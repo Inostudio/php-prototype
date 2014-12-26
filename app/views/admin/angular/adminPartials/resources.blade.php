@@ -26,3 +26,16 @@
 </div>
 
 <div ui-grid="gridOptions_resourcesGrid" ui-grid-edit class="resourcesGrid"></div>
+
+<script type="text/ng-template" id="ConfirmDelete.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Deleting!</h3>
+    </div>
+    <div class="modal-body">
+        Are you sure that you want delete this resource?
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="$emit('okDeleteResource')">OK</button>
+        <button class="btn btn-warning" ng-click="$emit('cancelDeleteResource')">Cancel</button>
+    </div>
+</script>

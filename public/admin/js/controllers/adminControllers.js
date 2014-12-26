@@ -6,29 +6,23 @@ adminControllers.controller('AdminCtrl', ['$scope', function($scope) {
       
 }]);
  
-adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'RemoveGroup', 'EditGroup', '$alert',
-    function($scope, Group, AddGroup, RemoveGroup, EditGroup, $alert) {
+adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'RemoveGroup', 'EditGroup', '$alert', '$modal', '$rootScope',
+    function($scope, Group, AddGroup, RemoveGroup, EditGroup, $alert, $modal, $rootScope) {
         
     var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
     var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
     
+    var removeGroupId = null;
+    $scope.modal = $modal({
+        show: false,
+        contentTemplate: 'ConfirmDelete.html'
+    });
     //Удаление +++
     $scope.$on('EventForDropGroup', function (event, id) {
         alertError.hide();
         alertSuccess.hide();
-        
-        RemoveGroup.query({groupId: id}, function(answer){
-            if(answer[0])
-            {
-                alertSuccess = $alert({title: 'Group has been successfully removed', placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
-                var oldGroups = $scope.gridOptions.data;
-                $scope.gridOptions.data = [];
-                angular.forEach(oldGroups, function(group) {
-                  if (group.id !== id) 
-                      $scope.gridOptions.data.push(group);
-                });
-            }
-        });
+        removeGroupId = id;
+        $scope.modal.show();     
     });
     
     //Redirect to permission
@@ -49,13 +43,10 @@ adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'Remove
           { name: 'remove', displayName: 'Remove' , width: '10%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
               cellTemplate: '<span class="fa fa-close" ng-click="$emit(\'EventForDropGroup\', row.entity.id)" style="cursor: pointer; padding-left: 40%;"></span>' }
     ];
-      //$scope.gridOptions.data = [];
+    
     $scope.msg = {};
     $scope.gridOptions.onRegisterApi = function(gridApi){
-        //set gridApi on scope
-       //$scope.gridApi = gridApi;
        gridApi.edit.on.afterCellEdit($scope,function(rowEntity, colDef, newValue, oldValue){
-            //console.log('edited row id:' + rowEntity.id + ' Column:' + colDef.name + ' newValue:' + newValue + ' oldValue:' + oldValue);
             alertError.hide();
             alertSuccess.hide();
             
@@ -162,10 +153,34 @@ adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'Remove
         });
     };
     
+    function removeGroup(id) {
+        RemoveGroup.query({groupId: id}, function(answer){
+            if(answer[0])
+            {
+                $scope.modal.hide();  
+                var oldGroups = $scope.gridOptions.data;
+                $scope.gridOptions.data = [];
+                angular.forEach(oldGroups, function(group) {
+                  if (group.id !== id) 
+                      $scope.gridOptions.data.push(group);
+                });
+                alertSuccess = $alert({title: 'Group has been successfully removed', placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+            }
+        });
+    }
+    
+    $rootScope.$on('cancelDeleteGroup', function(){
+        $scope.modal.hide();
+    });
+    
+    $rootScope.$on('okDeleteGroup', function(){
+        alertSuccess.hide();
+        removeGroup(removeGroupId);
+    });
   }]);
   
-adminControllers.controller('PermissionCtrl', ['$scope', '$alert', 'Permission', 'AddPermission', 'RemovePermission', 'EditPermission',
-    function($scope, $alert, Permission, AddPermission, RemovePermission, EditPermission) {
+adminControllers.controller('PermissionCtrl', ['$scope', '$alert', 'Permission', 'AddPermission', 'RemovePermission', 'EditPermission', '$modal', '$rootScope',
+    function($scope, $alert, Permission, AddPermission, RemovePermission, EditPermission, $modal, $rootScope) {
         var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container_perm'});
         var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container_perm'});
         
@@ -216,23 +231,17 @@ adminControllers.controller('PermissionCtrl', ['$scope', '$alert', 'Permission',
           });
         };
         
+        var removePermissionId = null;
+        $scope.modal = $modal({
+            show: false,
+            contentTemplate: 'ConfirmDelete.html'
+        });
         //Удаление
         $scope.$on('EventForDrop_perm', function (event, id) {
             alertError.hide();
             alertSuccess.hide();
-
-            RemovePermission.query({permissionId: id}, function(answer){
-                if(answer[0])
-                {
-                    alertSuccess = $alert({title: 'Permission has been successfully removed', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
-                    var oldPermissions = $scope.gridOptions_perm.data;
-                    $scope.gridOptions_perm.data = [];
-                    angular.forEach(oldPermissions, function(permission) {
-                      if (permission.id !== id) 
-                          $scope.gridOptions_perm.data.push(permission);
-                    });
-                }
-            });
+            removePermissionId = id;
+            $scope.modal.show();
         });
         
         //Редактирование
@@ -308,6 +317,31 @@ adminControllers.controller('PermissionCtrl', ['$scope', '$alert', 'Permission',
                 $scope.$apply();
               });
         };
+        
+        function removePermission(id) {
+            RemovePermission.query({permissionId: id}, function(answer){
+                if(answer[0])
+                {
+                    $scope.modal.hide();
+                    var oldPermissions = $scope.gridOptions_perm.data;
+                    $scope.gridOptions_perm.data = [];
+                    angular.forEach(oldPermissions, function(permission) {
+                      if (permission.id !== id) 
+                          $scope.gridOptions_perm.data.push(permission);
+                    });
+                    alertSuccess = $alert({title: 'Permission has been successfully removed', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
+                }
+            });
+        }
+        
+        $rootScope.$on('cancelDeletePermission', function(){
+            $scope.modal.hide();
+        });
+        
+        $rootScope.$on('okDeletePermission', function(){
+            alertSuccess.hide();
+            removePermission(removePermissionId);
+        });
     }
 ]);
 
@@ -366,16 +400,15 @@ adminControllers.controller('GroupOptionsCtrl', ['$scope', '$routeParams', 'Grou
         });    
 }]);
 
-adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser', 'RemoveUser', 'EditUser', 'SearchUsers',
-    function($scope, $alert, User, AddUser, RemoveUser, EditUser, SearchUsers) {
+adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser', 'RemoveUser', 'EditUser', 'SearchUsers', '$modal', '$rootScope',
+    function($scope, $alert, User, AddUser, RemoveUser, EditUser, SearchUsers, $modal, $rootScope) {
         var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container-for-users'});
         var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container-for-users'});
         
-        $scope.unavailable = false;
+        $scope.unavailableNext = false;
+        $scope.unavailablePrev = false;
         
         $scope.users_grid = {
-            /*pagingPageSizes: [25, 50, 75],
-            pagingPageSize: 25,*/
             enableFiltering: false
         };
         
@@ -402,25 +435,22 @@ adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser',
        
         $scope.nextPage = function(){
             if(($scope.currentPage + 1) <= $scope.totalPage) {
-                //console.log($scope.action);
+                $scope.unavailableNext = true;
+                $scope.unavailablePrev = true;
                 if($scope.action === 0) {   //Обычный просмотр
                     $scope.currentPage++;
-                    $scope.unavailable = true;
                     offset += limit;
                     getUsers(limit, offset, 'asc', 'id');
                 } else if($scope.action === 1){     //Поиск
                     $scope.currentPage++;
-                    $scope.unavailable = true;
                     offset += limit;
                     getFindUsers(searchText, limit, offset, 'asc', 'id');
                 } else if($scope.action === 2){         //сортировка
                     $scope.currentPage++;
-                    $scope.unavailable = true;
                     offset += limit; 
                     getUsers(limit, offset, $scope.direction, $scope.field);
                 } else if ($scope.action === 3) {   //Сортировка с поиском
                     $scope.currentPage++;
-                    $scope.unavailable = true;
                     offset += limit;
                     getFindUsers(searchText, limit, offset, $scope.dirFindSort, $scope.fieldFindSort);
                 }
@@ -430,26 +460,24 @@ adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser',
         $scope.prevPage = function(){
             
             if(($scope.currentPage - 1) >= 1) {
+                $scope.unavailableNext = true;
+                $scope.unavailablePrev = true;
                 if($scope.action === 0)     //Обычный просмотр
                 {
                     $scope.currentPage--;
-                    $scope.unavailable = true;
                     offset -= limit;
                     getUsers(limit, offset, 'asc', 'id');
                 } else if ($scope.action === 1){            //Поиск
                     $scope.currentPage--;
-                    $scope.unavailable = true;
                     offset -= limit;
                     getFindUsers(searchText, limit, offset, 'asc', 'id');
                 } else if($scope.action === 2) {            //сортировка
                     $scope.currentPage--;
-                    $scope.unavailable = true;
                     offset -= limit;
                     console.log(offset, limit);
                     getUsers(limit, offset, $scope.direction, $scope.field); 
                 } else if ($scope.action === 3) {   //Сортировка с поиском
                     $scope.currentPage--;
-                    $scope.unavailable = true;
                     offset -= limit;
                     getFindUsers(searchText, limit, offset, $scope.dirFindSort, $scope.fieldFindSort);
                 }
@@ -515,26 +543,17 @@ adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser',
             });
         };
         
-        
+        var userRemoveId = null;
+        $scope.modal = $modal({
+                show: false,
+                contentTemplate: 'ConfirmDelete.html'
+        });
         //Удаление +++
         $scope.$on('EventForDropUser', function (event, id) {
             alertError.hide();
             alertSuccess.hide();
-
-            RemoveUser.query({userId: id}, function(answer){
-                if(answer[0])
-                {
-                    alertSuccess = $alert({title: 'User has been successfully removed', placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
-                    var oldUsers = $scope.users_grid.data;
-
-                    $scope.users_grid.data = [];
-                    angular.forEach(oldUsers, function(user) {
-                      if (user.id !== id) 
-                          $scope.users_grid.data.push(user);
-                    });
-                    $scope.countUsers--;
-                }
-            });
+            userRemoveId = id;
+            $scope.modal.show();
         });
         
         //Редактирование +++
@@ -574,7 +593,6 @@ adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser',
             
             //Сортировка
             gridApi.core.on.sortChanged($scope, function(arg1, arg2) {
-                console.log($scope.action);
                 if(arg2.length !== 0){
                     if(($scope.action === 1) || ($scope.action === 3)){    //Сортировка с поиском
                         $scope.currentPage = 1;
@@ -636,8 +654,6 @@ adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser',
         function getUsers(limit, offset, direction, field){
             User.queryInfo({lim: limit, off: offset, direction: direction, field: field}, function(res){
                 var arr  = [];
-                //console.log(res);
-                                
                 angular.forEach(res[0], function(user) {
                     user.first_name = user.profile.first_name;
                     user.last_name = user.profile.last_name;
@@ -648,7 +664,9 @@ adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser',
 
                 $scope.countUsers = res[1];
                 $scope.totalPage = Math.ceil(res[1] / limit);
-                $scope.unavailable = false;
+                $scope.unavailableNext = false;
+                $scope.unavailablePrev = false;
+                checkNavigationButton();
             });
         };
         
@@ -665,9 +683,49 @@ adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser',
 
                 $scope.countUsers = res[1];
                 $scope.totalPage = Math.ceil(res[1] / limit);
-                $scope.unavailable = false;
+                $scope.unavailableNext = false;
+                $scope.unavailablePrev = false;
+                checkNavigationButton();
             });
         };
+        
+        function checkNavigationButton() {
+            if($scope.currentPage === 1) {
+                $scope.unavailablePrev = true;
+                
+            }
+            
+            if ($scope.currentPage >= $scope.totalPage) {
+                $scope.unavailableNext = true;
+            }
+        }
+        
+        function removeUser(id) {
+            RemoveUser.query({userId: id}, function(answer){
+                if(answer[0])
+                {
+                    $scope.modal.hide();
+                    alertSuccess = $alert({title: 'User has been successfully removed', placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
+                    var oldUsers = $scope.users_grid.data;
+
+                    $scope.users_grid.data = [];
+                    angular.forEach(oldUsers, function(user) {
+                      if (user.id !== id) 
+                          $scope.users_grid.data.push(user);
+                    });
+                    $scope.countUsers--;
+                }
+            });
+        }
+        
+        $rootScope.$on('cancelDeleteUser', function(){
+            $scope.modal.hide();
+    });
+    
+        $rootScope.$on('okDeleteUser', function(){
+            alertSuccess.hide();
+            removeUser(userRemoveId);
+        });
 }]);
 
 adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParams', 'UserOptions', 'ChangeGroupByUser',
@@ -727,9 +785,9 @@ adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParam
         });
 }]);
 
-adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResource', 'DeleteResource', '$alert', function($scope, AddResource, AllResource, DeleteResource, $alert) {
+adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResource', 'DeleteResource', '$alert', '$modal', '$rootScope', function($scope, AddResource, AllResource, DeleteResource, $alert, $modal, $rootScope) {
 
-    var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
+    //var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
     var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
 
     $scope.resource = {
@@ -755,13 +813,20 @@ adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResou
         { name: 'title', displayName: 'Title', width: '2%', enableCellEdit: false },
         { name: 'url', displayName: 'Url' , width: '15%', enableFiltering: false, enableCellEdit: false, enableSorting: false },
         { name: 'view', displayName: 'View' , width: '15%', enableCellEdit: false, enableFiltering: false, enableSorting: false, 
-            cellTemplate: '<img ng-src="{{row.entity.url}}" style="max-height: 150px; max-width: 150px; margin-left: 25%">' },
+            cellTemplate: '<div class="resourcePadding"><img ng-src="{{row.entity.url}}"></div>' },
         { name: 'action', displayName: 'Action' , width: '5%', enableCellEdit: false, enableFiltering: false, enableSorting: false, 
             cellTemplate: '<button class="btn" ng-click="$emit(\'EventForDropResource\', row.entity.id)" style="margin-left: 25%; margin-top: 20%">Delete</button>'}
     ];
     
+    var removeResourceId = null;
+    $scope.modal = $modal({
+        show: false,
+        contentTemplate: 'ConfirmDelete.html'
+    });
+    
     $scope.$on('EventForDropResource', function (event, id) {
-        $scope.delete(id);
+        removeResourceId = id;
+        $scope.modal.show();
     });
     
     $scope.add = function(resource) {
@@ -792,7 +857,7 @@ adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResou
 
     $scope.delete = function(id) {
         DeleteResource.query({id: id}, function (res) {
-            console.log(res);
+            $scope.modal.hide();
             if(res[0] === true) {
                 var index = 0;
                 for(i = 0; i < $scope.resources.length; i++) {
@@ -820,7 +885,14 @@ adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResou
 
     angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
 
-
+    $rootScope.$on('cancelDeleteResource', function(){
+        $scope.modal.hide();
+    });
+    
+    $rootScope.$on('okDeleteResource', function(){
+        alertSuccess.hide();
+        $scope.delete(removeResourceId);
+    });
 }]);
 
 var pagesControllers = angular.module('pagesControllers', ['mgcrea.ngStrap', 'ui.grid', 'ui.grid.edit']);
@@ -837,7 +909,8 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$alert', '$modal', 'AddPage
         { name: 'body', displayName: 'Short content' , width: '30%', enableFiltering: false, enableCellEdit: false },
         { name: 'url', displayName: 'Url' , width: '5%', enableCellEdit: false},
         { name: 'status', displayName: 'Status' , width: '5%', enableFiltering: false, enableCellEdit: false,
-            cellTemplate: '<p class="form-control" style="width: 50%; margin-left: 25%; margin-top: 10%">{{row.entity.status}}</p>'},
+            cellTemplate: '<p ng-class="{\'btn-success\': row.entity.status==\'Public\', \'btn-info\': row.entity.status==\'Private\', \n\
+                \'btn-warning\': row.entity.status==\'Draw\'}" class="form-control btn" style="width: 50%; margin-left: 25%; margin-top: 10%">{{row.entity.status}}</p>'},
         { name: 'actions', displayName: 'Actions' , width: '5%', enableFiltering: false, enableCellEdit: false,
             cellTemplate: '<p ng-click="$emit(\'EventForEditPage\', row.entity.id)" class="actionCol" style="margin-left: 30%">Edit</p>\n\
                 <p ng-click="$emit(\'EventForDropPage\', row.entity.id)" class="actionCol" style="margin-left: 25%">Delete</p>\n\
@@ -845,11 +918,12 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$alert', '$modal', 'AddPage
     }];
    
    //+++
+   $scope.modal = $modal({
+        show: false,
+        contentTemplate: 'ConfirmDelete.html'
+    });
     $scope.$on('EventForDropPage', function (event, id) {
-        $scope.modal = $modal({
-            show: true,
-            contentTemplate: 'ConfirmDelete.html'
-        });
+        $scope.modal.show();
         $scope.del = id;
     });
     
@@ -894,7 +968,7 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$alert', '$modal', 'AddPage
             });
             
             $scope.gridOptions_pagesGrid.data = arr;
-            //console.log(res);
+            //console.log(arr);
         });
     }();
     

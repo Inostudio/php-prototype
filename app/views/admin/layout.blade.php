@@ -18,8 +18,7 @@
     <link href="/admin/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="/admin/css/main.css" rel="stylesheet">
+    
 
     <script type="text/javascript" src="/admin/vendors/angular/angular.min.js"></script>
     <script type="text/javascript" src="/admin/vendors/ui-grid/ui-grid.min.js"></script>
@@ -68,6 +67,8 @@
 
     </style>
     
+    <!-- Custom styles for this template -->
+    <link href="/admin/css/main.css" rel="stylesheet">
   </head>
 
   <body ng-controller="activCtrl">

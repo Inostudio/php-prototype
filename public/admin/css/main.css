@@ -129,3 +129,16 @@ body {
 .modal-backdrop {
     z-index: 9000;
 }
+
+.ui-grid-cell-contents {
+    white-space: pre-line;
+}
+
+.resourcePadding img{
+    margin-top: 3px;
+    margin-bottom: 3px;
+    max-height: 150px; 
+    max-width: 150px; 
+    margin-left: 25%; 
+    border-radius: 5px;
+}
