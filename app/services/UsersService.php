@@ -1,16 +1,30 @@
 <?php
 
 
+/**
+ * Class UsersService
+ */
 class UsersService
 {
 
+    /**
+     * @var null|PermissionsService
+     */
     protected $ps = null;
 
 
-    public function __construct(PermissionsService $ps) {        
+    /**
+     * @param PermissionsService $ps
+     */
+    public function __construct(PermissionsService $ps) {
         $this->ps = $ps;
     }
-    
+
+    /**
+     * @param $email
+     * @param $password
+     * @return User
+     */
     public function registerUser($email, $password)
     {
         $user = new User;
@@ -27,6 +41,10 @@ class UsersService
         return $user;
     }
 
+    /**
+     * @param $email
+     * @return bool
+     */
     public function existUser($email)
     {
         return isset(User::where('email', '=', $email)->first()->email);
@@ -48,6 +66,10 @@ class UsersService
         $user->save();
     }
 
+    /**
+     * @param $idUser
+     * @param $data
+     */
     public function changeProfile($idUser, $data)
     {
         $user = User::find($idUser);
@@ -59,6 +81,13 @@ class UsersService
         $user->save();
     }
 
+    /**
+     * @param $offset
+     * @param $limit
+     * @param $direction
+     * @param $field
+     * @return mixed
+     */
     public function getPageOfUsers($offset, $limit, $direction, $field) {
         
         if(($field == 'first_name') || ($field == 'last_name')) {
@@ -75,28 +104,47 @@ class UsersService
             return $users->skip($offset)->take($limit)->orderBy($field, $direction)->get();
         }
     }
-    
+
+    /**
+     * @return mixed
+     */
     public function countUsers() {
         return User::all()->count();
     }
-    
+
+    /**
+     * @param $id
+     */
     public function removeUser($id){
         User::destroy($id);
                  
         return;
     }
-    
+
+    /**
+     * @param $id
+     * @param $email
+     */
     public function editUser($id, $email){
         $user = User::find($id);
         $user->email = $email;
         $user->save();
-    } 
-    
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function groupsToUser($id){
         
         return User::where('id', '=', $id)->with('groups')->get();
     }
-    
+
+    /**
+     * @param $groupId
+     * @param $userId
+     * @param $accept
+     */
     public function groupAccept($groupId, $userId, $accept){
         if($accept){
             UserToGroups::destroy(UserToGroups::where('user_id', '=', $userId)->where('group_id', '=', $groupId)->first()->id);
@@ -107,7 +155,15 @@ class UsersService
             $userToGroup->save();
         }
     }
-    
+
+    /**
+     * @param $text
+     * @param $limit
+     * @param $offset
+     * @param $direction
+     * @param $field
+     * @return array
+     */
     public function searchUsers($text, $limit, $offset, $direction, $field){
 
         if(($field === 'first_name') || ($field === 'last_name')) {

@@ -10,19 +10,32 @@ use \Redirect;
 use \Response;
 
 
+/**
+ * Class AuthController
+ * @package Admin
+ */
 class AuthController extends \Controller
 {
-    
+
+    /**
+     * @var array
+     */
     protected static $signinValidation = [
         'email' => 'required|email',
         'password' => 'required|alpha_num',
-    ];    
-    
+    ];
+
+    /**
+     * @return mixed
+     */
     public function getSignin()
     {
         return View::make('admin.signin');
     }
 
+    /**
+     * @return mixed
+     */
     public function postSignin()
     {
         $response = [true, 'Success'];
@@ -47,7 +60,10 @@ class AuthController extends \Controller
 
         return Response::json($response);
     }
-    
+
+    /**
+     * @return mixed
+     */
     public function getLogout()
     {
         Auth::logout();

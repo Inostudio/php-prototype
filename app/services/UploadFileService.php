@@ -10,15 +10,31 @@ use Gaufrette\File;
 use Gaufrette\Filesystem;
 use Gaufrette\Adapter\Local as LocalAdapter;
 
+/**
+ * Class UploadFileService
+ */
 class UploadFileService {
 
+    /**
+     * @var DecoderService|null
+     */
     protected $decoderService = null;
 
 
+    /**
+     * @param DecoderService $ds
+     */
     public function __construct(DecoderService $ds) {
         $this->decoderService = $ds;
     }
 
+    /**
+     * @param $data
+     * @param $name
+     * @param $path
+     * @param null $format
+     * @return bool
+     */
     public function uploadImage($data, $name, $path, $format = null)
     {
         if($format !== null) {

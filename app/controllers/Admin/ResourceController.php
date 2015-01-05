@@ -10,29 +10,44 @@ namespace Admin;
 
 use Illuminate\Support\Facades\Input;
 
+/**
+ * Class ResourceController
+ * @package Admin
+ */
 class ResourceController extends \BaseController {
 
+    /**
+     * @var null|\ResourceService
+     */
     protected $resources = null;
 
-    public function __construct( \ResourceService $rs)
-    {
+    /**
+     * @param \ResourceService $rs
+     */
+    public function __construct(\ResourceService $rs) {
         $this->resources = $rs;
     }
 
-    public function postAddResource()
-    {
+    /**
+     * @return array
+     */
+    public function postAdd() {
         $title = Input::get('title');
         $file = Input::get('file');
         return $this->resources->add($title, $file);
     }
 
-    public function postShowResources()
-    {
+    /**
+     * @return mixed
+     */
+    public function postShow() {
         return \Resource::all();
     }
 
-    public function postDeleteResources()
-    {
+    /**
+     * @return array
+     */
+    public function postDelete() {
         return $this->resources->delete(Input::get('id'));
     }
 } 
