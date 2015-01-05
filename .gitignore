@@ -13,3 +13,4 @@ nbproject/
 .idea/
 /public/users/
 /app/storage/debugbar/
+.vagrant/
