@@ -1,12 +1,61 @@
 var adminControllers = angular.module('adminControllers', ['ui.grid', 'ui.grid.edit',
     'mgcrea.ngStrap.alert']);
 
+adminControllers.directive('spanremove', function() {
+    return {
+        restrict: 'E',
+
+        template: '<span style="cursor: pointer; padding-left: 40%" class="fa fa-close"></span>',
+        replace: true,
+
+        link: function($scope, element, attrs) {
+            element.on('click', function(args) {
+                var action = args['target']['attributes']['remove-action'].value;
+                var removeId = args['target']['attributes']['remove-id'].value;
+                $scope.$emit(action, removeId);
+            });
+        }
+    };
+});
+adminControllers.directive('spanedit', function() {
+    return {
+        restrict: 'E',
+
+        template: '<span class="fa fa-edit" style="cursor: pointer; padding-left: 40%"></span>',
+        replace: true,
+
+        link: function($scope, element, attrs) {
+            element.on('click', function(args) {
+                var action = args['target']['attributes']['edit-action'].value;
+                var editId = args['target']['attributes']['edit-id'].value;
+                $scope.$emit(action, editId);
+            });
+        }
+    };
+});
+adminControllers.directive('spantoggle', function() {
+    return {
+        restrict: 'E',
+
+        template: '<span style="cursor: pointer; padding-left: 40%" class="fa" ng-class="{\' fa-check\': row.entity.accept, \'fa-close \':!row.entity.accept}"></span>',
+        replace: true,
+
+        link: function($scope, element, attrs) {
+            element.on('click', function(args) {
+                var action = args['target']['attributes']['change-action'].value;
+                var accept = Number(args['target']['attributes']['change-accept'].value);
+                var id = Number(args['target']['attributes']['change-id'].value);
+                $scope.$emit(action, id, accept);
+            });
+        }
+    };
+});
+
 
 adminControllers.controller('AdminCtrl', ['$scope', function($scope) {
-      
 }]);
  
-adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'RemoveGroup', 'EditGroup', '$alert', '$modal', '$rootScope',
+adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'RemoveGroup', 'EditGroup', '$alert', '$modal', '$rootScope',  //+Директива
     function($scope, Group, AddGroup, RemoveGroup, EditGroup, $alert, $modal, $rootScope) {
         
     var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
@@ -21,8 +70,8 @@ adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'Remove
     $scope.$on('EventForDropGroup', function (event, id) {
         alertError.hide();
         alertSuccess.hide();
-        removeGroupId = id;
-        $scope.modal.show();     
+        removeGroupId = Number(id);
+        $scope.modal.show();
     });
     
     //Redirect to permission
@@ -39,9 +88,9 @@ adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'Remove
           { name: 'title', displayName: 'Title', width: '20%' },
           { name: 'description', displayName: 'Description' , width: '30%', enableFiltering: false },
           { name: 'permissions', displayName: 'Permissions' , width: '15%', enableFiltering: false,  enableSorting: false, enableCellEdit: false,//permissioms
-            cellTemplate: '<span class="fa fa-edit" ng-click="$emit(\'EventForRedirectToGroupOptions\', row.entity.id)" style="cursor: pointer; padding-left: 40%;"></span>'},
-          { name: 'remove', displayName: 'Remove' , width: '10%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
-              cellTemplate: '<span class="fa fa-close" ng-click="$emit(\'EventForDropGroup\', row.entity.id)" style="cursor: pointer; padding-left: 40%;"></span>' }
+            cellTemplate: '<spanedit edit-action="EventForRedirectToGroupOptions" edit-id="{{row.entity.id}}"/>'},
+          { name: 'remove', displayName: 'Remove' , width: '10%', enableCellEdit: false, enableFiltering: false, enableSorting: false, height: '15px',
+            cellTemplate: '<spanremove remove-action="EventForDropGroup" remove-id="{{row.entity.id}}"/>' }
     ];
     
     $scope.msg = {};
@@ -179,7 +228,7 @@ adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'Remove
     });
   }]);
   
-adminControllers.controller('PermissionCtrl', ['$scope', '$alert', 'Permission', 'AddPermission', 'RemovePermission', 'EditPermission', '$modal', '$rootScope',
+adminControllers.controller('PermissionCtrl', ['$scope', '$alert', 'Permission', 'AddPermission', 'RemovePermission', 'EditPermission', '$modal', '$rootScope',     //+Директива
     function($scope, $alert, Permission, AddPermission, RemovePermission, EditPermission, $modal, $rootScope) {
         var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container_perm'});
         var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container_perm'});
@@ -190,7 +239,7 @@ adminControllers.controller('PermissionCtrl', ['$scope', '$alert', 'Permission',
             { name: 'title', displayName: 'Title', width: '20%' },
             { name: 'description', displayName: 'Description' , width: '30%', enableFiltering: false },
             { name: 'remove', displayName: 'Remove' , width: '5%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
-              cellTemplate: '<span class="fa fa-close" ng-click="$emit(\'EventForDrop_perm\', row.entity.id)" style="cursor: pointer; padding-left: 40%;"></span>' }
+              cellTemplate: '<spanremove remove-action="EventForDrop_perm" remove-id="{{row.entity.id}}"/>' }
         ];
       
         //Получение
@@ -240,7 +289,7 @@ adminControllers.controller('PermissionCtrl', ['$scope', '$alert', 'Permission',
         $scope.$on('EventForDrop_perm', function (event, id) {
             alertError.hide();
             alertSuccess.hide();
-            removePermissionId = id;
+            removePermissionId = Number(id);
             $scope.modal.show();
         });
         
@@ -345,7 +394,7 @@ adminControllers.controller('PermissionCtrl', ['$scope', '$alert', 'Permission',
     }
 ]);
 
-adminControllers.controller('GroupOptionsCtrl', ['$scope', '$routeParams', 'GroupOptions', '$alert', 'ChangePermissionsInGroup',
+adminControllers.controller('GroupOptionsCtrl', ['$scope', '$routeParams', 'GroupOptions', '$alert', 'ChangePermissionsInGroup',    //+Директива
     function($scope, $routeParams, GroupOptions, $alert, ChangePermissionsInGroup) {
         var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container_option'});
         
@@ -355,9 +404,9 @@ adminControllers.controller('GroupOptionsCtrl', ['$scope', '$routeParams', 'Grou
             { name: 'title', displayName: 'Title', width: '10%', enableCellEdit: false },
             { name: 'description', displayName: 'Description' , width: '30%', enableFiltering: false, enableCellEdit: false },
             { name: 'accept', displayName: 'Accept' , width: '5%', enableFiltering: false, enableCellEdit: false,
-                cellTemplate: '<span class="fa" ng-class="{\' fa-check\': row.entity.accept, \'fa-close \':!row.entity.accept}" ng-click="$emit(\'EventChangeGroup\', row.entity.id, row.entity.accept)" style="cursor: pointer; padding-left: 40%;"></span>'}
+                cellTemplate: '<spantoggle change-action="EventChangeGroup" change-accept="{{row.entity.accept}}" change-id="{{row.entity.id}}"/>'}
         ];
-        
+
         //Получение
         GroupOptions.query({groupId: $routeParams.groupId}, function(answer){
             $scope.groupTitle = answer[0].title;
@@ -400,7 +449,7 @@ adminControllers.controller('GroupOptionsCtrl', ['$scope', '$routeParams', 'Grou
         });    
 }]);
 
-adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser', 'RemoveUser', 'EditUser', 'SearchUsers', '$modal', '$rootScope',
+adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser', 'RemoveUser', 'EditUser', 'SearchUsers', '$modal', '$rootScope',   //+Директива
     function($scope, $alert, User, AddUser, RemoveUser, EditUser, SearchUsers, $modal, $rootScope) {
         var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container-for-users'});
         var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container-for-users'});
@@ -419,9 +468,9 @@ adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser',
             { name: 'last_name', enableCellEdit: false, width: '10%'},
             { name: 'phone', enableCellEdit: false, width: '20%', enableSorting: false},
             { name: 'groups', displayName: 'Groups' , width: '8%', enableCellEdit: false,  enableSorting: false,
-                cellTemplate: '<span class="fa fa-edit" ng-click="$emit(\'EventForRedirectToUserOptions\', row.entity.id)" style="cursor: pointer; padding-left: 40%;"></span>'},
+                cellTemplate: '<spanedit edit-action="EventForRedirectToUserOptions"  edit-id="{{row.entity.id}}"/>'},
             { name: 'remove', displayName: 'Remove' , width: '8%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
-              cellTemplate: '<span class="fa fa-close" ng-click="$emit(\'EventForDropUser\', row.entity.id)" style="cursor: pointer; padding-left: 40%;"></span>' }
+                cellTemplate: '<spanremove remove-action="EventForDropUser" remove-id="{{row.entity.id}}"/>' }
         ];
         
         //Получение +++
@@ -552,7 +601,7 @@ adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser',
         $scope.$on('EventForDropUser', function (event, id) {
             alertError.hide();
             alertSuccess.hide();
-            userRemoveId = id;
+            userRemoveId = Number(id);
             $scope.modal.show();
         });
         
@@ -728,7 +777,7 @@ adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser',
         });
 }]);
 
-adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParams', 'UserOptions', 'ChangeGroupByUser',
+adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParams', 'UserOptions', 'ChangeGroupByUser', //+Директивой
     function($scope, $alert, $routeParams, UserOptions, ChangeGroupByUser) {
         var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container_option_for_users'});
         
@@ -738,7 +787,7 @@ adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParam
             { name: 'title', displayName: 'Title', width: '10%', enableCellEdit: false },
             { name: 'description', displayName: 'Description' , width: '30%', enableFiltering: false, enableCellEdit: false },
             { name: 'accept', displayName: 'Accept' , width: '5%', enableFiltering: false, enableCellEdit: false,
-                cellTemplate: '<span class="fa" ng-class="{\' fa-check\': row.entity.accept, \'fa-close \':!row.entity.accept}" ng-click="$emit(\'EventChangeUser\', row.entity.id, row.entity.accept)" style="cursor: pointer; padding-left: 40%;"></span>'}
+                cellTemplate: '<spantoggle  change-action="EventChangeUser" change-accept="{{row.entity.accept}}" change-id="{{row.entity.id}}"/>'}
         ];
 
         //Получение групп, в которых состоит пользователь+++
@@ -787,7 +836,6 @@ adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParam
 
 adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResource', 'DeleteResource', '$alert', '$modal', '$rootScope', function($scope, AddResource, AllResource, DeleteResource, $alert, $modal, $rootScope) {
 
-    //var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
     var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
 
     $scope.resource = {
@@ -893,7 +941,7 @@ adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResou
         alertSuccess.hide();
         $scope.delete(removeResourceId);
     });
-}]);
+}]);    //Необходимость директивы?
 
 var pagesControllers = angular.module('pagesControllers', ['mgcrea.ngStrap', 'ui.grid', 'ui.grid.edit']);
 
