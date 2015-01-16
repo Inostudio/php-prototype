@@ -1,16 +1,20 @@
-<div class="panel-body">
+<?php
+    if (Auth::user()->facebook_user_id !== null)
+        $message = 'You password default is \'password\'!';
+?>
 
+<div class="panel-body">
     <form name="passwordForm" class="form-vertical" novalidate ng-submit="submitForm(passwordForm.$valid && confirm())">
         <div>
             <alert ng-show="(alert !== undefined)" type="{{alert.type}}" close="closeAlert()">
                 {{alert.msg}}
-            </aler>
+            </alert>
         </div>
 
         <div class="form-group">
             <div class="input-group" ng-class="{ 'has-error' : (passwordForm.oldPassword.$invalid) && submitted }">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                <input type="password" name="oldPassword" class="form-control" placeholder="Old password"
+                <input type="password" name="oldPassword" class="form-control" placeholder="<% $message !== null ? $message : 'Old password' %>"
                 ng-model="user.old_password" ng-change="closeAlert()" required>
             </div>
 

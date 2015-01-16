@@ -75,7 +75,7 @@
                     <div style="margin-top:10px" class="form-group text-center">                        
                         <div class="col-sm-12 controls">
                             <button  type="submit" class="btn btn-success" ng-disabled="signForm.$invalid && submitted"><i class="fa fa-sign-in"></i> Login</button>
-                            <a href="#" class="btn btn-primary"><i class="fa fa-facebook"></i> Login with Facebook</a>
+                            <a href="/facebook" class="btn btn-primary"><i class="fa fa-facebook"></i> Login with Facebook</a>
                         </div>
                     </div>
 

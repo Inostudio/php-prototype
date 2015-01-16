@@ -20,6 +20,26 @@ class UsersService
         $this->ps = $ps;
     }
 
+    public function facebookUser($facebook_user, $facebook_user_profile){
+        // Create the user if not exists or update existing
+        $user = User::createOrUpdateFacebookObject($facebook_user);
+
+        $userProfile = UserProfile::where('facebook_user_id', $facebook_user['id'])->first();
+
+        if($userProfile === NULL) {
+            UserProfile::createOrUpdateFacebookObject($facebook_user_profile);
+
+            $user = User::where('facebook_user_id', $facebook_user['id'])->first();
+            $userProfile = UserProfile::where('facebook_user_id', $facebook_user['id'])->first();
+
+            $userProfile->user_id = $user->id;
+            $userProfile->save();
+        }
+
+
+        return $user;
+    }
+    
     /**
      * @param $email
      * @param $password
@@ -73,12 +93,11 @@ class UsersService
     public function changeProfile($idUser, $data)
     {
         $user = User::find($idUser);
-
         $user->profile->first_name = $data['first_name'];
         $user->profile->last_name = $data['last_name'];
         $user->profile->phone = $data['phone'];
 
-        $user->save();
+        $user->profile->save();
     }
 
     /**

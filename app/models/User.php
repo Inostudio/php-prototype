@@ -4,6 +4,7 @@ use Illuminate\Auth\UserTrait;
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Auth\Reminders\RemindableInterface;
+use SammyK\LaravelFacebookSdk\FacebookableTrait;
 
 /**
  * User
@@ -24,6 +25,7 @@ use Illuminate\Auth\Reminders\RemindableInterface;
 class User extends Eloquent implements UserInterface, RemindableInterface {
 
 	use UserTrait, RemindableTrait;
+    use FacebookableTrait;
 
 	/**
 	 * The database table used by the model.
@@ -37,7 +39,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 *
 	 * @var array
 	 */
-	protected $hidden = array('password', 'remember_token');
+	protected $hidden = array('password', 'remember_token', 'access_token');
     
 //    public static $passwordAttributes  = array('password');
     
@@ -46,7 +48,12 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 //    public $autoPurgeRedundantAttributes = true;
     
      protected $fillable = array('email', 'password');
-    
+
+    protected static $facebook_field_aliases = [
+        'id' => 'facebook_user_id',
+        'email' => 'email'
+    ];
+
 //    public static $rules = array(
 //        'email' => 'required|email|unique:users',
 //        'password' => 'required|alpha_num|between:4,18|confirmed',

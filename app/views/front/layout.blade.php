@@ -50,7 +50,7 @@
         <ul class="nav navbar-nav pull-right">
             @if (Auth::user())
                 <li <?=$routeName=='front.profile' ? 'class="active"' : ''; ?>><a href="<% action('front.profile') %>"><i class="fa fa-user"></i> <% Auth::user()->email %></a></li>
-                <li><a href="<% 'fds' %>"><i class="fa fa-signout"></i> Logout</a></li>
+                <li><a href="<% action('front.logout') %>"><i class="fa fa-signout"></i> Logout</a></li>
             @else
                 <li <?=$routeName=='front.signin' ? 'class="active"' : ''; ?>><a href="<% action('front.signin') %>"><i class="fa fa-sign-in"></i> Signin</a></li>
                 <li <?=$routeName=='front.signup' ? 'class="active"' : ''; ?>><a href="<% action('front.signup') %>"><i class="fa fa-plus-square"></i> Signup</a></li>

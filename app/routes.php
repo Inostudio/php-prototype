@@ -49,6 +49,9 @@ Route::group(['namespace' => 'Front'], function () {
         'getLogout' => 'front.logout'
     ]);
 
+    //Login in Facebook
+    Route::controller('facebook', 'FacebookController');
+
     Route::controller('profile', 'ProfileController', [
         'getShow' => 'front.profile'
     ]);
@@ -81,5 +84,4 @@ Route::group(['namespace' => 'Front'], function () {
 
     //Route for static pages
     Route::get('/{namePage}', 'PagesController@showPage');
-
 });
