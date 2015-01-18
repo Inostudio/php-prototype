@@ -4,12 +4,12 @@
     <link rel="stylesheet" type="text/css" href="/front/css/profile.css">
 
 
-
     <script src="/front/vendors/directives/js/ng-img-crop.js"></script>
     <script src="/front/vendors/directives/js/ng-droplet.min.js"></script>
-    <script type="text/javascript" src="/front/js/profileApp.js"></script>
-    <script type="text/javascript" src="/front/js/controllers/profileControllers.js"></script>
-    <script type="text/javascript" src="/front/js/services/profileServices.js"></script>
+    <script type="text/javascript" src="/front/js/profileApp.module.js"></script>
+    <script type="text/javascript" src="/front/js/routes/profile.routes.js"></script>
+    <script type="text/javascript" src="/front/js/controllers/profile.controllers.js"></script>
+    <script type="text/javascript" src="/front/js/services/profile.services.js"></script>
 
     <link rel="stylesheet" type="text/css" href="/front/vendors/directives/css/ng-img-crop.css">
 @stop
@@ -17,18 +17,18 @@
 @section('content')
 
 <!-- Begin page content -->
-<div class="container" ng-app="profileApp">
+<div class="container" data-ng-app="profileApp">
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <div id="sidebar-wrapper" ng-controller="NavbarCtrl">
+        <div id="sidebar-wrapper" data-ng-controller="NavbarCtrl as vm">
             <ul class="sidebar-nav">
-                <li class="sidebar-brand active" ng-class="{ 'active' : isActive('/') || isActive('/edit') }">
+                <li class="sidebar-brand active" data-ng-class="{ 'active' : vm.isActive('/') || vm.isActive('/edit') }">
                     <a href="#/">
                         Профиль
                     </a>
                 </li>
-                <li ng-class="{ 'active' : isActive('/edit_password') }">
+                <li data-ng-class="{ 'active' : vm.isActive('/edit_password') }">
                     <a href="#/edit_password/">Смена пароля</a>
                 </li>
             </ul>
@@ -39,7 +39,7 @@
         <div id="page-content-wrapper">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" ng-view>
+                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" data-ng-view>
 
                     </div>
                 </div>

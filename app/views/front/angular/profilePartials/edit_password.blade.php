@@ -4,59 +4,59 @@
 ?>
 
 <div class="panel-body">
-    <form name="passwordForm" class="form-vertical" novalidate ng-submit="submitForm(passwordForm.$valid && confirm())">
+    <form name="passwordForm" class="form-vertical" novalidate data-ng-submit="vm.submitForm(passwordForm.$valid && vm.confirm())">
         <div>
-            <alert ng-show="(alert !== undefined)" type="{{alert.type}}" close="closeAlert()">
-                {{alert.msg}}
+            <alert data-ng-show="(vm.alert !== undefined)" type="{{alert.type}}" close="vm.closeAlert()">
+                {{vm.alert.msg}}
             </alert>
         </div>
 
         <div class="form-group">
-            <div class="input-group" ng-class="{ 'has-error' : (passwordForm.oldPassword.$invalid) && submitted }">
+            <div class="input-group" data-ng-class="{ 'has-error' : (passwordForm.oldPassword.$invalid) && vm.submitted }">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                 <input type="password" name="oldPassword" class="form-control" placeholder="<% $message !== null ? $message : 'Old password' %>"
-                ng-model="user.old_password" ng-change="closeAlert()" required>
+                data-ng-model="vm.user.old_password" data-ng-change="vm.closeAlert()" required>
             </div>
 
-            <span class="help-block" ng-show="(passwordForm.oldPassword.$error.required && submitted)">
+            <span class="help-block" data-ng-show="(passwordForm.oldPassword.$error.required && vm.submitted)">
                 Old password must be not empty
             </span>
 
             <span class="help-block"
-                ng-show="(passwordForm.oldPassword.$invalid && !passwordForm.oldPassword.$error.required && submitted)">
+                data-ng-show="(passwordForm.oldPassword.$invalid && !passwordForm.oldPassword.$error.required && vm.submitted)">
                 Email invalid
             </span>
         </div>
 
         <div class="form-group">
-            <div class="input-group" ng-class="{ 'has-error' : (passwordForm.password.$invalid) && submitted }">
+            <div class="input-group" data-ng-class="{ 'has-error' : (passwordForm.password.$invalid) && vm.submitted }">
 
                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                <input type="password" name="password" class="form-control" placeholder="New password" ng-model="user.new_password"
-                    minlength="4" maxlength="32" ng-change="closeAlert()" required>
+                <input type="password" name="password" class="form-control" placeholder="New password" data-ng-model="vm.user.new_password"
+                    minlength="4" maxlength="32" data-ng-change="vm.closeAlert()" required>
             </div>
 
             <span class="help-block"
-                ng-show="(passwordForm.password.$error.required) && submitted">
+                data-ng-show="(passwordForm.password.$error.required) && vm.submitted">
                 New password must be not empty
             </span>
 
-            <span class="help-block" ng-show="(passwordForm.password.$error.minlength) && submitted">
+            <span class="help-block" data-ng-show="(passwordForm.password.$error.minlength) && vm.submitted">
                 New password is too short.
             </span>
 
-            <span class="help-block" ng-show="(passwordForm.password.$error.maxlength) && submitted">
+            <span class="help-block" data-ng-show="(passwordForm.password.$error.maxlength) && vm.submitted">
                 New password is too long.
             </span>
         </div>
 
         <div class="form-group">
-            <div class="input-group" ng-class="{ 'has-error' : !confirm() && submitted }">
+            <div class="input-group" data-ng-class="{ 'has-error' : !vm.confirm() && vm.submitted }">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                <input type="password" name="password_confirm" class="form-control" placeholder="Confirm new password" ng-model="user.password_confirm" ng-change="closeAlert()">
+                <input type="password" name="password_confirm" class="form-control" placeholder="Confirm new password" data-ng-model="vm.user.password_confirm" data-ng-change="vm.closeAlert()">
             </div>
 
-            <span class="help-block" ng-show="submitted && !confirm()">
+            <span class="help-block" data-ng-show="vm.submitted && !vm.confirm()">
                 New password and password confirm don't match.
             </span>
         </div>
@@ -74,8 +74,8 @@
             <div class="col-md-offset-5 col-md-8">
 
                 <button id="btn-signup" type="submit" class="btn btn-info"
-                    ng-disabled="passwordForm.$invalid && submitted ||
-                    !confirm() && submitted"><i class="fa fa-sign-in"></i> &nbsp Change
+                    data-ng-disabled="passwordForm.$invalid && vm.submitted ||
+                    !vm.confirm() && vm.submitted"><i class="fa fa-sign-in"></i> &nbsp Change
                 </button>
             </div>
         </div>

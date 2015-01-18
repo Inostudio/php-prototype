@@ -41,24 +41,13 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 */
 	protected $hidden = array('password', 'remember_token', 'access_token');
     
-//    public static $passwordAttributes  = array('password');
-    
-//    public $autoHashPasswordAttributes = true;
-//    
-//    public $autoPurgeRedundantAttributes = true;
-    
-     protected $fillable = array('email', 'password');
+    protected $fillable = array('email', 'password');
 
     protected static $facebook_field_aliases = [
         'id' => 'facebook_user_id',
         'email' => 'email'
     ];
 
-//    public static $rules = array(
-//        'email' => 'required|email|unique:users',
-//        'password' => 'required|alpha_num|between:4,18|confirmed',
-//        'password_confirmation' => 'required|alpha_num|between:4,18',
-//    );
 
     public function getFullName()
     {
@@ -68,12 +57,12 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
     public function getCroppedPhoto()
     {
         $path = '/users/' . Auth::user()->id . '/CroppedImage.jpeg';
-        return File::exists('public'. $path) ? $path : 'https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100';
+        return File::exists('public'. $path) ? ('/public'.$path) : 'https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100';
     }
 
     public function getPhoto()
     {
-        $path = '/users/' . Auth::user()->id . '/FullImage.jpeg';
+        $path = '/public/users/' . Auth::user()->id . '/FullImage.jpeg';
         return $path;
     }
 
