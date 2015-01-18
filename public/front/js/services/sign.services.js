@@ -2,11 +2,26 @@
  * Created by user on 20.11.2014.
  */
 
-var signServices = angular.module('signServices', []);
+(function() {
+   'use strict';
 
-signServices.factory('Sign', ['$http', function ($http) {
-    return {
-        signIn: function(data, success, error) {
+    angular
+        .module('signApp')
+        .factory('Sign', Sign);
+
+    Sign.$inject = ['$http'];
+
+    function Sign($http) {
+        var service = {
+            signIn: signIn,
+            signUp: signUp
+        };
+
+        return service;
+
+        ////////////
+
+        function signIn(data, success, error) {
             $http({
                 url: '',
                 method: 'POST',
@@ -19,8 +34,9 @@ signServices.factory('Sign', ['$http', function ($http) {
             })
                 .success(success)
                 .error(error);
-        },
-        signUp: function(data, success, error) {
+        }
+
+        function signUp(data, success, error) {
             $http({
                 url: '',
                 method: 'POST',
@@ -34,5 +50,6 @@ signServices.factory('Sign', ['$http', function ($http) {
                 .success(success)
                 .error(error);
         }
-    };
-}]);
+
+    }
+})();
