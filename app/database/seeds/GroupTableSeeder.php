@@ -7,7 +7,7 @@ class GroupTableSeeder extends Seeder {
         DB::table('groups')->delete();
         
         DB::table('groups')->insert([
-            'title' => 'User',
+            'title' => 'admins',
         ]);
     }
 

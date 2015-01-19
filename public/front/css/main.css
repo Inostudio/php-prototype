@@ -45,3 +45,15 @@ code {
 .form-group.has-error p.text-danger{
     display: block;
 }
+
+.active {
+    pointer-events: none;
+    cursor: default;
+}
+
+.lang {
+    margin-top: 15px;
+    margin-left: 35%;
+    text-decoration: none;
+    cursor: pointer;
+}

@@ -8,7 +8,7 @@
 return array(
     "placeholder_old_password"                  => "Старый пароль",
     "placeholder_default_password"              => "Ваш пароль по умолчанию 'password'",
-    "placeholder_new_password"                  => "Новый_пароль",
+    "placeholder_new_password"                  => "Новый пароль",
     "placeholder_new_password_confirm"          => "Подтверждение нового пароля",
 
     "help_block_old_password_empty"             => "Старый пароль не может быть пустым",

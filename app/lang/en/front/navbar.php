@@ -6,11 +6,11 @@
  * Time: 10:03
  */
 return array(
-    "home" => "Home",
-    "about" => "About",
-    "contact" => "Contact",
-    "articles" => "Articles",
-    "signin" => "Sign in",
-    "signup" => "Sign up",
-    "logout" => "Sign out"
+    "home"              => "Home",
+    "about"             => "About",
+    "contact"           => "Contact",
+    "articles"          => "Articles",
+    "signin"            => "Sign in",
+    "signup"            => "Sign up",
+    "logout"            => "Sign out"
 );

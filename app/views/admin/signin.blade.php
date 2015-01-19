@@ -83,7 +83,11 @@
                 </div>
 
                 <div>
-                    <alert ng-show="(alert !== undefined)" type="{{alert.type}}" close="closeAlert()">{{alert.msg}}</aler>
+                    @if (Session::get('message'))
+                        <div ng-init="alert = { msg: '<% Session::get('message') %>', type: danger }">
+                        </div>
+                    @endif
+                    <alert ng-show="(alert !== undefined)" type="{{alert.type}}" close="closeAlert()">{{alert.msg}}</alert>
                 </div>
 
                 <div class="form-group" ng-class="{ 'has-error' : (signForm.email.$invalid) && submitted }">

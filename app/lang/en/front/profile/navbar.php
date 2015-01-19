@@ -6,6 +6,6 @@
  * Time: 10:37
  */
 return array(
-    "profile" => "Profile",
-    "changePassword" => "Change password"
+    "profile"           => "Profile",
+    "changePassword"    => "Change password"
 );
