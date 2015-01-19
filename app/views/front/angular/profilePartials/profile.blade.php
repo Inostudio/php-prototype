@@ -24,7 +24,7 @@
               <table class="table table-user-information">
                 <tbody>
                   <tr>
-                    <td>First name:</td>
+                    <td><% trans('front\profile\profile.first_name') %></td>
                     <td data-ng-init="vm.user.first_name = '<% $user->profile->first_name %>'">
                         <span data-ng-hide="vm.editing">{{vm.user.first_name}}</span>
 
@@ -51,7 +51,7 @@
                   </tr>
 
                   <tr data-ng-init="vm.user.last_name = '<% $user->profile->last_name %>'">
-                    <td>Last name:</td>
+                    <td><% trans('front\profile\profile.last_name') %></td>
                     <td>
                         <span data-ng-hide="vm.editing">{{vm.user.last_name}}</span>
 
@@ -77,13 +77,13 @@
                   </tr>
 
                   <tr>
-                    <td>Email</td>
+                    <td><% trans('front\profile\profile.email') %></td>
                     <td>
                         <a href="mailto:info@support.com"><% $user->email %></a>
                     </td>
                   </tr>
                   <tr data-ng-init="vm.user.phone = '<% $user->profile->phone %>'">
-                    <td>Phone Number</td>
+                    <td><% trans('front\profile\profile.phone') %></td>
                     <td>
                         <span data-ng-hide="vm.editing">{{vm.user.phone}}</span>
 

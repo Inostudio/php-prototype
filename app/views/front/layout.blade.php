@@ -5,6 +5,7 @@
     
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,6 +18,9 @@
 
     <title>Sticky Footer Navbar Template for Bootstrap</title>
 
+    <script type="text/javascript">
+        var lang = window.location.pathname.substr(1, 2);
+    </script>
     <!-- Bootstrap core CSS -->
     <!--<link href="/front/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">-->
     <link href="/front/vendors/bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -51,10 +55,10 @@
         <ul class="nav navbar-nav pull-right">
             @if (Auth::user())
                 <li <?=$routeName=='front.profile' ? 'class="active"' : ''; ?>><a href="<% action('front.profile') %>"><i class="fa fa-user"></i> <% Auth::user()->email %></a></li>
-                <li><a href="<% action('front.logout') %>"><i class="fa fa-signout"></i> Logout</a></li>
+                <li><a href="<% action('front.logout') %>"><i class="fa fa-signout"></i> <% trans('front\navbar.logout') %></a></li>
             @else
-                <li <?=$routeName=='front.signin' ? 'class="active"' : ''; ?>><a href="<% action('front.signin') %>"><i class="fa fa-sign-in"></i> Signin</a></li>
-                <li <?=$routeName=='front.signup' ? 'class="active"' : ''; ?>><a href="<% action('front.signup') %>"><i class="fa fa-plus-square"></i> Signup</a></li>
+                <li <?=$routeName=='front.signin' ? 'class="active"' : ''; ?>><a href="<% action('front.signin') %>"><i class="fa fa-sign-in"></i> <% trans('front\navbar.signin') %></a></li>
+                <li <?=$routeName=='front.signup' ? 'class="active"' : ''; ?>><a href="<% action('front.signup') %>"><i class="fa fa-plus-square"></i> <% trans('front\navbar.signup') %></a></li>
             @endif
         </ul>
           
@@ -69,10 +73,11 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li <?=$routeName=='front.home' ? 'class="active"' : ''; ?> ><a href="/">Home</a></li>
-            <li <?=$routeName=='front.about' ? 'class="active"' : ''; ?>><a href="<?=action('front.about');?>">About</a></li>
-            <li <?=$routeName=='front.contact' ? 'class="active"' : ''; ?>><a href="<?=action('front.contact');?>">Contact</a></li>
-            <li <?=Str::startsWith($routeName, 'front.articles') ? 'class="active"' : ''; ?>><a href="<?=action('front.articles.index');?>">Articles</a></li>
+
+            <li <?=$routeName=='front.home' ? 'class="active"' : ''; ?> ><a href="/"><% trans('front\navbar.home') %></a></li>
+            <li <?=$routeName=='front.about' ? 'class="active"' : ''; ?>><a href="<?=action('front.about');?>"><% trans('front\navbar.about') %></a></li>
+            <li <?=$routeName=='front.contact' ? 'class="active"' : ''; ?>><a href="<?=action('front.contact');?>"><% trans('front\navbar.contact') %></a></li>
+            <li <?=Str::startsWith($routeName, 'front.articles') ? 'class="active"' : ''; ?>><a href="<?=action('front.articles.index');?>"><% trans('front\navbar.articles') %></a></li>
             <?php if(0){ ?>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>

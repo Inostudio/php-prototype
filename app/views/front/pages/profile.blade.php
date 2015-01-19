@@ -31,11 +31,13 @@
             <ul class="sidebar-nav">
                 <li class="sidebar-brand active" data-ng-class="{ 'active' : vm.isActive('/') || vm.isActive('/edit') }">
                     <a href="#/">
-                        Профиль
+                        <% trans('front\profile\navbar.profile') %>
                     </a>
                 </li>
                 <li data-ng-class="{ 'active' : vm.isActive('/edit_password') }">
-                    <a href="#/edit_password/">Смена пароля</a>
+                    <a href="#/edit_password/">
+                        <% trans('front\profile\navbar.changePassword') %>
+                    </a>
                 </li>
             </ul>
         </div>

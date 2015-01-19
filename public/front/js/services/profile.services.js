@@ -25,7 +25,7 @@
 
         function changeProfile(data, success, error) {
             $http({
-                url: '/profile/change-profile',
+                url:  '/' + lang + '/profile/change-profile',
                 method: 'POST',
                 data: JSON.stringify({
                     first_name: data.first_name,
@@ -40,7 +40,7 @@
 
         function changePassword(data, success, error) {
             $http({
-                url: '/profile/change-password',
+                url:  '/' + lang + '/profile/change-password',
                 method: 'POST',
                 data: JSON.stringify({
                     old_password: data.old_password,
@@ -55,7 +55,7 @@
 
         function uploadCropped(data, success, error) {
             $http({
-                url: '/profile/upload-cropped',
+                url:  '/' + lang + '/profile/upload-cropped',
                 method: 'POST',
                 data: JSON.stringify({
                     croppedImage: data
@@ -68,7 +68,7 @@
 
         function uploadImage(data, success, error) {
             $http({
-                url: '/profile/upload-image',
+                url:  '/' + lang + '/profile/upload-image',
                 method: 'POST',
                 data: JSON.stringify({
                     sourceImage: data
