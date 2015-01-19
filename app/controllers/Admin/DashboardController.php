@@ -25,6 +25,7 @@ class DashboardController extends \BaseController
      */
     public function getIndex()
     {
+        header( 'Location: /');
         return \View::make('admin.layout');
     }
 

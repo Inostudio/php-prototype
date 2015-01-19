@@ -54,7 +54,7 @@ class PagesController extends \BaseController
      * @param $url
      * @return mixed
      */
-    public function showPage($url)
+    public function showPage($lang, $url)
     {
         $page = \Page::where('url', $url)->first();
         if($page === null || $page->status->title !== 'Public') {

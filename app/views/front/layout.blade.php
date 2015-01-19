@@ -1,7 +1,8 @@
 <?php
 
     use Illuminate\Support\Str;
-    $routeName = Route::getCurrentRoute()->getName();
+   $routeName = Route::getCurrentRoute()->getName();
+    
 
 ?>
 <!DOCTYPE html>

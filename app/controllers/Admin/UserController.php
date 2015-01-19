@@ -85,7 +85,7 @@ class UserController extends \BaseController
     /**
      * @return mixed
      */
-    public function postEditUser(){
+    public function postEdit(){
         $result = true;
         $message = '';
         $validator = \Validator::make(\Input::all(), $this->rulesAddUser);

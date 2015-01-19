@@ -19,7 +19,9 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
     
-
+    <script type="text/javascript">
+        var lang = window.location.pathname.substr(1, 2);
+    </script>
     <script type="text/javascript" src="/admin/vendors/angular/angular.min.js"></script>
     <script type="text/javascript" src="/admin/vendors/ui-grid/ui-grid.min.js"></script>
     
@@ -64,13 +66,18 @@
             width: 550px;
             height: 450px;
         }
-
+        
+        .lang {
+            margin-top: 15px;
+            margin-left: 35%;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
     
     <!-- Custom styles for this template -->
     <link href="/admin/css/main.css" rel="stylesheet">
   </head>
-
   <body ng-controller="activCtrl">
 
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -86,13 +93,17 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-            <li><a href="#/settings"><i class="fa fa-gear"></i> Settings</a></li>
-            <li><a href="<% action('admin.logout') %>">Logout</a></li>
+            <li><a href="#"><i class="fa fa-dashboard"></i> <%trans('adminMenu.dashboard')%></a></li>
+            <li><a href="#/settings"><i class="fa fa-gear"></i> <%trans('adminMenu.settings')%></a></li>
+            <li><a href="<% action('admin.logout') %>"><i class="fa fa-suitcase"></i> <%trans('adminMenu.logout')%></a></li>
           </ul>
           <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
+              <input type="text" class="form-control" placeholder="<%trans('adminMenu.search')%>">
           </form>
+            <div class='lang'>
+                <a ng-click='checkLang("ru")'>RUS</a>
+                <a ng-click='checkLang("en")'>ENG</a>
+            </div>
         </div>
       </div>
     </nav>
@@ -101,14 +112,14 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li ng-class="{'active' : isActive('/')}"><a href="#/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-            <li ng-class="{'active' : isActive('/users') || isActive('/userGroups')}"><a href="#/users"><i class="fa fa-users"></i> Users</a></li>
-            <li ng-class="{'active' : isActive('/groups') || isActive('/groupsPermis')}"><a href="#/groups"><i class="fa fa-group"></i> Groups</a></li>
-            <li ng-class="{'active' : isActive('/permissions')}"><a href="#/permissions"><i class="fa fa-legal"></i> Permissions</a></li>
-            <li ng-class="{'active' : isActive('/pages')}"><a href="#/pages"><i class="fa fa-newspaper-o"></i> Pages</a></li>
-            <li ng-class="{'active' : isActive('/products')}"><a href="#/products"><i class="fa fa-list"></i> Products</a></li>
-            <li ng-class="{'active' : isActive('/settings')}"><a href="#/settings"><i class="fa fa-gear"></i> Settings</a></li>
-            <li ng-class="{'active' : isActive('/resources')}"><a href="#/resources"><i class="fa fa-gear"></i> Resources</a></li>
+            <li ng-class="{'active' : isActive('/')}"><a href="#/"><i class="fa fa-dashboard"></i> <%trans('adminMenu.dashboard')%></a></li>
+            <li ng-class="{'active' : isActive('/users') || isActive('/userGroups')}"><a href="#/users"><i class="fa fa-users"></i> <%trans('adminMenu.users')%></a></li>
+            <li ng-class="{'active' : isActive('/groups') || isActive('/groupsPermis')}"><a href="#/groups"><i class="fa fa-group"></i> <%trans('adminMenu.groups')%></a></li>
+            <li ng-class="{'active' : isActive('/permissions')}"><a href="#/permissions"><i class="fa fa-legal"></i> <%trans('adminMenu.permissions')%></a></li>
+            <li ng-class="{'active' : isActive('/pages')}"><a href="#/pages"><i class="fa fa-newspaper-o"></i> <%trans('adminMenu.pages')%></a></li>
+            <li ng-class="{'active' : isActive('/products')}"><a href="#/products"><i class="fa fa-list"></i> <%trans('adminMenu.products')%></a></li>
+            <li ng-class="{'active' : isActive('/settings')}"><a href="#/settings"><i class="fa fa-gear"></i> <%trans('adminMenu.settings')%></a></li>
+            <li ng-class="{'active' : isActive('/resources')}"><a href="#/resources"><i class="fa fa-gear"></i> <%trans('adminMenu.resources')%></a></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-view></div>

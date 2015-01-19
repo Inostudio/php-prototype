@@ -139,7 +139,7 @@ adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'Remove
                                     alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
                                 } else
                                 {
-                                    alertSuccess = $alert({title: 'Group has been successfully edited', placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                                    alertSuccess = $alert({title: $scope.edit_group_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
                                 }
                             });
                         }
@@ -153,7 +153,7 @@ adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'Remove
                             alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
                         } else
                         {
-                            alertSuccess = $alert({title: 'Group has been successfully edited', placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                            alertSuccess = $alert({title: $scope.edit_group_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
                         }
                     });
                 }
@@ -195,7 +195,7 @@ adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'Remove
               $scope.gridOptions.data.push({title: $scope.groupName, description: $scope.groupDescription, id: answer.id}); 
               $scope.groupName = "";
               $scope.groupDescription = "";
-              alertSuccess = $alert({title: 'Group has been successfully added', placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+              alertSuccess = $alert({title: $scope.add_group_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
             } else {
                 alertError = $alert({title: answer.message, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
             }
@@ -213,7 +213,7 @@ adminControllers.controller('GroupCtrl', ['$scope', 'Group', 'AddGroup', 'Remove
                   if (group.id !== id) 
                       $scope.gridOptions.data.push(group);
                 });
-                alertSuccess = $alert({title: 'Group has been successfully removed', placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                alertSuccess = $alert({title: $scope.remove_group_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
             }
         });
     }
@@ -273,7 +273,7 @@ adminControllers.controller('PermissionCtrl', ['$scope', '$alert', 'Permission',
                 $scope.gridOptions_perm.data.push({title: $scope.permissionName, description: $scope.permissionDescription, id: answer.id}); 
                 $scope.permissionName = "";
                 $scope.permissionDescription = "";
-                alertSuccess = $alert({title: 'Permission has been successfully added', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
+                alertSuccess = $alert({title: $scope.add_permission_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
               } else {
                   alertError = $alert({title: answer.message, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
               }
@@ -343,7 +343,7 @@ adminControllers.controller('PermissionCtrl', ['$scope', '$alert', 'Permission',
                                         alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
                                     } else
                                     {
-                                        alertSuccess = $alert({title: 'Permission has been successfully edited', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
+                                        alertSuccess = $alert({title: $scope.edit_permission_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
                                     }
                                 });
                             }
@@ -358,7 +358,7 @@ adminControllers.controller('PermissionCtrl', ['$scope', '$alert', 'Permission',
                                 alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
                             } else
                             {
-                                alertSuccess = $alert({title: 'Permission has been successfully edited', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
+                                alertSuccess = $alert({title: $scope.edit_permission_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
                             }
                         });
                     }
@@ -378,7 +378,7 @@ adminControllers.controller('PermissionCtrl', ['$scope', '$alert', 'Permission',
                       if (permission.id !== id) 
                           $scope.gridOptions_perm.data.push(permission);
                     });
-                    alertSuccess = $alert({title: 'Permission has been successfully removed', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
+                    alertSuccess = $alert({title: $scope.remove_permission_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
                 }
             });
         }
@@ -435,11 +435,11 @@ adminControllers.controller('GroupOptionsCtrl', ['$scope', '$routeParams', 'Grou
                         if(permission.id === id){
                             if(accept){
                                 permission.accept = 0;
-                                alertSuccess = $alert({title: 'Right has been successfully removed', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option', duration: 3});
+                                alertSuccess = $alert({title: $scope.remove_perm_from_group, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option', duration: 3});
                             }
                             else {
                                 permission.accept = 1;
-                                alertSuccess = $alert({title: 'Right has been successfully accepted', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option', duration: 3});
+                                alertSuccess = $alert({title: $scope.add_perm_to_group, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option', duration: 3});
                             }
                         }
                     });
@@ -561,7 +561,7 @@ adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser',
                 if(!answer[0]){
                     alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
                 } else {
-                    alertSuccess = $alert({title: 'The user has been successfully added', placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
+                    alertSuccess = $alert({title: $scope.add_user_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
                     
                     //.log($scope.currentPage * limit);
                     //console.log($scope.countUsers);
@@ -632,7 +632,7 @@ adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser',
                                     alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
                                 } else
                                 {
-                                    alertSuccess = $alert({title: 'User has been successfully edited', placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
+                                    alertSuccess = $alert({title: $scope.edit_user_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
                                 }
                             });
                         }
@@ -754,7 +754,7 @@ adminControllers.controller('UsersCtrl', ['$scope', '$alert', 'User', 'AddUser',
                 if(answer[0])
                 {
                     $scope.modal.hide();
-                    alertSuccess = $alert({title: 'User has been successfully removed', placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
+                    alertSuccess = $alert({title: $scope.remove_user_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
                     var oldUsers = $scope.users_grid.data;
 
                     $scope.users_grid.data = [];
@@ -821,11 +821,11 @@ adminControllers.controller('UserOptionsCtrl', ['$scope', '$alert', '$routeParam
                         if(group.id === id){
                             if(accept){
                                 group.accept = 0;
-                                alertSuccess = $alert({title: 'User was successfully removed from the group', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option_for_users', duration: 3});
+                                alertSuccess = $alert({title: $scope.remove_user_from_group, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option_for_users', duration: 3});
                             }
                             else {
                                 group.accept = 1;
-                                alertSuccess = $alert({title: 'The user has been successfully added to the group', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option_for_users', duration: 3});
+                                alertSuccess = $alert({title: $scope.add_user_to_group, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option_for_users', duration: 3});
                             }
                         }
                     });
@@ -889,7 +889,7 @@ adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResou
                 if(res[0] === true) {
                     console.log(res[1]);
                     $scope.resources.push(res[1]);
-                    $alert({title: 'The resource has been successfully added', placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                    $alert({title: $scope.add_resource_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
 
                     $scope.resource = {
                         title: '',
@@ -915,7 +915,7 @@ adminControllers.controller('ResourcesCtrl', ['$scope', 'AddResource', 'AllResou
                     }
                 }
                 $scope.resources.splice(index, 1);
-                $alert({title: 'The resource has been successfully deleted', placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                $alert({title: $scope.remove_resource_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
             } else {
                 $alert({title: res[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
             }
@@ -979,7 +979,7 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$alert', '$modal', 'AddPage
     $scope.$on('EventForEditPage', function (event, id) {
         $scope.page = GetPage.query({id: id}, function(res) {
             $rootScope.page = res;
-            $rootScope.pageActions = 'Edit static page';
+            $rootScope.pageActions = $scope.edit_text;
             
             $scope.modalEditPage = $modal({
                 show: true,
@@ -990,7 +990,7 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$alert', '$modal', 'AddPage
     });
     
     $scope.$on('EventForShowPage', function(event, url){
-        $window.open('http://' + $location.host() + ':' + $location.port() + '/' + url);
+        $window.open('http://' + $location.host() + ':' + $location.port() + '/' + lang + '/' + url);
     });
     
     //+++    
@@ -1030,7 +1030,7 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$alert', '$modal', 'AddPage
             if(page.id === undefined) {
                 AddPage.query({title: page.title, body: page.body, status: page.status_id, url: page.url}, function(res) {
                     arr.push({id: res[0], title: page.title, body: page.body, status: $rootScope.statuses[page.status_id - 1].title, url: page.url});
-                    alertSuccess = $alert({title: 'Page has been added successfully', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_for_pages', duration: 3});
+                    alertSuccess = $alert({title: $scope.add_page_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_for_pages', duration: 3});
                 });
             } else {
                 SavePage.query({id: page.id, title: page.title, body: page.body, status: page.status_id, url: page.url}, function() {
@@ -1041,7 +1041,7 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$alert', '$modal', 'AddPage
                         }
                     }
                 });
-                alertSuccess = $alert({title: 'The page has been successfully edited', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_for_pages', duration: 3});
+                alertSuccess = $alert({title: $scope.edit_page_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_for_pages', duration: 3});
             }
         }
     };
@@ -1065,7 +1065,7 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$alert', '$modal', 'AddPage
         alertSuccess.hide();
         deletePage($scope.del);
         $scope.modal.hide();
-        alertSuccess = $alert({title: 'The page has been successfully removed', placement: 'top-right', type: 'success', show: true, container: '#alerts-container_for_pages', duration: 3});
+        alertSuccess = $alert({title: $scope.remove_page_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_for_pages', duration: 3});
     });
     
     $rootScope.$on('modal-cancel', function(){
@@ -1084,7 +1084,7 @@ pagesControllers.controller('PagesCtrl', ['$scope', '$alert', '$modal', 'AddPage
     $scope.createPage = function(){
         $rootScope.submitted = false;
         $rootScope.page = {};
-        $rootScope.pageActions = 'Create new static page';
+        $rootScope.pageActions = $scope.create_text;
         $scope.modalEditPage = $modal({
             show: true,
             contentTemplate: 'EditPage.html'

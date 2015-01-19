@@ -1,0 +1,25 @@
+<?php
+return array(
+    'add' => 'Add',
+    'users' => 'Users',
+    'add_user' => 'Add user',
+    'email' => 'Email',
+    'password' => 'Password',
+    'confirm_password' => 'Confirm password',
+    'list_of_users' => 'List of users',
+    'search' => 'Search',
+    'reset' => 'Reset/First',
+    'previous_page' => 'Previous page',
+    'next_page' => 'Next page',
+    'page' => 'Page',
+    'list_of_groups' => 'List of groups',
+    'deleting' => 'Deleteng!',
+    'deleting_text' => 'Are you sure you want to delete this user?',
+    'ok' => 'OK',
+    'cancel' => 'cancel',
+    'add_user_message' => 'The user has been successfully added!',
+    'edit_user_message' => 'User has been successfully edited!',
+    'remove_user_message' => 'User has been successfully removed!',
+    'add_user_to_group' => 'The user has been successfully added to the group!',
+    'remove_user_from_group' => 'User was successfully removed from the group!'
+);
