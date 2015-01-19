@@ -15,3 +15,5 @@ nbproject/
 /app/storage/debugbar/
 .vagrant/
 /public/public/
+node_modules/
+public/build/
