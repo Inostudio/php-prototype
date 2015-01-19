@@ -1,32 +1,34 @@
-<div id="alerts-container_perm"></div>
+<div id="alerts-container_perm" ng-init="add_permission_message = '<%trans("permissions.add_permission_message")%>';
+     remove_permission_message = '<%trans("permissions.remove_permission_message")%>';
+     edit_permission_message = '<%trans("permissions.edit_permission_message")%>';"></div>
 
-<h1 class="page-header">Permissions</h1>
+<h1 class="page-header"><%trans('permissions.permissions')%></h1>
 <div class="table-responsive">
-    <h3 class="sub-header">Add permission</h3>
+    <h3 class="sub-header"><%trans('permissions.add_permission')%></h3>
     <form>
         <div class="form-inline">
             <div class="input-group">
-                <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Permission name" ng-model="permissionName" required>
+                <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('permissions.permission_name')%>" ng-model="permissionName" required>
             </div>
             <div class="input-group">
-              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Permission description" ng-model="permissionDescription">
+              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('permissions.permission_description')%>" ng-model="permissionDescription">
             </div>
-            <button type="submit" class="btn btn-default" ng-click="addPermission()">Добавить</button>
+            <button type="submit" class="btn btn-default" ng-click="addPermission()"><%trans('permissions.add')%></button>
         </div>
     </form>
-    <h3 class="sub-header">List of permissions</h3>
+    <h3 class="sub-header"><%trans('permissions.list_of_permissions')%></h3>
     <div ui-grid="gridOptions_perm" ui-grid-edit class="grid2"></div>
 </div>
 
 <script type="text/ng-template" id="ConfirmDelete.html">
     <div class="modal-header">
-        <h3 class="modal-title">Deleting!</h3>
+        <h3 class="modal-title"><%trans("permissions.deleting")%></h3>
     </div>
     <div class="modal-body">
-        Are you sure that you want delete this permission?
+        <%trans("permissions.deleting_text")%>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="$emit('okDeletePermission')">OK</button>
-        <button class="btn btn-warning" ng-click="$emit('cancelDeletePermission')">Cancel</button>
+        <button class="btn btn-primary" ng-click="$emit('okDeletePermission')"><%trans("permissions.ok")%></button>
+        <button class="btn btn-warning" ng-click="$emit('cancelDeletePermission')"><%trans("permissions.cancel")%></button>
     </div>
 </script>

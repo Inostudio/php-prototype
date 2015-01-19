@@ -100,3 +100,8 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
+Route::filter('localization', function() {
+    App::setLocale(Route::input('lang'));
+    //return dd(Route::getCurrentRoute());
+});
