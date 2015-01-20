@@ -8,12 +8,12 @@
 </style>
 
 <h1 class="page-header"><%trans('resources.resources')%></h1>
-<div id="alerts-container" ng-init="remove_resource_message = '<%trans("resources.remove_resource_message")%>';
-     add_resource_message = '<%trans("resources.add_resource_message")%>';
-     delete_btn = '<%trans("resources.delete")%>';"></div>
+<div id="alerts-container" ng-init="vm.remove_resource_message = '<%trans("resources.remove_resource_message")%>';
+     vm.add_resource_message = '<%trans("resources.add_resource_message")%>';
+     vm.delete_btn = '<%trans("resources.delete")%>';"></div>
 <div>
     <h3 class="sub-header"><%trans('resources.add_resources')%></h3>
-    <form name="form" ng-submit="add(resource)">
+    <form name="form" ng-submit="vm.add(resource)">
         <div class="form-inline" novalidate>
             <div class="input-group">
                 <input type="text" class="form-control" name="title" placeholder="<%trans('resources.title_resource')%>" ng-model="resource.title" required />
@@ -27,7 +27,7 @@
     <h3 class="sub-header"><%trans('resources.list_of_resource')%></h3>
 </div>
 
-<div ui-grid="gridOptions_resourcesGrid" ui-grid-edit class="resourcesGrid"></div>
+<div ui-grid="vm.gridOptions_resourcesGrid" ui-grid-edit class="resourcesGrid"></div>
 
 <script type="text/ng-template" id="ConfirmDelete.html">
     <div class="modal-header">

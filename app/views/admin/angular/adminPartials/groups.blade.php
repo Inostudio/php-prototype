@@ -1,6 +1,6 @@
-<div id="alerts-container" ng-init="edit_group_message = '<%trans("groups.edit_group_message")%>';
-     remove_group_message = '<%trans("groups.remove_group_message")%>';
-     add_group_message = '<%trans("groups.add_group_message")%>'"></div>
+<div id="alerts-container" ng-init="vm.edit_group_message = '<%trans("groups.edit_group_message")%>';
+     vm.remove_group_message = '<%trans("groups.remove_group_message")%>';
+     vm.add_group_message = '<%trans("groups.add_group_message")%>'"></div>
 
 <h1 class="page-header"><%trans('groups.groups')%></h1>
 <div class="table-responsive">
@@ -8,16 +8,16 @@
     <form>
         <div class="form-inline">
             <div class="input-group">
-                <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('groups.group_name')%>" ng-model="groupName" required>
+                <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('groups.group_name')%>" ng-model="vm.groupName" required>
             </div>
             <div class="input-group">
-              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('groups.group_description')%>" ng-model="groupDescription">
+              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('groups.group_description')%>" ng-model="vm.groupDescription">
             </div>
-            <button type="submit" class="btn btn-default" ng-click="addGroup()"><%trans('groups.add')%></button>
+            <button type="submit" class="btn btn-default" ng-click="vm.addGroup()"><%trans('groups.add')%></button>
         </div>
     </form>
     <h3 class="sub-header"><%trans('groups.list_of_groups')%></h3>
-    <div ui-grid="gridOptions" ui-grid-edit class="grid"></div> 
+    <div ui-grid="vm.gridOptions" ui-grid-edit class="grid"></div> 
 </div>
 
 <script type="text/ng-template" id="ConfirmDelete.html">

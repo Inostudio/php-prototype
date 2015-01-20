@@ -74,56 +74,57 @@
 
     <body>
 
-        <div class="container" ng-controller="SignCtrl">
+        <div class="container" ng-controller="SignCtrl as vm">
 
 
-            <form class="form-signin" name="signForm" ng-submit="submitForm(signForm.$valid)" novalidate>
+            <form class="form-signin" name="signForm" ng-submit="vm.submitForm(signForm.$valid)" novalidate>
                 <div>
                     <h2 class="form-signin-heading">Please sign in</h2>
                 </div>
 
                 <div>
                     @if (Session::get('message'))
-                        <div ng-init="alert = { msg: '<% Session::get('message') %>', type: danger }">
+                        <div ng-init="alert = { msg: '<% Session::has('message') %>', type: danger }">
                         </div>
                     @endif
                     <alert ng-show="(alert !== undefined)" type="{{alert.type}}" close="closeAlert()">{{alert.msg}}</alert>
+
                 </div>
 
-                <div class="form-group" ng-class="{ 'has-error' : (signForm.email.$invalid) && submitted }">
+                <div class="form-group" ng-class="{ 'has-error' : (signForm.email.$invalid) && vm.submitted }">
                     <input type="email" class="form-control" placeholder="Email address" name="email"
-                    ng-model="user.email" required autofocus ng-required="true" ng-change="closeAlert()">
+                    ng-model="vm.user.email" required autofocus ng-required="true" ng-change="vm.closeAlert()">
 
-                    <span class="help-block" ng-show="(signForm.email.$error.required) && submitted">
+                    <span class="help-block" ng-show="(signForm.email.$error.required) && vm.submitted">
                         Email must be not empty
                     </span>
 
-                    <span class="help-block" ng-show="(signForm.email.$invalid && !signForm.email.$error.required) && submitted">
+                    <span class="help-block" ng-show="(signForm.email.$invalid && !signForm.email.$error.required) && vm.submitted">
                         Email invalid
                     </span>
                 </div>
 
-                <div class="form-group" ng-class="{ 'has-error' : (signForm.password.$invalid) && submitted }">
-                    <input type="password" class="form-control" placeholder="Password" name="password" required  ng-model="user.password" minlength="4" maxlength="32" ng-required="true" ng-change="closeAlert()">
-                    <span class="help-block" ng-show="(signForm.password.$error.required) && submitted">
+                <div class="form-group" ng-class="{ 'has-error' : (signForm.password.$invalid) && vm.submitted }">
+                    <input type="password" class="form-control" placeholder="Password" name="password" required  ng-model="vm.user.password" minlength="4" maxlength="32" ng-required="true" ng-change="vm.closeAlert()">
+                    <span class="help-block" ng-show="(signForm.password.$error.required) && vm.submitted">
                         Password must be not empty
                     </span>
 
-                    <span class="help-block" ng-show="(signForm.password.$error.minlength) && submitted">
+                    <span class="help-block" ng-show="(signForm.password.$error.minlength) && vm.submitted">
                         Password is too short.
                     </span>
                     
-                    <span class="help-block" ng-show="(signForm.password.$error.maxlength) && submitted">
+                    <span class="help-block" ng-show="(signForm.password.$error.maxlength) && vm.submitted">
                         Password is too long.
                     </span>
                 </div>
 
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="remember" value="1" ng-model="user.remember"> Remember me
+                        <input type="checkbox" name="remember" value="1" ng-model="vm.user.remember"> Remember me
                     </label>
                 </div>
-                <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="signForm.$invalid && submitted">Sign in</button>
+                <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="signForm.$invalid && vm.submitted">Sign in</button>
             </form>
 
         </div> <!-- /container -->

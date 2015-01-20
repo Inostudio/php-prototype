@@ -12,7 +12,7 @@ Blade::setEscapedContentTags('<%%', '%%>');    // for escaped data
 |
 */
 
-
+/*
 Route::get('/{any}', function()
 {
     $params = Route::getCurrentRoute()->parameters();
@@ -22,7 +22,7 @@ Route::get('/{any}', function()
         header('Refresh: 0; URL=/'.$lang.'/'.$params['any']);
     }
 });
-
+*/
 Route::group(['prefix' => '{lang?}', 'before' => 'localization'], function() {
     Route::get('/angular/', ['uses' => 'AngularController@serve']);
 
