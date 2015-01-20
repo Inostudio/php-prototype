@@ -11,7 +11,7 @@ class UserTableSeeder extends Seeder
             'email' => "dragg.ko@gmail.com"
         ]);
 
-        foreach (range(1, 100) as $id){
+        foreach (range(2, 100) as $id){
             User::create([
                 'id' => $id,
                 'password' => Hash::make('1234'),
