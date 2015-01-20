@@ -48,7 +48,7 @@
     function GroupCtrl($scope, Group, AddGroup, RemoveGroup, EditGroup, $alert, $modal, $rootScope){
         var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
         var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
-        
+
         var vm = this;
         vm.addGroup = addGroup;
         vm.groupName = '';
@@ -58,7 +58,7 @@
         vm.edit_group_message = '';
         vm.add_group_message = '';
         vm.remove_group_message = '';
-        
+
         var removeGroupId = null;
         vm.modal = $modal({
             show: false,
@@ -107,19 +107,19 @@
                         oldGroup = group;
                         flag = 1;
                         return false;
-                    }  
+                    }
                     if(!flag)
                         k++;
                 });
 
                 var isExistsEdit = 0;
                 if(colDef.name === 'title'){
-                    var i = 0;  
+                    var i = 0;
                     angular.forEach(vm.gridOptions.data, function(group) {  //Проверяем, существует ли группа с таким именем
                         if ((group.title === newValue.trim()) && (group.id !== rowEntity.id)) {
                             i++;
                             isExistsEdit = 1;
-                        }   
+                        }
                     });
                     if(isExistsEdit){
                         alertError = $alert({title: 'The title has already been taken.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
@@ -167,14 +167,14 @@
           vm.gridOptions.data = res;
         });
 
-        //Добавление    
+        //Добавление
         function addGroup(){
             var isExists = 0;
             alertError.hide();
             alertSuccess.hide();
 
             angular.forEach(vm.gridOptions.data, function(group) {
-                if (group.title === vm.groupName){ 
+                if (group.title === vm.groupName){
                     alertError = $alert({title: 'The title has already been taken. ', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
                     isExists = 1;
                 }
@@ -188,8 +188,8 @@
             }
 
             AddGroup.query({title: vm.groupName, groupDescription: vm.groupDescription}, function(answer){
-                if(answer.res){    
-                  vm.gridOptions.data.push({title: vm.groupName, description: vm.groupDescription, id: answer.id}); 
+                if(answer.res){
+                  vm.gridOptions.data.push({title: vm.groupName, description: vm.groupDescription, id: answer.id});
                   vm.groupName = "";
                   vm.groupDescription = "";
                   alertSuccess = $alert({title: vm.add_group_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
@@ -203,11 +203,11 @@
             RemoveGroup.query({groupId: id}, function(answer){
                 if(answer[0])
                 {
-                    vm.modal.hide();  
+                    vm.modal.hide();
                     var oldGroups = vm.gridOptions.data;
                     vm.gridOptions.data = [];
                     angular.forEach(oldGroups, function(group) {
-                      if (group.id !== id) 
+                      if (group.id !== id)
                           vm.gridOptions.data.push(group);
                     });
                     alertSuccess = $alert({title: vm.remove_group_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
@@ -872,10 +872,8 @@
         var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
         
         var vm = this;
-        vm.resource = '';
-        vm.resources = '';
-        vm.gridOptions_resourcesGrid = '';
-        vm.modal = '';
+        vm.gridOptions_resourcesGrid = [];
+        vm.modal = {};
         vm.add = add;
         vm.add_resource_message = '';
         vm.deleteResource = deleteResource;

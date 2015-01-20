@@ -13,10 +13,10 @@
      vm.delete_btn = '<%trans("resources.delete")%>';"></div>
 <div>
     <h3 class="sub-header"><%trans('resources.add_resources')%></h3>
-    <form name="form" ng-submit="vm.add(resource)">
+    <form name="form" ng-submit="vm.add(vm.resource)">
         <div class="form-inline" novalidate>
             <div class="input-group">
-                <input type="text" class="form-control" name="title" placeholder="<%trans('resources.title_resource')%>" ng-model="resource.title" required />
+                <input type="text" class="form-control" name="title" placeholder="<%trans('resources.title_resource')%>" ng-model="vm.resource.title" required />
             </div>
             <div class="input-group">
                 <input type="file" id="fileInput" name="file"/>
