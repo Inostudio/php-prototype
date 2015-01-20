@@ -80,8 +80,8 @@
             <li <?=Str::startsWith($routeName, 'front.articles') ? 'class="active"' : ''; ?>><a href="<?=action('front.articles.index', ['lang' => $lang]);?>"><% trans('front\navbar.articles') %></a></li>
           </ul>
           <div class="navbar-form navbar-left">
-              <a href="<% action($routeName, ['lang' => 'ru']) %>" class="<% $lang === 'ru' ? 'active' : '' %>">RUS</a>
-              <a href="<% action($routeName, ['lang' => 'en']) %>" class="<% $lang === 'en' ? 'active' : '' %>">ENG</a>
+              <a href="<% action($routeName, ['lang' => 'ru']) %>" class="<% $lang === 'ru' ? 'active-block' : '' %>">RUS</a>
+              <a href="<% action($routeName, ['lang' => 'en']) %>" class="<% $lang === 'en' ? 'active-block' : '' %>">ENG</a>
           </div>
         </div><!--/.nav-collapse -->
 

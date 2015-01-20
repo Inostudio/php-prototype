@@ -13,15 +13,15 @@ Blade::setEscapedContentTags('<%%', '%%>');    // for escaped data
 */
 
 
-/*Route::get('/{any}', function()
+Route::get('/{any}', function()
 {
     $params = Route::getCurrentRoute()->parameters();
     $lang =  App::getLocale();
-    return dd($params, $lang);
+    //return dd($params, $lang);
     if($params != $lang){
         header('Refresh: 0; URL=/'.$lang.'/'.$params['any']);
     }
-});*/
+});
 
 Route::group(['prefix' => '{lang?}', 'before' => 'localization'], function() {
     Route::get('/angular/', ['uses' => 'AngularController@serve']);

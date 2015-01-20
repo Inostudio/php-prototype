@@ -17,5 +17,8 @@ return array(
     "help_block_new_password_long"              => "New password is too long",
     "help_block_new_password_confirm_wrong"     => "New password and password confirm don't match",
 
-    "button_change"                             => "Change"
+    "button_change"                             => "Change",
+
+    "message_old_password_wrong"                => "Invalid old password",
+    "message_data_invalid"                      => "Invalid form data",
 );

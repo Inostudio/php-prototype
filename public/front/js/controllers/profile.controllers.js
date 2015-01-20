@@ -102,10 +102,10 @@
                 }
             });
 
-            modalInstance.result.then(function (Image) {
-                vm.image = Image;
+            modalInstance.result.then(function (data) {
+                vm.image = data.Image;
                 vm.exists = true;
-                vm.alert = { msg: 'The thumbnail successfully changed ', type: 'success'};
+                vm.alert = { msg: data.msg, type: 'success'};
             });
 
         };
@@ -304,13 +304,31 @@
 
         function upload(CroppedImage, FullImage) {
 
-            var success = function(data) {
+            var message = "";
+
+            var successUploadCropped = function(data) {
                 if (data[0] === true) {
-                    //console.log(data);//vm.alert = { msg: data[1], type: 'success'};
+                    //Profile.uploadCropped(CroppedImage, success, error);
                 } else {
                     //console.log(data);//vm.alert = { msg: data[1], type: 'danger'};
                 }
-                $modalInstance.close(CroppedImage);
+                $modalInstance.close({
+                    Image: CroppedImage,
+                    msg: FullImage !== undefined ? message : data[1]});
+            };
+
+            var successUploadImage = function(data) {
+
+                if (data[0] === true) {
+                    message = data[1];
+                    Profile.uploadCropped(CroppedImage, successUploadCropped, error);
+                } else {
+                    //console.log(data);//vm.alert = { msg: data[1], type: 'danger'};
+                }
+
+                /*$modalInstance.close({
+                    Image: CroppedImage,
+                    msg: data[1]});*/
             };
 
             var error = function(data) {
@@ -318,9 +336,11 @@
             };
 
             if(FullImage !== undefined) {
-                Profile.uploadImage(FullImage, success, error);
+                Profile.uploadImage(FullImage, successUploadImage, error);
+            } else {
+                Profile.uploadCropped(CroppedImage, successUploadCropped, error);
             }
-            Profile.uploadCropped(CroppedImage, success, error);
+
         }
     }
 })();

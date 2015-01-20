@@ -1,5 +1,6 @@
 <?php
     $user = Auth::user();
+    $field = trans('front\common.field');
 ?>
 
 <alert data-ng-show="(vm.alert !== undefined)" type="{{vm.alert.type}}" close="vm.closeAlert()">
@@ -14,10 +15,6 @@
       <div class="row">
         <div class="col-md-4 col-lg-4" align="center">
             <img alt="User Pic" data-ng-init="vm.exists = '<% $user->existsPhoto() %>';vm.imageUrl = '<% $user->getPhoto() %>'; vm.imageCroppedUrl = '<% $user->getCroppedPhoto() %>'; vm.image = vm.imageCroppedUrl" src="{{vm.image}}" class="img-rounded" data-ng-click="vm.photo('lg')">
-            <!--
-            <button class="btn btn-default" data-ng-click="edit_thumbnail('lg')">Edit thumbnail</button>
-            <button class="btn btn-default" data-ng-click="upload_new_photo('lg')">Upload a new photo</button>
-            -->
         </div>
         <div class=" col-md-8 col-lg-8 ">
             <form name="form" novalidate>
@@ -35,15 +32,18 @@
 
                             <span class="help-block"
                                 data-ng-show="(form.first_name.$error.required) && vm.submitted">
-                                First name must be not empty
+                                <% trans('front\profile\profile.help_block_attr_empty',
+                                    ['attr' => $field]) %>
                             </span>
 
                             <span class="help-block" data-ng-show="(form.first_name.$error.minlength) && vm.submitted">
-                                First name is too short.
+                                <% trans('front\profile\profile.help_block_attr_short',
+                                    ['attr' => $field]) %>
                             </span>
 
                             <span class="help-block" data-ng-show="(form.first_name.$error.maxlength) && vm.submitted">
-                                First name is too long.
+                                <% trans('front\profile\profile.help_block_attr_long',
+                                    ['attr' => $field]) %>
                             </span>
                         </div>
                     </td>
@@ -62,15 +62,18 @@
 
                             <span class="help-block"
                                 data-ng-show="(form.last_name.$error.required) && vm.submitted">
-                                Last name must be not empty
+                                <% trans('front\profile\profile.help_block_attr_empty',
+                                    ['attr' => $field]) %>
                             </span>
 
                             <span class="help-block" data-ng-show="(form.last_name.$error.minlength) && vm.submitted">
-                                Last name is too short.
+                                <% trans('front\profile\profile.help_block_attr_short',
+                                    ['attr' => $field]) %>
                             </span>
 
                             <span class="help-block" data-ng-show="(form.last_name.$error.maxlength) && vm.submitted">
-                                Last name is too long.
+                                <% trans('front\profile\profile.help_block_attr_long',
+                                    ['attr' => $field]) %>
                             </span>
                         </div>
                     </td>
@@ -94,15 +97,18 @@
 
                             <span class="help-block"
                                 data-ng-show="(form.phone.$error.required) && vm.submitted">
-                                Phone must be not empty
+                                <% trans('front\profile\profile.help_block_attr_empty',
+                                    ['attr' => $field]) %>
                             </span>
 
                             <span class="help-block" data-ng-show="(form.phone.$error.minlength) && vm.submitted">
-                                Phone is too short.
+                                <% trans('front\profile\profile.help_block_attr_short',
+                                    ['attr' => $field]) %>
                             </span>
 
                             <span class="help-block" data-ng-show="(form.phone.$error.maxlength) && vm.submitted">
-                                Phone is too long.
+                                <% trans('front\profile\profile.help_block_attr_long',
+                                    ['attr' => $field]) %>
                             </span>
                         </div>
                     </td>
@@ -123,54 +129,13 @@
     </div>
 </div>
 
-
-<style>
-.cropArea {
-    background: #E4E4E4;
-    overflow: hidden;
-    width: 0px;
-    height: 0px;
-}
-
-div.class1 droplet {
-   display: inline-block;
-   z-index: 2;
-   position: relative;
-   border-radius: 2px;
-   width: 100%;
-   height: 100%;
-   background-color: rgba(255, 255, 255, .1);
-   margin-top: -5px;
-   padding-top: 5px;
-   transition: box-shadow 0.35s;
-}
-
-div.class1 droplet comment:after {
-    content: "Drag Image...";
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    display: inline-block;
-    z-index: -1;
-    font-family: Lato, Arial, Tahoma, Helvetica, sans-serif;
-    color: rgba(0, 0, 0, .45);
-    text-decoration: none;
-    font-weight: normal;
-    font-size: 20px;
-    line-height: 300px;
-    text-align: center;
-}
-
-div.class1 droplet.event-dragover comment:after {
-    content: "...And Drop!";
-}
-
-</style>
-
 <script type="text/ng-template" id="editPhoto.html">
     <div style="display: inline-block; background: #efefef; width: 100%;" data-ng-style="">
         <div class="modal-header">
-            <h3 class="modal-title">Choose a new thumbnail</h3>
+            <h3 class="modal-title">
+                <nobr data-ng-hide="vm.isActive('NewPhoto')"><% trans('front\profile\profile.title_choose_thumbnail') %></nobr>
+                <nobr data-ng-show="vm.isActive('NewPhoto')"><% trans('front\profile\profile.title_upload_new_photo') %></nobr>
+            </h3>
         </div>
         <div class="modal-body" data-ng-style="vm.isActive('NewPhoto') ? {'padding': '0'} : {}" style="height: 600px;border: dashed 3px #c5cacd; margin: 15px; background: #fff;">
             <div data-ng-show="vm.isActive('ChangeThumbnail')">
@@ -182,7 +147,7 @@ div.class1 droplet.event-dragover comment:after {
             </div>
 
             <div data-ng-show="vm.isActive('NewPhoto')" style="height: inherit;">
-                <div class="class1" style="height: inherit; position: relative;">
+                <div class="dropClass" style="height: inherit; position: relative;">
                     <droplet data-ng-model="interface">
 
                         <div style="position: absolute; top: 240px; left: 300px;">
@@ -211,22 +176,34 @@ div.class1 droplet.event-dragover comment:after {
 
     <div class="modal-footer" style="background: #fff3be; border-top: 1px solid #efe2a9" data-ng-hide="vm.new && vm.isActive('NewPhoto')">
         <div data-ng-show="vm.isActive('NewPhoto')">
-            <button class="btn btn-primary" data-ng-click="vm.changeToThumbnail()">Choose a thumbnail</button>
+            <button class="btn btn-primary" data-ng-click="vm.changeToThumbnail()">
+                <% trans('front\profile\profile.button_choose_thumbnail') %>
+            </button>
         </div>
 
         <div data-ng-show="vm.isActive('ChangeThumbnail')">
             <div style="float: left">
-                <button class="btn btn-primary" data-ng-click="vm.changeToSelectNewPhoto()">Upload a new photo</button>
+                <button class="btn btn-primary" data-ng-click="vm.changeToSelectNewPhoto()">
+                    <% trans('front\profile\profile.button_upload_new') %>
+                </button>
             </div>
 
             <div style="float: right">
-                <button class="btn btn-primary" data-ng-click="vm.upload(vm.myCroppedImage)">OK</button>
-                <button class="btn btn-warning" data-ng-click="vm.cancel()">Cancel</button>
+                <button class="btn btn-primary" data-ng-click="vm.upload(vm.myCroppedImage)">
+                    <% trans('front\profile\profile.button_save') %>
+                </button>
+                <button class="btn btn-warning" data-ng-click="vm.cancel()">
+                    <% trans('front\profile\profile.button_cancel') %>
+                </button>
             </div>
         </div>
         <div data-ng-show="vm.isActive('UploadPhoto')">
-            <button class="btn btn-primary" data-ng-click="vm.upload(vm.NewPhotoCroppedImage, vm.NewPhoto)" style="float: left">Upload</button>
-            <button class="btn btn-warning" data-ng-click="vm.changeToSelectNewPhoto()" style="float: right">Cancel</button>
+            <button class="btn btn-primary" data-ng-click="vm.upload(vm.NewPhotoCroppedImage, vm.NewPhoto)" style="float: left">
+            <% trans('front\profile\profile.button_upload') %>
+            </button>
+            <button class="btn btn-warning" data-ng-click="vm.changeToSelectNewPhoto()" style="float: right">
+                <% trans('front\profile\profile.button_back') %>
+            </button>
         </div>
     </div>
 </script>

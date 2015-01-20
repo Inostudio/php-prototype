@@ -6,7 +6,7 @@
 <div class="panel-body">
     <form name="passwordForm" class="form-vertical" novalidate data-ng-submit="vm.submitForm(passwordForm.$valid && vm.confirm())">
         <div>
-            <alert data-ng-show="(vm.alert !== undefined)" type="{{alert.type}}" close="vm.closeAlert()">
+            <alert data-ng-show="(vm.alert !== undefined)" type="{{vm.alert.type}}" close="vm.closeAlert()">
                 {{vm.alert.msg}}
             </alert>
         </div>
