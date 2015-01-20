@@ -47,6 +47,8 @@
     <script src="/admin/js/app.js" type="text/javascript"></script>
     <script src="/admin/js/controllers/adminControllers.js" type="text/javascript"></script>
     <script src="/admin/js/services/adminServices.js" type="text/javascript"></script>
+    <script src="/admin/js/routes.js" type="text/javascript"></script>
+    <script src="/admin/js/directives.js" type="text/javascript"></script>
     
     @section('include')
 
@@ -78,7 +80,7 @@
     <!-- Custom styles for this template -->
     <link href="/admin/css/main.css" rel="stylesheet">
   </head>
-  <body ng-controller="activCtrl">
+  <body ng-controller="activCtrl as vm">
 
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
@@ -101,8 +103,8 @@
               <input type="text" class="form-control" placeholder="<%trans('adminMenu.search')%>">
           </form>
             <div class='lang'>
-                <a ng-click='checkLang("ru")'>RUS</a>
-                <a ng-click='checkLang("en")'>ENG</a>
+                <a ng-click='vm.checkLang("ru")'>RUS</a>
+                <a ng-click='vm.checkLang("en")'>ENG</a>
             </div>
         </div>
       </div>
@@ -112,14 +114,14 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li ng-class="{'active' : isActive('/')}"><a href="#/"><i class="fa fa-dashboard"></i> <%trans('adminMenu.dashboard')%></a></li>
-            <li ng-class="{'active' : isActive('/users') || isActive('/userGroups')}"><a href="#/users"><i class="fa fa-users"></i> <%trans('adminMenu.users')%></a></li>
-            <li ng-class="{'active' : isActive('/groups') || isActive('/groupsPermis')}"><a href="#/groups"><i class="fa fa-group"></i> <%trans('adminMenu.groups')%></a></li>
-            <li ng-class="{'active' : isActive('/permissions')}"><a href="#/permissions"><i class="fa fa-legal"></i> <%trans('adminMenu.permissions')%></a></li>
-            <li ng-class="{'active' : isActive('/pages')}"><a href="#/pages"><i class="fa fa-newspaper-o"></i> <%trans('adminMenu.pages')%></a></li>
-            <li ng-class="{'active' : isActive('/products')}"><a href="#/products"><i class="fa fa-list"></i> <%trans('adminMenu.products')%></a></li>
-            <li ng-class="{'active' : isActive('/settings')}"><a href="#/settings"><i class="fa fa-gear"></i> <%trans('adminMenu.settings')%></a></li>
-            <li ng-class="{'active' : isActive('/resources')}"><a href="#/resources"><i class="fa fa-gear"></i> <%trans('adminMenu.resources')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/')}"><a href="#/"><i class="fa fa-dashboard"></i> <%trans('adminMenu.dashboard')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/users') || vm.isActive('/userGroups')}"><a href="#/users"><i class="fa fa-users"></i> <%trans('adminMenu.users')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/groups') || vm.isActive('/groupsPermis')}"><a href="#/groups"><i class="fa fa-group"></i> <%trans('adminMenu.groups')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/permissions')}"><a href="#/permissions"><i class="fa fa-legal"></i> <%trans('adminMenu.permissions')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/pages')}"><a href="#/pages"><i class="fa fa-newspaper-o"></i> <%trans('adminMenu.pages')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/products')}"><a href="#/products"><i class="fa fa-list"></i> <%trans('adminMenu.products')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/settings')}"><a href="#/settings"><i class="fa fa-gear"></i> <%trans('adminMenu.settings')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/resources')}"><a href="#/resources"><i class="fa fa-gear"></i> <%trans('adminMenu.resources')%></a></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-view></div>

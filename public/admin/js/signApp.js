@@ -1,5 +1,8 @@
-var signApp = angular.module('signApp', [
-    'signControllers',
-    'signServices',
-    'ui.bootstrap'
-]);
+(function() {
+    'use strict';
+
+    angular
+        .module('signApp', [
+            'ui.bootstrap'
+        ]);
+})();

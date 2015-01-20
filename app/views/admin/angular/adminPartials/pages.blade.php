@@ -1,10 +1,10 @@
-<div id="alerts-container_for_pages" ng-init="create_text = '<%trans("pages.create_text")%>';
-     edit_text = '<%trans("pages.edit_text")%>';
-     remove_page_message = '<%trans("pages.remove_page_message")%>';
-     add_page_message = '<%trans("pages.add_page_message")%>';
-     edit_page_message = '<%trans("pages.edit_page_message")%>';"></div>
+<div id="alerts-container_for_pages" ng-init="vm.create_text = '<%trans("pages.create_text")%>';
+     vm.edit_text = '<%trans("pages.edit_text")%>';
+     vm.remove_page_message = '<%trans("pages.remove_page_message")%>';
+     vm.add_page_message = '<%trans("pages.add_page_message")%>';
+     vm.edit_page_message = '<%trans("pages.edit_page_message")%>';"></div>
 <h1 class="page-header"><%trans('pages.pages')%></h1>
-<button class="btn btn-primary" style="margin-bottom: 5px;" ng-click="createPage()"><%trans('pages.create')%></button>
+<button class="btn btn-primary" style="margin-bottom: 5px;" ng-click="vm.createPage()"><%trans('pages.create')%></button>
 <script type="text/ng-template" id="EditPage.html">
     <div>
         <div class="">
@@ -66,7 +66,7 @@
     </div>
 </script>
 
-<div ui-grid="gridOptions_pagesGrid" ui-grid-edit class="pagesGrid"></div>
+<div ui-grid="vm.gridOptions_pagesGrid" ui-grid-edit class="pagesGrid"></div>
 
 <script type="text/ng-template" id="ConfirmDelete.html">
     <div class="modal-header">
