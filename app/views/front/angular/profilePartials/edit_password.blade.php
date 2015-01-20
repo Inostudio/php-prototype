@@ -1,4 +1,5 @@
 <?php
+    $message = null;
     if (Auth::user()->facebook_user_id !== null)
         $message = 'You password default is \'password\'!';
 ?>

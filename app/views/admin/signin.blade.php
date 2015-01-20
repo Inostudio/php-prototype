@@ -84,10 +84,10 @@
 
                 <div>
                     @if (Session::get('message'))
-                        <div ng-init="alert = { msg: '<% Session::has('message') %>', type: danger }">
+                        <div ng-init="vm.alert = { msg: '<% Session::pull('message') %>', type: danger }">
                         </div>
                     @endif
-                    <alert ng-show="(alert !== undefined)" type="{{alert.type}}" close="closeAlert()">{{alert.msg}}</alert>
+                    <alert ng-show="(vm.alert !== undefined)" type="{{vm.alert.type}}" close="vm.closeAlert()">{{vm.alert.msg}}</alert>
 
                 </div>
 
