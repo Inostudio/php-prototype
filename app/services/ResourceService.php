@@ -62,7 +62,7 @@ class ResourceService {
             if ($this->us->uploadImage($file, $fileName, $this->path, 'jpeg')) {
                 $res = new Resource;
                 $res->title = $title;
-                $res->url = $this->url . $fileName;
+                $res->url = '/' . $this->path . $fileName;
                 $res->path = $this->path . $fileName;
                 $result = [$res->save(), $res];
             }
