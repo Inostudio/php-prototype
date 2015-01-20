@@ -94,4 +94,4 @@ class ResourceService {
 
         return $result;
     }
-} 
+}

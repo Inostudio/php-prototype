@@ -51,7 +51,9 @@ Route::filter('auth', function()
 
 Route::filter('auth.admin', function(){
 
-    if(!(Auth::check() && Auth::user()->IsAdmin())) {
+    if(Auth::guest()) {
+        return Redirect::action('admin.signin', ['lang' => 'en']);
+    } else if(!(Auth::user()->IsAdmin())) {
         return Redirect::action('admin.signin', ['lang' => 'en'])->with(['message' => 'Permission denied!']);
     }
 

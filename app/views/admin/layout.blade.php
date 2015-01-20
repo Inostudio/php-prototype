@@ -1,3 +1,6 @@
+<?php
+    $lang =  App::getLocale();
+?>
 <!DOCTYPE html>
 <html lang="en" ng-app="adminApp">
   <head>
@@ -97,7 +100,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#"><i class="fa fa-dashboard"></i> <%trans('adminMenu.dashboard')%></a></li>
             <li><a href="#/settings"><i class="fa fa-gear"></i> <%trans('adminMenu.settings')%></a></li>
-            <li><a href="<% action('admin.logout') %>"><i class="fa fa-suitcase"></i> <%trans('adminMenu.logout')%></a></li>
+            <li><a href="<% action('admin.logout', ['lang' => $lang]) %>"><i class="fa fa-suitcase"></i> <%trans('adminMenu.logout')%></a></li>
           </ul>
           <form class="navbar-form navbar-right">
               <input type="text" class="form-control" placeholder="<%trans('adminMenu.search')%>">

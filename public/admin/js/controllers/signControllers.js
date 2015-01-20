@@ -25,7 +25,7 @@
             if(isValid) {
                 var success = function(data) {
                     if(data[0] === true){
-                        $window.location.href = '/adm/';
+                        $window.location.href = data[1];//'/adm/';
                     } else {
                         vm.alert = { msg: data[1], type: 'danger'};
                     }

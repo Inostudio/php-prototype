@@ -38,7 +38,7 @@ class AuthController extends \Controller
      */
     public function postSignin()
     {
-        $response = [true, 'Success'];
+        $response = [true, '/' . \App::getLocale() . '/adm/'];
 
         $v = Validator::make(Input::all(), self::$signinValidation);
 

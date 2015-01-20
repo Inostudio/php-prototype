@@ -12,18 +12,23 @@ Blade::setEscapedContentTags('<%%', '%%>');    // for escaped data
 |
 */
 
-/*
-Route::get('/{any}', function()
-{
-    $params = Route::getCurrentRoute()->parameters();
-    $lang =  App::getLocale();
-    //return dd($params, $lang);
-    if($params != $lang){
-        header('Refresh: 0; URL=/'.$lang.'/'.$params['any']);
-    }
+
+Route::get('/', function() {
+    $url = App::getLocale() . '/';
+    return Redirect::to($url);
 });
-*/
-Route::group(['prefix' => '{lang?}', 'before' => 'localization'], function() {
+
+Route::any('{url?}', function($url) {
+    $segmentLang = Request::segment(1);
+    $url = App::getLocale() . '/' . $url;
+    if(!($segmentLang === "ru" || $segmentLang === "en"))
+        return Redirect::to($url);
+})->where(['url' => '^((?!ru|en).)[-a-z0-9/]+']);
+
+
+
+Route::group(['prefix' => '{lang}', 'before' => 'localization'], function() {
+
     Route::get('/angular/', ['uses' => 'AngularController@serve']);
 
     Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function () {
