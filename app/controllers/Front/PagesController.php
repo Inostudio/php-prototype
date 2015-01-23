@@ -56,6 +56,7 @@ class PagesController extends \BaseController
      */
     public function showPage($lang, $url)
     {
+        //return dd($url);
         $page = \Page::where('url', $url)->first();
         if($page === null || $page->status->title !== 'Public') {
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

@@ -1,7 +1,7 @@
 <?php
 
     use Illuminate\Support\Str;
-    $routeName = Route::getCurrentRoute()->getName();
+    $routeName = '';//Route::getCurrentRoute()->getName();
     $lang =  App::getLocale();
     $lang = $lang === NULL ? "en" : $lang;
 

@@ -36,7 +36,7 @@
                                                 <div class="well well-sm">
                                                     <div class="input-group" ng-class="{ 'has-error' : pageForm.url.$invalid && submitted}">
                                                         <span class="input-group-addon"><% Request::root() %>/</span>
-                                                        <input type="text" class="form-control" placeholder="<%trans('pages.url')%>" name="url" ng-model="page.url" required ng-pattern="/^\w+$/" ng-trim="true"/>
+                                                        <input type="text" class="form-control" placeholder="<%trans('pages.url')%>" name="url" ng-model="page.url" required ng-pattern="/^[\w'\/']+$/" ng-trim="true"/>
                                                     </div>
                                                 </div>
                                             </div>

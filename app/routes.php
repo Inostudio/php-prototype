@@ -94,6 +94,6 @@ Route::group(['prefix' => '{lang}', 'before' => 'localization'], function() {
         ]);
 
         //Route for static pages
-        Route::get('/{namePage}', 'PagesController@showPage');
+        Route::get('{namePage}', ['as' => 'front.static','uses' => 'PagesController@showPage'])->where(['namePage' => '[-a-z0-9/]+']);
    });   
 });
