@@ -22,7 +22,7 @@
         ////////////
 
         function signIn(data, success, error) {
-            $http({
+            return $http({
                 url: '',
                 method: 'POST',
                 data: JSON.stringify({
@@ -37,7 +37,7 @@
         }
 
         function signUp(data, success, error) {
-            $http({
+            return $http({
                 url: '',
                 method: 'POST',
                 data: JSON.stringify({

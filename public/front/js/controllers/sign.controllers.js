@@ -19,6 +19,14 @@
         vm.closeAlert = closeAlert;
         vm.submitForm = submitForm;
 
+
+        vm.delay = 0;
+        vm.minDuration = 0;
+        vm.message = 'Please Wait...';
+        vm.backdrop = true;
+        vm.promise = null;
+        //vm.templateUrl = '';
+
         ////////////
 
         function closeAlert() {
@@ -40,7 +48,7 @@
                     vm.alert = { msg: 'Some problems.', type: 'danger'};
                 };
 
-                Sign.signIn(vm.user, success, error);
+                vm.myPromise = Sign.signIn(vm.user, success, error);
             }
         }
 
@@ -61,6 +69,9 @@
         vm.closeAlert = closeAlert;
         vm.submitForm = submitForm;
         vm.confirm = confirm;
+
+
+
 
         ////////////
 

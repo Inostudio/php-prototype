@@ -6,7 +6,8 @@
 
     angular
         .module('signApp', [
-            'ui.bootstrap'
+            'ui.bootstrap',
+            'cgBusy'
         ]);
 })();
 
