@@ -19,7 +19,6 @@
         vm.closeAlert = closeAlert;
         vm.submitForm = submitForm;
 
-
         vm.delay = 0;
         vm.minDuration = 0;
         vm.message = 'Please Wait...';
@@ -48,7 +47,7 @@
                     vm.alert = { msg: 'Some problems.', type: 'danger'};
                 };
 
-                vm.myPromise = Sign.signIn(vm.user, success, error);
+                vm.promise = Sign.signIn(vm.user, success, error);
             }
         }
 
@@ -70,8 +69,12 @@
         vm.submitForm = submitForm;
         vm.confirm = confirm;
 
-
-
+        vm.delay = 0;
+        vm.minDuration = 0;
+        vm.message = 'Please Wait...';
+        vm.backdrop = true;
+        vm.promise = null;
+        //vm.templateUrl = '';
 
         ////////////
 
@@ -96,7 +99,7 @@
                     vm.alert = { msg: 'Some problems.', type: 'danger'};
                 };
 
-                Sign.signUp(vm.user, success, error);
+                vm.promise = Sign.signUp(vm.user, success, error);
             }
         }
 

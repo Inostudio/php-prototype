@@ -61,6 +61,7 @@ class AuthController extends \Controller
                 false,
                 'Invalid form data'
             ];
+            return Response::json($response); 
         }
 
         $loginInfo = ['email' => Input::get('email'), 'password' => Input::get('password')];
@@ -101,6 +102,7 @@ class AuthController extends \Controller
                 false,
                 'Invalid form data'
             ];
+            return Response::json($response); 
         }
         
         

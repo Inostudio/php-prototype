@@ -1,7 +1,13 @@
 @extends('front.layout')
 
 @section('include')
+    <link href="/front/vendors/angular-busy/angular-busy.min.css" rel="stylesheet">
+
     <script type="text/javascript" src="/front/js/signApp.module.js"></script>
+
+    <script type="text/javascript" src="/front/vendors/angular-animate/angular-animate.min.js"></script>
+    <script type="text/javascript" src="/front/vendors/angular-busy/angular-busy.min.js"></script>
+
     <script type="text/javascript" src="/front/js/controllers/sign.controllers.js"></script>
     <script type="text/javascript" src="/front/js/services/sign.services.js"></script>
 @stop
@@ -16,87 +22,77 @@
             </div>  
             <div class="panel-body" data-ng-controller="SignUpCtrl as vm">
                 
-                <form name="signForm" class="form-vertical" novalidate data-ng-submit="vm.submitForm(signForm.$valid)">
-                    <div>
-                        <alert data-ng-show="(vm.alert !== undefined)" type="{{vm.alert.type}}" close="vm.closeAlert()">
-                            {{vm.alert.msg}}
-                        </alert>
-                    </div>
-                    
-                    <div class="form-group">
-                        <div class="input-group" data-ng-class="{ 'has-error' : (signForm.email.$invalid) && vm.submitted }">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input type="email" name="email" class="form-control" placeholder="Email" 
-                            data-ng-model="vm.user.email" data-ng-change="vm.closeAlert()" required>
+                <div cg-busy="{promise:vm.promise,message:vm.message,backdrop:vm.backdrop,
+                    delay:vm.delay,minDuration:vm.minDuration}">
+                    <form name="signForm" class="form-vertical" novalidate data-ng-submit="vm.submitForm(signForm.$valid)">
+                        <div>
+                            <alert data-ng-show="(vm.alert !== undefined)" type="{{vm.alert.type}}" close="vm.closeAlert()">
+                                {{vm.alert.msg}}
+                            </alert>
                         </div>
-
-                        <span class="help-block" data-ng-show="(signForm.email.$error.required && vm.submitted)">
-                            Email must be not empty
-                        </span>
-
-                        <span class="help-block" 
-                            data-ng-show="(signForm.email.$invalid && !signForm.email.$error.required && vm.submitted)">
-                            Email invalid
-                        </span>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="input-group" data-ng-class="{ 'has-error' : (signForm.password.$invalid) && vm.submitted }">
                         
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                            <input type="password" name="password" class="form-control" placeholder="Password" data-ng-model="vm.user.password"
-                                minlength="4" maxlength="32" data-ng-change="vm.closeAlert()" required>
+                        <div class="form-group">
+                            <div class="input-group" data-ng-class="{ 'has-error' : (signForm.email.$invalid) && vm.submitted }">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input type="email" name="email" class="form-control" placeholder="Email" 
+                                data-ng-model="vm.user.email" data-ng-change="vm.closeAlert()" required>
+                            </div>
+
+                            <span class="help-block" data-ng-show="(signForm.email.$error.required && vm.submitted)">
+                                Email must be not empty
+                            </span>
+
+                            <span class="help-block" 
+                                data-ng-show="(signForm.email.$invalid && !signForm.email.$error.required && vm.submitted)">
+                                Email invalid
+                            </span>
                         </div>
 
-                        <span class="help-block"
-                            data-ng-show="(signForm.password.$error.required) && vm.submitted">
-                            Password must be not empty
-                        </span>
+                        <div class="form-group">
+                            <div class="input-group" data-ng-class="{ 'has-error' : (signForm.password.$invalid) && vm.submitted }">
+                            
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input type="password" name="password" class="form-control" placeholder="Password" data-ng-model="vm.user.password"
+                                    minlength="4" maxlength="32" data-ng-change="vm.closeAlert()" required>
+                            </div>
 
-                        <span class="help-block" data-ng-show="(signForm.password.$error.minlength) && vm.submitted">
-                            Password is too short.
-                        </span>
+                            <span class="help-block"
+                                data-ng-show="(signForm.password.$error.required) && vm.submitted">
+                                Password must be not empty
+                            </span>
 
-                        <span class="help-block" data-ng-show="(signForm.password.$error.maxlength) && vm.submitted">
-                            Password is too long.
-                        </span>
-                    </div>
-                
-                    <div class="form-group">
-                        <div class="input-group" data-ng-class="{ 'has-error' : !vm.confirm() && vm.submitted }">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                            <input type="password" name="password_confirm" class="form-control" placeholder="Confirm password" data-ng-model="vm.user.password_confirm" data-ng-change="vm.closeAlert()">
+                            <span class="help-block" data-ng-show="(signForm.password.$error.minlength) && vm.submitted">
+                                Password is too short.
+                            </span>
+
+                            <span class="help-block" data-ng-show="(signForm.password.$error.maxlength) && vm.submitted">
+                                Password is too long.
+                            </span>
+                        </div>
+                    
+                        <div class="form-group">
+                            <div class="input-group" data-ng-class="{ 'has-error' : !vm.confirm() && vm.submitted }">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input type="password" name="password_confirm" class="form-control" placeholder="Confirm password" data-ng-model="vm.user.password_confirm" data-ng-change="vm.closeAlert()">
+                            </div>
+
+                            <span class="help-block" data-ng-show="vm.submitted && !vm.confirm()">
+                                Password and password confirm don't match.
+                            </span>
                         </div>
 
-                        <span class="help-block" data-ng-show="vm.submitted && !vm.confirm()">
-                            Password and password confirm don't match.
-                        </span>
-                    </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-4 col-md-8">
 
-                    <?php if(0){ ?>
-                    <div class="form-group">
-                        <label for="icode" class="col-md-4 control-label">Invitation Code</label>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control" name="icode" placeholder="">
+                                <button id="btn-signup" type="submit" class="btn btn-info" 
+                                    data-ng-disabled="signForm.$invalid && vm.submitted ||
+                                    !vm.confirm() && vm.submitted"><i class="fa fa-sign-in"></i> &nbsp Sign Up
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <?php  } ?>
-
-                    <div class="form-group">                        
-                        <div class="col-md-offset-4 col-md-8">
-
-                            <button id="btn-signup" type="submit" class="btn btn-info" 
-                                data-ng-disabled="signForm.$invalid && vm.submitted ||
-                                !vm.confirm() && vm.submitted"><i class="fa fa-sign-in"></i> &nbsp Sign Up
-                            </button>
-
-                            <button id="btn-fbsignup" type="button" class="btn btn-primary">
-                                <i class="fa fa-facebook"></i> Sign Up with Facebook
-                            </button>
-                        </div>
-                    </div>
-                                       
-                </form>
+                            
+                    </form>
+                </div> 
             </div>
         </div>
 
