@@ -82,14 +82,14 @@ class ProfileController extends \BaseController
      */
     public function postChangeProfile()
     {
-        $response = [true, trans('front\profile\profile.message_change_success')];
+        $response = [true, trans('front/profile/profile.message_change_success')];
 
         $v = Validator::make(Input::all(), self::$changeProfileValidation);
 
         if($v->fails()){
             $response = [
                 false,
-                trans('front\profile\profile.message_data_invalid')
+                trans('front/profile/profile.message_data_invalid')
             ];
         } else {
             $this->users->changeProfile(Auth::user()->id, Input::all());
@@ -106,19 +106,19 @@ class ProfileController extends \BaseController
      */
     public function postChangePassword()
     {
-        $response = [true, trans('front\profile\profile.message_change_success')];
+        $response = [true, trans('front/profile/profile.message_change_success')];
 
         $v = Validator::make(Input::all(), self::$changePasswordValidation);
 
         if($v->fails()){
             $response = [
                 false,
-                trans('front\profile\change_password.message_data_invalid')
+                trans('front/profile/change_password.message_data_invalid')
             ];
         } else if (!\Hash::check(Input::get('old_password'), Auth::user()->password)) {
             $response = [
                 false,
-                trans('front\profile\change_password.message_old_password_wrong')
+                trans('front/profile/change_password.message_old_password_wrong')
             ];
         } else {
             $this->users->changePassword(Auth::user()->id, Input::get('new_password'));
@@ -140,7 +140,7 @@ class ProfileController extends \BaseController
                 'public/users/'. Auth::user()->id . '/',
                 'jpeg'
             ),
-            trans('front\profile\profile.message_upload_success')
+            trans('front/profile/profile.message_upload_success')
         ];
         return Response::json($response);
     }
@@ -157,7 +157,7 @@ class ProfileController extends \BaseController
                 'public/users/'. Auth::user()->id . '/',
                 'jpeg'
             ),
-            trans('front\profile\profile.message_select_thumbnail_success')
+            trans('front/profile/profile.message_select_thumbnail_success')
         ];
         return Response::json($response);
     }
