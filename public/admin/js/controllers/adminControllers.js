@@ -444,7 +444,7 @@
                 ChangePermissionsInGroup.query({groupId: vm.groupId, accept : accept, permId: id}, function(answer){
                     if(answer[0]){
                         angular.forEach(vm.gridOptions_groupOptions.data, function(permission) {    //Проверяем, существует ли право с таким именем
-                            if(permission.id === id){
+                            if(permission.id == id){
                                 if(accept){
                                     permission.accept = 0;
                                     alertSuccess = $alert({title: vm.remove_perm_from_group, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option', duration: 3});
@@ -870,7 +870,7 @@
                     //console.log(answer);
                     if(answer[0]){
                         angular.forEach(vm.gridOptions_userOptions.data, function(group) {    //Проверяем, существует ли право с таким именем
-                            if(group.id === id){
+                            if(group.id == id){
                                 if(accept){
                                     group.accept = 0;
                                     alertSuccess = $alert({title: vm.remove_user_from_group, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option_for_users', duration: 3});
@@ -977,7 +977,7 @@
                 if(res[0] === true) {
                     var index = 0;
                     for(var i = 0; i < vm.resources.length; i++) {
-                        if(vm.resources[i].id === id) {
+                        if(vm.resources[i].id == id) {
                             index = i;
                             break;
                         }
@@ -1123,7 +1123,7 @@
             DeletePage.query({id: id}, function(res) {
                 var index = 0;
                 for(var i = 0; i < arr.length; i++) {
-                    if(arr[i].id === id) {
+                    if(arr[i].id == id) {
                         index = i;
                         break;
                     }
