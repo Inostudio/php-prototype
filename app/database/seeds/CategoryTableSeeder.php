@@ -9,15 +9,17 @@ class CategoryTableSeeder extends Seeder {
 	{
         DB::table('categories')->delete();
 		$faker = Faker::create();
-
-		foreach(range(1, 10) as $index)
+                Category::create([
+                    'id' => 1,
+                    'title' => 'Other'
+                ]);
+		foreach(range(2, 10) as $index)
 		{
-			Category::create([
-                'id' => $index,
-                'title' => $faker->country,
-                'status' => Collection::make([Category::STATUS_PUBLISH, Category::STATUS_UNPUBLISH])->random(1)
-			]);
-		}
+                    Category::create([
+                        'id' => $index,
+                        'title' => $faker->streetName
+                    ]);
+		}   
 	}
 
 }

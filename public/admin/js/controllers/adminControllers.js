@@ -11,7 +11,9 @@
             .controller('UsersCtrl', UsersCtrl)     
             .controller('UserOptionsCtrl', UserOptionsCtrl)    
             .controller('ResourcesCtrl', ResourcesCtrl)
-            .controller('PagesCtrl', PagesCtrl);
+            .controller('PagesCtrl', PagesCtrl)
+            .controller('CategoriesOfArticlesCtrl', CategoriesOfArticlesCtrl)
+            .controller('ArticleCategoryCtrl', ArticleCategoryCtrl);
             
 
     AdminCtrl.$inject = ['$scope'];
@@ -19,10 +21,12 @@
     PermissionCtrl.$inject = ['$scope', '$alert', 'Permission', 'AddPermission', 'RemovePermission', 'EditPermission', '$modal', '$rootScope'];
     GroupOptionsCtrl.$inject = ['$scope', '$routeParams', 'GroupOptions', '$alert', 'ChangePermissionsInGroup'];
     UsersCtrl.$inject = ['$scope', '$alert', 'User', 'AddUser', 'RemoveUser', 'EditUser', 'SearchUsers', '$modal', '$rootScope'];
-    UserOptionsCtrl.$inject = ['$scope', '$alert', '$routeParams', 'UserOptions', 'ChangeGroupByUser'];
+    UserOptionsCtrl.$inject = ['$scope', '$alert', '$routeParams', 'UserOptions', 'ChangeGroupByUser', '$modal', '$rootScope'];
     ResourcesCtrl.$inject = ['$scope', 'AddResource', 'AllResource', 'DeleteResource', '$alert', '$modal', '$rootScope'];
     PagesCtrl.$inject = ['$scope', '$alert', '$modal', 'AddPage', 'Status', 'Pages', 'GetPage', 'DeletePage', 'SavePage', '$window', '$location', '$rootScope'];
     activCtrl.$inject = ['$scope', '$location', 'CheckLang'];
+    CategoriesOfArticlesCtrl.$inject = ['GetCategoryOfArticle', '$alert', '$scope', '$modal', '$rootScope', 'RemoveCategoryOfArticle', 'AddCategoryOfArticle', 'EditCategoryOfArticle'];
+    ArticleCategoryCtrl.$inject = ['GetArticles', '$routeParams', '$scope', '$alert', '$window', '$location', '$modal', '$rootScope', 'EditArticle', 'SearchArticles', 'RemoveArticle'];
     
     function activCtrl($scope, $location, CheckLang) {
         var vm = this;
@@ -31,7 +35,8 @@
         
         function isActive(path){  
               return ((path === $location.path()) || (($location.path().indexOf('/groups/') === 0) && (path === '/groupsPermis'))
-                      || (($location.path().indexOf('/users/') === 0) && (path === '/userGroups')));  
+                      || (($location.path().indexOf('/users/') === 0) && (path === '/userGroups'))
+                      || (($location.path().indexOf('/categories_of_articles/') === 0) && (path === '/articleCategory')));  
         };
 
         function checkLang(lang){
@@ -81,14 +86,14 @@
         });
         //Grid
         vm.gridOptions = { enableFiltering: true };
-          vm.gridOptions.columnDefs = [
-              { name: 'id', enableCellEdit: false, width: '5%', enableFiltering: false },
-              { name: 'title', displayName: 'Title', width: '20%' },
-              { name: 'description', displayName: 'Description' , width: '30%', enableFiltering: false },
-              { name: 'permissions', displayName: 'Permissions' , width: '15%', enableFiltering: false,  enableSorting: false, enableCellEdit: false,//permissioms
-                cellTemplate: '<spanedit edit-action="EventForRedirectToGroupOptions" edit-id="{{row.entity.id}}"/>'},
-              { name: 'remove', displayName: 'Remove' , width: '10%', enableCellEdit: false, enableFiltering: false, enableSorting: false, height: '15px',
-                cellTemplate: '<spanremove remove-action="EventForDropGroup" remove-id="{{row.entity.id}}"/>' }
+        vm.gridOptions.columnDefs = [
+            { name: 'id', enableCellEdit: false, width: '5%', enableFiltering: false },
+            { name: 'title', displayName: 'Title', width: '20%' },
+            { name: 'description', displayName: 'Description' , width: '30%', enableFiltering: false },
+            { name: 'permissions', displayName: 'Permissions' , width: '15%', enableFiltering: false,  enableSorting: false, enableCellEdit: false,//permissioms
+              cellTemplate: '<spanedit edit-action="EventForRedirectToGroupOptions" edit-id="{{row.entity.id}}"/>'},
+            { name: 'remove', displayName: 'Remove' , width: '10%', enableCellEdit: false, enableFiltering: false, enableSorting: false, height: '15px',
+              cellTemplate: '<spanremove remove-action="EventForDropGroup" remove-id="{{row.entity.id}}"/>' }
         ];
 
         vm.gridOptions.onRegisterApi = function(gridApi){
@@ -592,7 +597,7 @@
                     } else {
                         alertSuccess = $alert({title: vm.add_user_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
                         if((vm.currentPage === vm.totalPage) &&(vm.currentPage * limit > vm.countUsers)){
-                            console.log(vm.countUsers);
+                            //console.log(vm.countUsers);
                             var newUser = {
                                 id: answer[2],
                                 email: vm.email
@@ -600,7 +605,7 @@
                             vm.users_grid.data.push(newUser);
 
                             vm.countUsers++;
-                            console.log(vm.countUsers);
+                            //console.log(vm.countUsers);
                             vm.totalPage = Math.ceil(vm.countUsers / limit);
                         } else {
                             vm.countUsers++;
@@ -803,9 +808,10 @@
             });
     };
 
-    function UserOptionsCtrl($scope, $alert, $routeParams, UserOptions, ChangeGroupByUser) {
+    function UserOptionsCtrl($scope, $alert, $routeParams, UserOptions, ChangeGroupByUser, $modal, $rootScope) {
             var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container_option_for_users'});
             var vm = this;
+            var deleteSelfFromAdmin = false;
             vm.userEmail = '';
             vm.lastName = '';
             vm.firstName = '';
@@ -813,6 +819,13 @@
             vm.gridOptions_userOptions = '';
             vm.remove_user_from_group = '';
             vm.add_user_to_group = '';
+            vm.currentAdminId = 0;
+            vm.modal = $modal({
+                show: false,
+                contentTemplate: 'ConfirmDelete.html'
+            });
+            vm.selfAccept = 0;
+            vm.grSelfId = 0;
 
             vm.gridOptions_userOptions = { enableFiltering: true };
             vm.gridOptions_userOptions.columnDefs = [
@@ -847,6 +860,12 @@
             //Включение/исключение пользователя из группы+++
             $scope.$on('EventChangeUser', function (event, id, accept) {
                 alertSuccess.hide();
+                if((id == 1) && (vm.currentAdminId == $routeParams.userId) && (!deleteSelfFromAdmin)){
+                   vm.modal.show(); 
+                   vm.selfAccept = accept;
+                   vm.grSelfId = id;
+                   return;
+                };
                 ChangeGroupByUser.query({userId: vm.userId, accept : accept, groupId: id}, function(answer){
                     //console.log(answer);
                     if(answer[0]){
@@ -864,6 +883,17 @@
                         });
                     }
                 });
+                if(deleteSelfFromAdmin){
+                    window.location.href = '/';
+                }
+            });
+            $rootScope.$on('cancelDeleteGroup', function(){
+                vm.modal.hide();
+            });
+            $rootScope.$on('okDeleteGroup', function(){
+                vm.modal.hide();
+                deleteSelfFromAdmin = true;
+                $scope.$emit('EventChangeUser', vm.grSelfId, vm.selfAccept); 
             });
     };
 
@@ -1133,4 +1163,423 @@
             });
         };
      };
+     
+    function CategoriesOfArticlesCtrl(GetCategoryOfArticle, $alert, $scope, $modal, $rootScope, RemoveCategoryOfArticle, AddCategoryOfArticle, EditCategoryOfArticle){
+        var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
+        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
+        var vm = this;  
+        vm.gridOptionsOfCategories = {};
+        vm.categoryTitle = '';
+        vm.removeCategoryId = 0;
+        vm.addCategory = addCategory;
+        vm.remove_category_message = '';
+        vm.add_category_message = '';
+        vm.field_name_required = '';
+        vm.update_category_message = '';
+         
+        vm.gridOptions_categoriesOptions = { enableFiltering: true, enableSorting: true, enableCellEdit: true};
+        vm.gridOptions_categoriesOptions.columnDefs = [
+            { name: 'id', displayName: 'Id', width: '10%', enableCellEdit: false,  enableSorting: false, enableFiltering: false },
+            { name: 'title', displayName: 'Title', width: '50%', enableCellEdit: true,  enableSorting: true, enableFiltering: true},
+            { name: 'articles', displayName: 'Articles' , width: '20%', enableCellEdit: false,  enableSorting: false, enableFiltering: false,
+                    cellTemplate: '<spanedit edit-action="EventForRedirectToArticleOfCategory"  edit-id="{{row.entity.id}}"/>'},
+            { name: 'remove', displayName: 'Remove' , width: '20%', enableCellEdit: false,  enableSorting: false, enableFiltering: false,
+                cellTemplate: '<spanremove remove-action="EventForDropCategory" remove-id="{{row.entity.id}}" ng-hide="{{row.entity.id == 1}}"/>'}
+        ];
+        
+        GetCategoryOfArticle.query({}, function(answer){
+            var arr = [];
+            angular.forEach(answer[0], function(category) {
+                arr.push(category);
+            });
+            vm.gridOptions_categoriesOptions.data = arr;
+        });
+        
+        vm.modal = $modal({
+            show: false,
+            contentTemplate: 'ConfirmDelete.html'
+        });
+        
+        //Удаление 
+        $scope.$on('EventForDropCategory', function (event, id) {
+            alertError.hide();
+            alertSuccess.hide();
+            vm.removeCategoryId = Number(id);
+            vm.modal.show();
+        });
+        
+        $rootScope.$on('cancelDeleteCategory', function(){
+            vm.modal.hide();
+        });
+
+        $rootScope.$on('okDeleteCategory', function(){
+           alertSuccess.hide();
+           removeCategory(vm.removeCategoryId);
+        });
+        
+        function removeCategory(removeId){
+            RemoveCategoryOfArticle.query({categoryId: removeId}, function(answer){
+                vm.modal.hide();
+                alertSuccess = $alert({title: vm.remove_category_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                var i = 0;
+                angular.forEach(vm.gridOptions_categoriesOptions.data, function(category) {
+                    if(category.id == removeId){
+                        vm.gridOptions_categoriesOptions.data.splice(i, 1);
+                    }
+                  i++;
+                });
+            });
+        }
+        
+        function addCategory(){
+            alertError.hide();
+            alertSuccess.hide();
+            AddCategoryOfArticle.query({title: vm.categoryTitle}, function(answer){
+                if(!answer[0]){
+                    alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                } else {      
+                    alertSuccess = $alert({title: vm.add_category_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                    var newCategory = {
+                        id: answer[3],
+                        title: vm.categoryTitle
+                    };
+                    vm.gridOptions_categoriesOptions.data.push(newCategory); 
+                    vm.categoryTitle = '';
+                }
+                
+            });
+        }
+        
+        //Редактирование
+        vm.gridOptions_categoriesOptions.onRegisterApi = function(gridApi){
+
+            gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue){
+                alertError.hide();
+                alertSuccess.hide();
+                if(newValue.trim() !== oldValue.trim()){
+                    if(newValue.trim() === ''){
+                        alertError = $alert({title: vm.field_name_required, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                        angular.forEach(vm.gridOptions_categoriesOptions.data, function(category) {
+                            if (category.id === rowEntity.id) 
+                                category.title = oldValue;
+                        });
+                    } else{
+                        EditCategoryOfArticle.query({title: newValue, id: rowEntity.id}, function(answer){
+                            if(!answer[0]){
+                                alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                                angular.forEach(vm.gridOptions_categoriesOptions.data, function(category) {
+                                    if (category.id === rowEntity.id) 
+                                        category.title = oldValue;
+                                });
+                            } else{
+                                alertSuccess = $alert({title: vm.update_category_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                            }
+                        });
+                    }
+                }
+            });                      
+        };
+        
+        $scope.$on('EventForRedirectToArticleOfCategory', function (event, id) {
+            alertError.hide();
+            alertSuccess.hide();
+            window.location = '#/categories_of_articles/' + id;
+        });
+     }
+     
+    function ArticleCategoryCtrl(GetArticles, $routeParams, $scope, $alert, $window, $location, $modal, $rootScope, EditArticle, SearchArticles, RemoveArticle){
+        var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
+        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
+        var vm = this;
+        vm.limit = 9;
+        vm.offset = 0;
+        var direction = 'asc';
+        var field = 'id';
+        vm.categoryTitle = '';
+        vm.unavailablePrev = true;
+        vm.unavailableNext = true;
+        vm.searchPhrase = '';
+        vm.removeArticleId = 0;
+        vm.countArticles = 0;
+        vm.currentPage = 1;
+        vm.totalPage = 0;
+        vm.nextPage = nextPage;
+        vm.prevPage = prevPage;
+        /*action - навигация по страницам при поиске, сортировке, при обычной навигации
+         * 0 - обычная навигация или с сортировкой
+         * 1 - поиск и поиск с сортировкой
+         */
+        vm.action = 0;
+        vm.search = search;
+        vm.src = '';
+        vm.searchPhrase2 = '';
+        vm.src2 = '';
+        vm.reset = reset;
+        vm.article_removed_message = '';
+        vm.article_change_message = '';
+        vm.required_field = '';
+        
+        vm.modal = $modal({
+            show: false,
+            contentTemplate: 'ConfirmDelete.html'
+        });
+        
+        vm.gridOptions_articleOfCategoryOptions = { enableSorting: true, enableCellEdit: true};
+        vm.gridOptions_articleOfCategoryOptions.columnDefs = [
+            { name: 'id', displayName: 'Id', width: '5%', enableCellEdit: false,  enableSorting: true},
+            { name: 'category', displayName: 'Category', width: '15%', enableCellEdit: true,  enableSorting: false, visible: ($routeParams.categoryId === undefined) },
+            { name: 'title', displayName: 'Title', width: '20%', enableCellEdit: true,  enableSorting: true},
+            { name: 'link', displayName: 'Link', width: '5%', enableCellEdit: true,  enableSorting: false,
+                cellTemplate: '<spanedit edit-action="EventForRedirectToShowArticle"  edit-id="{{row.entity.id}}"/>'},
+            { name: 'user_email', displayName: 'Email of the author', width: '20%', enableCellEdit: false,  enableSorting: false},
+            { name: 'remove', displayName: 'Remove' , width: '5%', enableCellEdit: false,  enableSorting: false,
+                cellTemplate: '<spanremove remove-action="EventForDropArticle" remove-id="{{row.entity.id}}"/>'}
+        ];
+        getArticles(vm.limit, vm.offset);
+        
+        $scope.$on('EventForRedirectToShowArticle', function (event, id) {
+            alertError.hide();
+            alertSuccess.hide();
+            $window.open('http://' + $location.host() + ':' + $location.port() + '/' + lang + '/articles#/' + id);
+        });
+        
+        //Удаление 
+        $scope.$on('EventForDropArticle', function (event, id) {
+            alertError.hide();
+            alertSuccess.hide();
+            vm.removeArticleId = Number(id);
+            vm.modal.show();
+        });
+        
+        $rootScope.$on('cancelDeleteArticle', function(){
+            vm.modal.hide();
+        });
+
+        $rootScope.$on('okDeleteArticle', function(){
+           alertSuccess.hide();
+           vm.modal.hide();
+           removeArticle(vm.removeArticleId);
+        });
+        
+        function removeArticle(removeId){
+            alertSuccess = $alert({title: vm.article_removed_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+            RemoveArticle.query({id: removeId}, function(answer){
+                var i = 0;
+                angular.forEach(vm.gridOptions_articleOfCategoryOptions.data, function(article) {
+                    if(article.id == removeId){
+                        vm.gridOptions_articleOfCategoryOptions.data.splice(i, 1);
+                    }
+                  i++;
+                });
+                if(!vm.action){     //Обыная навигация и сортировка
+                    GetArticles.query({categoryId: $routeParams.categoryId, lim: 1, off: (vm.offset + 8), dir: direction, fiel: field}, function(answer){
+                    if(answer[2] != undefined){
+                        vm.categoryTitle = answer[2].title;
+                    }
+                    vm.countArticles = answer[1];
+                    var arr = [];
+                    angular.forEach(answer[0], function(article) {
+                        var art = {};
+                        if($routeParams.categoryId === undefined){
+                            article.category = article.category.title;
+                            article.user_email = article.user.email;
+                        } else {
+                            article.user_email = article.user.email;
+                        }
+                        arr.push(article);
+                    });
+                vm.gridOptions_articleOfCategoryOptions.data = vm.gridOptions_articleOfCategoryOptions.data.concat(arr);
+                checkNavBtnAndCheckCountPage();
+            });
+                } else if (vm.action === 1){    //Поиск
+                    SearchArticles.query({categoryId: $routeParams.categoryId, lim: 1, off: (vm.offset + 8), dir: direction, fiel: field, phrase: vm.searchPhrase2, src: vm.src2}, function(answer){
+                        vm.countArticles = answer[1];
+                        var arr = [];
+                        angular.forEach(answer[0], function(article) {
+                            var art = {};
+                            if($routeParams.categoryId === undefined){
+                                article.category = article.category.title;
+                                article.user_email = article.user.email;
+                            } else {
+                                article.user_email = article.user.email;
+                            }
+                            arr.push(article);
+                        });
+                        vm.gridOptions_articleOfCategoryOptions.data = vm.gridOptions_articleOfCategoryOptions.data.concat(arr);
+                        checkNavBtnAndCheckCountPage();
+                    });
+                }
+            });
+        }
+        
+        function checkNavBtnAndCheckCountPage(){
+            //Проверка кнопки "назад"
+            if(vm.currentPage === 1){
+                vm.unavailablePrev = true;
+            } else {
+                vm.unavailablePrev = false;
+            }
+            //Проверка кнопки "вперед"
+            if((vm.offset + vm.limit) >= vm.countArticles){
+                vm.unavailableNext = true;
+            } else {
+                vm.unavailableNext = false;
+            }
+            //Подсчет количества страниц
+            vm.totalPage = Math.ceil(vm.countArticles / vm.limit);
+            //vm.currentPage = Math.ceil(vm.offset / vm.limit) + 1;
+        }
+        
+        function getArticles($lim, $off){
+            GetArticles.query({categoryId: $routeParams.categoryId, lim: $lim, off: $off, dir: direction, fiel: field}, function(answer){
+                if(answer[2] != undefined){
+                    vm.categoryTitle = answer[2].title;
+                }
+                vm.countArticles = answer[1];
+                var arr = [];
+                angular.forEach(answer[0], function(article) {
+                    var art = {};
+                    if($routeParams.categoryId === undefined){
+                        article.category = article.category.title;
+                        article.user_email = article.user.email;
+                    } else {
+                        article.user_email = article.user.email;
+                    }
+                    arr.push(article);
+                });
+                vm.gridOptions_articleOfCategoryOptions.data = arr;
+                checkNavBtnAndCheckCountPage();
+            });
+        }
+        
+        //Редактирование и сортировка
+        vm.gridOptions_articleOfCategoryOptions.onRegisterApi = function(gridApi){
+
+            //Редактирование
+            gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue){
+                alertError.hide();
+                alertSuccess.hide();
+                if(newValue.trim() !== oldValue.trim()){
+                    if(newValue.trim() === '') {
+                        alertError = $alert({title: vm.required_field, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                        angular.forEach(vm.gridOptions_articleOfCategoryOptions.data, function(article) {
+                            if (article.id === rowEntity.id){
+                                if(colDef.name === 'category'){
+                                    article.category = oldValue;
+                                } else {
+                                    article.title = oldValue;
+                                }
+                            } 
+                        });
+                    } else {
+                        EditArticle.query({id: rowEntity.id, title: newValue, field:  colDef.name}, function(answer){
+                            console.log();
+                            if(!answer[0]){
+                                alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                                angular.forEach(vm.gridOptions_articleOfCategoryOptions.data, function(article) {
+                                if (article.id === rowEntity.id){
+                                        if(colDef.name === 'category'){
+                                            article.category = oldValue;
+                                        } else {
+                                            article.title = oldValue;
+                                        }
+                                    } 
+                                });
+                            } else {
+                                alertSuccess = $alert({title: vm.article_change_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                            }
+                            
+                        });
+                    }
+                }
+            });   
+            
+            //Сортировка
+            gridApi.core.on.sortChanged($scope, function(arg1, arg2) {
+                vm.currentPage = 1;
+                //Сортировка с поиском
+                if(!vm.action){     //Обычная сортировка
+                    if(arg2[0] !== undefined){
+                        vm.offset = 0;
+                        direction = arg2[0].sort.direction;
+                        field = arg2[0].name;
+                        getArticles(vm.limit, vm.offset);
+                    }
+                } else if(vm.action === 1){
+                    console.log('Search with sorting');
+                    if(arg2[0] !== undefined){
+                        vm.offset = 0;
+                        direction = arg2[0].sort.direction;
+                        field = arg2[0].name;
+                        searchArticles(vm.limit, vm.offset);
+                    }
+                }
+            });
+        };
+        
+        
+        function nextPage(){
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            vm.offset += vm.limit;
+            if(!vm.action){     //Обыная навигация и сортировка
+                getArticles(vm.limit, vm.offset);
+            } else if (vm.action === 1){    //Поиск
+                searchArticles(vm.limit, vm.offset);
+            }
+            vm.currentPage++;
+        }
+        
+        function prevPage(){
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            vm.offset -= vm.limit;
+            if(!vm.action){     //Обыная навигация и сортировка
+                getArticles(vm.limit, vm.offset);
+            } else if (vm.action === 1) {   //Поиск
+                searchArticles(vm.limit, vm.offset);
+            }
+            vm.currentPage--;
+        }
+        
+        function search(){
+            vm.currentPage = 1;
+            direction = 'asc';
+            field = 'id';
+            vm.offset = 0;
+            vm.searchPhrase2 = vm.searchPhrase;
+            vm.src2 = vm.src;
+            vm.action = 1;
+            searchArticles(vm.limit, vm.offset);
+        }
+        
+        function searchArticles($lim, $off){
+            SearchArticles.query({categoryId: $routeParams.categoryId, lim: $lim, off: $off, dir: direction, fiel: field, phrase: vm.searchPhrase2, src: vm.src2}, function(answer){
+                vm.countArticles = answer[1];
+                var arr = [];
+                angular.forEach(answer[0], function(article) {
+                    var art = {};
+                    if($routeParams.categoryId === undefined){
+                        article.category = article.category.title;
+                        article.user_email = article.user.email;
+                    } else {
+                        article.user_email = article.user.email;
+                    }
+                    arr.push(article);
+                });
+                vm.gridOptions_articleOfCategoryOptions.data = arr;
+                checkNavBtnAndCheckCountPage();
+            });
+        }
+        
+        function reset(){
+            vm.currentPage = 1;
+            vm.offset = 0;
+            direction = 'asc';
+            field = 'id';
+            vm.searchPhrase = '';
+            vm.action = 0;
+            getArticles(vm.limit, vm.offset);
+        }
+    }
  })();

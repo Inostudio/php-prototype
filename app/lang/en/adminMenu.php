@@ -5,8 +5,8 @@ return array(
     'groups' => 'Groups',
     'permissions' => 'Permissions',
     'pages' => 'Pages',
-    'products' => 'Products',
-    'settings' => 'Settings',
+    'categories_of_articles' => 'Categories of articles',
+    'articles' => 'Articles',
     'resources' => 'Resources',
     'logout' => 'Logout',
     'search' => 'Search...'

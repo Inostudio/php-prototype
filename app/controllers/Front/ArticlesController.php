@@ -27,104 +27,79 @@ class ArticlesController extends \BaseController
     }
     
 
+    protected $rulesAddArticle = [
+        'title' => 'required',
+        'body' => 'required',
+        'category' => 'required|min:0'
+    ];
     /**
      * Display a listing of the resource.
      * GET /articles
      *
      * @return Response
      */
-    public function index()
+    public function getIndex()
     {
-                
-//        \Debugbar::error("Test");
+        return View::make('front.pages.articles');
+    }
+    
+    public function getArticlesAndCategories(){
         
-        return View::make('front.articles.index', [
-                    'faker' => \Faker\Factory::create(),
-            
-                    'articles' => $this->articles->showPublishedList(
-                                            Input::get('phrase'), 
-                                            Input::get('category_id'), 
-                                            Input::get('order')),
-            
-                    'categories' => $this->articles->getPublishedCategories(),
-            
-                    'orderOptions' => Article::getOrderOptions()                    
-        ]);
+        $userId = 0;
+        if(Auth::check()){
+            $userId = Auth::user()->id;
+        } 
+        //Получение новостей
+        return \Response::json([\Category::all(), $this->articles->getArticles(\Input::get('lim')), \Article::count(), $userId, $this->articles->getNewArticles()]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     * GET /articles/create
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
+    
+    public function getMoreArticles(){
+        return \Response::json([$this->articles->getMoreArticles(\Input::get('lim'), \Input::get('off')), \Article::count()]);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     * POST /articles
-     *
-     * @return Response
-     */
-    public function store()
-    {
-        //
+    
+    public function getSearchResults(){
+        return \Response::json($this->articles->searchResults(\Input::get('lim'), \Input::get('off'), \Input::get('cat'), \Input::get('phr')));
     }
-
-    /**
-     * Display the specified resource.
-     * GET /articles/{id}
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($id)
-    {
+    
+    public function getShowArticle(){
+        return \Response::json($this->articles->getArticle(\Input::all('articleId')));
+    }
+    
+    public function postRemoveArticle(){
         
-        $article = $this->articles->getPublishedArticle($id);
+        return \Response::json([$this->articles->removeArticle(\Input::get('removeId'))]);
+    }
+    
+    public function getCategory(){
+        return \Response::json([\Category::all()]);
+    }
+    
+    public function postCreateArticle(){
+        $result = true;
+        $message = '';
+        $id = 0;
+        $validator = \Validator::make(\Input::all(), $this->rulesAddArticle);
         
-        return View::make('front.articles.show', [
-            'article' => $article
-        ]);
+        if($validator->fails()) {
+            $result = false;
+            $message = $validator->messages()->first();
+        } else {
+                $id = $this->articles->createArticle(\Input::get("title"), \Input::get("body"), \Input::get("category"));
+        }
+        return \Response::json([$result, $message, $id]);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     * GET /articles/{id}/edit
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
+    
+    public function postEditArticle(){
+        $result = true;
+        $message = '';
+        $validator = \Validator::make(\Input::all(), $this->rulesAddArticle);
+        if($validator->fails()) {
+            $result = false;
+            $message = $validator->messages()->first();
+        } else {
+                $this->articles->editArticle(\Input::get("title"), \Input::get("body"), \Input::get("category"), \Input::get("id"));
+        }
+        
+        return \Response::json([$result, $message]);
     }
-
-    /**
-     * Update the specified resource in storage.
-     * PUT /articles/{id}
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function update($id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * DELETE /articles/{id}
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
 }

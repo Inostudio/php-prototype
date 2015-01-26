@@ -5,8 +5,8 @@ return array(
     'groups' => 'Группы',
     'permissions' => 'Разрешения',
     'pages' => 'Страницы',
-    'products' => 'Продукты',
-    'settings' => 'Настройки',
+    'categories_of_articles' => 'Категории статей',
+    'articles' => 'Статьи',
     'resources' => 'Ресурсы',
     'logout' => 'Выйти',
     'search' => 'Поиск...'

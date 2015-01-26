@@ -30,7 +30,15 @@
         .factory('AddResource', AddResource)
         .factory('AllResource', AllResource)
         .factory('DeleteResource', DeleteResource)
-        .factory('CheckLang', CheckLang);
+        .factory('CheckLang', CheckLang)
+        .factory('GetCategoryOfArticle', GetCategoryOfArticle)
+        .factory('RemoveCategoryOfArticle', RemoveCategoryOfArticle)
+        .factory('AddCategoryOfArticle', AddCategoryOfArticle)
+        .factory('EditCategoryOfArticle', EditCategoryOfArticle)
+        .factory('GetArticles', GetArticles)
+        .factory('EditArticle', EditArticle)
+        .factory('SearchArticles', SearchArticles)
+        .factory('RemoveArticle', RemoveArticle);
     
     Group.$inject = ['$resource'];
     AddGroup.$inject = ['$resource'];
@@ -59,7 +67,14 @@
     AllResource.$inject = ['$resource'];
     DeleteResource.$inject = ['$resource'];
     CheckLang.$inject = ['$resource'];
-
+    GetCategoryOfArticle.$inject = ['$resource'];
+    RemoveCategoryOfArticle.$inject = ['$resource'];
+    AddCategoryOfArticle.$inject = ['$resource'];
+    EditCategoryOfArticle.$inject = ['$resource'];
+    GetArticles.$inject = ['$resource'];
+    EditArticle.$inject = ['$resource'];
+    SearchArticles.$inject = ['$resource'];
+    RemoveArticle.$inject = ['$resource'];
     
     function Group($resource){
         return $resource('/' + lang +  '/adm/group/show', {}, {
@@ -240,6 +255,54 @@
     function CheckLang($resource, $language){
         return $resource('/' + lang +  '/checklang', {}, {
             query: {method:'POST', params:{language: $language}, isArray:false}
+        });
+    };
+    
+    function GetCategoryOfArticle($resource){
+        return $resource('/' + lang +  '/adm/article/category', {}, {
+            query: {method:'GET', params:{}, isArray:true}
+        });
+    };
+    
+    function RemoveCategoryOfArticle($resource, $categoryId){
+        return $resource('/' + lang +  '/adm/article/remove-category', {categoryId: $categoryId}, {
+            query: {method:'POST', params:{}, isArray:true}
+        });
+    };
+    
+    function AddCategoryOfArticle($resource, $title){
+        return $resource('/' + lang +  '/adm/article/add-category', {title: $title}, {
+            query: {method:'POST', params:{}, isArray:true}
+        });
+    };
+    
+    function EditCategoryOfArticle($resource, $title, $id){
+        return $resource('/' + lang +  '/adm/article/edit-category', {title: $title, id: $id}, {
+            query: {method:'POST', params:{}, isArray:true}
+        });
+    };
+    
+    function GetArticles($resource, $categoryId, $lim, $off, $dir, $fiel){
+        return $resource('/' + lang +  '/adm/article/articles', {categoryId: $categoryId, lim: $lim, off: $off, dir: $dir, fiel: $fiel}, {
+            query: {method:'GET', params:{}, isArray:true}
+        });
+    };
+    
+    function EditArticle($resource, $id, $title, $field){
+        return $resource('/' + lang +  '/adm/article/edit-article', {id: $id, title: $title, field: $field}, {
+            query: {method:'POST', params:{}, isArray:true}
+        });
+    };
+    
+    function SearchArticles($resource, $categoryId, $lim, $off, $dir, $fiel, $phrase, $src){
+        return $resource('/' + lang +  '/adm/article/search-articles', {categoryId: $categoryId, lim: $lim, off: $off, dir: $dir, fiel: $fiel, phrase: $phrase, src: $src}, {
+            query: {method:'GET', params:{}, isArray:true}
+        });
+    };
+    
+    function RemoveArticle($resource, $id){
+        return $resource('/' + lang +  '/adm/article/remove-article', {id: $id}, {
+            query: {method:'POST', params:{}, isArray:true}
         });
     };
 })();

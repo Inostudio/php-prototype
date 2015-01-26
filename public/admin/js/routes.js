@@ -21,14 +21,20 @@
             controller: 'PagesCtrl',
             controllerAs: 'vm'
           }).
-          when('/products', {
-            templateUrl:  '/' + lang + '/angular/?ns=admin&id=adminPartials.products',
-            controller: 'AdminCtrl',
+          when('/categories_of_articles', {
+            templateUrl:  '/' + lang + '/angular/?ns=admin&id=adminPartials.categoriesOfArticles',
+            controller: 'CategoriesOfArticlesCtrl',
             controllerAs: 'vm'
           }).
-          when('/settings', {
-            templateUrl:  '/' + lang + '/angular/?ns=admin&id=adminPartials.settings',
-            controller: 'AdminCtrl',
+          when('/allArticle', {
+            templateUrl:  '/' + lang + '/angular/?ns=admin&id=adminPartials.articleCategory',
+            controller: 'ArticleCategoryCtrl',
+            controllerAs: 'vm'
+          }).
+                  
+          when('/categories_of_articles/:categoryId', {
+            templateUrl:  '/' + lang + '/angular/?ns=admin&id=adminPartials.articleCategory',
+            controller: 'ArticleCategoryCtrl',
             controllerAs: 'vm'
           }).
           when('/groups', {
