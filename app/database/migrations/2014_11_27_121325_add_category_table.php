@@ -16,7 +16,6 @@ class AddCategoryTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('title')->unique();
-			$table->tinyInteger('status');
 
             $table->softDeletes();
 		});

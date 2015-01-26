@@ -1,1 +1,0 @@
-/var/www/laravel/app/views/articles/create.blade.php

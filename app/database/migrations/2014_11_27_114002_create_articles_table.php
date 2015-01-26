@@ -19,7 +19,6 @@ class CreateArticlesTable extends Migration {
 			$table->text('body');
 			$table->integer('user_id');
 			$table->integer('category_id');
-			$table->tinyInteger('status');
 			$table->timestamps();
 
             $table->softDeletes();

@@ -173,6 +173,7 @@ class UsersService
             $userToGroup->group_id = $groupId;
             $userToGroup->save();
         }
+        return;
     }
 
     /**

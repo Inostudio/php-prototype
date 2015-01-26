@@ -14,14 +14,13 @@ class ArticleTableSeeder extends Seeder
         
         $statuses = Collection::make([Article::STATUS_DRAFT, Article::STATUS_PUBLISH, Article::STATUS_DELETED]);
 
-        foreach (range(1, 150) as $index) {
+        foreach (range(1, 102) as $index) {
             Article::create([
                 'id' => $index,
                 'title' => $faker->text(255),
                 'body' => $faker->text(1000),
                 'user_id' => mt_rand(1, 100),
-                'category_id' => mt_rand(1, 20),
-                'status' => $statuses->random(1)                
+                'category_id' => mt_rand(1, 10)              
             ]);
         }
     }

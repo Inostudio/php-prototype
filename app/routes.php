@@ -40,6 +40,7 @@ Route::group(['prefix' => '{lang}', 'before' => 'localization'], function() {
             Route::controller('user', 'UserController');
             Route::controller('resource', 'ResourceController');
             Route::controller('page', 'StaticPageController');
+            Route::controller('article', 'ArticleController');
         });
         
         
@@ -59,6 +60,7 @@ Route::group(['prefix' => '{lang}', 'before' => 'localization'], function() {
         Route::get('/contact', ['as' => 'front.contact', 'uses' => 'PagesController@contact']);
         Route::get('/about', ['as' => 'front.about', 'uses' => 'PagesController@about']);
         Route::post('/checklang', ['uses' => 'LanguageController@postCheckLang']);
+        //
 
         Route::controller('auth', 'AuthController', [
             'getSignin' => 'front.signin',
@@ -78,21 +80,27 @@ Route::group(['prefix' => '{lang}', 'before' => 'localization'], function() {
             ]
         ]);
 
-        Route::resource('articles', 'ArticlesController', [
+        /*Route::resource('articles', 'ArticlesController', [
             'names' => [
-                'create' => 'front.articles.create',
+                //'create' => 'front.articles.create',
                 'index' => 'front.articles.index',
-                'show' => 'front.articles.show',
-                'destroy' => 'front.articles.destroy',
-                'update' => 'front.articles.update',
-                'edit' => 'front.articles.edit',
-                'store' => 'front.articles.store'
+                //'show' => 'front.articles.show',
+                //'destroy' => 'front.articles.destroy',
+                //'update' => 'front.articles.update',
+                //'edit' => 'front.articles.edit',
+                //'store' => 'front.articles.store'
             ]
-        ]);
+        ]);*/
         Route::controller('page', 'PagesController', [
             'showPage' => 'front.page'
         ]);
-
+        
+        //Articles
+        Route::controller('articles', 'ArticlesController', [
+            'getIndex' => 'front.articles'
+        ]);
+//        Route::controller('articles', 'ArticlesController');
+        
         //Route for static pages
         Route::get('{namePage}', ['as' => 'front.static','uses' => 'PagesController@showPage'])->where(['namePage' => '[-a-z0-9/]+']);
    });   

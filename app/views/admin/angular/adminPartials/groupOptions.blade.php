@@ -6,5 +6,5 @@
     <h3 class="sub-header">{{vm.groupDescription}}</h3>
     
     <h3 class="sub-header"><%trans('groups.list_of_permissions')%></h3>
-    <div ui-grid="vm.gridOptions_groupOptions" ui-grid-edit class="grid1"></div>
+    <div ui-grid="vm.gridOptions_groupOptions" ui-grid-edit></div>
 </div>

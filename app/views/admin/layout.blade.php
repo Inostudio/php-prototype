@@ -46,8 +46,6 @@
     <script src="/admin/vendors/angular/ui-grid-unstable.min.js"></script>
     <link href="/admin/vendors/ui-grid/ui-grid-unstable.min.css" rel="stylesheet">
     
-    
-    
     <script src="/admin/js/app.js" type="text/javascript"></script>
     <script src="/admin/js/controllers/adminControllers.js" type="text/javascript"></script>
     <script src="/admin/js/services/adminServices.js" type="text/javascript"></script>
@@ -79,6 +77,9 @@
             text-decoration: none;
             cursor: pointer;
         }
+        .gridCategories{
+            width: 500px;
+        }
     </style>
     
     <!-- Custom styles for this template -->
@@ -100,8 +101,8 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#"><i class="fa fa-dashboard"></i> <%trans('adminMenu.dashboard')%></a></li>
-            <li><a href="#/settings"><i class="fa fa-gear"></i> <%trans('adminMenu.settings')%></a></li>
-            <li><a href="<% action('admin.logout', ['lang' => $lang]) %>"><i class="fa fa-suitcase"></i> <%trans('adminMenu.logout')%></a></li>
+            <li><a href="#/allArticle"><i class="fa fa-file-o"></i> <%trans('adminMenu.articles')%></a></li>
+            <li><a href="<% action('admin.logout') %>"><i class="fa fa-suitcase"></i> <%trans('adminMenu.logout')%></a></li>
           </ul>
           <form class="navbar-form navbar-right">
               <input type="text" class="form-control" placeholder="<%trans('adminMenu.search')%>">
@@ -123,8 +124,8 @@
             <li ng-class="{'active' : vm.isActive('/groups') || vm.isActive('/groupsPermis')}"><a href="#/groups"><i class="fa fa-group"></i> <%trans('adminMenu.groups')%></a></li>
             <li ng-class="{'active' : vm.isActive('/permissions')}"><a href="#/permissions"><i class="fa fa-legal"></i> <%trans('adminMenu.permissions')%></a></li>
             <li ng-class="{'active' : vm.isActive('/pages')}"><a href="#/pages"><i class="fa fa-newspaper-o"></i> <%trans('adminMenu.pages')%></a></li>
-            <li ng-class="{'active' : vm.isActive('/products')}"><a href="#/products"><i class="fa fa-list"></i> <%trans('adminMenu.products')%></a></li>
-            <li ng-class="{'active' : vm.isActive('/settings')}"><a href="#/settings"><i class="fa fa-gear"></i> <%trans('adminMenu.settings')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/categories_of_articles') || vm.isActive('/articleCategory')}"><a href="#/categories_of_articles"><i class="fa fa-list"></i> <%trans('adminMenu.categories_of_articles')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/allArticle')}"><a href="#/allArticle"><i class="fa fa-file-o"></i> <%trans('adminMenu.articles')%></a></li>
             <li ng-class="{'active' : vm.isActive('/resources')}"><a href="#/resources"><i class="fa fa-gear"></i> <%trans('adminMenu.resources')%></a></li>
           </ul>
         </div>
