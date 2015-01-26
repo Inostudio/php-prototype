@@ -29,7 +29,7 @@
     <!--@codereview move into a special templatec -->
     <link rel="stylesheet" type="text/css" href="/front/css/sidebar.css">
     <link href="/vendor/loading-bar/css/loading-bar.min.css" rel="stylesheet">
- 
+
     <!-- Custom styles for this template -->
     <link href="/front/css/main.css" rel="stylesheet">
 
@@ -41,7 +41,7 @@
     @section('include')
 
     @show
-    
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -54,7 +54,7 @@
     <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="container">
-          
+
         <ul class="nav navbar-nav pull-right">
             @if (Auth::user())
                 <li <?=$routeName=='front.profile' ? 'class="active"' : ''; ?>><a href="<% action('front.profile', ['lang' => $lang]) %>"><i class="fa fa-user"></i> <% Auth::user()->email %></a></li>
@@ -64,7 +64,7 @@
                 <li <?=$routeName=='front.signup' ? 'class="active"' : ''; ?>><a href="<% action('front.signup', ['lang' => $lang]) %>"><i class="fa fa-plus-square"></i> <% trans('front/navbar.signup') %></a></li>
             @endif
         </ul>
-          
+
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
@@ -76,10 +76,10 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li <?=$routeName=='front.home' ? 'class="active"' : ''; ?> ><a href="<?=action('front.home', ['lang' => $lang]);?>"><% trans('front\navbar.home') %></a></li>
-            <li <?=$routeName=='front.about' ? 'class="active"' : ''; ?>><a href="<?=action('front.about', ['lang' => $lang]);?>"><% trans('front\navbar.about') %></a></li>
-            <li <?=$routeName=='front.contact' ? 'class="active"' : ''; ?>><a href="<?=action('front.contact', ['lang' => $lang]);?>"><% trans('front\navbar.contact') %></a></li>
-            <li <?=Str::startsWith($routeName, 'front.articles') ? 'class="active"' : ''; ?>><a href="<?=action('front.articles', ['lang' => $lang]);?>"><% trans('front\navbar.articles') %></a></li>
+            <li <?=$routeName=='front.home' ? 'class="active"' : ''; ?> ><a href="<?=action('front.home', ['lang' => $lang]);?>"><% trans('front/navbar.home') %></a></li>
+            <li <?=$routeName=='front.about' ? 'class="active"' : ''; ?>><a href="<?=action('front.about', ['lang' => $lang]);?>"><% trans('front/navbar.about') %></a></li>
+            <li <?=$routeName=='front.contact' ? 'class="active"' : ''; ?>><a href="<?=action('front.contact', ['lang' => $lang]);?>"><% trans('front/navbar.contact') %></a></li>
+            <li <?=Str::startsWith($routeName, 'front.articles') ? 'class="active"' : ''; ?>><a href="<?=action('front.articles', ['lang' => $lang]);?>"><% trans('front/navbar.articles') %></a></li>
           </ul>
           <div class="navbar-form navbar-left">
               <a href="<% action($routeName, ['lang' => 'ru']) %>" class="<% $lang === 'ru' ? 'active-block' : '' %>">RUS</a>
