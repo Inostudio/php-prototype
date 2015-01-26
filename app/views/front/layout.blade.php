@@ -28,6 +28,7 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <!--@codereview move into a special templatec -->
     <link rel="stylesheet" type="text/css" href="/front/css/sidebar.css">
+    <link href="/vendor/loading-bar/css/loading-bar.min.css" rel="stylesheet">
  
     <!-- Custom styles for this template -->
     <link href="/front/css/main.css" rel="stylesheet">
@@ -35,6 +36,7 @@
     <script type="text/javascript" src="/front/vendors/angular/angular.min.js"></script>
     <script type="text/javascript" src="/front/vendors/angular/angular-route.min.js"></script>
     <script type="text/javascript" src="/front/vendors/ui-bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>
+    <script src="/vendor/loading-bar/js/loading-bar.min.js" type="text/javascript"></script>
 
     @section('include')
 
