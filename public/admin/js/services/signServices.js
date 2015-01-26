@@ -16,7 +16,7 @@
     };
     
     function sign(data, success, error) {
-        $http({
+        return $http({
             url: '',
             method: 'POST',
             data: JSON.stringify({

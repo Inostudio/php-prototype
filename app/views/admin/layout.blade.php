@@ -18,7 +18,7 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/libraries.min.css">    <!---Эта штука нужна для анимации всплывающих окон-->
     <link href="/admin/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/admin/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/loading-bar/css/loading-bar.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
     
@@ -35,6 +35,7 @@
     <script src="/admin/vendors/angular/angular-animate.js" type="text/javascript"></script>
     <script src="/admin/vendors/angular/angular-strap.min.js" type="text/javascript"></script>
     <script src="/admin/vendors/angular/angular-strap.tpl.js" type="text/javascript"></script>
+    <script src="/vendor/loading-bar/js/loading-bar.min.js" type="text/javascript"></script>
 
     <script src="/front/vendors/directives/js/ng-img-crop.js"></script>
     

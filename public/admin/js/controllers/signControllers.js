@@ -20,6 +20,13 @@
 
         vm.submitted = false;
 
+        vm.delay = 0;
+        vm.minDuration = 0;
+        vm.message = 'Please Wait...';
+        vm.backdrop = true;
+        vm.promise = null;
+
+
         function submitForm(isValid) {
             vm.submitted = true;
             if(isValid) {
@@ -35,7 +42,7 @@
                     vm.alert = { msg: 'Some problems.', type: 'danger'};
                 };
 
-                SignIn.signIn(vm.user, success, error);
+                vm.promise = SignIn.signIn(vm.user, success, error);
             }
         };
         

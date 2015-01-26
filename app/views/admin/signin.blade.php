@@ -13,6 +13,8 @@
         <!-- Bootstrap core CSS -->
 
         <link href="/admin/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/front/vendors/angular-busy/angular-busy.min.css" rel="stylesheet">
+        
 
         <!-- Custom styles for this template -->
         <style type="text/css">
@@ -61,71 +63,72 @@
 
         <script src="/admin/vendors/angular/angular.min.js"></script>
         <script src="/admin/vendors/ui-bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>
+
+        <script type="text/javascript" src="/front/vendors/angular-animate/angular-animate.min.js"></script>
+        <script type="text/javascript" src="/front/vendors/angular-busy/angular-busy.min.js"></script>
+
         <script src="/admin/js/signApp.js"></script>
         <script src="/admin/js/controllers/signControllers.js"></script>
         <script src="/admin/js/services/signServices.js"></script>
-
-        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
     </head>
 
     <body>
 
         <div class="container" ng-controller="SignCtrl as vm">
 
+            <div class="form-signin" cg-busy="{promise:vm.promise,message:vm.message,backdrop:vm.backdrop,
+                                                delay:vm.delay,minDuration:vm.minDuration}">
+                <form name="signForm" ng-submit="vm.submitForm(signForm.$valid)" novalidate>
+                    <div>
+                        <h2 class="form-signin-heading">Please sign in</h2>
+                    </div>
 
-            <form class="form-signin" name="signForm" ng-submit="vm.submitForm(signForm.$valid)" novalidate>
-                <div>
-                    <h2 class="form-signin-heading">Please sign in</h2>
-                </div>
+                    <div>
+                        @if (Session::get('message'))
+                            <div ng-init="vm.alert = { msg: '<% Session::pull('message') %>', type: danger }">
+                            </div>
+                        @endif
+                        <alert ng-show="(vm.alert !== undefined)" type="{{vm.alert.type}}" close="vm.closeAlert()">{{vm.alert.msg}}</alert>
 
-                <div>
-                    @if (Session::get('message'))
-                        <div ng-init="vm.alert = { msg: '<% Session::pull('message') %>', type: danger }">
-                        </div>
-                    @endif
-                    <alert ng-show="(vm.alert !== undefined)" type="{{vm.alert.type}}" close="vm.closeAlert()">{{vm.alert.msg}}</alert>
+                    </div>
 
-                </div>
+                    <div class="form-group" ng-class="{ 'has-error' : (signForm.email.$invalid) && vm.submitted }">
+                        <input type="email" class="form-control" placeholder="Email address" name="email"
+                        ng-model="vm.user.email" required autofocus ng-required="true" ng-change="vm.closeAlert()">
 
-                <div class="form-group" ng-class="{ 'has-error' : (signForm.email.$invalid) && vm.submitted }">
-                    <input type="email" class="form-control" placeholder="Email address" name="email"
-                    ng-model="vm.user.email" required autofocus ng-required="true" ng-change="vm.closeAlert()">
+                        <span class="help-block" ng-show="(signForm.email.$error.required) && vm.submitted">
+                            Email must be not empty
+                        </span>
 
-                    <span class="help-block" ng-show="(signForm.email.$error.required) && vm.submitted">
-                        Email must be not empty
-                    </span>
+                        <span class="help-block" ng-show="(signForm.email.$invalid && !signForm.email.$error.required) && vm.submitted">
+                            Email invalid
+                        </span>
+                    </div>
 
-                    <span class="help-block" ng-show="(signForm.email.$invalid && !signForm.email.$error.required) && vm.submitted">
-                        Email invalid
-                    </span>
-                </div>
+                    <div class="form-group" ng-class="{ 'has-error' : (signForm.password.$invalid) && vm.submitted }">
+                        <input type="password" class="form-control" placeholder="Password" name="password" required  ng-model="vm.user.password" minlength="4" maxlength="32" ng-required="true" ng-change="vm.closeAlert()">
+                        <span class="help-block" ng-show="(signForm.password.$error.required) && vm.submitted">
+                            Password must be not empty
+                        </span>
 
-                <div class="form-group" ng-class="{ 'has-error' : (signForm.password.$invalid) && vm.submitted }">
-                    <input type="password" class="form-control" placeholder="Password" name="password" required  ng-model="vm.user.password" minlength="4" maxlength="32" ng-required="true" ng-change="vm.closeAlert()">
-                    <span class="help-block" ng-show="(signForm.password.$error.required) && vm.submitted">
-                        Password must be not empty
-                    </span>
+                        <span class="help-block" ng-show="(signForm.password.$error.minlength) && vm.submitted">
+                            Password is too short.
+                        </span>
+                        
+                        <span class="help-block" ng-show="(signForm.password.$error.maxlength) && vm.submitted">
+                            Password is too long.
+                        </span>
+                    </div>
 
-                    <span class="help-block" ng-show="(signForm.password.$error.minlength) && vm.submitted">
-                        Password is too short.
-                    </span>
-                    
-                    <span class="help-block" ng-show="(signForm.password.$error.maxlength) && vm.submitted">
-                        Password is too long.
-                    </span>
-                </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="remember" value="1" ng-model="vm.user.remember"> Remember me
+                        </label>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="signForm.$invalid && vm.submitted">Sign in</button>
+                </form>
 
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" name="remember" value="1" ng-model="vm.user.remember"> Remember me
-                    </label>
-                </div>
-                <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="signForm.$invalid && vm.submitted">Sign in</button>
-            </form>
+            </div>
 
         </div> <!-- /container -->
 
