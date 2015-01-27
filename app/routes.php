@@ -63,6 +63,13 @@ Route::group(['prefix' => '{lang}', 'before' => 'localization'], function() {
         Route::post('/checklang', ['uses' => 'LanguageController@postCheckLang']);
         //
 
+        Route::controller('password', 'RemindersController', [
+            'getRemind' => 'front.remind',
+            'postRemind' => 'front.remind.post',
+            'getReset' => 'front.reset',
+            'postReset' => 'front.reset.post'
+        ]);
+
         Route::controller('auth', 'AuthController', [
             'getSignin' => 'front.signin',
             'getSignup' => 'front.signup',
