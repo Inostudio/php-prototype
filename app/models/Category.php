@@ -8,5 +8,9 @@ class Category extends \Eloquent
     public $timestamps = false;
 
     protected $fillable = [];
-
+    
+    public function articles()
+    {
+        return $this->belongsTo('Article');
+    }
 }

@@ -41,6 +41,7 @@ Route::group(['prefix' => '{lang}', 'before' => 'localization'], function() {
             Route::controller('resource', 'ResourceController');
             Route::controller('page', 'StaticPageController');
             Route::controller('article', 'ArticleController');
+            Route::controller('dashboard', 'DashboardController');
         });
         
         
