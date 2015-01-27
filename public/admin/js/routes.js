@@ -8,7 +8,7 @@
         $routeProvider.
           when('/', {
             templateUrl:  '/' + lang + '/angular/?ns=admin&id=adminPartials.dashboard',
-            controller: 'AdminCtrl',
+            controller: 'DashboardCtrl',
             controllerAs: 'vm'
           }).
           when('/users', {

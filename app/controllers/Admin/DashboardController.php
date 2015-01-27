@@ -2,32 +2,27 @@
 
 namespace Admin;
 
-//use \Response;
-use Illuminate\Support\Facades\Input;
-use Symfony\Component\HttpFoundation\Response;
+use \Input;
+use \Response;
 
-/**
- * Class DashboardController
- * @package Admin
- */
 class DashboardController extends \BaseController
 {
-    /**
-     *
-     */
-    public function __construct()
-    {
-
+    
+    protected $dashboard = null;
+    
+    public function __construct(\DashboardService $ds) {
+        $this->dashboard = $ds;
     }
 
-    /**
-     * @return mixed
-     */
     public function getIndex()
     {
         header( 'Location: /');
         return \View::make('admin.layout');
     }
 
+    public function getStatistics(){
+        return \Response::json([$this->dashboard->getUsersOfGroup(), $this->dashboard->getArticlesOfCategory()]);
+        //return Response::json([true]);
+    }
 
 }
