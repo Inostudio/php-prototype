@@ -51,6 +51,9 @@
     <script src="/admin/js/services/adminServices.js" type="text/javascript"></script>
     <script src="/admin/js/routes.js" type="text/javascript"></script>
     <script src="/admin/js/directives.js" type="text/javascript"></script>
+    <!--Charts-->
+    <script type='text/javascript' src='/admin/vendors/angular/d3.min.js'></script>
+    <script type='text/javascript' src='/admin/vendors/angular/angular-charts.min.js'></script>
     
     @section('include')
 

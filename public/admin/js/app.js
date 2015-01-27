@@ -10,6 +10,7 @@
         'ui.grid.edit',
         'mgcrea.ngStrap',
         'ngResource',
-        'angular-loading-bar'
+        'angular-loading-bar',
+        'angularCharts'
     ]);
 })();

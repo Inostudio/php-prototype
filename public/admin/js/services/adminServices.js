@@ -38,7 +38,8 @@
         .factory('GetArticles', GetArticles)
         .factory('EditArticle', EditArticle)
         .factory('SearchArticles', SearchArticles)
-        .factory('RemoveArticle', RemoveArticle);
+        .factory('RemoveArticle', RemoveArticle)
+        .factory('GetStatistics', GetStatistics);
     
     Group.$inject = ['$resource'];
     AddGroup.$inject = ['$resource'];
@@ -303,6 +304,12 @@
     function RemoveArticle($resource, $id){
         return $resource('/' + lang +  '/adm/article/remove-article', {id: $id}, {
             query: {method:'POST', params:{}, isArray:true}
+        });
+    };
+    
+    function GetStatistics($resource){
+        return $resource('/' + lang +  '/adm/dashboard/statistics', {}, {
+            query: {method:'GET', params:{}, isArray:true}
         });
     };
 })();
