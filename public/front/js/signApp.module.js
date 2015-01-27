@@ -7,7 +7,8 @@
     angular
         .module('signApp', [
             'ui.bootstrap',
-            'cgBusy'
+            'cgBusy',
+            'ngRoute'
         ]);
 })();
 

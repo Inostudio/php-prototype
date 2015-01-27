@@ -3,6 +3,7 @@
 use \View;
 use \Password;
 use \Redirect;
+use \Response;
 use \App;
 use \Input;
 use \Hash;
@@ -32,10 +33,12 @@ class RemindersController extends \Controller {
 		}))
 		{
 			case Password::INVALID_USER:
-				return Redirect::back()->with('error', Lang::get($response));
+				return Response::json([false, Lang::get($response)]);
+				//return Redirect::back()->with('error', Lang::get($response));
 
 			case Password::REMINDER_SENT:
-				return Redirect::back()->with('status', Lang::get($response));
+				return Response::json([true, Lang::get($response)]);
+				//return Redirect::back()->with('status', Lang::get($response));
 		}
 	}
 
@@ -49,7 +52,7 @@ class RemindersController extends \Controller {
 	{
 		if (is_null($token)) App::abort(404);
 
-		return View::make('password.reset')->with('token', $token);
+		return View::make('front.auth.reset')->with('token', $token);
 	}
 
 	/**
@@ -60,12 +63,11 @@ class RemindersController extends \Controller {
 	public function postReset()
 	{
 		$credentials = Input::only(
-			'email', 'password', 'password_confirmation', 'token'
+			'password', 'password_confirmation', 'token'
 		);
 
 		$response = Password::reset($credentials, function($user, $password)
 		{
-
 			$user->password = Hash::make($password);
 
 			$user->save();
@@ -76,10 +78,12 @@ class RemindersController extends \Controller {
 			case Password::INVALID_PASSWORD:
 			case Password::INVALID_TOKEN:
 			case Password::INVALID_USER:
-				return Redirect::back()->with('error', Lang::get($response));
+				return Response::json([false, Lang::get($response)]);
+				//return Redirect::back()->with('error', Lang::get($response));
 
 			case Password::PASSWORD_RESET:
-				return Redirect::to('/');
+				return Response::json([true, 'Ok']);
+				//return Redirect::to('/');
 		}
 	}
 

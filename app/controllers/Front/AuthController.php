@@ -97,7 +97,7 @@ class AuthController extends \Controller
 
         $v = Validator::make(Input::all(), self::$signupValidation);
         
-        if($v->fails()){
+        if($messages = $v->fails()){
             $response = [
                 false,
                 'Invalid form data'

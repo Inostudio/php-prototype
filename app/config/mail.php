@@ -54,7 +54,7 @@ return array(
 	|
 	*/
 
-	'from' => array('address' => 'mg@php-prototype.com', 'name' => 'Zhidenko Nikolay'),
+	'from' => array('address' => 'mg@php-prototype.com', 'name' => 'Support php-prototype.com'),
 
 	/*
 	|--------------------------------------------------------------------------

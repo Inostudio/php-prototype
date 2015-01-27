@@ -7,10 +7,10 @@
 
     angular
         .module('signApp')
-        .factory('Sign', Sign);
+        .factory('Sign', Sign)
+        .factory('Reminder', Reminder);
 
     Sign.$inject = ['$http'];
-
     function Sign($http) {
         var service = {
             signIn: signIn,
@@ -50,6 +50,45 @@
                 .success(success)
                 .error(error);
         }
+    }
 
+    Reminder.$inject = ['$http'];
+    function Reminder($http) {
+        var service = {
+            remind: remind,
+            reset : reset
+        };
+
+        return service;
+
+        ////////////
+
+        function remind(data, success, error) {
+            return $http({
+                url: '/en/password/remind',
+                method: 'POST',
+                data: JSON.stringify({
+                    email: data.email
+                }),
+                headers: {'Content-Type': 'application/json'}
+            })
+                .success(success)
+                .error(error);
+        }
+
+        function reset(data, success, error) {
+            return $http({
+                url: '/en/password/reset',
+                method: 'POST',
+                data: JSON.stringify({
+                    token: data.token,
+                    password: data.password,
+                    password_confirmation: data.password_confirmation
+                }),
+                headers: {'Content-Type': 'application/json'}
+            })
+                .success(success)
+                .error(error);
+        }
     }
 })();
