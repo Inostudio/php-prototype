@@ -8,6 +8,5 @@ return array(
     'categories_of_articles' => 'Categories of articles',
     'articles' => 'Articles',
     'resources' => 'Resources',
-    'logout' => 'Logout',
-    'search' => 'Search...'
+    'logout' => 'Logout'
 );

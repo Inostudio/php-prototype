@@ -8,6 +8,5 @@ return array(
     'categories_of_articles' => 'Категории статей',
     'articles' => 'Статьи',
     'resources' => 'Ресурсы',
-    'logout' => 'Выйти',
-    'search' => 'Поиск...'
+    'logout' => 'Выйти'
 );

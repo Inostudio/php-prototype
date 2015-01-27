@@ -1,1 +1,0 @@
-<div ui-grid="{ data: myData }" class="myGrid"></div>

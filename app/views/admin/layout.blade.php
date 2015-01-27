@@ -103,13 +103,10 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><i class="fa fa-dashboard"></i> <%trans('adminMenu.dashboard')%></a></li>
-            <li><a href="#/allArticle"><i class="fa fa-file-o"></i> <%trans('adminMenu.articles')%></a></li>
-            <li><a href="<% action('admin.logout') %>"><i class="fa fa-suitcase"></i> <%trans('adminMenu.logout')%></a></li>
+            <li><a href="#"><i class="fa fa-dashboard"></i> <%trans('admin/adminMenu.dashboard')%></a></li>
+            <li><a href="#/allArticle"><i class="fa fa-file-o"></i> <%trans('admin/adminMenu.articles')%></a></li>
+            <li><a href="<% action('admin.logout') %>"><i class="fa fa-suitcase"></i> <%trans('admin/adminMenu.logout')%></a></li>
           </ul>
-          <form class="navbar-form navbar-right">
-              <input type="text" class="form-control" placeholder="<%trans('adminMenu.search')%>">
-          </form>
             <div class='lang'>
                 <a ng-click='vm.checkLang("ru")'>RUS</a>
                 <a ng-click='vm.checkLang("en")'>ENG</a>
@@ -122,14 +119,14 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li ng-class="{'active' : vm.isActive('/')}"><a href="#/"><i class="fa fa-dashboard"></i> <%trans('adminMenu.dashboard')%></a></li>
-            <li ng-class="{'active' : vm.isActive('/users') || vm.isActive('/userGroups')}"><a href="#/users"><i class="fa fa-users"></i> <%trans('adminMenu.users')%></a></li>
-            <li ng-class="{'active' : vm.isActive('/groups') || vm.isActive('/groupsPermis')}"><a href="#/groups"><i class="fa fa-group"></i> <%trans('adminMenu.groups')%></a></li>
-            <li ng-class="{'active' : vm.isActive('/permissions')}"><a href="#/permissions"><i class="fa fa-legal"></i> <%trans('adminMenu.permissions')%></a></li>
-            <li ng-class="{'active' : vm.isActive('/pages')}"><a href="#/pages"><i class="fa fa-newspaper-o"></i> <%trans('adminMenu.pages')%></a></li>
-            <li ng-class="{'active' : vm.isActive('/categories_of_articles') || vm.isActive('/articleCategory')}"><a href="#/categories_of_articles"><i class="fa fa-list"></i> <%trans('adminMenu.categories_of_articles')%></a></li>
-            <li ng-class="{'active' : vm.isActive('/allArticle')}"><a href="#/allArticle"><i class="fa fa-file-o"></i> <%trans('adminMenu.articles')%></a></li>
-            <li ng-class="{'active' : vm.isActive('/resources')}"><a href="#/resources"><i class="fa fa-gear"></i> <%trans('adminMenu.resources')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/')}"><a href="#/"><i class="fa fa-dashboard"></i> <%trans('admin/adminMenu.dashboard')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/users') || vm.isActive('/userGroups')}"><a href="#/users"><i class="fa fa-users"></i> <%trans('admin/adminMenu.users')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/groups') || vm.isActive('/groupsPermis')}"><a href="#/groups"><i class="fa fa-group"></i> <%trans('admin/adminMenu.groups')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/permissions')}"><a href="#/permissions"><i class="fa fa-legal"></i> <%trans('admin/adminMenu.permissions')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/pages')}"><a href="#/pages"><i class="fa fa-newspaper-o"></i> <%trans('admin/adminMenu.pages')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/categories_of_articles') || vm.isActive('/articleCategory')}"><a href="#/categories_of_articles"><i class="fa fa-list"></i> <%trans('admin/adminMenu.categories_of_articles')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/allArticle')}"><a href="#/allArticle"><i class="fa fa-file-o"></i> <%trans('admin/adminMenu.articles')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/resources')}"><a href="#/resources"><i class="fa fa-gear"></i> <%trans('admin/adminMenu.resources')%></a></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-view></div>
