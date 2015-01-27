@@ -13,17 +13,17 @@
     function config($routeProvider) {
         $routeProvider.
             when('/', {
-                templateUrl:  '/' + lang + '/angular/?ns=front&id=authPartials.signin',
+                templateUrl: '/angular/?ns=front&id=authPartials.signin',
                 controller: 'SignInCtrl',
                 controllerAs: 'vm'
             }).
             when('/remind_password', {
-                templateUrl:  '/' + lang + '/angular/?ns=front&id=authPartials.remind',
+                templateUrl: '/angular/?ns=front&id=authPartials.remind',
                 controller: 'RemindCtrl',
                 controllerAs: 'vm'
             }).
             when('/reset_password', {
-                templateUrl:  '/' + lang + '/angular/?ns=front&id=authPartials.reset',
+                templateUrl: '/angular/?ns=front&id=authPartials.reset',
                 controller: 'ResetCtrl',
                 controllerAs: 'vm'
             }).

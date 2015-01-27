@@ -28,10 +28,9 @@
     CategoriesOfArticlesCtrl.$inject = ['GetCategoryOfArticle', '$alert', '$scope', '$modal', '$rootScope', 'RemoveCategoryOfArticle', 'AddCategoryOfArticle', 'EditCategoryOfArticle'];
     ArticleCategoryCtrl.$inject = ['GetArticles', '$routeParams', '$scope', '$alert', '$window', '$location', '$modal', '$rootScope', 'EditArticle', 'SearchArticles', 'RemoveArticle'];
     
-    function activCtrl($scope, $location, CheckLang) {
+    function activCtrl($scope, $location) {
         var vm = this;
         vm.isActive = isActive;
-        vm.checkLang = checkLang;
         
         function isActive(path){  
               return ((path === $location.path()) || (($location.path().indexOf('/groups/') === 0) && (path === '/groupsPermis'))
@@ -39,12 +38,6 @@
                       || (($location.path().indexOf('/categories_of_articles/') === 0) && (path === '/articleCategory')));  
         };
 
-        function checkLang(lang){
-          CheckLang.query({language: lang}, function(answer){
-              var oldLang =  window.location.pathname.substr(1, 2);
-              window.location.href = document.location.href.replace('/' + oldLang +'/', '/' + lang +'/');
-          });
-        };
     }
     
     function DashboardCtrl(GetStatistics) {
@@ -1117,7 +1110,7 @@
         });
 
         $scope.$on('EventForShowPage', function(event, url){
-            $window.open('http://' + $location.host() + ':' + $location.port() + '/' + lang + '/' + url);
+            $window.open('http://' + $location.host() + ':' + $location.port() + '/' + url);
         });
 
         //+++    
@@ -1390,7 +1383,7 @@
         $scope.$on('EventForRedirectToShowArticle', function (event, id) {
             alertError.hide();
             alertSuccess.hide();
-            $window.open('http://' + $location.host() + ':' + $location.port() + '/' + lang + '/articles#/' + id);
+            $window.open('http://' + $location.host() + ':' + $location.port() + '/articles#/' + id);
         });
         
         //Удаление 

@@ -177,7 +177,7 @@
     <div class="modal-footer" style="background: #fff3be; border-top: 1px solid #efe2a9" data-ng-hide="vm.new && vm.isActive('NewPhoto')">
         <div data-ng-show="vm.isActive('NewPhoto')">
             <button class="btn btn-primary" data-ng-click="vm.changeToThumbnail()">
-                <% trans('front`/profile/profile.button_choose_thumbnail') %>
+                <% trans('front/profile/profile.button_choose_thumbnail') %>
             </button>
         </div>
 

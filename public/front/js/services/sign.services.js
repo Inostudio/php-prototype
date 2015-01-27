@@ -65,7 +65,7 @@
 
         function remind(data, success, error) {
             return $http({
-                url: '/en/password/remind',
+                url: '/password/remind',
                 method: 'POST',
                 data: JSON.stringify({
                     email: data.email
@@ -78,7 +78,7 @@
 
         function reset(data, success, error) {
             return $http({
-                url: '/en/password/reset',
+                url: '/password/reset',
                 method: 'POST',
                 data: JSON.stringify({
                     token: data.token,

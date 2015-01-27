@@ -20,7 +20,7 @@
     <title>Sticky Footer Navbar Template for Bootstrap</title>
 
     <script type="text/javascript">
-        var lang = window.location.pathname.substr(1, 2);
+        //var lang = window.location.pathname.substr(1, 2);
     </script>
     <!-- Bootstrap core CSS -->
     <!--<link href="/front/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">-->
@@ -76,10 +76,10 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li <?=$routeName=='front.home' ? 'class="active"' : ''; ?> ><a href="<?=action('front.home', ['lang' => $lang]);?>"><% trans('front/navbar.home') %></a></li>
-            <li <?=$routeName=='front.about' ? 'class="active"' : ''; ?>><a href="<?=action('front.about', ['lang' => $lang]);?>"><% trans('front/navbar.about') %></a></li>
-            <li <?=$routeName=='front.contact' ? 'class="active"' : ''; ?>><a href="<?=action('front.contact', ['lang' => $lang]);?>"><% trans('front/navbar.contact') %></a></li>
-            <li <?=Str::startsWith($routeName, 'front.articles') ? 'class="active"' : ''; ?>><a href="<?=action('front.articles', ['lang' => $lang]);?>"><% trans('front/navbar.articles') %></a></li>
+            <li <?=$routeName=='front.home' ? 'class="active"' : ''; ?> ><a href="<?=action('front.home');?>"><% trans('front/navbar.home') %></a></li>
+            <li <?=$routeName=='front.about' ? 'class="active"' : ''; ?>><a href="<?=action('front.about');?>"><% trans('front/navbar.about') %></a></li>
+            <li <?=$routeName=='front.contact' ? 'class="active"' : ''; ?>><a href="<?=action('front.contact');?>"><% trans('front/navbar.contact') %></a></li>
+            <li <?=Str::startsWith($routeName, 'front.articles') ? 'class="active"' : ''; ?>><a href="<?=action('front.articles');?>"><% trans('front/navbar.articles') %></a></li>
           </ul>
           <div class="navbar-form navbar-left">
               <a href="<% action($routeName, ['lang' => 'ru']) %>" class="<% $lang === 'ru' ? 'active-block' : '' %>">RUS</a>

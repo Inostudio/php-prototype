@@ -1,5 +1,6 @@
 <?php
     $lang =  App::getLocale();
+    $routeName = Route::getCurrentRoute()->getName();
 ?>
 <!DOCTYPE html>
 <html lang="en" ng-app="adminApp">
@@ -111,8 +112,8 @@
               <input type="text" class="form-control" placeholder="<%trans('adminMenu.search')%>">
           </form>
             <div class='lang'>
-                <a ng-click='vm.checkLang("ru")'>RUS</a>
-                <a ng-click='vm.checkLang("en")'>ENG</a>
+                <a href="<% action($routeName, ['lang' => 'ru']) %>" class="<% $lang === 'ru' ? 'active-block' : '' %>">RUS</a>
+                <a href="<% action($routeName, ['lang' => 'en']) %>" class="<% $lang === 'en' ? 'active-block' : '' %>">ENG</a>
             </div>
         </div>
       </div>

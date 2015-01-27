@@ -52,9 +52,9 @@ Route::filter('auth', function()
 Route::filter('auth.admin', function(){
 
     if(Auth::guest()) {
-        return Redirect::action('admin.signin', ['lang' => 'en']);
+        return Redirect::action('admin.signin', ['lang' => App::getLocale()]);
     } else if(!(Auth::user()->IsAdmin())) {
-        return Redirect::action('admin.signin', ['lang' => 'en'])->with(['message' => 'Permission denied!']);
+        return Redirect::action('admin.signin', ['lang' => App::getLocale()])->with(['message' => 'Permission denied!']);
     }
 
     if (Auth::guest()) {
@@ -109,5 +109,4 @@ Route::filter('csrf', function()
 
 Route::filter('localization', function() {
     App::setLocale(Route::input('lang'));
-    //return dd(Route::getCurrentRoute());
 });

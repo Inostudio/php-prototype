@@ -13,12 +13,12 @@
     function config($routeProvider) {
         $routeProvider.
             when('/', {
-                templateUrl:  '/' + lang + '/angular/?ns=front&id=profilePartials.profile',
+                templateUrl: '/angular/?ns=front&id=profilePartials.profile',
                 controller: 'ShowCtrl',
                 controllerAs: 'vm'
             }).
             when('/edit_password', {
-                templateUrl:  '/' + lang + '/angular/?ns=front&id=profilePartials.edit_password',
+                templateUrl:  '/angular/?ns=front&id=profilePartials.edit_password',
                 controller: 'EditCtrl',
                 controllerAs: 'vm'
             }).

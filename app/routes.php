@@ -13,26 +13,14 @@ Blade::setEscapedContentTags('<%%', '%%>');    // for escaped data
 */
 
 
-Route::get('/', function() {
-    $url = App::getLocale() . '/';
-    return Redirect::to($url);
-});
-
-Route::any('{url?}', function($url) {
-    $segmentLang = Request::segment(1);
-    $url = App::getLocale() . '/' . $url;
-    if(!($segmentLang === "ru" || $segmentLang === "en"))
-        return Redirect::to($url);
-})->where(['url' => '^((?!ru|en).)[-a-z0-9/]+']);
-
-
-
-Route::group(['prefix' => '{lang}', 'before' => 'localization'], function() {
-
+Route::group(array(
+    'domain' => '{lang}.php-prototype.com',
+    'before' => 'localization'), function()
+{
     Route::get('/angular/', ['uses' => 'AngularController@serve']);
 
     Route::group(['namespace' => 'Admin', 'prefix' => 'adm'], function () {
-        
+
         Route::group(['before' => 'auth.admin'], function () {
             Route::get('/', ['as' => 'admin.dashboard', 'uses' => 'DashboardController@getIndex']);
             Route::controller('group', 'GroupController');
@@ -43,16 +31,16 @@ Route::group(['prefix' => '{lang}', 'before' => 'localization'], function() {
             Route::controller('article', 'ArticleController');
             Route::controller('dashboard', 'DashboardController');
         });
-        
-        
-            
+
+
+
         Route::controller('auth', 'AuthController', [
             'getSignin' => 'admin.signin',
             'getLogout' => 'admin.logout'
         ]);
-        
+
     });
-    
+
     Route::group(['namespace' => 'Front'], function () {
         //Login in Facebook
         Route::controller('facebook', 'FacebookController');
@@ -102,14 +90,22 @@ Route::group(['prefix' => '{lang}', 'before' => 'localization'], function() {
         Route::controller('page', 'PagesController', [
             'showPage' => 'front.page'
         ]);
-        
+
         //Articles
         Route::controller('articles', 'ArticlesController', [
             'getIndex' => 'front.articles'
         ]);
 //        Route::controller('articles', 'ArticlesController');
-        
+
         //Route for static pages
         Route::get('{namePage}', ['as' => 'front.static','uses' => 'PagesController@showPage'])->where(['namePage' => '[-a-z0-9/]+']);
-   });   
+    });
+});
+
+Route::group(array('domain' => 'php-prototype.com'), function()
+{
+    Route::any('{url?}', function($url) {
+        $redirectUrl = 'http://' . Config::get('app.locale'). '.' . 'php-prototype.com' . $url;
+        return Redirect::to($redirectUrl);
+    })->where(['url' => '[-a-z0-9/]+']);
 });
