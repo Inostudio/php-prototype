@@ -49,7 +49,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
     ];
 
     public function IsAdmin() {
-        return $this->groups()->where('title', 'admins')->first();
+        return $this->groups()->where('isAdmin', 1)->first() ? true : false;
     }
 
     public function getFullName()

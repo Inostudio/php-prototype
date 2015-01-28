@@ -1,7 +1,7 @@
 <?php
 return array(
     'dashboard'  =>  'Dashboard',
-    'users'  =>  'User',
+    'users'  =>  'Users',
     'groups'  =>  'Groups',
     'permissions'  =>  'Permissions',
     'pages'  =>  'Pages',

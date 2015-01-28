@@ -525,8 +525,8 @@
             vm.totalPage = 0;
             vm.dirFindSort = '';
             vm.fieldFindSort = '';
-            vm.direction = '';
-            vm.field = '';
+            vm.direction = 'asc';
+            vm.field = 'id';
             vm.email = '';
             vm.userConfirmPassword = '';
             vm.userPassword = '';
@@ -542,11 +542,13 @@
             vm.modal = '';
             vm.edit_user_message = '';
             vm.remove_user_message = '';
+            vm.myId = 0;
+            vm.invalid_email_message = '';
 
             vm.users_grid = {
                 enableFiltering: false
             };
-
+            
             vm.users_grid.columnDefs = [
                 { name: 'id', enableCellEdit: false, width: '8%'},
                 { name: 'email', enableCellEdit: true, width: '15%'},
@@ -558,8 +560,6 @@
                 { name: 'remove', displayName: 'Remove' , width: '8%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
                     cellTemplate: '<spanremove remove-action="EventForDropUser" remove-id="{{row.entity.id}}"/>' }
             ];
-
-            //Получение +++
             
             var offset = 0;
             var limit =  9;
@@ -572,28 +572,21 @@
                 if((vm.currentPage + 1) <= vm.totalPage) {
                     vm.unavailableNext = true;
                     vm.unavailablePrev = true;
+                    offset += limit;
+                    vm.currentPage++;
                     if(vm.action === 0) {   //Обычный просмотр
-                        vm.currentPage++;
-                        offset += limit;
                         getUsers(limit, offset, 'asc', 'id');
                     } else if(vm.action === 1){     //Поиск
-                        vm.currentPage++;
-                        offset += limit;
                         getFindUsers(searchText, limit, offset, 'asc', 'id');
                     } else if(vm.action === 2){         //сортировка
-                        vm.currentPage++;
-                        offset += limit; 
                         getUsers(limit, offset, vm.direction, vm.field);
                     } else if (vm.action === 3) {   //Сортировка с поиском
-                        vm.currentPage++;
-                        offset += limit;
                         getFindUsers(searchText, limit, offset, vm.dirFindSort, vm.fieldFindSort);
                     }
                 }
             };
 
             function prevPage(){
-
                 if((vm.currentPage - 1) >= 1) {
                     vm.unavailableNext = true;
                     vm.unavailablePrev = true;
@@ -609,7 +602,6 @@
                     } else if(vm.action === 2) {            //сортировка
                         vm.currentPage--;
                         offset -= limit;
-                        console.log(offset, limit);
                         getUsers(limit, offset, vm.direction, vm.field); 
                     } else if (vm.action === 3) {   //Сортировка с поиском
                         vm.currentPage--;
@@ -649,7 +641,6 @@
                     } else {
                         alertSuccess = $alert({title: vm.add_user_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
                         if((vm.currentPage === vm.totalPage) &&(vm.currentPage * limit > vm.countUsers)){
-                            //console.log(vm.countUsers);
                             var newUser = {
                                 id: answer[2],
                                 email: vm.email
@@ -657,7 +648,6 @@
                             vm.users_grid.data.push(newUser);
 
                             vm.countUsers++;
-                            //console.log(vm.countUsers);
                             vm.totalPage = Math.ceil(vm.countUsers / limit);
                         } else {
                             vm.countUsers++;
@@ -685,8 +675,11 @@
             $scope.$on('EventForDropUser', function (event, id) {
                 alertError.hide();
                 alertSuccess.hide();
-                userRemoveId = Number(id);
-                vm.modal.show();
+                if(id != vm.myId)
+                {
+                    userRemoveId = Number(id);
+                    vm.modal.show();
+                }
             });
 
             //Редактирование +++
@@ -697,7 +690,7 @@
                     alertSuccess.hide();
 
                     if(newValue.trim() === ''){
-                        alertError = $alert({title: 'Field email is empty!', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                        alertError = $alert({title: vm.invalid_email_message, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
                         angular.forEach(vm.users_grid.data, function(user) {
                             if (user.id === rowEntity.id) 
                                 user.email = oldValue;
@@ -706,13 +699,21 @@
                         var str = newValue;
                         var a = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,6})+$/;
                         if(str.search(a) === -1){
-                            alertError = $alert({title: 'Email is invalid!', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                            alertError = $alert({title: vm.invalid_email_message, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                            angular.forEach(vm.users_grid.data, function(user) {
+                                if (user.id === rowEntity.id) 
+                                    user.email = oldValue;
+                            }); 
                         } else {
                             if(newValue.trim() !== oldValue)
                             {
                                 EditUser.query({userId: rowEntity.id, email: newValue}, function(answer){
                                     if(answer[0] === false){
                                         alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                                        angular.forEach(vm.users_grid.data, function(user) {
+                                            if (user.id === rowEntity.id) 
+                                                user.email = oldValue;
+                                        }); 
                                     } else
                                     {
                                         alertSuccess = $alert({title: vm.edit_user_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
@@ -729,9 +730,11 @@
                         if((vm.action === 1) || (vm.action === 3)){    //Сортировка с поиском
                             vm.currentPage = 1;
                             vm.action = 3;
+                            
                             vm.dirFindSort = arg2[0].sort.direction;
                             vm.fieldFindSort = arg2[0].name;
-
+                            vm.field = vm.fieldFindSort;
+                            vm.direction = vm.dirFindSort;
                             offset = 0;
                             getFindUsers(searchText, limit, offset, vm.dirFindSort, vm.fieldFindSort);                      
                         } else {
@@ -826,14 +829,13 @@
                     vm.unavailablePrev = true;
 
                 }
-
                 if (vm.currentPage >= vm.totalPage) {
                     vm.unavailableNext = true;
                 }
             }
 
             function removeUser(id) {
-                RemoveUser.query({userId: id}, function(answer){
+                RemoveUser.query({userId: id, field: vm.field, direction: vm.direction, action: vm.action, off: (offset + limit - 1), text: vm.searchText}, function(answer){
                     if(answer[0])
                     {
                         vm.modal.hide();
@@ -847,6 +849,28 @@
                         });
                         vm.countUsers--;
                     }
+                    vm.totalPage = Math.ceil(vm.countUsers / limit);
+                    checkNavigationButton();
+                    if((vm.action == 1) || (vm.action == 3)) {
+                        vm.users_grid.data.push(answer[1][0][0]);
+                    } else {
+                        vm.users_grid.data.push(answer[1][0]);
+                    }
+                    console.log(answer[1][0]);/**
+                        *
+                        * 
+                        *  
+                        *   
+                        *    
+                        *     
+                        *      
+                        *       
+                        *        
+                        *         
+                        *          
+                        *           
+                        *             
+                     */
                 });
             }
 
@@ -862,6 +886,7 @@
 
     function UserOptionsCtrl($scope, $alert, $routeParams, UserOptions, ChangeGroupByUser, $modal, $rootScope) {
             var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container_option_for_users'});
+            var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container_option_for_users'});
             var vm = this;
             var deleteSelfFromAdmin = false;
             vm.userEmail = '';
@@ -912,6 +937,7 @@
             //Включение/исключение пользователя из группы+++
             $scope.$on('EventChangeUser', function (event, id, accept) {
                 alertSuccess.hide();
+                alertError.hide();
                 if((id == 1) && (vm.currentAdminId == $routeParams.userId) && (!deleteSelfFromAdmin)){
                    vm.modal.show(); 
                    vm.selfAccept = accept;
@@ -919,7 +945,7 @@
                    return;
                 };
                 ChangeGroupByUser.query({userId: vm.userId, accept : accept, groupId: id}, function(answer){
-                    //console.log(answer);
+                    console.log(answer);
                     if(answer[0]){
                         angular.forEach(vm.gridOptions_userOptions.data, function(group) {    //Проверяем, существует ли право с таким именем
                             if(group.id == id){
@@ -933,11 +959,14 @@
                                 }
                             }
                         });
+                        if(deleteSelfFromAdmin){
+                            window.location.href = '/';
+                        }
+                    } else {
+                        alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_option_for_users'});
                     }
                 });
-                if(deleteSelfFromAdmin){
-                    window.location.href = '/';
-                }
+                
             });
             $rootScope.$on('cancelDeleteGroup', function(){
                 vm.modal.hide();
@@ -1747,7 +1776,6 @@
                         });
                     } else {
                         EditLanguageFile.query({path: vm.path, file: vm.editFile, language: colDef.name.slice(0, 2), key: rowEntity.key, value: newValue}, function(answer){
-                            console.log(answer);
                             if(!answer[0]){
                                 alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
                             } else {

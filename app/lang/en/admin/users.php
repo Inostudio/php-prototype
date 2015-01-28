@@ -26,5 +26,6 @@ return array(
     'deliting'  =>  'Deliting!',
     'deliting_text'  =>  'Are you sure you want to remove yourself from this group?',
     'ok'    =>  'Ok',
-    'cancel'    =>  'Cancel'
+    'cancel'    =>  'Cancel',
+    'invalid_email_message' =>  'Email is invalid!'
 );

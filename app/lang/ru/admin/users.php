@@ -26,5 +26,6 @@ return array(
     'deliting'  =>  'Удаление!',
     'deliting_text'  =>  'Вы действительно хотите исключить себя из данной группы?',
     'ok'    =>  'Подтвердить',
-    'cancel'    =>  'Отмена'
+    'cancel'    =>  'Отмена',
+    'invalid_email_message' =>  'Некорректный email!'
 );

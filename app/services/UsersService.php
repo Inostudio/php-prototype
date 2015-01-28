@@ -165,15 +165,24 @@ class UsersService
      * @param $accept
      */
     public function groupAccept($groupId, $userId, $accept){
+        $groupAdm = null;
         if($accept){
+            $groupAdm = Group::where('id', '=', $groupId)->first()->isAdmin;
+            if($groupAdm){
+               $countAdmins = UserToGroups::where('group_id', '=', $groupId)->count();
+               if($countAdmins == 1){
+                   return [false, trans('validation.remove_all_admins')];
+               }
+            }
             UserToGroups::destroy(UserToGroups::where('user_id', '=', $userId)->where('group_id', '=', $groupId)->first()->id);
+            
         }else {
             $userToGroup = new UserToGroups();
             $userToGroup->user_id = $userId;
             $userToGroup->group_id = $groupId;
             $userToGroup->save();
         }
-        return;
+        return [true, $groupAdm];
     }
 
     /**

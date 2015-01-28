@@ -77,8 +77,13 @@ class UserController extends \BaseController
     public function postRemove(){
         $result = true;
         $this->users->removeUser(Input::get("userId"));
-
-        return \Response::json([$result]);
+        $user = null;
+        if((Input::get('action') == 1) || (Input::get('action') == 3)) {    //Подгрузка при поиске
+            $user = $this->users->searchUsers(Input::get('text'), 1, Input::get('off'), Input::get('direction'), Input::get('field'));
+        } else {    //Обычная подгрузка
+            $user = $this->users->getPageOfUsers(Input::get('off'), 1, Input::get('direction'), Input::get('field'));
+        }
+        return \Response::json([$result, $user]);
     }
 
     //Редактирование пользователя +++
@@ -114,9 +119,8 @@ class UserController extends \BaseController
      * @return mixed
      */
     public function postChangeGroupByUser(){
-        $this->users->groupAccept(Input::get('groupId'), Input::get('userId'), Input::get("accept"));
 
-        return \Response::json([true]);
+        return \Response::json($this->users->groupAccept(Input::get('groupId'), Input::get('userId'), Input::get("accept")));
     }
 
     //Поиск пользователей
