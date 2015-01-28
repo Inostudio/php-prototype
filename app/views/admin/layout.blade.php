@@ -127,6 +127,7 @@
             <li ng-class="{'active' : vm.isActive('/categories_of_articles') || vm.isActive('/articleCategory')}"><a href="#/categories_of_articles"><i class="fa fa-list"></i> <%trans('admin/adminMenu.categories_of_articles')%></a></li>
             <li ng-class="{'active' : vm.isActive('/allArticle')}"><a href="#/allArticle"><i class="fa fa-file-o"></i> <%trans('admin/adminMenu.articles')%></a></li>
             <li ng-class="{'active' : vm.isActive('/resources')}"><a href="#/resources"><i class="fa fa-gear"></i> <%trans('admin/adminMenu.resources')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/languages')}"><a href="#/languages"><i class="fa fa-language"></i> <%trans('admin/adminMenu.languages')%></a></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-view></div>

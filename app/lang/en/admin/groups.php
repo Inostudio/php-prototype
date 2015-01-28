@@ -15,5 +15,7 @@ return array(
     'ok' => 'OK',
     'cancel' => 'Cancel',
     'add_perm_to_group' => 'Right has been successfully accepted!',
-    'remove_perm_from_group' => 'Right has been successfully removed!'
+    'remove_perm_from_group' => 'Right has been successfully removed!',
+    'group' => 'Group',
+    'description' => 'Description'
 );

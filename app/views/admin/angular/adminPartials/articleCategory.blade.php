@@ -2,7 +2,7 @@
      vm.article_change_message = '<%trans("admin/articleCategory.article_change_message")%>';
      vm.required_field = '<%trans("admin/articleCategory.required_field")%>'"></div>
 
-<h1 class="page-header" align='center'>{{vm.categoryTitle == '' ? '<%trans("admin/articleCategory.all_categories")%>' : vm.categoryTitle}}</h1>
+<h1 class="page-header" align='center'>{{vm.categoryTitle == '' ? '<%trans("admin/articleCategory.all_categories")%>' : ('<%trans("admin/articleCategory.category")%>: ' + vm.categoryTitle)}}</h1>
 <div class="table-responsive">
     <h3 class="sub-header"><%trans('admin/articleCategory.list_of_articles')%></h3>
     <div style="margin-bottom: 5px;">

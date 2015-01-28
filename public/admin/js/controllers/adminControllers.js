@@ -13,7 +13,8 @@
             .controller('ResourcesCtrl', ResourcesCtrl)
             .controller('PagesCtrl', PagesCtrl)
             .controller('CategoriesOfArticlesCtrl', CategoriesOfArticlesCtrl)
-            .controller('ArticleCategoryCtrl', ArticleCategoryCtrl);
+            .controller('ArticleCategoryCtrl', ArticleCategoryCtrl)
+            .controller('LanguagesCtrl', LanguagesCtrl);
             
 
     DashboardCtrl.$inject = ['GetStatistics'];
@@ -27,6 +28,7 @@
     activCtrl.$inject = ['$scope', '$location', 'CheckLang'];
     CategoriesOfArticlesCtrl.$inject = ['GetCategoryOfArticle', '$alert', '$scope', '$modal', '$rootScope', 'RemoveCategoryOfArticle', 'AddCategoryOfArticle', 'EditCategoryOfArticle'];
     ArticleCategoryCtrl.$inject = ['GetArticles', '$routeParams', '$scope', '$alert', '$window', '$location', '$modal', '$rootScope', 'EditArticle', 'SearchArticles', 'RemoveArticle'];
+    LanguagesCtrl.$inject = ['GetLanguageFiles', '$rootScope', '$scope', '$alert', 'EditLanguageFile'];
     
     function activCtrl($scope, $location, CheckLang) {
         var vm = this;
@@ -55,7 +57,7 @@
         vm.data2 = {};
         vm.users_in_groups = '';
         vm.articles_in_categories = '';
-        vm.config1 = {
+        vm.config2 = {
             labels: false,
             title : (lang == 'en' ? 'Users in groups' : 'Пользователи в группах'),
             legend : {
@@ -63,7 +65,7 @@
                     position:'right'
             }
 	};
-        vm.config2 = {
+        vm.config1 = {
             labels: false,
             title : (lang == 'en' ? 'Articles in categories' : 'Статьи в категориях'),
             legend : {
@@ -1082,15 +1084,15 @@
 
         vm.gridOptions_pagesGrid.columnDefs = [
             { name: 'title', displayName: 'Title', width: '10%', enableCellEdit: false },
-            { name: 'body', displayName: 'Short content' , width: '30%', enableFiltering: false, enableCellEdit: false },
+            { name: 'body', displayName: 'Short content' , width: '33%', enableFiltering: false, enableCellEdit: false },
             { name: 'url', displayName: 'Url' , width: '5%', enableCellEdit: false},
             { name: 'status', displayName: 'Status' , width: '5%', enableFiltering: false, enableCellEdit: false,
                 cellTemplate: '<p ng-class="{\'btn-success\': row.entity.status==\'Public\', \'btn-info\': row.entity.status==\'Private\', \n\
                     \'btn-warning\': row.entity.status==\'Draw\'}" class="form-control btn" style="width: 50%; margin-left: 25%; margin-top: 10%">{{row.entity.status}}</p>'},
-            { name: 'actions', displayName: 'Actions' , width: '5%', enableFiltering: false, enableCellEdit: false,
-                cellTemplate: '<p ng-click="$emit(\'EventForEditPage\', row.entity.id)" class="actionCol" style="margin-left: 30%">Edit</p>\n\
-                    <p ng-click="$emit(\'EventForDropPage\', row.entity.id)" class="actionCol" style="margin-left: 25%">Delete</p>\n\
-                    <p ng-click="$emit(\'EventForShowPage\', row.entity.url)" class="actionCol" style="margin-left: 28%">Show</p>'
+            { name: 'actions', displayName: 'Actions' , width: '2%', enableFiltering: false, enableCellEdit: false,
+                cellTemplate: '<p ng-click="$emit(\'EventForEditPage\', row.entity.id)" class="actionCol fa fa-edit"></p><br/>\n\
+                    <p ng-click="$emit(\'EventForDropPage\', row.entity.id)" class="actionCol fa fa-close"></p><br/>\n\
+                    <p ng-click="$emit(\'EventForShowPage\', row.entity.url)" class="actionCol fa fa-file-o"></p>'
         }];
 
        //+++
@@ -1632,4 +1634,129 @@
             getArticles(vm.limit, vm.offset);
         }
     }
+    
+    function LanguagesCtrl(GetLanguageFiles, $rootScope, $scope, $alert, EditLanguageFile){
+        var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
+        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
+        var vm = this;
+        vm.path = '/';
+        vm.isFile = -1;
+        vm.hideLangFiles = false;
+        vm.editFile = '';
+        vm.selectFile = selectFile;
+        vm.required_field = '';
+        vm.file_change = '';
+        
+        vm.gridOptions_gridLanguagesFiles = { enableSorting: false, enableCellEdit: false};
+        vm.gridOptions_gridLanguagesFiles.columnDefs = [
+            { name: 'folder', displayName: 'Folder',
+                cellTemplate: '<p ng-click="$emit(\'selectContent\', row.entity.folder)" style="cursor: pointer">{{row.entity.folder}}</p>'}
+        ];
+        
+        vm.gridOptions_gridLanguagesFile = { enableSorting: false, enableCellEdit: true};
+        vm.gridOptions_gridLanguagesFile.columnDefs = [
+            {name: 'key', displayName: 'Key', width: '24%', enableCellEdit: false},
+            {name: 'english', displayName: 'English'},
+            {name: 'russian', displayName: 'Russian'}
+        ];
+        
+        getContent(vm.path);
+        $rootScope.$on('selectContent', function(args, content){  
+            if(content == '...'){ 
+                var position = 0;
+                for(var i = 0; i<vm.path.length; i++){
+                    if(vm.path[i] == '/'){
+                        position = i;
+                    }
+                }
+                vm.path = vm.path.slice(0, position);
+            } else {
+                if(content.search('.php') == -1)
+                {
+                    if(vm.path == '/'){
+                        vm.path += content;
+                    }else{
+                        vm.path += '/' + content;
+                    }
+                } else{
+                    vm.editFile = content;
+                    vm.hideLangFiles = true;
+                }
+            }
+            if(vm.path == ''){
+                vm.path = '/';
+            }
+            vm.isFile = content.search('.php');
+            if(vm.isFile == -1 ){
+               getContent(vm.path); 
+            } else {
+                getContent(vm.path + '/' + content);
+            }
+        });
+        
+        function getContent(path){
+            GetLanguageFiles.query({path: path}, function(answer){
+                if(vm.isFile == -1)
+                {
+                    if(vm.path != '\\'){
+                        vm.gridOptions_gridLanguagesFiles.data = [{folder: '...'}];
+                    }
+                    angular.forEach(answer[0], function(content){
+                        vm.gridOptions_gridLanguagesFiles.data.push({folder: content});
+                    });
+                }
+                else{
+                    var arr = [];
+                    angular.forEach(answer[1][0], function(value, key1){
+                        var obj = {
+                          key: key1,
+                          english: value
+                        };
+                        arr.push(obj);
+                    });
+                    var i = 0;
+                    angular.forEach(answer[1][1], function(value){
+                        arr[i].russian = value;
+                        i++;
+                    });
+                    vm.gridOptions_gridLanguagesFile.data = arr;
+                }
+            });
+        }
+        
+        function selectFile(){
+            vm.hideLangFiles = false;
+            vm.gridOptions_gridLanguagesFile.data = [];
+        }
+        
+        vm.gridOptions_gridLanguagesFile.onRegisterApi = function(gridApi){
+            gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue){
+                alertError.hide();
+                alertSuccess.hide();
+                if(newValue.trim() !== oldValue.trim()){
+                    if(newValue.trim() === '') {
+                        alertError = $alert({title: vm.required_field, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                        angular.forEach(vm.gridOptions_gridLanguagesFile.data, function(phrase) {
+                            if (phrase.key === rowEntity.key){
+                                if(colDef.name === 'english'){
+                                    phrase.english = oldValue;
+                                } else {
+                                    phrase.russian = oldValue;
+                                }
+                            } 
+                        });
+                    } else {
+                        EditLanguageFile.query({path: vm.path, file: vm.editFile, language: colDef.name.slice(0, 2), key: rowEntity.key, value: newValue}, function(answer){
+                            console.log(answer);
+                            if(!answer[0]){
+                                alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                            } else {
+                                alertSuccess = $alert({title: vm.file_change, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                            }
+                        });
+                    }
+                }
+            });   
+        };
+    };
  })();

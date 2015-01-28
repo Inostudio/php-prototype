@@ -21,5 +21,10 @@ return array(
     'edit_user_message' => 'User has been successfully edited!',
     'remove_user_message' => 'User has been successfully removed!',
     'add_user_to_group' => 'The user has been successfully added to the group!',
-    'remove_user_from_group' => 'User was successfully removed from the group!'
+    'remove_user_from_group' => 'User was successfully removed from the group!',
+    'user' => 'User',
+    'deliting'  =>  'Deliting!',
+    'deliting_text'  =>  'Are you sure you want to remove yourself from this group?',
+    'ok'    =>  'Ok',
+    'cancel'    =>  'Cancel'
 );

@@ -15,5 +15,7 @@ return array(
     'ok' => 'Подтвердить',
     'cancel' => 'Отмена',
     'add_perm_to_group' => 'Право было успешно предоставлено!',
-    'remove_perm_from_group' => 'Право было успешно удалено!'
+    'remove_perm_from_group' => 'Право было успешно удалено!',
+    'group' => 'Группа',
+    'description' => 'Описание'
 );

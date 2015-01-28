@@ -66,6 +66,11 @@
               templateUrl:  '/' + lang + '/angular/?ns=admin&id=adminPartials.resources',
               controller: 'ResourcesCtrl',
               controllerAs: 'vm'
+          }).
+          when('/languages', {
+              templateUrl:  '/' + lang + '/angular/?ns=admin&id=adminPartials.languages',
+              controller: 'LanguagesCtrl',
+              controllerAs: 'vm'
           });
       }]);
 })();

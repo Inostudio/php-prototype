@@ -39,7 +39,9 @@
         .factory('EditArticle', EditArticle)
         .factory('SearchArticles', SearchArticles)
         .factory('RemoveArticle', RemoveArticle)
-        .factory('GetStatistics', GetStatistics);
+        .factory('GetStatistics', GetStatistics)
+        .factory('GetLanguageFiles', GetLanguageFiles)
+        .factory('EditLanguageFile', EditLanguageFile);
     
     Group.$inject = ['$resource'];
     AddGroup.$inject = ['$resource'];
@@ -76,6 +78,8 @@
     EditArticle.$inject = ['$resource'];
     SearchArticles.$inject = ['$resource'];
     RemoveArticle.$inject = ['$resource'];
+    GetLanguageFiles.$inject = ['$resource'];
+    EditLanguageFile.$inject = ['$resource'];
     
     function Group($resource){
         return $resource('/' + lang +  '/adm/group/show', {}, {
@@ -310,6 +314,18 @@
     function GetStatistics($resource){
         return $resource('/' + lang +  '/adm/dashboard/statistics', {}, {
             query: {method:'GET', params:{}, isArray:true}
+        });
+    };
+    
+    function GetLanguageFiles($resource, $path){
+        return $resource('/' + lang + '/adm/language/language-files', {path: $path}, {
+            query: {method:'GET', params: {}, isArray:true}
+        });
+    };
+    
+    function EditLanguageFile($resource, $path, $file, $language, $key, $value){
+        return $resource('/' + lang + '/adm/language/edit-language-file', {path: $path, file: $file, language: $language, key: $key, value: $value}, {
+            query: {method:'POST', params: {}, isArray:true}
         });
     };
 })();
