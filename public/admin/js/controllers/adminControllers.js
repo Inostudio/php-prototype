@@ -115,6 +115,7 @@
         vm.edit_group_message = '';
         vm.add_group_message = '';
         vm.remove_group_message = '';
+        vm.idAdminsGroup = 0;
 
         var removeGroupId = null;
         vm.modal = $modal({
@@ -126,7 +127,9 @@
             alertError.hide();
             alertSuccess.hide();
             removeGroupId = Number(id);
-            vm.modal.show();
+            if(id != vm.idAdminsGroup){
+                vm.modal.show();
+            }
         });
 
         //Redirect to permission
@@ -145,7 +148,7 @@
             { name: 'permissions', displayName: 'Permissions' , width: '15%', enableFiltering: false,  enableSorting: false, enableCellEdit: false,//permissioms
               cellTemplate: '<spanedit edit-action="EventForRedirectToGroupOptions" edit-id="{{row.entity.id}}"/>'},
             { name: 'remove', displayName: 'Remove' , width: '10%', enableCellEdit: false, enableFiltering: false, enableSorting: false, height: '15px',
-              cellTemplate: '<spanremove remove-action="EventForDropGroup" remove-id="{{row.entity.id}}"/>' }
+              cellTemplate: '<spanremove remove-action="EventForDropGroup" remove-id="{{row.entity.id}}" ng-hide/>' }
         ];
 
         vm.gridOptions.onRegisterApi = function(gridApi){
@@ -221,7 +224,12 @@
 
         //Получение +++
         Group.queryInfo(function(res){
-          vm.gridOptions.data = res;
+            angular.forEach(res, function(elem){
+                if(elem.isAdmin){
+                    vm.idAdminsGroup = elem.id;
+                }
+            });
+            vm.gridOptions.data = res;
         });
 
         //Добавление
@@ -464,10 +472,10 @@
             
             vm.gridOptions_groupOptions = { enableFiltering: true };
             vm.gridOptions_groupOptions.columnDefs = [
-                { name: 'id', displayName: 'Id', enableCellEdit: false, width: '5%', enableFiltering: false },
-                { name: 'title', displayName: 'Title', width: '10%', enableCellEdit: false },
-                { name: 'description', displayName: 'Description' , width: '30%', enableFiltering: false, enableCellEdit: false },
-                { name: 'accept', displayName: 'Accept' , width: '5%', enableFiltering: false, enableCellEdit: false,
+                { name: 'id', displayName: 'Id', enableCellEdit: false, width: '10%', enableFiltering: false },
+                { name: 'title', displayName: 'Title', width: '30%', enableCellEdit: false },
+                { name: 'description', displayName: 'Description' , width: '45%', enableFiltering: false, enableCellEdit: false },
+                { name: 'accept', displayName: 'Accept' , width: '15%', enableFiltering: false, enableCellEdit: false,
                     cellTemplate: '<spantoggle change-action="EventChangeGroup" change-accept="{{row.entity.accept}}" change-id="{{row.entity.id}}"/>'}
             ];
 

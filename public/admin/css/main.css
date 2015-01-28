@@ -157,3 +157,7 @@ body {
 .navbar-inverse .navbar-nav>li>a {
   color: #000000;
 }
+
+.groupOptionTable{
+    width: 600px;
+}

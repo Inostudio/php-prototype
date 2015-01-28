@@ -5,7 +5,7 @@
 <h1 class="page-header"><%trans('admin/permissions.permissions')%></h1>
 <div class="table-responsive">
     <h3 class="sub-header"><%trans('admin/permissions.add_permission')%></h3>
-    <form>
+    <form name="form" novalidate>
         <div class="form-inline">
             <div class="input-group">
                 <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/permissions.permission_name')%>" ng-model="vm.permissionName" required>
@@ -13,7 +13,7 @@
             <div class="input-group">
               <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/permissions.permission_description')%>" ng-model="vm.permissionDescription">
             </div>
-            <button type="submit" class="btn btn-default" ng-click="vm.addPermission()"><%trans('admin/permissions.add')%></button>
+            <button type="submit" class="btn btn-default" ng-click="vm.addPermission()" ng-disabled="form.$invalid"><%trans('admin/permissions.add')%></button>
         </div>
     </form>
     <h3 class="sub-header"><%trans('admin/permissions.list_of_permissions')%></h3>
