@@ -164,7 +164,7 @@
                 if(colDef.name === 'title'){
                     var i = 0;
                     angular.forEach(vm.gridOptions.data, function(group) {  //Проверяем, существует ли группа с таким именем
-                        if ((group.title === newValue.trim()) && (group.id !== rowEntity.id)) {
+                        if ((group.title === newValue.trim()) && (group.id != rowEntity.id)) {
                             i++;
                             isExistsEdit = 1;
                         }
@@ -177,7 +177,7 @@
                             alertError = $alert({title: 'Field title is empty!', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
                             vm.gridOptions.data[k].title = oldValue;
                         } else {
-                            if(oldValue !== newValue)
+                            if(oldValue != newValue)
                             {
                                 EditGroup.query({groupId: rowEntity.id, title: newValue, groupDescription: oldGroup.description}, function(answer){
                                     if(answer[0] === false){
@@ -192,7 +192,7 @@
                     }
 
                 } else {
-                    if((newValue !== null) && (newValue.trim() != oldValue)) {
+                    if((newValue != null) && (newValue.trim() != oldValue)) {
                         EditGroup.query({groupId: rowEntity.id, title: oldGroup.title, groupDescription: newValue}, function(answer){
                             if(answer[0] === false){
                                 alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
@@ -255,7 +255,7 @@
                     var oldGroups = vm.gridOptions.data;
                     vm.gridOptions.data = [];
                     angular.forEach(oldGroups, function(group) {
-                      if (group.id !== id)
+                      if (group.id != id)
                           vm.gridOptions.data.push(group);
                     });
                     alertSuccess = $alert({title: vm.remove_group_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
@@ -373,7 +373,7 @@
                     if(colDef.name === 'title'){
                         var i = 0;  
                         angular.forEach(vm.gridOptions_perm.data, function(permission) {    //Проверяем, существует ли право с таким именем
-                            if ((permission.title === newValue.trim()) && (permission.id !== rowEntity.id)) {
+                            if ((permission.title === newValue.trim()) && (permission.id != rowEntity.id)) {
                                 i++;
                                 isExistsEdit = 1;
                             }   
@@ -386,7 +386,7 @@
                                 alertError = $alert({title: 'Field title is empty!', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
                                 vm.gridOptions_perm.data[k].title = oldValue;
                             } else {
-                                if(oldValue !== newValue)
+                                if(oldValue != newValue)
                                 {
                                     EditPermission.query({permissionId: rowEntity.id, title: newValue, permissionDescription: oldPermission.description}, function(answer){
                                         if(answer[0] === false){
@@ -401,7 +401,7 @@
                         }
 
                     } else {
-                        if((newValue !== null) && (newValue.trim() != oldValue)) {
+                        if((newValue != null) && (newValue.trim() != oldValue)) {
                             //alert("Description");
                             EditPermission.query({permissionId: rowEntity.id, title: oldPermission.title, permissionDescription: newValue}, function(answer){
                                 if(answer[0] === false){
@@ -425,7 +425,7 @@
                         var oldPermissions = vm.gridOptions_perm.data;
                         vm.gridOptions_perm.data = [];
                         angular.forEach(oldPermissions, function(permission) {
-                          if (permission.id !== id) 
+                          if (permission.id != id) 
                               vm.gridOptions_perm.data.push(permission);
                         });
                         alertSuccess = $alert({title: vm.remove_permission_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
@@ -629,7 +629,7 @@
                      return;
                 }
 
-                if((vm.userPassword !== vm.userConfirmPassword)){
+                if((vm.userPassword != vm.userConfirmPassword)){
                      alertError = $alert({title: 'Don\'t match confirm password.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
                      return;
                 }
@@ -699,7 +699,7 @@
                         if(str.search(a) === -1){
                             alertError = $alert({title: 'Email is invalid!', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
                         } else {
-                            if(newValue.trim() !== oldValue)
+                            if(newValue.trim() != oldValue)
                             {
                                 EditUser.query({userId: rowEntity.id, email: newValue}, function(answer){
                                     if(answer[0] === false){
@@ -716,7 +716,7 @@
 
                 //Сортировка
                 gridApi.core.on.sortChanged($scope, function(arg1, arg2) {
-                    if(arg2.length !== 0){
+                    if(arg2.length != 0){
                         if((vm.action === 1) || (vm.action === 3)){    //Сортировка с поиском
                             vm.currentPage = 1;
                             vm.action = 3;
@@ -833,7 +833,7 @@
 
                         vm.users_grid.data = [];
                         angular.forEach(oldUsers, function(user) {
-                          if (user.id !== id) 
+                          if (user.id != id) 
                               vm.users_grid.data.push(user);
                         });
                         vm.countUsers--;
@@ -1299,7 +1299,7 @@
             gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue){
                 alertError.hide();
                 alertSuccess.hide();
-                if(newValue.trim() !== oldValue.trim()){
+                if(newValue.trim() != oldValue.trim()){
                     if(newValue.trim() === ''){
                         alertError = $alert({title: vm.field_name_required, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
                         angular.forEach(vm.gridOptions_categoriesOptions.data, function(category) {
@@ -1502,7 +1502,7 @@
             gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue){
                 alertError.hide();
                 alertSuccess.hide();
-                if(newValue.trim() !== oldValue.trim()){
+                if(newValue.trim() != oldValue.trim()){
                     if(newValue.trim() === '') {
                         alertError = $alert({title: vm.required_field, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
                         angular.forEach(vm.gridOptions_articleOfCategoryOptions.data, function(article) {
@@ -1542,7 +1542,7 @@
                 vm.currentPage = 1;
                 //Сортировка с поиском
                 if(!vm.action){     //Обычная сортировка
-                    if(arg2[0] !== undefined){
+                    if(arg2[0] != undefined){
                         vm.offset = 0;
                         direction = arg2[0].sort.direction;
                         field = arg2[0].name;
@@ -1550,7 +1550,7 @@
                     }
                 } else if(vm.action === 1){
                     console.log('Search with sorting');
-                    if(arg2[0] !== undefined){
+                    if(arg2[0] != undefined){
                         vm.offset = 0;
                         direction = arg2[0].sort.direction;
                         field = arg2[0].name;
