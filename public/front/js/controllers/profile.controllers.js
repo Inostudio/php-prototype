@@ -234,6 +234,7 @@
             closeAlert();
             cleanErrors(field);
         }
+
     }
 
     EditPhotoCtrl.$inject = ['$scope', '$modalInstance', 'Profile', 'imageUrl', 'exists', 'PhotoResize'];

@@ -148,21 +148,19 @@ class ProfileController extends \BaseController
         $v = Validator::make(Input::all(), self::$changeEmailValidation);
 
         if($v->fails()){
-            //return 'false';
             $response = [
                 false,
-                $v->messages()//"This email is exists or fail email or password!"//trans('front/profile/change_password.message_data_invalid')
+                $v->messages()
             ];
         } else if (!\Hash::check(Input::get('password'), Auth::user()->password)) {
-            //return 'false2';
             $response = [
                 false,
-                ["password" => ["The selected password is invalid."]]//trans('front/profile/change_password.message_old_password_wrong')
+                ["password" => [trans('front/profile/change_email.message_password_wrong')]]
             ];
         } else {
 
             //Send email
-            return [true, 'На вашу текущую почту отправлено письмо. Для подтверждение смены емаила пройдите по присланной ссылке.'];
+            return [true, trans('front/profile/change_email.message_change_success_send')];
             $this->users->changePassword(Auth::user()->id, Input::get('new_password'));
         }
 

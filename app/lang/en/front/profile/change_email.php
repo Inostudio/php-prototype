@@ -6,19 +6,22 @@
  * Time: 10:54
  */
 return array(
-    "placeholder_old_password"                  => "Old password",
-    "placeholder_default_password"              => "Your password default is 'password'",
-    "placeholder_new_password"                  => "New password",
-    "placeholder_new_password_confirm"          => "Confirm new password",
+    "placeholder_old_email"                  => "Old email address",
+    "placeholder_new_email"                  => "New email address",
+    "placeholder_password"          => "Enter your password",
 
-    "help_block_old_password_empty"             => "Old password must be not empty",
-    "help_block_new_password_empty"             => "New password must be not empty",
-    "help_block_new_password_short"             => "New password is too short",
-    "help_block_new_password_long"              => "New password is too long",
-    "help_block_new_password_confirm_wrong"     => "New password and password confirm don't match",
+    "help_block_old_email_empty"             => "Old email must be not empty",
+    "help_block_new_email_empty"             => "New email must be not empty",
+    "help_block_password_empty"             => "Password must be not empty",
+    "help_block_password_short"             => "Password is too short",
+    "help_block_password_long"              => "Password is too long",
+    "help_block_password_confirm_wrong"     => "Password and password confirm don't match",
+    "help_block_email_invalid"     => "The email must be a valid email address.",
+
 
     "button_change"                             => "Change",
 
-    "message_old_password_wrong"                => "Invalid old password",
-    "message_data_invalid"                      => "Invalid form data",
+    "message_password_wrong"                => "The selected password is invalid.",
+    "message_change_success_send"                      => "On your current e-mail sent the letter. To confirm the change of Email go to send the link.",
+    "title"                      => "Change email",
 );

@@ -8,5 +8,5 @@
 return array(
     "profile"           => "Profile",
     "changePassword"    => "Change password",
-    "changeEmail"       => "Change email"
+    "changeEmail"       => "Change email",
 );
