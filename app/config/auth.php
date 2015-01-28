@@ -68,4 +68,14 @@ return array(
 
 	),
 
+	'email_change' => array(
+
+		'change' => 'emails.change.reminder',
+
+		'table' => 'email_change',
+
+		'expire' => 60,
+
+	),
+
 );

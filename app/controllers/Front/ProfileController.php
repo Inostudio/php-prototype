@@ -158,14 +158,23 @@ class ProfileController extends \BaseController
                 ["password" => [trans('front/profile/change_email.message_password_wrong')]]
             ];
         } else {
-
+            $credentials = Input::only(
+                'old_email', 'new_email'
+            );
             //Send email
+            \Email::change($credentials);
             return [true, trans('front/profile/change_email.message_change_success_send')];
             $this->users->changePassword(Auth::user()->id, Input::get('new_password'));
         }
 
         return Response::json($response);
     }
+
+    public function getChangeEmailConfirmation()
+    {
+
+    }
+
 
     /**
      * @return mixed
