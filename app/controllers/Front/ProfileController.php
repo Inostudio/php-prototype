@@ -56,6 +56,15 @@ class ProfileController extends \BaseController
     ];
 
     /**
+     * @var array
+     */
+    protected static $changeEmailValidation = [
+        'old_email' => 'required|email|exists:users,email',
+        'new_email' => 'required|email|unique:users,email',
+        'password' => 'required|alpha_num|between:4,18'
+    ];
+
+    /**
      * Show layout profile page
      *
      * @return \Illuminate\View\View
@@ -127,6 +136,38 @@ class ProfileController extends \BaseController
         return Response::json($response);
     }
 
+    /**
+     * Change user's email
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function postChangeEmail()
+    {
+        $response = [true, trans('front/profile/profile.message_change_success')];
+
+        $v = Validator::make(Input::all(), self::$changeEmailValidation);
+
+        if($v->fails()){
+            //return 'false';
+            $response = [
+                false,
+                $v->messages()//"This email is exists or fail email or password!"//trans('front/profile/change_password.message_data_invalid')
+            ];
+        } else if (!\Hash::check(Input::get('password'), Auth::user()->password)) {
+            //return 'false2';
+            $response = [
+                false,
+                ["password" => ["The selected password is invalid."]]//trans('front/profile/change_password.message_old_password_wrong')
+            ];
+        } else {
+
+            //Send email
+            return [true, 'На вашу текущую почту отправлено письмо. Для подтверждение смены емаила пройдите по присланной ссылке.'];
+            $this->users->changePassword(Auth::user()->id, Input::get('new_password'));
+        }
+
+        return Response::json($response);
+    }
 
     /**
      * @return mixed

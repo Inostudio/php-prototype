@@ -7,5 +7,6 @@
  */
 return array(
     "profile"           => "Profile",
-    "changePassword"    => "Change password"
+    "changePassword"    => "Change password",
+    "changeEmail"       => "Change email"
 );

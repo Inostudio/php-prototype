@@ -9,8 +9,10 @@
         .module('profileApp')
         .controller('NavbarCtrl', NavbarCtrl)
         .controller('ShowCtrl', ShowCtrl)
-        .controller('EditCtrl', EditCtrl)
+        .controller('EditPasswordCtrl', EditPasswordCtrl)
+        .controller('EditEmailCtrl', EditEmailCtrl)
         .controller('EditPhotoCtrl', EditPhotoCtrl);
+
 
     NavbarCtrl.$inject = ['$location'];
     function NavbarCtrl($location){
@@ -111,8 +113,8 @@
         };
     }
 
-    EditCtrl.$inject = ['Profile'];
-    function EditCtrl(Profile) {
+    EditPasswordCtrl.$inject = ['Profile'];
+    function EditPasswordCtrl(Profile) {
         var vm = this;
 
         vm.alert = undefined;
@@ -164,7 +166,75 @@
         }
     }
 
-    var profileControllers = angular.module('profileControllers', []);
+    EditEmailCtrl.$inject = ['Profile'];
+    function EditEmailCtrl(Profile) {
+        var vm = this;
+
+        vm.alert = undefined;
+        vm.closeAlert = closeAlert;
+        vm.submitForm = submitForm;
+        vm.cleanForm = cleanForm;
+        vm.confirm = confirm;
+        vm.cleanErrors = cleanErrors;
+        vm.change = close;
+
+        vm.error = {};
+
+        ////////////
+
+        function closeAlert() {
+            vm.alert = undefined;
+        }
+
+        function submitForm(isValid) {
+            vm.submitted = true;
+            if(isValid) {
+                var success = function(data) {
+                    console.log(data[1]['old_email']);
+                    if (data[0] === true) {
+                        vm.alert = { msg: data[1], type: 'success'};
+                        vm.cleareForm();
+                    } else {
+                        vm.error.old_email = data[1]['old_email'] ? data[1]['old_email'][0] : undefined;
+                        vm.error.new_email = data[1]['new_email'] ? data[1]['new_email'][0] : undefined;
+                        vm.error.password = data[1]['password'] ? data[1]['password'][0] : undefined;
+                        //vm.alert = { msg: data[1], type: 'danger'};
+                    }
+                };
+
+                var error = function(data) {
+                    vm.alert = { msg: 'Some problems', type: 'danger'};
+                };
+
+                Profile.changeEmail(vm.user, success, error);
+            }
+        }
+
+        function cleanErrors(field) {
+            vm.error[field] = undefined;
+        }
+
+
+        function cleanForm() {
+            vm.user = {
+                old_email: '',
+                new_email: '',
+                password: ''
+            }
+
+            vm.submitted = false;
+        }
+        vm.cleanForm();
+
+        function confirm(){
+            return (vm.user.new_password === vm.user.password_confirm);
+        }
+
+        function close(field) {
+            closeAlert();
+            cleanErrors(field);
+        }
+    }
 
     EditPhotoCtrl.$inject = ['$scope', '$modalInstance', 'Profile', 'imageUrl', 'exists', 'PhotoResize'];
     function EditPhotoCtrl($scope, $modalInstance, Profile, imageUrl, exists, PhotoResize) {

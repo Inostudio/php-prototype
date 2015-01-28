@@ -11,7 +11,6 @@
             'ngImgCrop',
             'ngRoute',
             'ui.bootstrap',
-            'profileControllers',
             'angular-loading-bar'
         ]);
 })();

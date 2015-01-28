@@ -39,6 +39,11 @@
                         <% trans('front/profile/navbar.changePassword') %>
                     </a>
                 </li>
+                <li data-ng-class="{ 'active' : vm.isActive('/change_email') }">
+                    <a href="#/change_email/">
+                        <% trans('front/profile/navbar.changeEmail') %>
+                    </a>
+                </li>
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->

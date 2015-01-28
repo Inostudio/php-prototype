@@ -19,7 +19,12 @@
             }).
             when('/edit_password', {
                 templateUrl:  '/angular/?ns=front&id=profilePartials.edit_password',
-                controller: 'EditCtrl',
+                controller: 'EditPasswordCtrl',
+                controllerAs: 'vm'
+            }).
+            when('/change_email', {
+                templateUrl:  '/angular/?ns=front&id=profilePartials.change_email',
+                controller: 'EditEmailCtrl',
                 controllerAs: 'vm'
             }).
             otherwise({

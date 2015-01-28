@@ -15,6 +15,7 @@
         var service = {
             changeProfile: changeProfile,
             changePassword: changePassword,
+            changeEmail: changeEmail,
             uploadCropped: uploadCropped,
             uploadImage: uploadImage
         }
@@ -46,6 +47,21 @@
                     old_password: data.old_password,
                     new_password: data.new_password,
                     new_password_confirmation: data.password_confirm
+                }),
+                headers: {'Content-Type': 'application/json'}
+            })
+                .success(success)
+                .error(error);
+        }
+
+        function changeEmail(data, success, error) {
+            $http({
+                url: '/profile/change-email',
+                method: 'POST',
+                data: JSON.stringify({
+                    old_email: data.old_email,
+                    new_email: data.new_email,
+                    password: data.password
                 }),
                 headers: {'Content-Type': 'application/json'}
             })
