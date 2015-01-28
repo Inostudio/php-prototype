@@ -1,6 +1,12 @@
 <?php
 
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
+
 class Group extends Eloquent {
+
+    use SoftDeletingTrait;
+
+    protected $dates = ['deleted_at'];
 
     protected $table = 'groups'; //Таблица, используемая моделью
     

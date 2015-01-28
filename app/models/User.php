@@ -5,6 +5,7 @@ use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Auth\Reminders\RemindableInterface;
 use SammyK\LaravelFacebookSdk\FacebookableTrait;
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
 /**
  * User
@@ -26,7 +27,10 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 	use UserTrait, RemindableTrait;
     use FacebookableTrait;
+    use SoftDeletingTrait;
 
+
+    protected $dates = ['deleted_at'];
 	/**
 	 * The database table used by the model.
 	 *

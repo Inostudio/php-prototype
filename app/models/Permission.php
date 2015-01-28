@@ -1,8 +1,14 @@
 <?php
 
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
+
 class Permission extends Eloquent {
 
     //use UserTrait, RemindableTrait;
+    use SoftDeletingTrait;
+
+
+    protected $dates = ['deleted_at'];
 
     protected $table = 'permissions'; //Таблица, используемая моделью
     

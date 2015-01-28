@@ -1,7 +1,13 @@
 <?php
 
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
+
 class Article extends \Eloquent
 {
+    use SoftDeletingTrait;
+
+    protected $dates = ['deleted_at'];
+
     const STATUS_DRAFT = 1;
     const STATUS_PUBLISH = 2;
     const STATUS_DELETED = 3;

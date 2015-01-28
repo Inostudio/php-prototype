@@ -7,9 +7,13 @@
  */
 
 use SammyK\LaravelFacebookSdk\FacebookableTrait;
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
 class UserProfile extends Eloquent {
     use FacebookableTrait;
+    use SoftDeletingTrait;
+
+    protected $dates = ['deleted_at'];
 
     protected $table = 'user_profile';
 
