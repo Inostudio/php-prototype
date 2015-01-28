@@ -44,7 +44,7 @@ class ResourceService {
     public function __construct(UploadFileService $uploadService)
     {
         $this->us = $uploadService;
-        $this->localAdapter = new LocalAdapter('public');
+        $this->localAdapter = new LocalAdapter(public_path());
         $this->filesystem = new Filesystem($this->localAdapter);
     }
 
@@ -80,15 +80,22 @@ class ResourceService {
     public function delete($id)
     {
         $result = [false, 'Unknown'];
+        $notFound = false;
 
         $resource = Resource::find($id);
         if($resource) {
-            $resource = $resource->first();
-
-            $file = new File($resource->url, $this->filesystem);
-            $file->delete();
-            $result = [$resource->delete()];
+            $file = new File($resource->path, $this->filesystem);
+            if($file->exists()) {
+                $file->delete();
+                $result = [$resource->delete()];
+            } else {
+                $notFound = true;
+            }
         } else {
+            $notFound = true;
+        }
+
+        if($notFound) {
             $result[1] = 'Resource didn\'t found';
         }
 
