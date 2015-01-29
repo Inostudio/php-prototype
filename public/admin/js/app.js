@@ -12,6 +12,12 @@
         'ngResource',
         'angular-loading-bar',
         'angularCharts',
-        //'ngClipboard'
+        'ngClipboard'
     ]);
+    
+    angular
+        .module('adminApp')
+        .config(['ngClipProvider', function(ngClipProvider){
+            ngClipProvider.setPath("/admin/vendors/angular/ZeroClipboard.swf");
+    }]);
 })();

@@ -14,5 +14,6 @@ return array(
     'delete' => 'Delete',
     'empty_field'   =>  'The field can not be empty!',
     'success_changed_message'  =>  'Resource has been successfully changed!',
-    'select_file'  =>  'Please select a file'
+    'select_file'  =>  'Please select a file',
+    'copy_url'  =>  'Link copied to clipboard!'
 );

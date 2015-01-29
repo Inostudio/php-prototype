@@ -13,7 +13,8 @@
      vm.delete_btn = '<%trans("admin/resources.delete")%>';
      vm.empty_field = '<%trans("admin/resources.empty_field")%>';
      vm.success_changed_message = '<%trans("admin/resources.success_changed_message")%>';
-     vm.select_file = '<%trans("admin/resources.select_file")%>';"></div>
+     vm.select_file = '<%trans("admin/resources.select_file")%>';
+     vm.copy_url = '<%trans("admin/resources.copy_url")%>'"></div>
 <div>
     <h3 class="sub-header"><%trans('admin/resources.add_resources')%></h3>
     <form name="form" ng-submit="vm.add(vm.resource)">

@@ -1013,6 +1013,7 @@
         vm.empty_field = '';
         vm.success_changed_message = '';
         vm.select_file = '';
+        vm.copy_url = '';
         /*
          * action - режим навигации
          * 0 - обыная навигация или навигация с упорядочиванием
@@ -1033,7 +1034,11 @@
         vm.gridOptions_resourcesGrid.columnDefs = [
             { name: 'id', visible: false},
             { name: 'title', displayName: 'Title', width: '2%', enableCellEdit: true, enableSorting: true },
-            { name: 'url', displayName: 'Url' , width: '15%', enableCellEdit: false, enableSorting: false },
+            { name: 'url', displayName: 'Url' , width: '15%', enableCellEdit: false, enableSorting: false,
+                cellTemplate: '<div style="position: relative"><p>{{row.entity.url.length > 40 ? row.entity.url.substr(0, 35) + "..." : row.entity.url}}</p>\n\
+                    <a clip-copy="row.entity.url" ng-click="$emit(\'EventForCopyUrl\')" class="fa fa-files-o" style="margin-left: 90%; position: absolute; \n\
+                    margin-top: -8%"></a></div>'
+            },
             { name: 'view', displayName: 'View' , width: '15%', enableCellEdit: false, enableSorting: false, 
                 cellTemplate: '<div class="resourcePadding"><img ng-src="{{row.entity.url}}"></div>' },
             { name: 'action', displayName: 'Action' , width: '5%', enableCellEdit: false, enableSorting: false, 
@@ -1045,13 +1050,21 @@
             show: false,
             contentTemplate: 'ConfirmDelete.html'
         });
-
+        
+        $scope.$on('EventForCopyUrl', function (event) {
+            alertSuccess.hide();
+            alertError.hide();
+            $alert({title: vm.copy_url, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+        });
+        
         $scope.$on('EventForDropResource', function (event, id) {
             removeResourceId = id;
             vm.modal.show();
         });
 
         function add(resource) {
+            alertSuccess.hide();
+            alertError.hide();
             if(resource.file === '') {
                 $alert({title: vm.select_file, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
             } else {

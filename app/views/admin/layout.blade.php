@@ -56,7 +56,8 @@
     <script type='text/javascript' src='/admin/vendors/angular/angular-charts.min.js'></script>
     
     <!--ngClip-->
-
+    <script type='text/javascript' src='/admin/vendors/angular/ZeroClipboard.min.js'></script>
+    <script type='text/javascript' src='/admin/vendors/angular/ngClip.js'></script>
     @section('include')
 
     @show
