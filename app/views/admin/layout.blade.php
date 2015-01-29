@@ -55,6 +55,8 @@
     <script type='text/javascript' src='/admin/vendors/angular/d3.min.js'></script>
     <script type='text/javascript' src='/admin/vendors/angular/angular-charts.min.js'></script>
     
+    <!--ngClip-->
+
     @section('include')
 
     @show

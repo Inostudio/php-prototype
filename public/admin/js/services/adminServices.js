@@ -41,7 +41,9 @@
         .factory('RemoveArticle', RemoveArticle)
         .factory('GetStatistics', GetStatistics)
         .factory('GetLanguageFiles', GetLanguageFiles)
-        .factory('EditLanguageFile', EditLanguageFile);
+        .factory('EditLanguageFile', EditLanguageFile)
+        .factory('EditResource', EditResource)
+        .factory('GetSearchResources', GetSearchResources);
     
     Group.$inject = ['$resource'];
     AddGroup.$inject = ['$resource'];
@@ -80,6 +82,8 @@
     RemoveArticle.$inject = ['$resource'];
     GetLanguageFiles.$inject = ['$resource'];
     EditLanguageFile.$inject = ['$resource'];
+    EditResource.$inject = ['$resource'];
+    GetSearchResources.$inject = ['$resource'];
     
     function Group($resource){
         return $resource('/' + lang +  '/adm/group/show', {}, {
@@ -243,16 +247,22 @@
         });
     };
 
-    function AllResource($resource){
-        return $resource('/' + lang +  '/adm/resource/show', {}, {
+    function AllResource($resource, $limit, $offset, $direction){
+        return $resource('/' + lang +  '/adm/resource/show', {limit: $limit, offset: $offset, direction: $direction}, {
             query: {method:'POST', params:{}, isArray:true}
         });
     };
 
-    function DeleteResource($resource, $id){
+    function DeleteResource($resource, $id, $direction, $offset, $action, $limit, $phrase, $src){
         return $resource('/' + lang +  '/adm/resource/delete', {}, {
             query: {method:'POST', params:{
-                id: $id
+                id: $id,
+                direction: $direction, 
+                offset: $offset, 
+                action: $action,
+                limit: $limit,
+                phrase: $phrase,
+                src: $src
             }, isArray:true}
         });
     };
@@ -326,6 +336,18 @@
     function EditLanguageFile($resource, $path, $file, $language, $key, $value){
         return $resource('/' + lang + '/adm/language/edit-language-file', {path: $path, file: $file, language: $language, key: $key, value: $value}, {
             query: {method:'POST', params: {}, isArray:true}
+        });
+    };
+    
+    function EditResource($resource, $id, $title){
+        return $resource('/' + lang + '/adm/resource/edit-resource', {id: $id, title: $title}, {
+            query: {method:'POST', params: {}, isArray:true}
+        });
+    };
+    
+    function GetSearchResources($resource, $phrase, $src, $direction, $limit, $offset){
+        return $resource('/' + lang + '/adm/resource/search-resources', {phrase: $phrase, src: $src, direction: $direction, limit: $limit, offset: $offset}, {
+            query: {method:'GET', params: {}, isArray:true}
         });
     };
 })();

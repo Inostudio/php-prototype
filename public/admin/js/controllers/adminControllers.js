@@ -23,7 +23,7 @@
     GroupOptionsCtrl.$inject = ['$scope', '$routeParams', 'GroupOptions', '$alert', 'ChangePermissionsInGroup'];
     UsersCtrl.$inject = ['$scope', '$alert', 'User', 'AddUser', 'RemoveUser', 'EditUser', 'SearchUsers', '$modal', '$rootScope'];
     UserOptionsCtrl.$inject = ['$scope', '$alert', '$routeParams', 'UserOptions', 'ChangeGroupByUser', '$modal', '$rootScope'];
-    ResourcesCtrl.$inject = ['$scope', 'AddResource', 'AllResource', 'DeleteResource', '$alert', '$modal', '$rootScope'];
+    ResourcesCtrl.$inject = ['$scope', 'AddResource', 'AllResource', 'DeleteResource', '$alert', '$modal', '$rootScope', 'EditResource', 'GetSearchResources'];
     PagesCtrl.$inject = ['$scope', '$alert', '$modal', 'AddPage', 'Status', 'Pages', 'GetPage', 'DeletePage', 'SavePage', '$window', '$location', '$rootScope'];
     activCtrl.$inject = ['$scope', '$location', 'CheckLang'];
     CategoriesOfArticlesCtrl.$inject = ['GetCategoryOfArticle', '$alert', '$scope', '$modal', '$rootScope', 'RemoveCategoryOfArticle', 'AddCategoryOfArticle', 'EditCategoryOfArticle'];
@@ -986,8 +986,8 @@
             });
     };
 
-    function ResourcesCtrl($scope, AddResource, AllResource, DeleteResource, $alert, $modal, $rootScope) {
-
+    function ResourcesCtrl($scope, AddResource, AllResource, DeleteResource, $alert, $modal, $rootScope, EditResource, GetSearchResources) {
+        var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
         var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
         
         var vm = this;
@@ -997,6 +997,27 @@
         vm.add_resource_message = '';
         vm.deleteResource = deleteResource;
         vm.remove_resource_message = '';
+        vm.direction = 'asc';
+        vm.totalPage = 0;
+        vm.currentPage = 1;
+        vm.limit = 5;
+        vm.offset = 0;
+        vm.unavailablePrev = false;
+        vm.unavailableNext = false;
+        vm.prevPage = prevPage;
+        vm.nextPage = nextPage;
+        vm.action = 0;
+        vm.search = search;
+        vm.countResources = 0;
+        vm.reset = reset;
+        vm.empty_field = '';
+        vm.success_changed_message = '';
+        vm.select_file = '';
+        /*
+         * action - режим навигации
+         * 0 - обыная навигация или навигация с упорядочиванием
+         * 1 - поиск или поиск с упорядочиванием
+         */
         
         vm.resource = {
             title: '',
@@ -1005,24 +1026,18 @@
 
         vm.resources = [];
 
+        getResources();
 
-
-        function getAllResources() {
-            vm.resources = AllResource.query(function(res){
-                vm.gridOptions_resourcesGrid.data = res;
-            });
-        };
-        getAllResources();
-
-        vm.gridOptions_resourcesGrid = { enableFiltering: true, rowHeight: 110 };
+        vm.gridOptions_resourcesGrid = { enableFiltering: false, rowHeight: 110 };
 
         vm.gridOptions_resourcesGrid.columnDefs = [
-            { name: 'title', displayName: 'Title', width: '2%', enableCellEdit: false },
-            { name: 'url', displayName: 'Url' , width: '15%', enableFiltering: false, enableCellEdit: false, enableSorting: false },
-            { name: 'view', displayName: 'View' , width: '15%', enableCellEdit: false, enableFiltering: false, enableSorting: false, 
+            { name: 'id', visible: false},
+            { name: 'title', displayName: 'Title', width: '2%', enableCellEdit: true, enableSorting: true },
+            { name: 'url', displayName: 'Url' , width: '15%', enableCellEdit: false, enableSorting: false },
+            { name: 'view', displayName: 'View' , width: '15%', enableCellEdit: false, enableSorting: false, 
                 cellTemplate: '<div class="resourcePadding"><img ng-src="{{row.entity.url}}"></div>' },
-            { name: 'action', displayName: 'Action' , width: '5%', enableCellEdit: false, enableFiltering: false, enableSorting: false, 
-                cellTemplate: '<button class="btn" ng-click="$emit(\'EventForDropResource\', row.entity.id)" style="margin-left: 25%; margin-top: 20%">Delete</button>'}
+            { name: 'action', displayName: 'Action' , width: '5%', enableCellEdit: false, enableSorting: false, 
+                cellTemplate: '<button class="btn" ng-click="$emit(\'EventForDropResource\', row.entity.id)" style="margin-left: 25%; margin-top: 15%">Delete</button>'}
         ];
 
         var removeResourceId = null;
@@ -1038,43 +1053,65 @@
 
         function add(resource) {
             if(resource.file === '') {
-                $alert({title: 'Please select a file', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
+                $alert({title: vm.select_file, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
             } else {
-                AddResource.query({
-                    title: resource.title,
-                    file: resource.file
-                }, function(res) {
-                    if(res[0] === true) {
-                        vm.resources.push(res[1]);
+                AddResource.query({title: resource.title, file: resource.file}, function(answer) {
+                    if(answer[0]) {
                         $alert({title: vm.add_resource_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
-
                         vm.resource = {
                             title: '',
                             file: ''
                         };
                         angular.element(document.querySelector('#fileInput')).val(null);
+                        vm.countResources++;
+                        if((vm.currentPage < vm.totalPage) && (vm.limit * vm.totalPage >= vm.countResources)){
+                            vm.offset = vm.limit * vm.totalPage - vm.limit;
+                            vm.currentPage = vm.totalPage;
+                            if(!vm.action) {    //Обычная навигация
+                                getResources();
+                            } else {    //С поиском
+                                getSearchResources();
+                            }
+                            console.log('1-й');
+                        } else if(((vm.currentPage < vm.totalPage) || (vm.currentPage == vm.totalPage)) && (vm.limit * vm.totalPage < vm.countResources)){
+                            vm.offset = vm.limit * vm.totalPage;
+                            vm.currentPage = vm.totalPage + 1;
+                            if(!vm.action) {    //Обычная навигация
+                                getResources();
+                            } else {    //С поиском
+                                getSearchResources();
+                            }
+                            console.log('2-й');
+                        }
+                        else {
+                            vm.gridOptions_resourcesGrid.data.push(answer[1]);
+                            console.log('3-й');
+                        }
                     } else {
-                        $alert({title: res[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
+                        $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
                     }
                 });
             }
         };
 
         function deleteResource(id) {
-            DeleteResource.query({id: id}, function (res) {
+            DeleteResource.query({id: id, direction: vm.direction, offset: vm.offset, action: vm.action, limit: vm.limit, phrase: vm.searchText, src: vm.src}, function (answer) {
                 vm.modal.hide();
-                if(res[0] === true) {
-                    var index = 0;
-                    for(var i = 0; i < vm.resources.length; i++) {
-                        if(vm.resources[i].id == id) {
-                            index = i;
-                            break;
+                console.log(answer);
+                if(answer[0]) {
+                    vm.countResources = answer[0][2][1];
+                    var arr = []
+                    angular.forEach(vm.gridOptions_resourcesGrid.data, function(elem){
+                        if(elem.id != id){
+                            arr.push(elem);
                         }
-                    }
-                    vm.resources.splice(index, 1);
+                    });
+                    arr.push(answer[0][2][0][0]);
+                    vm.gridOptions_resourcesGrid.data = arr;
+                    checkNavBtnAndCountTotalPage();
                     $alert({title: vm.remove_resource_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
                 } else {
-                    $alert({title: res[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
+                    $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
                 }
             });
         };
@@ -1098,6 +1135,132 @@
             alertSuccess.hide();
             vm.deleteResource(removeResourceId);
         });
+        
+        function getResources(){
+            vm.resources = AllResource.query({limit: vm.limit, offset: vm.offset, direction: vm.direction}, function(answer){
+                vm.gridOptions_resourcesGrid.data = [];
+                angular.forEach(answer[0], function(resource){
+                    vm.gridOptions_resourcesGrid.data.push(resource);
+                });
+                vm.countResources = answer[1];
+                checkNavBtnAndCountTotalPage();
+            });
+        }
+        
+        function checkNavBtnAndCountTotalPage(){
+            vm.totalPage = Math.ceil(vm.countResources/vm.limit);
+            vm.unavailablePrev = false;
+            vm.unavailableNext = false;
+            if(vm.currentPage == 1){
+                vm.unavailablePrev = true;
+            }
+            
+            if(vm.currentPage == vm.totalPage){
+                vm.unavailableNext = true;
+            }
+        }
+        
+        function prevPage(){
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            vm.offset -= vm.limit;
+            vm.currentPage--;
+            if(!vm.action){
+                getResources();
+            } else {
+                getSearchResources();
+            }
+        }
+        
+        function nextPage(){
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            vm.offset += vm.limit;
+            vm.currentPage++;
+            if(!vm.action){
+                getResources();
+            } else {
+                getSearchResources();
+            }
+        }
+        
+        
+        vm.gridOptions_resourcesGrid.onRegisterApi = function(gridApi){
+            //Редактирование
+            gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue){
+                alertError.hide();
+                alertSuccess.hide();
+                if(newValue.trim() != oldValue.trim()){
+                    if(newValue.trim() === ''){
+                        alertError = $alert({title: vm.empty_field, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                        angular.forEach(vm.gridOptions_resourcesGrid.data, function(resource) {
+                            if (resource.id === rowEntity.id) 
+                                resource.title = oldValue;
+                        });
+                    } else {
+                        EditResource.query({id: rowEntity.id, title: newValue}, function(answer){
+                            if(answer[0]){
+                                alertSuccess = $alert({title: vm.success_changed_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                            } else {
+                                alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                                angular.forEach(vm.gridOptions_resourcesGrid.data, function(resource) {
+                                    if (resource.id === rowEntity.id) 
+                                        resource.title = oldValue;
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+
+            //Сортировка
+            gridApi.core.on.sortChanged($scope, function(arg1, arg2) {
+                if(arg2.length !== 0){
+                    vm.unavailablePrev = true;
+                    vm.unavailableNext = true;
+                    vm.direction = arg2[0].sort.direction;;
+                    vm.currentPage = 1;
+                    vm.offset = 0;
+                    if(!vm.action){    //Обычная сортировка
+                        getResources();                    
+                    } else {    //Сортировка с поиском
+                        getSearchResources();
+                    }
+                }
+            });                       
+        };
+        
+        function search(){
+            vm.direction = 'asc';
+            vm.offset = 0;
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            vm.currentPage = 1;
+            vm.action = 1;
+            getSearchResources();
+            
+        }
+        
+        function getSearchResources(){
+            GetSearchResources.query({phrase: vm.searchText, src: vm.src, direction: vm.direction, limit: vm.limit, offset: vm.offset}, function(answer){
+                vm.gridOptions_resourcesGrid.data = [];
+                angular.forEach(answer[0], function(resource){
+                    vm.gridOptions_resourcesGrid.data.push(resource);
+                });
+                vm.countResources = answer[1];
+                checkNavBtnAndCountTotalPage();
+            });
+        }
+        
+        function reset(){
+            vm.action = 0;
+            vm.currentPage = 1;
+            vm.offset = 0;
+            vm.direction = 'asc';
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            getResources();
+        }
     };  
 
     function PagesCtrl ($scope, $alert, $modal, AddPage, Status, Pages, GetPage, DeletePage, SavePage, $window, $location, $rootScope) {

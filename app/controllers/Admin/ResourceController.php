@@ -9,7 +9,7 @@
 namespace Admin;
 
 use Illuminate\Support\Facades\Input;
-
+use \Response;
 /**
  * Class ResourceController
  * @package Admin
@@ -21,6 +21,9 @@ class ResourceController extends \BaseController {
      */
     protected $resources = null;
 
+    protected $rulesEditResource = [
+        'title' => 'required|unique:resources'
+    ];
     /**
      * @param \ResourceService $rs
      */
@@ -41,13 +44,32 @@ class ResourceController extends \BaseController {
      * @return mixed
      */
     public function postShow() {
-        return \Resource::all();
+        return $this->resources->getResources(Input::get('direction'), Input::get('limit'), Input::get('offset'));
     }
 
     /**
      * @return array
      */
     public function postDelete() {
-        return $this->resources->delete(Input::get('id'));
+        return Response::json([$this->resources->delete(Input::get('id'), Input::get('action'), Input::get('direction'), Input::get('offset'), Input::get('limit'), Input::get('phrase'), Input::get('src'))]);
+    }
+    
+    public function postEditResource(){
+        $status = true;
+        $message = '';
+        $validator = \Validator::make(\Input::all(), $this->rulesEditResource);
+
+        if($validator->fails()) {
+            $status = false;
+            $message = $validator->messages()->first();
+        } else {
+            $this->resources->editResource(Input::get('id'), Input::get('title'));
+        }
+        
+        return Response::json([$status, $message]);
+    }
+    
+    public function getSearchResources(){
+        return Response::json($this->resources->getSearchResources(Input::get('direction'), Input::get('phrase'), Input::get('src'), Input::get('limit'), Input::get('offset')));
     }
 } 

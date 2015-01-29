@@ -11,6 +11,7 @@
         'mgcrea.ngStrap',
         'ngResource',
         'angular-loading-bar',
-        'angularCharts'
+        'angularCharts',
+        //'ngClipboard'
     ]);
 })();
