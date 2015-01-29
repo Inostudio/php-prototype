@@ -24,7 +24,7 @@ use SammyK\LaravelFacebookSdk\FacebookableTrait;
  */
 class User extends Eloquent implements UserInterface, RemindableInterface {
 
-	use UserTrait, RemindableTrait;
+    use UserTrait, RemindableTrait;
     use FacebookableTrait;
 
 	/**

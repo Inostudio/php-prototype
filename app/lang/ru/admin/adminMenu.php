@@ -10,4 +10,5 @@ return array(
     'resources'  =>  'Ресурсы',
     'logout'  =>  'Выйти',
     'languages'  =>  'Языки',
+    'settings'  =>  'Настройки'
 );

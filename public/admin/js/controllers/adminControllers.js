@@ -14,7 +14,8 @@
             .controller('PagesCtrl', PagesCtrl)
             .controller('CategoriesOfArticlesCtrl', CategoriesOfArticlesCtrl)
             .controller('ArticleCategoryCtrl', ArticleCategoryCtrl)
-            .controller('LanguagesCtrl', LanguagesCtrl);
+            .controller('LanguagesCtrl', LanguagesCtrl)
+            .controller('SettingsCtrl', SettingsCtrl);
             
 
     DashboardCtrl.$inject = ['GetStatistics'];
@@ -29,6 +30,7 @@
     CategoriesOfArticlesCtrl.$inject = ['GetCategoryOfArticle', '$alert', '$scope', '$modal', '$rootScope', 'RemoveCategoryOfArticle', 'AddCategoryOfArticle', 'EditCategoryOfArticle'];
     ArticleCategoryCtrl.$inject = ['GetArticles', '$routeParams', '$scope', '$alert', '$window', '$location', '$modal', '$rootScope', 'EditArticle', 'SearchArticles', 'RemoveArticle'];
     LanguagesCtrl.$inject = ['GetLanguageFiles', '$rootScope', '$scope', '$alert', 'EditLanguageFile'];
+    SettingsCtrl.$inject = [];
     
     function activCtrl($scope, $location, CheckLang) {
         var vm = this;
@@ -1971,4 +1973,9 @@
             });   
         };
     };
+    
+    function SettingsCtrl(){
+        var vm = this;
+        vm.hello = 'SettingsCtrl';
+    }
  })();

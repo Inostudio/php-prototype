@@ -4,7 +4,10 @@
     $routeName = Route::getCurrentRoute()->getName();
     $lang =  App::getLocale();
     $lang = $lang === NULL ? "en" : $lang;
-
+    
+    foreach (Section::all() as $key => $value) {
+        $result[$value->title] = $value->disable;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -79,7 +82,9 @@
             <li <?=$routeName=='front.home' ? 'class="active"' : ''; ?> ><a href="<?=action('front.home', ['lang' => $lang]);?>"><% trans('front\navbar.home') %></a></li>
             <li <?=$routeName=='front.about' ? 'class="active"' : ''; ?>><a href="<?=action('front.about', ['lang' => $lang]);?>"><% trans('front\navbar.about') %></a></li>
             <li <?=$routeName=='front.contact' ? 'class="active"' : ''; ?>><a href="<?=action('front.contact', ['lang' => $lang]);?>"><% trans('front\navbar.contact') %></a></li>
-            <li <?=Str::startsWith($routeName, 'front.articles') ? 'class="active"' : ''; ?>><a href="<?=action('front.articles', ['lang' => $lang]);?>"><% trans('front\navbar.articles') %></a></li>
+            @if(!$result['Articles'])
+                <li <?=Str::startsWith($routeName, 'front.articles') ? 'class="active"' : ''; ?>><a href="<?=action('front.articles', ['lang' => $lang]);?>"><% trans('front\navbar.articles') %></a></li>
+            @endif
           </ul>
           <div class="navbar-form navbar-left">
               <a href="<% action($routeName, ['lang' => 'ru']) %>" class="<% $lang === 'ru' ? 'active-block' : '' %>">RUS</a>

@@ -58,6 +58,7 @@
     <!--ngClip-->
     <script type='text/javascript' src='/admin/vendors/angular/ZeroClipboard.min.js'></script>
     <script type='text/javascript' src='/admin/vendors/angular/ngClip.js'></script>
+    
     @section('include')
 
     @show
@@ -129,8 +130,9 @@
             <li ng-class="{'active' : vm.isActive('/pages')}"><a href="#/pages"><i class="fa fa-newspaper-o"></i> <%trans('admin/adminMenu.pages')%></a></li>
             <li ng-class="{'active' : vm.isActive('/categories_of_articles') || vm.isActive('/articleCategory')}"><a href="#/categories_of_articles"><i class="fa fa-list"></i> <%trans('admin/adminMenu.categories_of_articles')%></a></li>
             <li ng-class="{'active' : vm.isActive('/allArticle')}"><a href="#/allArticle"><i class="fa fa-file-o"></i> <%trans('admin/adminMenu.articles')%></a></li>
-            <li ng-class="{'active' : vm.isActive('/resources')}"><a href="#/resources"><i class="fa fa-gear"></i> <%trans('admin/adminMenu.resources')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/resources')}"><a href="#/resources"><i class="fa fa-file-image-o"></i> <%trans('admin/adminMenu.resources')%></a></li>
             <li ng-class="{'active' : vm.isActive('/languages')}"><a href="#/languages"><i class="fa fa-language"></i> <%trans('admin/adminMenu.languages')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/settings')}"><a href="#/settings"><i class="fa fa-gear"></i> <%trans('admin/adminMenu.settings')%></a></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-view></div>
