@@ -33,13 +33,13 @@
     <div>
         <div class="form-inline">
             <form name="form2" novalidate>
-                <input type="text" class="form-control" placeholder="Search phrase" ng-model="vm.searchText" required>
+                <input type="text" class="form-control" placeholder="<%trans('admin/resources.search_phrase')%>" ng-model="vm.searchText" required>
                 <select class="form-control" ng-model="vm.src" required="">
                     <option value="1">Title</option>
                     <option value="2">Url</option>
                 </select>
-                <button class="btn btn-primary" ng-click="vm.search()" ng-disabled="form2.$invalid">Search</button>
-                <button class="btn btn-primary" ng-click="vm.reset()">Reset</button>
+                <button class="btn btn-primary" ng-click="vm.search()" ng-disabled="form2.$invalid"><%trans('admin/resources.search')%></button>
+                <button class="btn btn-primary" ng-click="vm.reset()"><%trans('admin/resources.reset')%></button>
             </form>
         </div>
         <span style="float: right"><%trans('admin/users.page')%>: {{vm.currentPage}}/{{vm.totalPage}}</span><br>
@@ -48,8 +48,8 @@
 
 <div ui-grid="vm.gridOptions_resourcesGrid" ui-grid-edit class="resourcesGrid"></div>
 <div style="margin-top: 5px;">
-    <button type="button" class="btn btn-success" ng-click="vm.prevPage()" ng-disabled="vm.unavailablePrev">Previous</button>
-    <button type="button" class="btn btn-success" ng-click="vm.nextPage()" ng-disabled="vm.unavailableNext">Next</button>
+    <button type="button" class="btn btn-success" ng-click="vm.prevPage()" ng-disabled="vm.unavailablePrev"><%trans('admin/resources.previous')%></button>
+    <button type="button" class="btn btn-success" ng-click="vm.nextPage()" ng-disabled="vm.unavailableNext"><%trans('admin/resources.next')%></button>
 </div>
 
 <script type="text/ng-template" id="ConfirmDelete.html">

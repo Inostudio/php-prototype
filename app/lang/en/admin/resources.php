@@ -15,5 +15,10 @@ return array(
     'empty_field'   =>  'The field can not be empty!',
     'success_changed_message'  =>  'Resource has been successfully changed!',
     'select_file'  =>  'Please select a file',
-    'copy_url'  =>  'Link copied to clipboard!'
+    'copy_url'  =>  'Link copied to clipboard!',
+    'search_phrase' =>  'Search phrase',
+    'search' =>  'Search',
+    'reset' =>  'Reset',
+    'previous' =>  'Previous',
+    'next' =>  'Next'
 );

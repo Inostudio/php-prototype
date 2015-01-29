@@ -1033,16 +1033,16 @@
 
         vm.gridOptions_resourcesGrid.columnDefs = [
             { name: 'id', visible: false},
-            { name: 'title', displayName: 'Title', width: '2%', enableCellEdit: true, enableSorting: true },
-            { name: 'url', displayName: 'Url' , width: '15%', enableCellEdit: false, enableSorting: false,
-                cellTemplate: '<div style="position: relative"><p>{{row.entity.url.length > 40 ? row.entity.url.substr(0, 35) + "..." : row.entity.url}}</p>\n\
+            { name: 'title', displayName: 'Title', width: '20%', enableCellEdit: true, enableSorting: true },
+            { name: 'url', displayName: 'Url' , width: '30%', enableCellEdit: false, enableSorting: false,
+                cellTemplate: '<div style="position: relative"><p>{{row.entity.url.length > 50 ? row.entity.url.substr(0, 45) + "..." : row.entity.url}}</p>\n\
                     <a clip-copy="row.entity.url" ng-click="$emit(\'EventForCopyUrl\')" class="fa fa-files-o" style="margin-left: 90%; position: absolute; \n\
-                    margin-top: -8%"></a></div>'
+                    margin-top: -6%"></a></div>'
             },
             { name: 'view', displayName: 'View' , width: '15%', enableCellEdit: false, enableSorting: false, 
                 cellTemplate: '<div class="resourcePadding"><img ng-src="{{row.entity.url}}"></div>' },
-            { name: 'action', displayName: 'Action' , width: '5%', enableCellEdit: false, enableSorting: false, 
-                cellTemplate: '<button class="btn" ng-click="$emit(\'EventForDropResource\', row.entity.id)" style="margin-left: 25%; margin-top: 15%">Delete</button>'}
+            { name: 'action', displayName: 'Remove' , width: '1%', enableCellEdit: false, enableSorting: false, 
+                cellTemplate: '<span class="fa fa-close" style="cursor: pointer; margin: 40%" ng-click="$emit(\'EventForDropResource\', row.entity.id)" style="margin-left: 25%; margin-top: 15%"></span>'}
         ];
 
         var removeResourceId = null;
