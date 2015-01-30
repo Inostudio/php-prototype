@@ -190,6 +190,21 @@ class ProfileController extends \BaseController
 
     }
 
+
+    /**
+     * @return mixed
+     */
+    public function postDeleteImage()
+    {
+        $result = $this->users->deleteAvatar();
+        $response = [
+            $result,
+            Auth::user()->getCroppedPhoto(),
+            $result ? 'Photo success removed' : 'Fail'
+        ];
+        return Response::json($response);
+    }
+
     /**
      * @return mixed
      */

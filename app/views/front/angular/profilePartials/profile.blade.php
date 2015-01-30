@@ -13,8 +13,22 @@
     </div>
     <div class="panel-body">
       <div class="row">
-        <div class="col-md-4 col-lg-4" align="center">
-            <img alt="User Pic" data-ng-init="vm.exists = '<% $user->existsPhoto() %>';vm.imageUrl = '<% $user->getPhoto() %>'; vm.imageCroppedUrl = '<% $user->getCroppedPhoto() %>'; vm.image = vm.imageCroppedUrl" src="{{vm.image}}" class="img-rounded" data-ng-click="vm.photo('lg')">
+        <div class="col-md-4 col-lg-4" align="center" style="position:relative; z-index: 100" data-ng-mouseover="vm.show = true;" data-ng-mouseleave="vm.show = false;">
+            <img alt="User Pic" data-ng-init="vm.exists = '<% $user->existsPhoto() %>';vm.imageUrl = '<% $user->getPhoto() %>'; vm.imageCroppedUrl = '<% $user->getCroppedPhoto() %>'; vm.image = vm.imageCroppedUrl" src="{{vm.image}}" class="img-rounded">
+            <div ng-show="vm.show">
+                <div data-ng-show="vm.exists" style="position: absolute; background: rgba(0,0,0,0.6); top: 0px; right: -12px; border-radius: 8px; width: 20px;">
+                    <span data-ng-click="vm.deleteAvatar()"><i class="fa fa-times"></i></span>
+                </div>
+
+                <div style="position: absolute; background: rgba(0,0,0,0.6); bottom: 0px; border-radius: 8px; height: 30px; width: 99%">
+                    <div data-ng-show="!vm.exists">
+                        <a><span style="color: #ffffff" data-ng-click="vm.photo('lg')">Upload image</span></a>
+                    </div>
+                    <div data-ng-show="vm.exists">
+                        <a><span style="color: #ffffff" data-ng-click="vm.photo('lg')">Change image</span></a>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class=" col-md-8 col-lg-8 ">
             <form name="form" novalidate>
@@ -192,7 +206,7 @@
                 <button class="btn btn-primary" data-ng-click="vm.upload(vm.myCroppedImage)">
                     <% trans('front/profile/profile.button_save') %>
                 </button>
-                <button class="btn btn-w/rning" data-ng-click="vm.cancel()">
+                <button class="btn btn-warning" data-ng-click="vm.cancel()">
                     <% trans('front/profile/profile.button_cancel') %>
                 </button>
             </div>

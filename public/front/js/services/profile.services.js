@@ -17,7 +17,8 @@
             changePassword: changePassword,
             changeEmail: changeEmail,
             uploadCropped: uploadCropped,
-            uploadImage: uploadImage
+            uploadImage: uploadImage,
+            deleteImage: deleteImage
         }
 
         return service;
@@ -94,6 +95,19 @@
                 .success(success)
                 .error(error);
         }
+
+        function deleteImage(data, success, error) {
+            $http({
+                url: '/profile/delete-image',
+                method: 'POST',
+                data: JSON.stringify({
+                }),
+                headers: {'Content-Type': 'application/json'}
+            })
+                .success(success)
+                .error(error);
+        }
+
     }
 
     function Photo() {

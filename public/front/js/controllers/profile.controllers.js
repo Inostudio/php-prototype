@@ -34,11 +34,13 @@
         vm.alert = undefined;
         vm.editing = false;
         vm.submitted = false;
+        vm.exists = true;
         vm.closeAlert = closeAlert;
         vm.edit = edit;
         vm.cancel = cancel;
         vm.apply = apply;
         vm.photo = photo;
+        vm.deleteAvatar = deleteAvatar;
 
         ////////////
 
@@ -111,6 +113,20 @@
             });
 
         };
+
+        function deleteAvatar() {
+            //add confirm
+            Profile.deleteImage({}, function(data) {
+                vm.exists = false;
+                vm.image = data[1];
+                if(data[0]) {
+                    vm.alert = { msg: data[2], type: 'success'};
+                } else {
+                    vm.alert = { msg: data[2], type: 'danger'};
+                }
+                console.log(data);
+            });
+        }
     }
 
     EditPasswordCtrl.$inject = ['Profile'];

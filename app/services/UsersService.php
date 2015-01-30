@@ -228,5 +228,25 @@ class UsersService
             return [$users2, $users1];
         }
     }
+
+    public function deleteAvatar()
+    {
+        return $this->rmdirRecursive(public_path() . "/public/users/" . Auth::user()->id);
+    }
+
+    private function rmdirRecursive($path){
+        $dir = $path;//'samples' . DIRECTORY_SEPARATOR . 'sampledirtree';
+        $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
+        $files = new RecursiveIteratorIterator($it,
+            RecursiveIteratorIterator::CHILD_FIRST);
+        foreach($files as $file) {
+            if ($file->isDir()){
+                rmdir($file->getRealPath());
+            } else {
+                unlink($file->getRealPath());
+            }
+        }
+        return rmdir($dir);
+    }
     
 }
