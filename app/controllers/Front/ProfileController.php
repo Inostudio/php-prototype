@@ -107,7 +107,6 @@ class ProfileController extends \BaseController
         return Response::json($response);
     }
 
-
     /**
      * Change user's password
      *
@@ -175,6 +174,21 @@ class ProfileController extends \BaseController
 
     }
 
+    public function postUser(){
+        $id = Input::get('id');
+        if($id != NULL) {
+            $user = \User::find($id);
+            if($user) {
+                $user = \User::with('profile', 'groups', 'articles.category', 'articles.user')->find($id);
+                //return $user;
+                return Response::json([$user, $user->getCroppedPhoto()]);
+            } else {
+                return Response::json([0, 'The user has not found']);
+            }
+
+        }
+
+    }
 
     /**
      * @return mixed

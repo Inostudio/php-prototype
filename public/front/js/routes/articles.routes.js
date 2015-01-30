@@ -27,7 +27,12 @@
                 templateUrl:  '/angular/?ns=front&id=articlesPartials.show',
                 controller: 'ShowArticleCtrl',
                 controllerAs: 'vm'
-            }).          
+            }).
+            when('/user/:userId', {
+                templateUrl:  '/angular/?ns=front&id=profilePartials.user',
+                controller: 'ShowUserCtrl',
+                controllerAs: 'vm'
+            }).
             otherwise({
                 redirectTo: '/'
             });

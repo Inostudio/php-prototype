@@ -6,13 +6,13 @@ class ArticlesService
     
     public function getArticles($limit){
         
-        $articles = Article::with('user');
+        $articles = Article::with('user', 'user.profile');
         return $articles->with('category')->take($limit)->get();
     }
     
     public function getMoreArticles($limit, $offset){
         
-        $articles = Article::with('user');
+        $articles = Article::with('user', 'user.profile');
         return $articles->with('category')->skip($offset)->take($limit)->get();
     }
     

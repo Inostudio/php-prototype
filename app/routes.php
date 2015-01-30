@@ -65,7 +65,8 @@ Route::group(array(
         ]);
 
         Route::controller('profile', 'ProfileController', [
-            'getShow' => 'front.profile'
+            'getShow' => 'front.profile',
+            'getUser' => 'front.profile.user'
         ]);
 
         Route::resource('entity', 'EntityController', [

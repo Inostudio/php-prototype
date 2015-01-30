@@ -9,6 +9,7 @@
         .module('articlesApp')
         .controller('ShowCtrl', ShowCtrl)
         .controller('ShowArticleCtrl', ShowArticleCtrl)
+        .controller('ShowUserCtrl', ShowUserCtrl)
         .controller('CreateArticleCtrl', CreateArticleCtrl)
         .controller('EditArticleCtrl', EditArticleCtrl);
 
@@ -150,6 +151,7 @@
         vm.article = [];
         vm.currentUserId = 0;
         vm.userArticle = [];
+        var lang = 'en';
         vm.you = (lang === 'en' ? 'you' : 'Вами');
         vm.byTheUser = (lang === 'en' ? 'by the user ' : 'пользователем ');
         
@@ -177,7 +179,7 @@
                 if(!answer[0]){
                     alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-error-container'});
                 } else {
-                    window.location.href = '/' + lang + '/articles';
+                    window.location.href = '/articles';
                 }
             });
             
@@ -201,7 +203,7 @@
         ShowArticle.query({articleId: $routeParams.articleId}, function(answer){
             
             if(answer[0].user_id !== answer[1]){
-                window.location.href = '/' + lang + '/articles';
+                window.location.href = '/articles';
             } else {
                 vm.article = answer[0];
                 vm.articleCategory = vm.article.category_id;
@@ -216,6 +218,51 @@
                     alertSuccess = $alert({title: vm.success_edit, placement: 'top-right', type: 'success', show: true, container: '#alerts-error-container', duration: 3});
                 }
             });
+        }
+    }
+
+    ShowUserCtrl.$injcet = ['ShowUser', '$routeParams'];
+    function ShowUserCtrl(ShowUser, $routeParams){
+        var vm = this;
+        vm.user = {
+        };
+        vm.currentUserId = 0;
+        vm.found = true;
+        vm.message = '';
+        vm.back = back;
+
+        function getUser(id) {
+            function success(data) {
+                if(data[0] != 0) {
+                    vm.user.photo = data[1];
+                    if (data[0].groups.length !== 0) {
+                        vm.user.groups = data[0].groups;
+                    }
+                    if (data[0].articles.length !== 0) {
+                        vm.user.articles = data[0].articles;
+                    }
+                    vm.user.articles = data[0].articles;
+                    vm.user.first_name = data[0].profile.first_name;
+                    vm.user.last_name = data[0].profile.last_name;
+                    vm.user.phone = data[0].profile.phone;
+                    vm.user.email = data[0].email;
+                    vm.user.name = vm.user.first_name + " " + vm.user.last_name;
+                } else {
+                    vm.found = false;
+                    vm.message = data[1];
+                }
+            }
+
+            function error(data) {
+
+            }
+            ShowUser.getUser({id: id}, success, error);
+        };
+
+        getUser($routeParams.userId);
+
+        function back() {
+            window.history.back();
         }
     }
 })();

@@ -129,7 +129,7 @@
                 </div>
                 <div class="articleMetaInfo">
                     <p><span class="grenSpan"><%trans('/front/articles/index.category')%>:</span> {{article.category.title}}</p>
-                    <p><span class="grenSpan"><%trans('/front/articles/index.author')%>:</span> {{article.user.email}}</p>
+                    <p><span class="grenSpan"><%trans('/front/articles/index.author')%>:</span> <a href="#/user/{{article.user.id}}">{{article.user.profile.first_name +  " " + article.user.profile.last_name}}</a></p>
                     <p><span class="grenSpan"><%trans('/front/articles/index.creation_date')%>:</span> {{article.created_at}}</p>
                 </div>
             </div>
