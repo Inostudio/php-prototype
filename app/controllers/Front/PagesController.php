@@ -57,10 +57,12 @@ class PagesController extends \BaseController
     public function showPage($lang, $url)
     {
         $page = \Page::where('url', $url)->first();
-        if(!(Auth::check() && Auth::user()->IsAdmin())){
-            if($page === null || $page->status->title !== 'Public') {
+        if($page !== null) {
+            if($page->status->title !== 'Public'
+                && !(Auth::check() && Auth::user()->IsAdmin()))
                 throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-            }
+        } else {
+            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
         }
 
         return \View::make('front.pages.static', [
