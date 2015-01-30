@@ -70,7 +70,7 @@ return array(
 
 	'email_change' => array(
 
-		'change' => 'emails.change.reminder',
+		'change' => 'emails.change.letter',
 
 		'table' => 'email_change',
 

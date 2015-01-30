@@ -142,6 +142,7 @@ class ProfileController extends \BaseController
      */
     public function postChangeEmail()
     {
+        //return Response::json([1]);
         $response = [true, trans('front/profile/profile.message_change_success')];
 
         $v = Validator::make(Input::all(), self::$changeEmailValidation);
@@ -163,15 +164,52 @@ class ProfileController extends \BaseController
             //Send email
             \Email::change($credentials);
             return [true, trans('front/profile/change_email.message_change_success_send')];
-            $this->users->changePassword(Auth::user()->id, Input::get('new_password'));
         }
 
         return Response::json($response);
     }
 
-    public function getChangeEmailConfirmation()
+    public function getChangeEmailConfirmation($lang, $token)
     {
 
+        $response = [false, ''];
+        $email = \Email::where('token', $token)->first();
+
+        if($email) {
+            //check expire
+            $created_at = $email->created_at;
+            $now = \Carbon\Carbon::now();
+            $max_diff = \Config::get('auth.email_change.expire') * 60;
+
+
+            if($max_diff > $now->diffInSeconds($created_at)) {
+                $user = \User::where('email', $email->email)->first();
+
+                $new_email_exists = \User::where('email', $email->new_email)->first();
+
+                if(!$new_email_exists && $user) {
+
+                    $user->email = $email->new_email;
+                    $response[0] = $user->save();
+                    $response[1] = 'You change email success!';
+
+                    \DB::table('email_change')->where('token', $token)->delete();
+                } else {
+                    \DB::table('email_change')->where('token', $token)->delete();
+                    $response[1] = 'This email is exists! Please try again.';
+                }
+            } else {
+                \DB::table('email_change')->where('token', $token)->delete();
+                throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+            }
+
+
+        } else {
+            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+        }
+
+        return Response::json($response);
+        //return dd($token, $email->new_email);
     }
 
     public function postUser(){

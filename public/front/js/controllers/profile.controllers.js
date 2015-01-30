@@ -136,7 +136,7 @@
         vm.alert = undefined;
         vm.closeAlert = closeAlert;
         vm.submitForm = submitForm;
-        vm.cleareForm = cleareForm;
+        vm.cleanForm = cleanForm;
         vm.confirm = confirm;
 
         ////////////
@@ -151,7 +151,7 @@
                 var success = function(data) {
                     if (data[0] === true) {
                         vm.alert = { msg: data[1], type: 'success'};
-                        vm.cleareForm();
+                        vm.cleanForm();
                     } else {
                         vm.alert = { msg: data[1], type: 'danger'};
                     }
@@ -165,7 +165,7 @@
             }
         }
 
-        function cleareForm() {
+        function cleanForm() {
             vm.user = {
                 old_password: '',
                 new_password: '',
@@ -174,7 +174,7 @@
 
             vm.submitted = false;
         }
-        vm.cleareForm();
+        vm.cleanForm();
 
 
         function confirm(){
@@ -209,7 +209,7 @@
                     console.log(data[1]['old_email']);
                     if (data[0] === true) {
                         vm.alert = { msg: data[1], type: 'success'};
-                        vm.cleareForm();
+                        vm.cleanForm();
                     } else {
                         vm.error.old_email = data[1]['old_email'] ? data[1]['old_email'][0] : undefined;
                         vm.error.new_email = data[1]['new_email'] ? data[1]['new_email'][0] : undefined;

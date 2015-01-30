@@ -10,10 +10,10 @@ class Email extends \Eloquent {
 
     protected $table = 'email_change';
 
-    public $timestamps = false;
-
     static public function change($credentials){
         $token = csrf_token();
+
+        self::removeEmail($token, $credentials['old_email']);
 
         $email = new Email;
         $email->email = $credentials['old_email'];
@@ -21,9 +21,24 @@ class Email extends \Eloquent {
         $email->token = $token;
         $email->save();
 
-        View::make(Config::get('auth.email_change.change'), ['token' => $token]);
+        Mail::send(Config::get('auth.email_change.change'), array('token' => $token), function($message) use ($email)
+        {
+            $message->to($email->email, 'John Smith')->subject('Change email!');
+        });
+        //View::make(Config::get('auth.email_change.change'), ['token' => $token]);
 
         return true;
+    }
+
+    static private function removeEmail($token, $email)
+    {
+        Email::where('token', $token)->delete();
+        Email::where('email', $email)->delete();
+    }
+
+    public function setUpdatedAtAttribute($value)
+    {
+        // Do nothing.
     }
 
 }

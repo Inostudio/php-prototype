@@ -213,7 +213,7 @@
         </div>
         <div data-ng-show="vm.isActive('UploadPhoto')">
             <button class="btn btn-primary" data-ng-click="vm.upload(vm.NewPhotoCroppedImage, vm.NewPhoto)" style="float: left">
-            <% trans('front/profile/profile.button_upload') %>
+                <% trans('front/profile/profile.button_upload') %>
             </button>
             <button class="btn btn-warning" data-ng-click="vm.changeToSelectNewPhoto()" style="float: right">
                 <% trans('front/profile/profile.button_back') %>
