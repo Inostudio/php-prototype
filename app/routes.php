@@ -106,7 +106,7 @@ Route::group(array(
 Route::group(array('domain' => 'php-prototype.com'), function()
 {
     Route::any('{url?}', function($url) {
-        $redirectUrl = 'http://' . Config::get('app.locale'). '.' . 'php-prototype.com' . $url;
+        $redirectUrl = 'http://' . Config::get('app.locale'). '.' . 'php-prototype.com' . ($url === '/' ? $url : '/' . $url);
         return Redirect::to($redirectUrl);
     })->where(['url' => '[-a-z0-9/]+']);
 });

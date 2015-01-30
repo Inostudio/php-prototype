@@ -106,7 +106,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#"><i class="fa fa-dashboard"></i> <%trans('adminMenu.dashboard')%></a></li>
             <li><a href="#/allArticle"><i class="fa fa-file-o"></i> <%trans('adminMenu.articles')%></a></li>
-            <li><a href="<% action('admin.logout') %>"><i class="fa fa-suitcase"></i> <%trans('adminMenu.logout')%></a></li>
+            <li><a href="<% action('admin.logout', ['lang' => $lang]) %>"><i class="fa fa-suitcase"></i> <%trans('adminMenu.logout')%></a></li>
           </ul>
           <form class="navbar-form navbar-right">
               <input type="text" class="form-control" placeholder="<%trans('adminMenu.search')%>">
