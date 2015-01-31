@@ -109,5 +109,16 @@ Route::filter('csrf', function()
 
 Route::filter('localization', function() {
     App::setLocale(Route::input('lang'));
-    //return dd(Route::getCurrentRoute());
+});
+
+Route::filter('checkSection', function() {
+    $section = Request::segment(2);
+    
+    $section = Section::where('title', '=', $section)->first();
+    if($section){
+        if($section->disable){
+            return Redirect::to('/');
+        }
+    }
+    //return dd($section);
 });

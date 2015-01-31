@@ -7,7 +7,7 @@ use \Response;
 
 
 /**
- * Class UserController
+ * Class ArticleController
  * @package Admin
  */
 class ArticleController extends \BaseController

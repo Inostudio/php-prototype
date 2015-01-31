@@ -30,7 +30,7 @@
     CategoriesOfArticlesCtrl.$inject = ['GetCategoryOfArticle', '$alert', '$scope', '$modal', '$rootScope', 'RemoveCategoryOfArticle', 'AddCategoryOfArticle', 'EditCategoryOfArticle'];
     ArticleCategoryCtrl.$inject = ['GetArticles', '$routeParams', '$scope', '$alert', '$window', '$location', '$modal', '$rootScope', 'EditArticle', 'SearchArticles', 'RemoveArticle'];
     LanguagesCtrl.$inject = ['GetLanguageFiles', '$rootScope', '$scope', '$alert', 'EditLanguageFile'];
-    SettingsCtrl.$inject = [];
+    SettingsCtrl.$inject = ['GetSections', 'ChangeSection', '$alert', '$scope'];
     
     function activCtrl($scope, $location, CheckLang) {
         var vm = this;
@@ -1974,8 +1974,36 @@
         };
     };
     
-    function SettingsCtrl(){
+    function SettingsCtrl(GetSections, ChangeSection, $alert, $scope){
+        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
         var vm = this;
-        vm.hello = 'SettingsCtrl';
+        vm.sections = [];
+        vm.toggleSection = toggleSection;
+        vm.section_disable = '';
+        vm.section_enable = '';
+        
+        GetSections.query({}, function(answer){
+           angular.forEach(answer[0], function(elem){
+               var item = {id: elem.id, title: elem.title};
+               if(elem.disable){
+                   item.disable = 0;
+               } else {
+                   item.disable = 1;
+               }
+               vm.sections.push(item);
+               
+           });
+        });
+        
+        function toggleSection($id, $disable){
+            alertSuccess.hide();
+            ChangeSection.query({id: $id, disable: $disable}, function(answer){
+                if($disable){
+                    alertSuccess = $alert({title: vm.section_disable, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                } else {
+                    alertSuccess = $alert({title: vm.section_enable, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                }
+            });
+        }
     }
  })();

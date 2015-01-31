@@ -59,6 +59,11 @@
     <script type='text/javascript' src='/admin/vendors/angular/ZeroClipboard.min.js'></script>
     <script type='text/javascript' src='/admin/vendors/angular/ngClip.js'></script>
     
+    
+    <!--Toggle-->
+    <script type='text/javascript' src='/admin/vendors/angular/ng-toggle.js'></script>
+    <link href="/admin/vendors/angular/ng-toggle.css" rel="stylesheet">
+    
     @section('include')
 
     @show

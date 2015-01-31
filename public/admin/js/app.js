@@ -12,7 +12,8 @@
         'ngResource',
         'angular-loading-bar',
         'angularCharts',
-        'ngClipboard'
+        'ngClipboard',
+        'ngToggle'
     ]);
     
     angular

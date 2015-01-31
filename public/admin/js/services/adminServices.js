@@ -43,7 +43,9 @@
         .factory('GetLanguageFiles', GetLanguageFiles)
         .factory('EditLanguageFile', EditLanguageFile)
         .factory('EditResource', EditResource)
-        .factory('GetSearchResources', GetSearchResources);
+        .factory('GetSearchResources', GetSearchResources)
+        .factory('GetSections', GetSections)
+        .factory('ChangeSection', ChangeSection);
     
     Group.$inject = ['$resource'];
     AddGroup.$inject = ['$resource'];
@@ -84,6 +86,8 @@
     EditLanguageFile.$inject = ['$resource'];
     EditResource.$inject = ['$resource'];
     GetSearchResources.$inject = ['$resource'];
+    GetSections.$inject = ['$resource'];
+    ChangeSection.$inject = ['$resource'];
     
     function Group($resource){
         return $resource('/' + lang +  '/adm/group/show', {}, {
@@ -348,6 +352,18 @@
     function GetSearchResources($resource, $phrase, $src, $direction, $limit, $offset){
         return $resource('/' + lang + '/adm/resource/search-resources', {phrase: $phrase, src: $src, direction: $direction, limit: $limit, offset: $offset}, {
             query: {method:'GET', params: {}, isArray:true}
+        });
+    };
+    
+    function GetSections($resource){
+        return $resource('/' + lang + '/adm/setting/sections', {}, {
+            query: {method:'GET', params: {}, isArray:true}
+        });
+    };
+    
+    function ChangeSection($resource, $id, $disable){
+        return $resource('/' + lang + '/adm/setting/change-section', {id: $id, disable: $disable}, {
+            query: {method:'POST', params: {}, isArray:true}
         });
     };
 })();

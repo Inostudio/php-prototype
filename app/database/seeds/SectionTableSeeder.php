@@ -7,19 +7,15 @@ class SectionTableSeeder extends Seeder
         DB::table('sections')->delete();
 
         Section::create([
-            'title' => 'Articles',
+            'title' => 'articles',
         ]);
         
         Section::create([
-            'title' => 'Profile',
+            'title' => 'profile',
         ]);
         
         Section::create([
-            'title' => 'Sign up',
-        ]);
-        
-        Section::create([
-            'title' => 'Sign in',
-        ]);    
+            'title' => 'auth',
+        ]);   
     }    
 }

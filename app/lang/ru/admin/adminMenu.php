@@ -1,6 +1,6 @@
 <?php
 return array(
-    'dashboard'  =>  'Статистика',
+    'dashboard'  =>  'Статиcтика',
     'users'  =>  'Пользователи',
     'groups'  =>  'Группы',
     'permissions'  =>  'Разрешения',
@@ -10,5 +10,5 @@ return array(
     'resources'  =>  'Ресурсы',
     'logout'  =>  'Выйти',
     'languages'  =>  'Языки',
-    'settings'  =>  'Настройки'
+    'settings'  =>  'Настройки',
 );
