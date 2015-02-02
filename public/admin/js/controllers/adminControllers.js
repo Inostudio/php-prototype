@@ -1078,6 +1078,8 @@
         vm.success_changed_message = '';
         vm.select_file = '';
         vm.copy_url = '';
+        vm.searchText2 = '';
+        vm.src2 = '';
         /*
          * action - режим навигации
          * 0 - обыная навигация или навигация с упорядочиванием
@@ -1174,16 +1176,18 @@
         function deleteResource(id) {
             DeleteResource.query({id: id, direction: vm.direction, offset: vm.offset, action: vm.action, limit: vm.limit, phrase: vm.searchText, src: vm.src}, function (answer) {
                 vm.modal.hide();
-                console.log(answer);
                 if(answer[0]) {
                     vm.countResources = answer[0][2][1];
-                    var arr = []
+                    var arr = [];
                     angular.forEach(vm.gridOptions_resourcesGrid.data, function(elem){
                         if(elem.id != id){
                             arr.push(elem);
                         }
                     });
-                    arr.push(answer[0][2][0][0]);
+                    if(answer[0][2][0][0] != undefined){
+                        arr.push(answer[0][2][0][0]);
+                    }
+                    vm.gridOptions_resourcesGrid.data = [];
                     vm.gridOptions_resourcesGrid.data = arr;
                     checkNavBtnAndCountTotalPage();
                     $alert({title: vm.remove_resource_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
@@ -1314,12 +1318,13 @@
             vm.unavailableNext = true;
             vm.currentPage = 1;
             vm.action = 1;
+            vm.searchText2 = vm.searchText;
+            vm.src2 = vm.src;
             getSearchResources();
-            
         }
         
         function getSearchResources(){
-            GetSearchResources.query({phrase: vm.searchText, src: vm.src, direction: vm.direction, limit: vm.limit, offset: vm.offset}, function(answer){
+            GetSearchResources.query({phrase: vm.searchText2, src: vm.src2, direction: vm.direction, limit: vm.limit, offset: vm.offset}, function(answer){
                 vm.gridOptions_resourcesGrid.data = [];
                 angular.forEach(answer[0], function(resource){
                     vm.gridOptions_resourcesGrid.data.push(resource);
