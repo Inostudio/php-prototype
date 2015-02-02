@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'url' => 'http://php-prototype.com',
+	'url' => 'http://en.php-prototype.com',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -192,9 +192,8 @@ return array(
 		'URL'               => 'Illuminate\Support\Facades\URL',
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
-        
-        'Debugbar' => 'Barryvdh\Debugbar\Facade',
-        'Facebook' => 'SammyK\LaravelFacebookSdk\FacebookFacade',
+        'Debugbar' 			=> 'Barryvdh\Debugbar\Facade',
+        'Facebook' 			=> 'SammyK\LaravelFacebookSdk\FacebookFacade',
         
 	),
 

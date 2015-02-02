@@ -84,6 +84,7 @@ class FacebookController extends \BaseController {
             return Redirect::to('/')->with('error', $e->getPrevious()->getMessage());
         }
 
+        //return dd($facebook_user, $facebook_user_profile);
         $user = $this->users->facebookUser($facebook_user, $facebook_user_profile);
 
         // Log the user into Laravel
