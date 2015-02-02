@@ -25,7 +25,6 @@ class Email extends \Eloquent {
         {
             $message->to($email->email, 'John Smith')->subject('Change email!');
         });
-        //View::make(Config::get('auth.email_change.change'), ['token' => $token]);
 
         return true;
     }

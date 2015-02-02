@@ -39,7 +39,36 @@ class PagesController extends \BaseController
      */
     public function contact()
     {
-        return \View::make('front.pages.contact');
+        return \View::make('front.pages.contact', ['lang' => \App::getLocale()]);
+    }
+
+    protected static $contact = [
+        'name' => 'required',
+        'email' => 'required|email',
+        'message' => 'required|min:30',
+    ];
+
+    public function postSendContact()
+    {
+        $response = [true, 'Email success send!'];
+        $data = Input::only('name', 'email', 'message');
+
+        $v = \Validator::make($data, self::$contact);
+
+        if($v->fails()) {
+            $response = [false, $v->messages()];
+        } else {
+            $config = \Config::get('prototype.contact');
+            try {
+                \Mail::send($config['view'] , ['user' => $data], function($message) use ($config) {
+                    $message->to($config['email'], $config['whom'])->subject($config['subject']);
+                });
+            } catch(\Exception $ex) {
+                $response = [false, $ex->getMessage()];
+            }
+        }
+
+        return $response;
     }
 
     /**

@@ -90,7 +90,8 @@ Route::group(array(
             ]
         ]);*/
         Route::controller('page', 'PagesController', [
-            'showPage' => 'front.page'
+            'showPage' => 'front.page',
+            'postSendContact' => 'front.contact.send'
         ]);
 
         //Articles
