@@ -45,7 +45,10 @@
         .factory('EditResource', EditResource)
         .factory('GetSearchResources', GetSearchResources)
         .factory('GetSections', GetSections)
-        .factory('ChangeSection', ChangeSection);
+        .factory('ChangeSection', ChangeSection)
+        .factory('GetUserBans', GetUserBans)
+        .factory('RemoveBan', RemoveBan)
+        .factory('AddBan', AddBan);
     
     Group.$inject = ['$resource'];
     AddGroup.$inject = ['$resource'];
@@ -88,6 +91,9 @@
     GetSearchResources.$inject = ['$resource'];
     GetSections.$inject = ['$resource'];
     ChangeSection.$inject = ['$resource'];
+    GetUserBans.$inject = ['$resource'];
+    RemoveBan.$inject = ['$resource'];
+    AddBan.$inject = ['$resource'];
     
     function Group($resource){
         return $resource('/' + lang +  '/adm/group/show', {}, {
@@ -364,6 +370,24 @@
     function ChangeSection($resource, $id, $disable){
         return $resource('/' + lang + '/adm/setting/change-section', {id: $id, disable: $disable}, {
             query: {method:'POST', params: {}, isArray:true}
+        });
+    };
+    
+    function GetUserBans($resource, $userId){
+        return $resource('/' + lang +  '/adm/user/bans', {}, {
+          query: {method:'POST', params:{id: $userId}, isArray:true}
+        });
+    };
+    
+    function RemoveBan($resource, $id){
+        return $resource('/' + lang +  '/adm/user/remove-ban', {}, {
+          query: {method:'POST', params:{id: $id}, isArray:true}
+        });
+    };
+    
+    function AddBan($resource, $userId, $endDate, $reason){
+        return $resource('/' + lang +  '/adm/user/add-ban', {userId: $userId, endDate: $endDate, reason: $reason}, {
+          query: {method:'POST', params:{}, isArray:true}
         });
     };
 })();

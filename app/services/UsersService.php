@@ -238,4 +238,25 @@ class UsersService
         }
     }
     
+    public function getUserBans($id){
+        $bans = UserBans::where('user_id', '=', $id)->get();
+        $isBaned = UserBans::where('user_id', '=', $id)->where('end', '>', date("Y-m-d H:i:s"))->first();
+        
+        return [($isBaned == null ? false : $isBaned), $bans];
+    }
+    
+    public function removeBan($id){
+        UserBans::destroy($id);
+        return true;
+    }
+    
+    public function addBan($userId, $endDate, $reason){
+        $ban = new UserBans;
+        $ban->user_id = $userId;
+        $ban->begin = date("Y-m-d H:i:s");
+        $ban->end = $endDate;
+        $ban->reason = $reason;
+        $ban->save();
+        return true;
+    }
 }

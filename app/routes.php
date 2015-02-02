@@ -25,7 +25,7 @@ Route::any('{url?}', function($url) {
         return Redirect::to($url);
 })->where(['url' => '^((?!ru|en).)[-a-z0-9/]+']);
 
-Route::group(['before'  =>  'checkSection'], function(){
+Route::group(['before'  =>  'checkBan|checkSection'], function(){
     Route::group(['prefix' => '{lang}', 'before' => 'localization'], function() {
 
         Route::get('/angular/', ['uses' => 'AngularController@serve']);

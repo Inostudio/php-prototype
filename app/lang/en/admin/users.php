@@ -27,5 +27,16 @@ return array(
     'deliting_text'  =>  'Are you sure you want to remove yourself from this group?',
     'ok'    =>  'Ok',
     'cancel'    =>  'Cancel',
-    'invalid_email_message' =>  'Email is invalid!'
+    'invalid_email_message' =>  'Email is invalid!',
+    'user'  =>  'User',
+    'delete'    =>  'Delete',
+    'reason'    =>  'Reason',
+    'bans'    =>  'Bans',
+    'ban'    =>  'Ban',
+    'lock_up_to'    =>  'Lock up to',
+    'date'    =>  'Date',
+    'time'    =>  'Time',
+    'banned_with'    =>  'Banned with',
+    'to'    =>  'to',
+    'successfully_blocked_message'  =>  'User was successfully blocked!'
 );

@@ -22,7 +22,7 @@
     GroupCtrl.$inject = ['$scope', 'Group', 'AddGroup', 'RemoveGroup', 'EditGroup', '$alert', '$modal', '$rootScope'];
     PermissionCtrl.$inject = ['$scope', '$alert', 'Permission', 'AddPermission', 'RemovePermission', 'EditPermission', '$modal', '$rootScope'];
     GroupOptionsCtrl.$inject = ['$scope', '$routeParams', 'GroupOptions', '$alert', 'ChangePermissionsInGroup'];
-    UsersCtrl.$inject = ['$scope', '$alert', 'User', 'AddUser', 'RemoveUser', 'EditUser', 'SearchUsers', '$modal', '$rootScope'];
+    UsersCtrl.$inject = ['$scope', '$alert', 'User', 'AddUser', 'RemoveUser', 'EditUser', 'SearchUsers', '$modal', '$rootScope', 'GetUserBans', 'RemoveBan', 'AddBan'];
     UserOptionsCtrl.$inject = ['$scope', '$alert', '$routeParams', 'UserOptions', 'ChangeGroupByUser', '$modal', '$rootScope'];
     ResourcesCtrl.$inject = ['$scope', 'AddResource', 'AllResource', 'DeleteResource', '$alert', '$modal', '$rootScope', 'EditResource', 'GetSearchResources'];
     PagesCtrl.$inject = ['$scope', '$alert', '$modal', 'AddPage', 'Status', 'Pages', 'GetPage', 'DeletePage', 'SavePage', '$window', '$location', '$rootScope'];
@@ -523,7 +523,7 @@
             });    
     };
 
-    function UsersCtrl($scope, $alert, User, AddUser, RemoveUser, EditUser, SearchUsers, $modal, $rootScope) {
+    function UsersCtrl($scope, $alert, User, AddUser, RemoveUser, EditUser, SearchUsers, $modal, $rootScope, GetUserBans, RemoveBan, AddBan) {
             var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container-for-users'});
             var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container-for-users'});
             
@@ -554,7 +554,19 @@
             vm.remove_user_message = '';
             vm.myId = 0;
             vm.invalid_email_message = '';
-
+            vm.userBan = null;
+            vm.modalBan = {};
+            vm.hideCurrentBan = true;
+            vm.ban = {};
+            vm.confirmDeleteBan = true;
+            vm.acceptRemoveBan = acceptRemoveBan;
+            vm.banDate = "";
+            vm.banTime = "";
+            vm.banReason = "";
+            vm.banUserId = 0;
+            vm.errorDate = false;
+            vm.successfully_blocked_message = '';
+            
             vm.users_grid = {
                 enableFiltering: false
             };
@@ -564,7 +576,9 @@
                 { name: 'email', enableCellEdit: true, width: '15%'},
                 { name: 'first_name', enableCellEdit: false, width: '10%'},
                 { name: 'last_name', enableCellEdit: false, width: '10%'},
-                { name: 'phone', enableCellEdit: false, width: '20%', enableSorting: false},
+                { name: 'phone', enableCellEdit: false, width: '15%', enableSorting: false},
+                { name: 'ban', enableCellEdit: false, width: '5%', enableSorting: false,
+                    cellTemplate: '<span class="fa fa-ban" style="margin-left: 40%; cursor: pointer" ng-click="$emit(\'changeBan\', row.entity.id, row.entity.email)"></span>'},
                 { name: 'groups', displayName: 'Groups' , width: '8%', enableCellEdit: false,  enableSorting: false,
                     cellTemplate: '<spanedit edit-action="EventForRedirectToUserOptions"  edit-id="{{row.entity.id}}"/>'},
                 { name: 'remove', displayName: 'Remove' , width: '8%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
@@ -577,7 +591,7 @@
             var searchText = '';
 
             getUsers(limit, offset, 'asc', 'id');
-
+            
             function nextPage(){
                 if((vm.currentPage + 1) <= vm.totalPage) {
                     vm.unavailableNext = true;
@@ -866,21 +880,7 @@
                     } else {
                         vm.users_grid.data.push(answer[1][0]);
                     }
-                    console.log(answer[1][0]);/**
-                        *
-                        * 
-                        *  
-                        *   
-                        *    
-                        *     
-                        *      
-                        *       
-                        *        
-                        *         
-                        *          
-                        *           
-                        *             
-                     */
+                    console.log(answer[1][0]);
                 });
             }
 
@@ -892,6 +892,68 @@
                 alertSuccess.hide();
                 removeUser(userRemoveId);
             });
+            
+            vm.modalBan = $modal({
+                show: false,
+                contentTemplate: 'Ban.html',
+                scope: $scope
+            });
+            
+            $rootScope.$on('changeBan', function(args, id, user){
+                if(id != vm.myId)
+                {
+                    vm.userBan = user;
+                    vm.banUserId = id;
+                    vm.hideCurrentBan = true;
+                    vm.confirmDeleteBan = true;
+                    vm.ban = {};
+                    GetUserBans.query({userId: id}, function(answer){
+                        if(answer[0]){  //Уже забанен
+                            vm.hideCurrentBan = false;
+                            vm.ban = answer[0];
+                        }
+                        vm.modalBan.show();
+                    });
+                }
+            });
+            
+            $rootScope.$on('cancelBan', function(){
+                vm.modalBan.hide();
+            });
+            
+            $rootScope.$on('okBan', function(){
+                var oldValueDate = new Date(vm.banDate);
+                var oldValueTime = new Date(vm.banTime);
+                vm.banDate.setHours(vm.banDate.getHours() + vm.banTime.toString().slice(16, 18));
+                vm.banDate.setMinutes(vm.banDate.getMinutes() + vm.banTime.toString().slice(19, 21));
+                var currentDate = new Date();
+                if(vm.banDate.getTime() <= currentDate.getTime()){   //Ошибка
+                    vm.errorDate = true;
+                } else{ //Всё норм
+                    AddBan.query({userId: vm.banUserId, endDate: vm.banDate, reason: vm.banReason}, function(answer){
+                        vm.banDate = '';
+                        vm.banTime = '';
+                        vm.banReason = '';
+                        vm.modalBan.hide();
+                        alertSuccess = $alert({title: vm.successfully_blocked_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
+                    });
+                    vm.errorDate = false;
+                }
+                vm.banDate = oldValueDate;
+                vm.banTime = oldValueTime;
+            }); 
+            
+            $rootScope.$on('showConfirmDeleteBan', function(){
+                vm.confirmDeleteBan = false;
+            }); 
+            
+            function acceptRemoveBan(id){
+                RemoveBan.query({id: id}, function(answer){
+                    vm.confirmDeleteBan = true;
+                    vm.hideCurrentBan = false;
+                    vm.hideCurrentBan = true;
+                });
+            }
     };
 
     function UserOptionsCtrl($scope, $alert, $routeParams, UserOptions, ChangeGroupByUser, $modal, $rootScope) {

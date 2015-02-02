@@ -165,3 +165,7 @@ body {
 .resourcesGrid{
     height: 630px;
 }
+
+.error-border{
+    border: 1px solid red;
+}

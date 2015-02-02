@@ -130,4 +130,16 @@ class UserController extends \BaseController
     public function postSearch(){
         return \Response::json($this->users->searchUsers(Input::get('text'), Input::get('lim'), Input::get('off'), Input::get('direction'), Input::get('field')));
     }
+    
+    public function postBans(){
+        return \Response::json($this->users->getUserBans(Input::get('userId')));
+    }
+    
+    public function postRemoveBan(){
+        return \Response::json([$this->users->removeBan(Input::get('id'))]);
+    }
+    
+    public function postAddBan(){
+        return \Response::json([$this->users->addBan(Input::get('userId'), Input::get('endDate'), Input::get('reason'))]);
+    }
 } 

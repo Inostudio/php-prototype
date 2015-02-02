@@ -2,7 +2,8 @@
      vm.edit_user_message = '<%trans("admin/users.edit_user_message")%>';
      vm.remove_user_message = '<%trans("admin/users.remove_user_message")%>';
      vm.myId='<%Auth::user()->id%>';
-     vm.invalid_email_message='<%trans("admin/users.invalid_email_message")%>'"></div>
+     vm.invalid_email_message='<%trans("admin/users.invalid_email_message")%>';
+     vm.successfully_blocked_message='<%trans("admin/users.successfully_blocked_message")%>'"></div>
 
 <h1 class="page-header"><%trans('admin/users.users')%></h1>
 <div class="table-responsive">
@@ -50,4 +51,40 @@
         <button class="btn btn-primary" ng-click="$emit('okDeleteUser')"><%trans('admin/users.ok')%></button>
         <button class="btn btn-warning" ng-click="$emit('cancelDeleteUser')"><%trans('admin/users.cancel')%></button>
     </div>
+</script>
+
+<script type="text/ng-template" id="Ban.html">
+    <center><h1 class="page-header"><%trans('admin/users.bans')%></h1></center> 
+    <form name="formBan" novalidate>
+        <div class="modal-body" style="padding-top: 0">
+            <div>
+                <b><%trans('admin/users.user')%>:</b> {{vm.userBan}}
+                <p ng-hide="vm.hideCurrentBan" style="margin-bottom: 0"><i><%trans('admin/users.banned_with')%> {{vm.ban.begin}} <%trans('admin/users.to')%> {{vm.ban.end}}</i>    <span class="fa fa-close" style="cursor: pointer" ng-click="$emit('showConfirmDeleteBan')"></span>
+                            <button class="btn btn-primary" ng-hide="vm.confirmDeleteBan" ng-click="vm.acceptRemoveBan(vm.ban.id)"><%trans('admin/users.delete')%></button>  <button class="btn btn-primary" ng-hide="vm.confirmDeleteBan" ng-click="vm.confirmDeleteBan=true"><%trans('admin/users.cancel')%></button></p>  
+                <p ng-hide="vm.hideCurrentBan"><i><%trans('admin/users.reason')%>: {{vm.ban.reason}}</i></p>
+            </div>
+            <center><h3 class="modal-title"><%trans('admin/users.ban')%></h3></center>              
+            <!---->
+            <div class="form-group form-inline">
+                <p><i><%trans('admin/users.lock_up_to')%></i></p>
+                <label class="control-label"><i class="fa fa-calendar"></i> <%trans('admin/users.date')%></label><label class="control-label" style="margin-left: 17%;"><i class="fa fa-clock-o"></i> <%trans('admin/users.time')%></label><br>
+                <div class="form-group">
+                  <input ng-change="vm.errorDate = false;" ng-class="{'error-border' : vm.errorDate}" type="text" size="10" class="form-control ng-pristine ng-valid ng-touched" ng-model="vm.banDate" placeholder="<%trans('admin/users.date')%>" bs-datepicker="" ng-disabled="!vm.hideCurrentBan" required>
+                </div>
+                <div class="form-group">
+                    <input ng-change="vm.errorDate = false;" ng-class="{'error-border' : vm.errorDate}" type="text" class="form-control" size="8" ng-model="vm.banTime" name="time" bs-timepicker placeholder="<%trans('admin/users.time')%>"
+                        data-time-format="HH:mm" data-length="1" data-minute-step="1" data-arrow-behavior="picker" ng-disabled="!vm.hideCurrentBan" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="<%trans('admin/users.reason')%>" class="form-control" ng-disabled="!vm.hideCurrentBan" ng-model="vm.banReason" required>
+                </div>
+            </div>
+            
+            <!---->
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="$emit('okBan')" ng-disabled="formBan.$invalid || vm.errorDate"><%trans('admin/users.ok')%></button>
+            <button class="btn btn-warning" ng-click="$emit('cancelBan')"><%trans('admin/users.cancel')%></button>
+        </div>
+    </form>
 </script>

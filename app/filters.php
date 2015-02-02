@@ -120,5 +120,13 @@ Route::filter('checkSection', function() {
             return Redirect::to('/');
         }
     }
-    //return dd($section);
+});
+
+Route::filter('checkBan', function() {
+    if(Auth::user()){
+        $ban = UserBans::where('user_id', '=', Auth::user()->id)->where('end', '>', date("Y-m-d H:i:s"))->first();
+        if($ban){
+            return Response::view('errors/forbidden', ['ban' => $ban], 403);
+        }
+    }
 });
