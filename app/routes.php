@@ -42,6 +42,11 @@ Route::group(array(
     });
 
     Route::group(['namespace' => 'Front'], function () {
+
+        Route::controller('search', 'SearchController', [
+            'getIndex' => 'front.search'
+        ]);
+
         //Login in Facebook
         Route::controller('facebook', 'FacebookController');
 

@@ -56,6 +56,9 @@
       <div class="container">
 
         <ul class="nav navbar-nav pull-right">
+          <form class="navbar-form" style="float: left" method="get" action="<% action('front.search', ['lang' => $lang]) %>">
+            <input name="offer" type="text" class="form-control" placeholder="<%trans('adminMenu.search')%>">
+          </form>
             @if (Auth::user())
                 <li <?=$routeName=='front.profile' ? 'class="active"' : ''; ?>><a href="<% action('front.profile', ['lang' => $lang]) %>"><i class="fa fa-user"></i> <% Auth::user()->email %></a></li>
                 <li><a href="<% action('front.logout', ['lang' => $lang]) %>"><i class="fa fa-signout"></i> <% trans('front/navbar.logout') %></a></li>
@@ -63,6 +66,7 @@
                 <li <?=$routeName=='front.signin' ? 'class="active"' : ''; ?>><a href="<% action('front.signin', ['lang' => $lang]) %>"><i class="fa fa-sign-in"></i> <% trans('front/navbar.signin') %></a></li>
                 <li <?=$routeName=='front.signup' ? 'class="active"' : ''; ?>><a href="<% action('front.signup', ['lang' => $lang]) %>"><i class="fa fa-plus-square"></i> <% trans('front/navbar.signup') %></a></li>
             @endif
+
         </ul>
 
         <div class="navbar-header">
@@ -85,6 +89,7 @@
               <a href="<% action($routeName, ['lang' => 'ru']) %>" class="<% $lang === 'ru' ? 'active-block' : '' %>">RUS</a>
               <a href="<% action($routeName, ['lang' => 'en']) %>" class="<% $lang === 'en' ? 'active-block' : '' %>">ENG</a>
           </div>
+
         </div><!--/.nav-collapse -->
 
 

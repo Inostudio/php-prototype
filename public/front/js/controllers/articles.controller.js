@@ -43,7 +43,7 @@
         var action = 0;
         var searchArticles = [];
         getArticles(limit);
-        
+
         vm.modal = $modal({
             show: false,
             contentTemplate: 'ConfirmDelete.html'

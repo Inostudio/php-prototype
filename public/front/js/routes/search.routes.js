@@ -2,27 +2,27 @@
     'use strict';
 
     angular
-        .module('articlesApp')
+        .module('searchApp')
         .config(config);
 
     config.$inject = ['$routeProvider'];
     function config($routeProvider) {
         $routeProvider.
             when('/', {
-                templateUrl: '/angular/?ns=front&id=articlesPartials.index',
-                controller: 'ShowCtrl',
+                templateUrl: '/angular/?ns=front&id=userPartials.users',
+                controller: 'IndexCtrl',
+                controllerAs: 'vm'
+            })./*
+            when('/create', {
+                templateUrl:  '/angular/?ns=front&id=articlesPartials.create',
+                controller: 'CreateArticleCtrl',
                 controllerAs: 'vm'
             }).
-            when('/create', {
-               templateUrl:  '/angular/?ns=front&id=articlesPartials.create',
-               controller: 'CreateArticleCtrl',
-               controllerAs: 'vm'
-            }).
             when('/edit/:articleId', {
-               templateUrl:  '/angular/?ns=front&id=articlesPartials.edit',
-               controller: 'EditArticleCtrl',
-               controllerAs: 'vm'
-            }). 
+                templateUrl:  '/angular/?ns=front&id=articlesPartials.edit',
+                controller: 'EditArticleCtrl',
+                controllerAs: 'vm'
+            }).
             when('/:articleId', {
                 templateUrl:  '/angular/?ns=front&id=articlesPartials.show',
                 controller: 'ShowArticleCtrl',
@@ -33,7 +33,7 @@
                 controller: 'ShowUserCtrl',
                 controllerAs: 'vm'
             }).
-
+*/
             otherwise({
                 redirectTo: '/'
             });
