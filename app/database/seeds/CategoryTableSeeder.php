@@ -11,7 +11,8 @@ class CategoryTableSeeder extends Seeder {
 		$faker = Faker::create();
                 Category::create([
                     'id' => 1,
-                    'title' => 'Other'
+                    'title' => 'Other',
+                    'isDefault'   =>  true
                 ]);
 		foreach(range(2, 10) as $index)
 		{

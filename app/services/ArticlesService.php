@@ -89,7 +89,7 @@ class ArticlesService
     }
     
     public function removeCategory($id){
-        Article::where('category_id', '=', $id)->update(array('category_id' => (Category::where('title', '=', 'Other')->first()->id)));
+        Article::where('category_id', '=', $id)->update(array('category_id' => (Category::where('isDefault', '=', '1')->first()->id)));
         Category::destroy($id);
         return true;
     }

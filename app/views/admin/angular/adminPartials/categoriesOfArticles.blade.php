@@ -1,7 +1,8 @@
 <div id="alerts-container"  ng-init="vm.remove_category_message = '<%trans("admin/articles.remove_category_message")%>';
      vm.add_category_message = '<%trans("admin/articles.add_category_message")%>';
      vm.field_name_required = '<%trans("admin/articles.field_name_required")%>';
-     vm.update_category_message = '<%trans("admin/articles.update_category_message")%>';"></div>
+     vm.update_category_message = '<%trans("admin/articles.update_category_message")%>';
+     vm.defaultCategoryId = '<%Category::where('isDefault', '=', '1')->first()->id%>'"></div>
 
 <h1 class="page-header"><%trans('admin/articles.categories_of_articles')%></h1>
 <div class="table-responsive">

@@ -1510,6 +1510,7 @@
         vm.add_category_message = '';
         vm.field_name_required = '';
         vm.update_category_message = '';
+        vm.defaultCategoryId = 0;
          
         vm.gridOptions_categoriesOptions = { enableFiltering: true, enableSorting: true, enableCellEdit: true};
         vm.gridOptions_categoriesOptions.columnDefs = [
@@ -1518,7 +1519,7 @@
             { name: 'articles', displayName: 'Articles' , width: '20%', enableCellEdit: false,  enableSorting: false, enableFiltering: false,
                     cellTemplate: '<spanedit edit-action="EventForRedirectToArticleOfCategory"  edit-id="{{row.entity.id}}"/>'},
             { name: 'remove', displayName: 'Remove' , width: '20%', enableCellEdit: false,  enableSorting: false, enableFiltering: false,
-                cellTemplate: '<spanremove remove-action="EventForDropCategory" remove-id="{{row.entity.id}}" ng-hide="{{row.entity.id == 1}}"/>'}
+                cellTemplate: '<spanremove remove-action="EventForDropCategory" remove-id="{{row.entity.id}}"/>'}
         ];
         
         GetCategoryOfArticle.query({}, function(answer){
@@ -1536,10 +1537,12 @@
         
         //Удаление 
         $scope.$on('EventForDropCategory', function (event, id) {
-            alertError.hide();
-            alertSuccess.hide();
-            vm.removeCategoryId = Number(id);
-            vm.modal.show();
+            if(id != vm.defaultCategoryId){
+                alertError.hide();
+                alertSuccess.hide();
+                vm.removeCategoryId = Number(id);
+                vm.modal.show();
+            }
         });
         
         $rootScope.$on('cancelDeleteCategory', function(){
