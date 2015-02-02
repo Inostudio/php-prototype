@@ -53,9 +53,15 @@ class ArticlesService
         return [$article, $currentUserId, $user];
     }
     
-    public function removeArticle($id){
+    public function removeArticle($id, $action, $direction, $offset, $limit, $phrase, $src, $category, $field){
         Article::destroy($id);
-        return true;
+        $article = null;
+        if(!$action){   //Обычная подгрузка
+            $article = $this->getArticlesAndCategory($category, 1, ($offset + $limit - 1), $direction, $field);
+        } else {    //При поиске
+            $article = $this->searchArticles($category, 1, ($offset + $limit - 1), $direction, $field, $phrase, $src);
+        }
+        return $article;
     }
     
     public function createArticle($title, $body, $category){

@@ -325,8 +325,8 @@
         });
     };
     
-    function RemoveArticle($resource, $id){
-        return $resource('/' + lang +  '/adm/article/remove-article', {id: $id}, {
+    function RemoveArticle($resource, $id, $direction, $offset, $action, $limit, $phrase, $src, $category, $field){
+        return $resource('/' + lang +  '/adm/article/remove-article', {id: $id, direction: $direction, offset: $offset, action: $action, limit: $limit, phrase: $phrase, src: $src, category: $category, field: $field}, {
             query: {method:'POST', params:{}, isArray:true}
         });
     };

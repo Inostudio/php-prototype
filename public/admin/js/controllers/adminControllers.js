@@ -1622,8 +1622,8 @@
         var vm = this;
         vm.limit = 9;
         vm.offset = 0;
-        var direction = 'asc';
-        var field = 'id';
+        vm.direction = 'asc';
+        vm.field = 'id';
         vm.categoryTitle = '';
         vm.unavailablePrev = true;
         vm.unavailableNext = true;
@@ -1664,7 +1664,7 @@
             { name: 'remove', displayName: 'Remove' , width: '5%', enableCellEdit: false,  enableSorting: false,
                 cellTemplate: '<spanremove remove-action="EventForDropArticle" remove-id="{{row.entity.id}}"/>'}
         ];
-        getArticles(vm.limit, vm.offset);
+        getArticles();
         
         $scope.$on('EventForRedirectToShowArticle', function (event, id) {
             alertError.hide();
@@ -1691,92 +1691,56 @@
         });
         
         function removeArticle(removeId){
-            alertSuccess = $alert({title: vm.article_removed_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
-            RemoveArticle.query({id: removeId}, function(answer){
-                var i = 0;
-                angular.forEach(vm.gridOptions_articleOfCategoryOptions.data, function(article) {
-                    if(article.id == removeId){
-                        vm.gridOptions_articleOfCategoryOptions.data.splice(i, 1);
-                    }
-                  i++;
-                });
-                if(!vm.action){     //Обыная навигация и сортировка
-                    GetArticles.query({categoryId: $routeParams.categoryId, lim: 1, off: (vm.offset + 8), dir: direction, fiel: field}, function(answer){
-                    if(answer[2] != undefined){
-                        vm.categoryTitle = answer[2].title;
-                    }
-                    vm.countArticles = answer[1];
-                    var arr = [];
-                    angular.forEach(answer[0], function(article) {
-                        var art = {};
-                        if($routeParams.categoryId === undefined){
-                            article.category = article.category.title;
-                            article.user_email = article.user.email;
-                        } else {
-                            article.user_email = article.user.email;
-                        }
+            RemoveArticle.query({id: removeId, direction: vm.direction, offset: vm.offset, action: vm.action, limit: vm.limit, phrase: vm.searchPhrase2, src: vm.src2, category: $routeParams.categoryId, field: vm.field}, function(answer){
+                var arr = [];
+                angular.forEach(vm.gridOptions_articleOfCategoryOptions.data, function(article){
+                    if(article.id != removeId)
                         arr.push(article);
-                    });
-                vm.gridOptions_articleOfCategoryOptions.data = vm.gridOptions_articleOfCategoryOptions.data.concat(arr);
-                checkNavBtnAndCheckCountPage();
-            });
-                } else if (vm.action === 1){    //Поиск
-                    SearchArticles.query({categoryId: $routeParams.categoryId, lim: 1, off: (vm.offset + 8), dir: direction, fiel: field, phrase: vm.searchPhrase2, src: vm.src2}, function(answer){
-                        vm.countArticles = answer[1];
-                        var arr = [];
-                        angular.forEach(answer[0], function(article) {
-                            var art = {};
-                            if($routeParams.categoryId === undefined){
-                                article.category = article.category.title;
-                                article.user_email = article.user.email;
-                            } else {
-                                article.user_email = article.user.email;
-                            }
-                            arr.push(article);
-                        });
-                        vm.gridOptions_articleOfCategoryOptions.data = vm.gridOptions_articleOfCategoryOptions.data.concat(arr);
-                        checkNavBtnAndCheckCountPage();
-                    });
+                });
+                vm.gridOptions_articleOfCategoryOptions.data = arr;
+                if(answer[0][0].length != 0){
+                    if($routeParams.categoryId == undefined){
+                        answer[0][0][0].category = answer[0][0][0].category.title;
+                    }
+                    answer[0][0][0].user_email = answer[0][0][0].user == null ? 'deleted' : answer[0][0][0].user.email;
+                    vm.gridOptions_articleOfCategoryOptions.data.push(answer[0][0][0]);
                 }
+                vm.countArticles = answer[0][1];
+                alertSuccess = $alert({title: vm.article_removed_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                checkNavBtnAndCheckCountPage();
             });
         }
         
         function checkNavBtnAndCheckCountPage(){
-            //Проверка кнопки "назад"
-            if(vm.currentPage === 1){
-                vm.unavailablePrev = true;
-            } else {
-                vm.unavailablePrev = false;
-            }
-            //Проверка кнопки "вперед"
-            if((vm.offset + vm.limit) >= vm.countArticles){
-                vm.unavailableNext = true;
-            } else {
-                vm.unavailableNext = false;
-            }
-            //Подсчет количества страниц
+            vm.unavailablePrev = false;
+            vm.unavailableNext = false;
             vm.totalPage = Math.ceil(vm.countArticles / vm.limit);
-            //vm.currentPage = Math.ceil(vm.offset / vm.limit) + 1;
+            if(vm.currentPage == 1){
+                vm.unavailablePrev = true;
+            }
+            
+            if(vm.currentPage == vm.totalPage){
+                vm.unavailableNext = true;
+            }
         }
         
-        function getArticles($lim, $off){
-            GetArticles.query({categoryId: $routeParams.categoryId, lim: $lim, off: $off, dir: direction, fiel: field}, function(answer){
+        function getArticles(){
+            GetArticles.query({categoryId: $routeParams.categoryId, lim: vm.limit, off: vm.offset, dir: vm.direction, fiel: vm.field}, function(answer){
                 if(answer[2] != undefined){
                     vm.categoryTitle = answer[2].title;
                 }
-                vm.countArticles = answer[1];
-                var arr = [];
+                
+                vm.gridOptions_articleOfCategoryOptions.data = [];
                 angular.forEach(answer[0], function(article) {
-                    var art = {};
                     if($routeParams.categoryId === undefined){
                         article.category = article.category.title;
-                        article.user_email = article.user.email;
+                        article.user_email = article.user == null ? 'deleted' : article.user.email;
                     } else {
-                        article.user_email = article.user.email;
+                        article.user_email = article.user == null ? 'deleted' : article.user.email;
                     }
-                    arr.push(article);
+                    vm.gridOptions_articleOfCategoryOptions.data.push(article);
                 });
-                vm.gridOptions_articleOfCategoryOptions.data = arr;
+                vm.countArticles = answer[1];
                 checkNavBtnAndCheckCountPage();
             });
         }
@@ -1825,22 +1789,19 @@
             
             //Сортировка
             gridApi.core.on.sortChanged($scope, function(arg1, arg2) {
-                vm.currentPage = 1;
-                //Сортировка с поиском
-                if(!vm.action){     //Обычная сортировка
-                    if(arg2[0] !== undefined){
-                        vm.offset = 0;
-                        direction = arg2[0].sort.direction;
-                        field = arg2[0].name;
-                        getArticles(vm.limit, vm.offset);
-                    }
-                } else if(vm.action === 1){
-                    console.log('Search with sorting');
-                    if(arg2[0] !== undefined){
-                        vm.offset = 0;
-                        direction = arg2[0].sort.direction;
-                        field = arg2[0].name;
-                        searchArticles(vm.limit, vm.offset);
+                if(arg2.length !== 0){
+                    vm.unavailablePrev = true;
+                    vm.unavailableNext = true;
+                    vm.currentPage = 1;
+                    vm.direction = arg2[0].sort.direction;
+                    vm.field = arg2[0].name;
+                    vm.offset = 0;
+                    
+                    //Сортировка с поиском
+                    if(!vm.action){     //Обычная сортировка
+                        getArticles();
+                    } else if(vm.action === 1){ //С поиском
+                        searchArticles();
                     }
                 }
             });
@@ -1851,64 +1812,66 @@
             vm.unavailablePrev = true;
             vm.unavailableNext = true;
             vm.offset += vm.limit;
-            if(!vm.action){     //Обыная навигация и сортировка
-                getArticles(vm.limit, vm.offset);
-            } else if (vm.action === 1){    //Поиск
-                searchArticles(vm.limit, vm.offset);
-            }
             vm.currentPage++;
+            if(!vm.action){     //Обыная навигация и сортировка
+                getArticles();
+            } else if (vm.action === 1){    //Поиск
+                searchArticles();
+            }
         }
         
         function prevPage(){
             vm.unavailablePrev = true;
             vm.unavailableNext = true;
             vm.offset -= vm.limit;
-            if(!vm.action){     //Обыная навигация и сортировка
-                getArticles(vm.limit, vm.offset);
-            } else if (vm.action === 1) {   //Поиск
-                searchArticles(vm.limit, vm.offset);
-            }
             vm.currentPage--;
+            if(!vm.action){     //Обыная навигация и сортировка
+                getArticles();
+            } else if (vm.action === 1) {   //Поиск
+                searchArticles();
+            }
         }
         
         function search(){
-            vm.currentPage = 1;
-            direction = 'asc';
-            field = 'id';
+            vm.direction = 'asc';
+            vm.field = 'id';
             vm.offset = 0;
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            vm.currentPage = 1;
             vm.searchPhrase2 = vm.searchPhrase;
             vm.src2 = vm.src;
             vm.action = 1;
-            searchArticles(vm.limit, vm.offset);
+            searchArticles();
         }
         
-        function searchArticles($lim, $off){
-            SearchArticles.query({categoryId: $routeParams.categoryId, lim: $lim, off: $off, dir: direction, fiel: field, phrase: vm.searchPhrase2, src: vm.src2}, function(answer){
-                vm.countArticles = answer[1];
-                var arr = [];
+        function searchArticles(){
+            SearchArticles.query({categoryId: $routeParams.categoryId, lim: vm.limit, off: vm.offset, dir: vm.direction, fiel: vm.field, phrase: vm.searchPhrase2, src: vm.src2}, function(answer){
+                vm.gridOptions_articleOfCategoryOptions.data = [];
                 angular.forEach(answer[0], function(article) {
-                    var art = {};
                     if($routeParams.categoryId === undefined){
                         article.category = article.category.title;
-                        article.user_email = article.user.email;
+                        article.user_email = article.user == null ? 'deleted' : article.user.email;
                     } else {
-                        article.user_email = article.user.email;
+                        article.user_email = article.user == null ? 'deleted' : article.user.email;
                     }
-                    arr.push(article);
+                    vm.gridOptions_articleOfCategoryOptions.data.push(article);
                 });
-                vm.gridOptions_articleOfCategoryOptions.data = arr;
+                vm.countArticles = answer[1];
                 checkNavBtnAndCheckCountPage();
             });
         }
         
         function reset(){
+            vm.action = 0;
             vm.currentPage = 1;
             vm.offset = 0;
-            direction = 'asc';
-            field = 'id';
+            vm.direction = 'asc';
+            vm.field = 'id';
             vm.searchPhrase = '';
-            vm.action = 0;
-            getArticles(vm.limit, vm.offset);
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            getArticles();
         }
     }
     

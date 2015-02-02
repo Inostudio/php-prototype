@@ -109,6 +109,6 @@ class ArticleController extends \BaseController
     }
     
     public function postRemoveArticle(){
-        return Response::json([ $this->article->removeArticle(Input::get('id'))]);
+        return Response::json([ $this->article->removeArticle(Input::get('id'), Input::get('action'), Input::get('direction'), Input::get('offset'), Input::get('limit'), Input::get('phrase'), Input::get('src'), Input::get('category'), Input::get('field'))]);
     }
 } 
