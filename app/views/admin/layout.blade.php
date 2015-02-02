@@ -15,10 +15,10 @@
     <title>InoPrototypeDesigner</title>
 
 
-    <link rel="stylesheet" type="text/css" href="/front/vendors/directives/css/ng-img-crop.css">
+    <link rel="stylesheet" type="text/css" href="/vendor/directives/css/ng-img-crop.css">
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/libraries.min.css">    <!---Эта штука нужна для анимации всплывающих окон-->
-    <link href="/admin/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/vendor/loading-bar/css/loading-bar.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
@@ -26,65 +26,40 @@
     <script type="text/javascript">
         var lang = window.location.pathname.substr(1, 2);
     </script>
-    <script type="text/javascript" src="/admin/vendors/angular/angular.min.js"></script>
-    <script type="text/javascript" src="/admin/vendors/ui-grid/ui-grid.min.js"></script>
+    <script type="text/javascript" src="/vendor/angular/angular.min.js"></script>
+    <script type="text/javascript" src="/vendor/ui-grid/ui-grid.min.js"></script>
     
-    <script type="text/javascript" src="/admin/vendors/ui-bootstrap/ui-bootstrap-tpls-0.12.0.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-sanitize.js"></script>
-    <script src="/admin/vendors/angular/angular-route.min.js" type="text/javascript"></script>
-    <script src="/admin/vendors/angular/angular-resource.min.js" type="text/javascript"></script>
-    <script src="/admin/vendors/angular/angular-animate.js" type="text/javascript"></script>
-    <script src="/admin/vendors/angular/angular-strap.min.js" type="text/javascript"></script>
-    <script src="/admin/vendors/angular/angular-strap.tpl.js" type="text/javascript"></script>
+    <script src="/vendor/ui-bootstrap/ui-bootstrap-tpls-0.12.0.min.js"  type="text/javascript"></script>
+    <script src="/vendor/angular-sanitize/angular-sanitize.js"></script>
+    <script src="/vendor/angular-route/angular-route.min.js" type="text/javascript"></script>
+    <script src="/vendor/angular-resource/angular-resource.min.js" type="text/javascript"></script>
+    <script src="/vendor/angular-animate/angular-animate.min.js" type="text/javascript"></script>
+    <script src="/vendor/angular-strap/angular-strap.min.js" type="text/javascript"></script>
+    <script src="/vendor/angular-strap/angular-strap.tpl.js" type="text/javascript"></script>
     <script src="/vendor/loading-bar/js/loading-bar.min.js" type="text/javascript"></script>
 
-    <script src="/front/vendors/directives/js/ng-img-crop.js"></script>
+    <script src="/vendor/directives/js/ng-img-crop.js"></script>
     
     <!--Для grid---->
 
-    <script src="/admin/vendors/angular/pdfmake.js" type="text/javascript"></script>
-    <script src="/admin/vendors/angular/vfs_fonts.js"></script>
-    <script src="/admin/vendors/angular/ui-grid-unstable.min.js"></script>
-    <link href="/admin/vendors/ui-grid/ui-grid-unstable.min.css" rel="stylesheet">
+    <!--<script src="/vendor/angular/pdfmake.js" type="text/javascript"></script>
+    <script src="/vendor/angular/vfs_fonts.js"></script>-->
+    <script src="/vendor/ui-grid/ui-grid-unstable.min.js"></script>
+    <link href="/vendor/ui-grid/ui-grid-unstable.min.css" rel="stylesheet">
     
     <script src="/admin/js/app.js" type="text/javascript"></script>
     <script src="/admin/js/controllers/adminControllers.js" type="text/javascript"></script>
     <script src="/admin/js/services/adminServices.js" type="text/javascript"></script>
     <script src="/admin/js/routes.js" type="text/javascript"></script>
     <script src="/admin/js/directives.js" type="text/javascript"></script>
+
     <!--Charts-->
-    <script type='text/javascript' src='/admin/vendors/angular/d3.min.js'></script>
-    <script type='text/javascript' src='/admin/vendors/angular/angular-charts.min.js'></script>
+    <script type='text/javascript' src='/vendor/angular-charts/d3.min.js'></script>
+    <script type='text/javascript' src='/vendor/angular-charts/angular-charts.min.js'></script>
     
     @section('include')
 
     @show
-
-    <style type="text/css">
-        .grid {
-            width: 600px;
-            height: 450px;
-        }
-        .grid1 {
-            width: 600px;
-            height: 450px;
-        }
-        
-        .grid2 {
-            width: 550px;
-            height: 450px;
-        }
-        
-        .lang {
-            margin-top: 15px;
-            margin-left: 35%;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .gridCategories{
-            width: 500px;
-        }
-    </style>
     
     <!-- Custom styles for this template -->
     <link href="/admin/css/main.css" rel="stylesheet">

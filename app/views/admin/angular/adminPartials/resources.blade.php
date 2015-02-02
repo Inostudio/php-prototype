@@ -1,12 +1,3 @@
-<style>
-    .cropArea {
-      background: #E4E4E4;
-      overflow: hidden;
-      width:500px;
-      height:350px;
-    }
-</style>
-
 <h1 class="page-header"><%trans('resources.resources')%></h1>
 <div id="alerts-container" ng-init="vm.remove_resource_message = '<%trans("resources.remove_resource_message")%>';
      vm.add_resource_message = '<%trans("resources.add_resource_message")%>';

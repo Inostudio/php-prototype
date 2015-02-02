@@ -12,8 +12,8 @@
 
         <!-- Bootstrap core CSS -->
 
-        <link href="/admin/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/front/vendors/angular-busy/angular-busy.min.css" rel="stylesheet">
+        <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/vendor/angular-busy/angular-busy.min.css" rel="stylesheet">
         
 
         <!-- Custom styles for this template -->
@@ -61,11 +61,11 @@
 
         </style>
 
-        <script src="/admin/vendors/angular/angular.min.js"></script>
-        <script src="/admin/vendors/ui-bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>
+        <script src="/vendor/angular/angular.min.js"></script>
+        <script src="/vendor/ui-bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>
 
-        <script type="text/javascript" src="/front/vendors/angular-animate/angular-animate.min.js"></script>
-        <script type="text/javascript" src="/front/vendors/angular-busy/angular-busy.min.js"></script>
+        <script type="text/javascript" src="/vendor/angular-animate/angular-animate.min.js"></script>
+        <script type="text/javascript" src="/vendor/angular-busy/angular-busy.min.js"></script>
 
         <script src="/admin/js/signApp.js"></script>
         <script src="/admin/js/controllers/signControllers.js"></script>

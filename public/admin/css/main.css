@@ -155,3 +155,55 @@ body {
 .navbar-inverse .navbar-nav>li>a {
   color: #000000;
 }
+
+.grid {
+    width: 600px;
+    height: 450px;
+}
+.grid1 {
+    width: 600px;
+    height: 450px;
+}
+
+.grid2 {
+    width: 550px;
+    height: 450px;
+}
+
+.lang {
+    margin-top: 15px;
+    margin-left: 35%;
+    text-decoration: none;
+    cursor: pointer;
+}
+.gridCategories{
+    width: 500px;
+}
+
+[ac-chart] {
+    float:left;
+    width: 48%;
+    height: 400px;
+    margin: 0 1%;
+}
+.ac-tooltip {
+    color: black;
+    border: 2px solid rgba(200,200,0,0.8);
+    background-color: rgba(200,200,0,0.5);
+}
+
+#chart1 .ac-legend-box, #chart2 .ac-legend-box {
+    border-radius: 10px;
+}
+
+#chart1, #chart2 {
+    height: 400px;
+    width: 800px;
+}
+
+.cropArea {
+    background: #E4E4E4;
+    overflow: hidden;
+    width:500px;
+    height:350px;
+}
