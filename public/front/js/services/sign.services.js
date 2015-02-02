@@ -6,7 +6,7 @@
    'use strict';
 
     angular
-        .module('signApp')
+        .module('frontApp')
         .factory('Sign', Sign)
         .factory('Reminder', Reminder);
 
@@ -23,7 +23,7 @@
 
         function signIn(data, success, error) {
             return $http({
-                url: '',
+                url: '/auth/signin',
                 method: 'POST',
                 data: JSON.stringify({
                     email: data.email,
@@ -38,7 +38,7 @@
 
         function signUp(data, success, error) {
             return $http({
-                url: '',
+                url: '/auth/signup',
                 method: 'POST',
                 data: JSON.stringify({
                     email: data.email,

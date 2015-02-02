@@ -6,19 +6,19 @@
     'use strict';
 
     angular
-        .module('articlesApp')
-        .controller('ShowCtrl', ShowCtrl)
+        .module('frontApp')
+        .controller('ShowArticlesCtrl', ShowArticlesCtrl)
         .controller('ShowArticleCtrl', ShowArticleCtrl)
         .controller('ShowUserCtrl', ShowUserCtrl)
         .controller('CreateArticleCtrl', CreateArticleCtrl)
         .controller('EditArticleCtrl', EditArticleCtrl);
 
-    ShowCtrl.$inject = ['GetArticlesAndCategories', 'GetArticleMore', 'GetSearchResult', '$modal', '$rootScope', 'RemoveArticle', '$alert'];
+    ShowArticlesCtrl.$inject = ['GetArticlesAndCategories', 'GetArticleMore', 'GetSearchResult', '$strapModal', '$rootScope', 'RemoveArticle', '$alert'];
     ShowArticleCtrl.$inject = ['ShowArticle', '$routeParams'];
     CreateArticleCtrl.$inject = ['GetCategory', 'CreateArticle', '$alert'];
     EditArticleCtrl.$inject = ['$routeParams', 'ShowArticle', 'GetCategory', '$alert', 'EditArticle'];
     
-    function ShowCtrl(GetArticlesAndCategories, GetArticleMore, GetSearchResult, $modal, $rootScope, RemoveArticle, $alert) {
+    function ShowArticlesCtrl(GetArticlesAndCategories, GetArticleMore, GetSearchResult, $strapModal, $rootScope, RemoveArticle, $alert) {
         var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
         var vm = this;
         vm.showMoreBtn = false;
@@ -44,7 +44,7 @@
         var searchArticles = [];
         getArticles(limit);
 
-        vm.modal = $modal({
+        vm.modal = $strapModal({
             show: false,
             contentTemplate: 'ConfirmDelete.html'
         });
@@ -179,7 +179,7 @@
                 if(!answer[0]){
                     alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-error-container'});
                 } else {
-                    window.location.href = '/articles';
+                    window.location.href = '#/articles';
                 }
             });
             

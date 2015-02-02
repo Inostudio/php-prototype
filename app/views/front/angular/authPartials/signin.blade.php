@@ -71,7 +71,7 @@
                         <div class="col-md-12 control">
                             <div style="padding-top:25px; font-size:80%" >
                                 <% trans('front/auth/signin.text_no_account') %>
-                                <a href="<% action('front.signup') %>"><% trans('front/auth/signin.text_remind') %></a>
+                                <a href="#/sign_up"><% trans('front/auth/signin.sign_up') %></a>
                             </div>
                         </div>
                     </div>

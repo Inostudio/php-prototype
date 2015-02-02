@@ -6,15 +6,20 @@
     'use strict';
 
     angular
-        .module('signApp')
+        .module('frontApp')
         .config(config);
 
     config.$inject = ['$routeProvider'];
     function config($routeProvider) {
         $routeProvider.
-            when('/', {
+            when('/sign_in', {
                 templateUrl: '/angular/?ns=front&id=authPartials.signin',
                 controller: 'SignInCtrl',
+                controllerAs: 'vm'
+            }).
+            when('/sign_up', {
+                templateUrl: '/angular/?ns=front&id=authPartials.signup',
+                controller: 'SignUpCtrl',
                 controllerAs: 'vm'
             }).
             when('/remind_password', {
@@ -26,9 +31,6 @@
                 templateUrl: '/angular/?ns=front&id=authPartials.reset',
                 controller: 'ResetCtrl',
                 controllerAs: 'vm'
-            }).
-            otherwise({
-                redirectTo: '/'
             });
     }
 })();

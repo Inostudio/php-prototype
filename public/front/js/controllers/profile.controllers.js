@@ -6,7 +6,7 @@
     'use strict';
 
     angular
-        .module('profileApp')
+        .module('frontApp')
         .controller('NavbarCtrl', NavbarCtrl)
         .controller('ShowCtrl', ShowCtrl)
         .controller('EditPasswordCtrl', EditPasswordCtrl)

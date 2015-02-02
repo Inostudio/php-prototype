@@ -5,7 +5,7 @@
     'use strict';
 
     angular
-        .module('signApp')
+        .module('frontApp')
         .controller('SignInCtrl', SignInCtrl)
         .controller('SignUpCtrl', SignUpCtrl)
         .controller('RemindCtrl', RemindCtrl)

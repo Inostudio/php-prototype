@@ -36,5 +36,3 @@
         </div>
     </div>
 </div>
-<!--
-<img src="/front/img/loader.gif" class="loader" ng-class="{'loader-hidden' : !vm.disableCat}">{{vm.disableCat}}-->

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('articlesApp')
+        .module('frontApp')
         .factory('GetArticlesAndCategories', GetArticlesAndCategories)
         .factory('GetArticleMore', GetArticleMore)
         .factory('GetSearchResult', GetSearchResult)

@@ -28,28 +28,61 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <!--@codereview move into a special templatec -->
     <link rel="stylesheet" type="text/css" href="/front/css/sidebar.css">
-    <link href="/vendor/loading-bar/css/loading-bar.min.css" rel="stylesheet">
+
 
     <!-- Custom styles for this template -->
     <link href="/front/css/main.css" rel="stylesheet">
 
-    <script type="text/javascript" src="/vendor/angular/angular.min.js"></script>
-    <script type="text/javascript" src="/vendor/angular-route/angular-route.min.js"></script>
+    <!-- Includes angular's scripts -->
+    <script src="/vendor/angular/angular.min.js" type="text/javascript"></script>
+    <script src="/vendor/angular-route/angular-route.min.js" type="text/javascript"></script>
+    <script src="/vendor/angular-resource/angular-resource.min.js" type="text/javascript"></script>
+    <script src="/vendor/angular-animate/angular-animate.min.js" type="text/javascript"></script>
+    <script src="/vendor/angular-busy/angular-busy.min.js" type="text/javascript"></script>
+    <script src="/vendor/angular-strap/angular-strap.min.js" type="text/javascript"></script>
+    <script src="/vendor/angular-strap/angular-strap.tpl.js" type="text/javascript"></script>
+
+
     <script type="text/javascript" src="/vendor/ui-bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>
+
+    <!-- Include SPA -->
+    <script src="/front/js/frontApp.module.js" type="text/javascript"></script>
+    <script src="/front/js/controllers/front.controllers.js" type="text/javascript"></script>
+    <script src="/front/js/routes/front.routes.js" type="text/javascript"></script>
+    <!-- Contact -->
+    <script src="/front/js/controllers/contact.controllers.js" type="text/javascript"></script>
+    <script src="/front/js/services/contact.services.js" type="text/javascript"></script>
+    <!-- Auth -->
+    <script src="/front/js/routes/sign.routes.js" type="text/javascript"></script>
+    <script src="/front/js/controllers/sign.controllers.js" type="text/javascript"></script>
+    <script src="/front/js/services/sign.services.js" type="text/javascript"></script>
+    <!-- Articles -->
+    <script src="/front/js/routes/articles.routes.js" type="text/javascript"></script>
+    <script src="/front/js/controllers/articles.controllers.js" type="text/javascript"></script>
+    <script src="/front/js/services/articles.services.js" type="text/javascript"></script>
+    <!-- Profile -->
+    <script src="/front/js/routes/profile.routes.js" type="text/javascript"></script>
+    <script src="/front/js/controllers/profile.controllers.js" type="text/javascript"></script>
+    <script src="/front/js/services/profile.services.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/front/css/profile.css">
+
+
+    <!-- Include loading bar -->
     <script src="/vendor/loading-bar/js/loading-bar.min.js" type="text/javascript"></script>
+    <link href="/vendor/loading-bar/css/loading-bar.min.css" rel="stylesheet">
 
-    @section('include')
+    <!-- Include waiting indicator -->
+    <script type="text/javascript" src="/vendor/angular-busy/angular-busy.min.js"></script>
+    <link href="/vendor/angular-busy/angular-busy.min.css" rel="stylesheet">
 
-    @show
+    <!-- Include for work with image -->
+    <script src="/vendor/directives/js/ng-img-crop.js"></script>
+    <script src="/vendor/directives/js/ng-droplet.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/vendor/directives/css/ng-img-crop.css">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
 
-  <body>
+  <body data-ng-app="frontApp" data-ng-controller="MainCtrl as vm">
 
     <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -60,11 +93,11 @@
             <input name="offer" type="text" class="form-control" placeholder="<%trans('adminMenu.search')%>">
           </form>
             @if (Auth::user())
-                <li <?=$routeName=='front.profile' ? 'class="active"' : ''; ?>><a href="<% action('front.profile', ['lang' => $lang]) %>"><i class="fa fa-user"></i> <% Auth::user()->email %></a></li>
+                <li <?=$routeName=='front.profile' ? 'class="active"' : ''; ?>><a href="#/profile"><i class="fa fa-user"></i> <% Auth::user()->email %></a></li>
                 <li><a href="<% action('front.logout', ['lang' => $lang]) %>"><i class="fa fa-signout"></i> <% trans('front/navbar.logout') %></a></li>
             @else
-                <li <?=$routeName=='front.signin' ? 'class="active"' : ''; ?>><a href="<% action('front.signin', ['lang' => $lang]) %>"><i class="fa fa-sign-in"></i> <% trans('front/navbar.signin') %></a></li>
-                <li <?=$routeName=='front.signup' ? 'class="active"' : ''; ?>><a href="<% action('front.signup', ['lang' => $lang]) %>"><i class="fa fa-plus-square"></i> <% trans('front/navbar.signup') %></a></li>
+              <li <?=$routeName=='front.signin' ? 'class="active"' : ''; ?>><a href="#/sign_in"><i class="fa fa-sign-in"></i> <% trans('front/navbar.signin') %></a></li>
+              <li <?=$routeName=='front.signup' ? 'class="active"' : ''; ?>><a href="#/sign_up"><i class="fa fa-plus-square"></i> <% trans('front/navbar.signup') %></a></li>
             @endif
 
         </ul>
@@ -81,9 +114,9 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li <?=$routeName=='front.home' ? 'class="active"' : ''; ?> ><a href="<?=action('front.home', ['lang' => $lang]);?>"><% trans('front/navbar.home') %></a></li>
-            <li <?=$routeName=='front.about' ? 'class="active"' : ''; ?>><a href="<?=action('front.about', ['lang' => $lang]);?>"><% trans('front/navbar.about') %></a></li>
-            <li <?=$routeName=='front.contact' ? 'class="active"' : ''; ?>><a href="<?=action('front.contact', ['lang' => $lang]);?>"><% trans('front/navbar.contact') %></a></li>
-            <li <?=Str::startsWith($routeName, 'front.articles') ? 'class="active"' : ''; ?>><a href="<?=action('front.articles', ['lang' => $lang]);?>"><% trans('front/navbar.articles') %></a></li>
+            <li <?=$routeName=='front.about' ? 'class="active"' : ''; ?>><a href="#/about"><% trans('front/navbar.about') %></a></li>
+            <li <?=$routeName=='front.contact' ? 'class="active"' : ''; ?>><a href="#/contact"><% trans('front/navbar.contact') %></a></li>
+            <li <?=Str::startsWith($routeName, 'front.articles') ? 'class="active"' : ''; ?>><a href="#/articles"><% trans('front/navbar.articles') %></a></li>
           </ul>
           <div class="navbar-form navbar-left">
               <a href="<% action($routeName, ['lang' => 'ru']) %>" class="<% $lang === 'ru' ? 'active-block' : '' %>">RUS</a>
@@ -96,9 +129,9 @@
       </div>
     </nav>
     
-    @section('content')
-        Here should be a content
-    @show
+    <div data-ng-view class="container">
+      Here should be a content4
+    </div>
 
     <div class="footer">
       <div class="container">

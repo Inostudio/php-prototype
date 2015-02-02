@@ -15,4 +15,5 @@ return array(
     "title_singin"             => "Sign In",
     "text_no_account"             => "Don't have an account?",
     "text_remind"             => "Forgot password?",
+    "sign_up"   => "Sign up now"
 );

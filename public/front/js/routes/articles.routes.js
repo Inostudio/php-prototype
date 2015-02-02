@@ -2,15 +2,15 @@
     'use strict';
 
     angular
-        .module('articlesApp')
+        .module('frontApp')
         .config(config);
 
     config.$inject = ['$routeProvider'];
     function config($routeProvider) {
         $routeProvider.
-            when('/', {
+            when('/articles', {
                 templateUrl: '/angular/?ns=front&id=articlesPartials.index',
-                controller: 'ShowCtrl',
+                controller: 'ShowArticlesCtrl',
                 controllerAs: 'vm'
             }).
             when('/create', {
@@ -23,7 +23,7 @@
                controller: 'EditArticleCtrl',
                controllerAs: 'vm'
             }). 
-            when('/:articleId', {
+            when('/article/:articleId', {
                 templateUrl:  '/angular/?ns=front&id=articlesPartials.show',
                 controller: 'ShowArticleCtrl',
                 controllerAs: 'vm'
@@ -32,10 +32,6 @@
                 templateUrl:  '/angular/?ns=front&id=profilePartials.user',
                 controller: 'ShowUserCtrl',
                 controllerAs: 'vm'
-            }).
-
-            otherwise({
-                redirectTo: '/'
             });
     }
 })();

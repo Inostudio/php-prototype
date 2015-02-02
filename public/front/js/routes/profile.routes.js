@@ -6,13 +6,13 @@
     'use strict';
 
     angular
-        .module('profileApp')
+        .module('frontApp')
         .config(config);
 
     config.$inject = ['$routeProvider'];
     function config($routeProvider) {
         $routeProvider.
-            when('/', {
+            when('/profile', {
                 templateUrl: '/angular/?ns=front&id=profilePartials.profile',
                 controller: 'ShowCtrl',
                 controllerAs: 'vm'
@@ -26,9 +26,6 @@
                 templateUrl:  '/angular/?ns=front&id=profilePartials.change_email',
                 controller: 'EditEmailCtrl',
                 controllerAs: 'vm'
-            }).
-            otherwise({
-                redirectTo: '/'
             });
     }
 })();

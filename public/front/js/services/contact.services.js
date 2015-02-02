@@ -4,7 +4,7 @@
 
 (function(){
     angular
-        .module('contactApp')
+        .module('frontApp')
         .service('SendContact', SendContact);
 
     SendContact.$inject = ['$http'];

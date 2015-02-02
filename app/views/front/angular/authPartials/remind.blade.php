@@ -5,7 +5,7 @@
     <div class="panel panel-info" >
         <div class="panel-heading">
             <div class="panel-title"><% trans('front/auth/remind.title_remind') %></div>
-            <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#/"><% trans('front/navbar.signin') %></a></div>
+            <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#/sign_in"><% trans('front/navbar.signin') %></a></div>
         </div>
 
         <div style="padding-top:30px" class="panel-body">

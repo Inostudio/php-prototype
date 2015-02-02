@@ -6,7 +6,7 @@
     'use strict';
 
     angular
-        .module('profileApp')
+        .module('frontApp')
         .factory('Profile', Profile)
         .factory('PhotoResize', Photo);
 

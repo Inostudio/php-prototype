@@ -135,7 +135,7 @@
             </div>
             <div class="articleAction col-sm-1">
                 <center><p ng-class="{'btn-action-hidden' : article.user.id != vm.currentUserId}"><a class="fa fa-edit" href="#/edit/{{article.id}}"></a></p>
-                <p><a class="fa fa-file-o" href="#/{{article.id}}"></a></p>
+                <p><a class="fa fa-file-o" href="#/article/{{article.id}}"></a></p>
                 <p ng-class="{'btn-action-hidden' : article.user.id != vm.currentUserId}"><a class="fa fa-close" ng-click="vm.removeArticle(article.id)"></a></p>
                 </center>
             </div>
@@ -152,7 +152,7 @@
                   <div class="newArticleMetaInfo">
                       <p><span class="grenSpan"><%trans('/front/articles/index.creation_date')%>:</span> {{newArticle.created_at}}</p>
                       <p><span class="grenSpan"><%trans('/front/articles/index.category')%>:</span> {{newArticle.category.title}}</p>
-                      <p style="text-align: right"><a href="#/{{newArticle.id}}"><%trans('/front/articles/index.more_link')%>...</a></p>  
+                      <p style="text-align: right"><a href="#/article/{{newArticle.id}}"><%trans('/front/articles/index.more_link')%>...</a></p>
                   </div>
               </div>
           </div>

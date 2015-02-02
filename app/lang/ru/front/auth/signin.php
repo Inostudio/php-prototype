@@ -15,4 +15,5 @@ return array(
     "title_singin"             => "Вход",
     "text_no_account"             => "У вас ещё нет аккаунта?",
     "text_remind"             => "Забыли пароль?",
+    "sign_up"   => "Зарегестрируйтесь сейчас"
 );

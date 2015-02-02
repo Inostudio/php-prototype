@@ -4,11 +4,11 @@
 
 (function(){
     angular
-        .module('contactApp')
-        .controller('MainCtrl', MainCtrl);
+        .module('frontApp')
+        .controller('ContactCtrl', ContactCtrl);
 
-    MainCtrl.$inject = ['SendContact'];
-    function MainCtrl(SendContact) {
+    ContactCtrl.$inject = ['SendContact'];
+    function ContactCtrl(SendContact) {
         var vm = this;
 
         vm.alert = undefined;
@@ -37,7 +37,6 @@
                         vm.error.name = data[1]['name'] ? data[1]['name'][0] : undefined;
                         vm.error.email = data[1]['email'] ? data[1]['email'][0] : undefined;
                         vm.error.message = data[1]['message'] ? data[1]['message'][0] : undefined;
-                        //vm.alert = { msg: data[1], type: 'danger'};
                     }
                 };
 
