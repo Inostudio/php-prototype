@@ -463,7 +463,16 @@
         };
 
     function GroupOptionsCtrl($scope, $routeParams, GroupOptions, $alert, ChangePermissionsInGroup) {
-            var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container_option'});
+            var alertSuccess;
+            
+            function showSuccessAlert(alertMessage){
+                if(alertSuccess != null){
+                    alertSuccess.$promise.then(alertSuccess.hide);
+                }
+                alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container_option', duration: 3});
+                alertSuccess.$promise.then(alertSuccess.show);
+            }
+            
             var vm = this;
             vm.groupTitle = '';
             vm.groupDescription = '';
@@ -502,18 +511,17 @@
 
             //Изменение разрешений группы
             $scope.$on('EventChangeGroup', function (event, id, accept) {
-                alertSuccess.hide();
                 ChangePermissionsInGroup.query({groupId: vm.groupId, accept : accept, permId: id}, function(answer){
                     if(answer[0]){
                         angular.forEach(vm.gridOptions_groupOptions.data, function(permission) {    //Проверяем, существует ли право с таким именем
                             if(permission.id == id){
                                 if(accept){
                                     permission.accept = 0;
-                                    alertSuccess = $alert({title: vm.remove_perm_from_group, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option', duration: 3});
+                                    showSuccessAlert(vm.remove_perm_from_group);
                                 }
                                 else {
                                     permission.accept = 1;
-                                    alertSuccess = $alert({title: vm.add_perm_to_group, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option', duration: 3});
+                                    showSuccessAlert(vm.add_perm_to_group);
                                 }
                             }
                         });
@@ -875,12 +883,13 @@
                     }
                     vm.totalPage = Math.ceil(vm.countUsers / limit);
                     checkNavigationButton();
-                    if((vm.action == 1) || (vm.action == 3)) {
-                        vm.users_grid.data.push(answer[1][0][0]);
-                    } else {
-                        vm.users_grid.data.push(answer[1][0]);
+                    if(answer[1][0].length != 0){
+                        if((vm.action == 1) || (vm.action == 3)) {
+                            vm.users_grid.data.push(answer[1][0][0]);
+                        } else {
+                            vm.users_grid.data.push(answer[1][0]);
+                        }
                     }
-                    console.log(answer[1][0]);
                 });
             }
 

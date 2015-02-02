@@ -14,10 +14,10 @@
                 <input type="email" class="form-control" name="email" id="exampleInputEmail2" placeholder="<%trans('admin/users.email')%>" ng-model="vm.email" required>
             </div>
             <div class="input-group">
-                <input type="password" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/users.password')%>" ng-model="vm.userPassword">
+                <input type="password" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/users.password')%>" ng-model="vm.userPassword" required>
             </div>
             <div class="input-group">
-                <input type="password" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/users.confirm_password')%>" ng-model="vm.userConfirmPassword">
+                <input type="password" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/users.confirm_password')%>" ng-model="vm.userConfirmPassword" required>
             </div>
             <button type="submit" class="btn btn-default" ng-click="vm.addUser()" ng-disabled="form.email.$invalid"><%trans('admin/users.add')%></button>
         </div>
