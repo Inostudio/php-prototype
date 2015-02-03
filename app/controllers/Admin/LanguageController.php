@@ -50,4 +50,15 @@ class LanguageController extends \BaseController {
         rename(app_path().'/lang'.'/'.Input::get('language').Input::get('path').'/'.$bufName, app_path().'/lang'.'/'.Input::get('language').Input::get('path').'/'.Input::get('file'));
         return Response::json([true, $languageContent]);
     }
+    
+    public function postTableTranslate(){
+        $lang = \Config::get('app.locale');
+        $tablePhrase = require(app_path().'/lang/'.$lang.'/admin/tables.php');
+        $outputArr = [];
+        
+        foreach(Input::get('phrase') as $phrase){
+            $outputArr[$phrase] = $tablePhrase[$phrase];
+        }
+        return Response::json([$outputArr]);
+    }
 }

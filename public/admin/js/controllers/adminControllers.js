@@ -19,17 +19,17 @@
             
 
     DashboardCtrl.$inject = ['GetStatistics'];
-    GroupCtrl.$inject = ['$scope', 'Group', 'AddGroup', 'RemoveGroup', 'EditGroup', '$alert', '$modal', '$rootScope'];
-    PermissionCtrl.$inject = ['$scope', '$alert', 'Permission', 'AddPermission', 'RemovePermission', 'EditPermission', '$modal', '$rootScope'];
-    GroupOptionsCtrl.$inject = ['$scope', '$routeParams', 'GroupOptions', '$alert', 'ChangePermissionsInGroup'];
-    UsersCtrl.$inject = ['$scope', '$alert', 'User', 'AddUser', 'RemoveUser', 'EditUser', 'SearchUsers', '$modal', '$rootScope', 'GetUserBans', 'RemoveBan', 'AddBan'];
-    UserOptionsCtrl.$inject = ['$scope', '$alert', '$routeParams', 'UserOptions', 'ChangeGroupByUser', '$modal', '$rootScope'];
-    ResourcesCtrl.$inject = ['$scope', 'AddResource', 'AllResource', 'DeleteResource', '$alert', '$modal', '$rootScope', 'EditResource', 'GetSearchResources'];
-    PagesCtrl.$inject = ['$scope', '$alert', '$modal', 'AddPage', 'Status', 'Pages', 'GetPage', 'DeletePage', 'SavePage', '$window', '$location', '$rootScope'];
+    GroupCtrl.$inject = ['$scope', 'Group', 'AddGroup', 'RemoveGroup', 'EditGroup', '$alert', '$modal', '$rootScope', 'TableTranslate'];
+    PermissionCtrl.$inject = ['$scope', '$alert', 'Permission', 'AddPermission', 'RemovePermission', 'EditPermission', '$modal', '$rootScope', 'TableTranslate'];
+    GroupOptionsCtrl.$inject = ['$scope', '$routeParams', 'GroupOptions', '$alert', 'ChangePermissionsInGroup', 'TableTranslate'];
+    UsersCtrl.$inject = ['$scope', '$alert', 'User', 'AddUser', 'RemoveUser', 'EditUser', 'SearchUsers', '$modal', '$rootScope', 'GetUserBans', 'RemoveBan', 'AddBan', 'TableTranslate'];
+    UserOptionsCtrl.$inject = ['$scope', '$alert', '$routeParams', 'UserOptions', 'ChangeGroupByUser', '$modal', '$rootScope', 'TableTranslate'];
+    ResourcesCtrl.$inject = ['$scope', 'AddResource', 'AllResource', 'DeleteResource', '$alert', '$modal', '$rootScope', 'EditResource', 'GetSearchResources', 'TableTranslate'];
+    PagesCtrl.$inject = ['$scope', '$alert', '$modal', 'AddPage', 'Status', 'Pages', 'GetPage', 'DeletePage', 'SavePage', '$window', '$location', '$rootScope', 'TableTranslate'];
     activCtrl.$inject = ['$scope', '$location', 'CheckLang'];
-    CategoriesOfArticlesCtrl.$inject = ['GetCategoryOfArticle', '$alert', '$scope', '$modal', '$rootScope', 'RemoveCategoryOfArticle', 'AddCategoryOfArticle', 'EditCategoryOfArticle'];
-    ArticleCategoryCtrl.$inject = ['GetArticles', '$routeParams', '$scope', '$alert', '$window', '$location', '$modal', '$rootScope', 'EditArticle', 'SearchArticles', 'RemoveArticle'];
-    LanguagesCtrl.$inject = ['GetLanguageFiles', '$rootScope', '$scope', '$alert', 'EditLanguageFile'];
+    CategoriesOfArticlesCtrl.$inject = ['GetCategoryOfArticle', '$alert', '$scope', '$modal', '$rootScope', 'RemoveCategoryOfArticle', 'AddCategoryOfArticle', 'EditCategoryOfArticle', 'TableTranslate'];
+    ArticleCategoryCtrl.$inject = ['GetArticles', '$routeParams', '$scope', '$alert', '$window', '$location', '$modal', '$rootScope', 'EditArticle', 'SearchArticles', 'RemoveArticle', 'TableTranslate'];
+    LanguagesCtrl.$inject = ['GetLanguageFiles', '$rootScope', '$scope', '$alert', 'EditLanguageFile', 'TableTranslate'];
     SettingsCtrl.$inject = ['GetSections', 'ChangeSection', '$alert', '$scope'];
     
     function activCtrl($scope, $location, CheckLang) {
@@ -104,7 +104,7 @@
         });
     };
 
-    function GroupCtrl($scope, Group, AddGroup, RemoveGroup, EditGroup, $alert, $modal, $rootScope){
+    function GroupCtrl($scope, Group, AddGroup, RemoveGroup, EditGroup, $alert, $modal, $rootScope, TableTranslate){
         var alertError;
         var alertSuccess;
         function showErrorAlert(alertMessage){
@@ -160,15 +160,17 @@
         });
         //Grid
         vm.gridOptions = { enableFiltering: true };
-        vm.gridOptions.columnDefs = [
-            { name: 'id', enableCellEdit: false, width: '5%', enableFiltering: false },
-            { name: 'title', displayName: 'Title', width: '20%' },
-            { name: 'description', displayName: 'Description' , width: '30%', enableFiltering: false },
-            { name: 'permissions', displayName: 'Permissions' , width: '15%', enableFiltering: false,  enableSorting: false, enableCellEdit: false,//permissioms
-              cellTemplate: '<spanedit edit-action="EventForRedirectToGroupOptions" edit-id="{{row.entity.id}}"/>'},
-            { name: 'remove', displayName: 'Remove' , width: '10%', enableCellEdit: false, enableFiltering: false, enableSorting: false, height: '15px',
-              cellTemplate: '<spanremove remove-action="EventForDropGroup" remove-id="{{row.entity.id}}" ng-hide/>' }
-        ];
+        TableTranslate.query({phrase: ['id', 'title', 'description', 'permissions', 'remove']}, function(answer){
+            vm.gridOptions.columnDefs = [
+                { name: 'id', enableCellEdit: false, width: '2%', enableFiltering: false, displayName: answer[0]['id']},
+                { name: 'title', displayName: answer[0]['title'], width: '15%' },
+                { name: 'description', displayName: answer[0]['description'], width: '30%', enableFiltering: false },
+                { name: 'permissions', displayName: answer[0]['permissions'], width: '15%', enableFiltering: false,  enableSorting: false, enableCellEdit: false,//permissioms
+                  cellTemplate: '<spanedit edit-action="EventForRedirectToGroupOptions" edit-id="{{row.entity.id}}"/>'},
+                { name: 'remove', displayName: answer[0]['remove'], width: '12%', enableCellEdit: false, enableFiltering: false, enableSorting: false, height: '15px',
+                  cellTemplate: '<spanremove remove-action="EventForDropGroup" remove-id="{{row.entity.id}}" ng-hide/>' }
+            ];
+        });
 
         vm.gridOptions.onRegisterApi = function(gridApi){
            gridApi.edit.on.afterCellEdit($scope,function(rowEntity, colDef, newValue, oldValue){
@@ -302,7 +304,7 @@
         });
       };
 
-    function PermissionCtrl($scope, $alert, Permission, AddPermission, RemovePermission, EditPermission, $modal, $rootScope) {
+    function PermissionCtrl($scope, $alert, Permission, AddPermission, RemovePermission, EditPermission, $modal, $rootScope, TableTranslate) {
             var alertError;
             var alertSuccess;
             function showErrorAlert(alertMessage){
@@ -338,13 +340,15 @@
             vm.title_empty = '';
             
             vm.gridOptions_perm = { enableFiltering: true };
-            vm.gridOptions_perm.columnDefs = [
-                { name: 'id', enableCellEdit: false, width: '2%', enableFiltering: false },
-                { name: 'title', displayName: 'Title', width: '20%' },
-                { name: 'description', displayName: 'Description' , width: '30%', enableFiltering: false },
-                { name: 'remove', displayName: 'Remove' , width: '5%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
-                  cellTemplate: '<spanremove remove-action="EventForDrop_perm" remove-id="{{row.entity.id}}"/>' }
-            ];
+            TableTranslate.query({phrase: ['id', 'title', 'description', 'remove']}, function(answer){
+                vm.gridOptions_perm.columnDefs = [
+                    { name: 'id', enableCellEdit: false, displayName: answer[0]['id'], width: '2%', enableFiltering: false },
+                    { name: 'title', displayName: answer[0]['title'], width: '20%' },
+                    { name: 'description', displayName: answer[0]['description'], width: '30%', enableFiltering: false },
+                    { name: 'remove', displayName: answer[0]['remove'], width: '10%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
+                      cellTemplate: '<spanremove remove-action="EventForDrop_perm" remove-id="{{row.entity.id}}"/>' }
+                ];
+            });
 
             //Получение
             Permission.queryInfo(function(res){
@@ -484,7 +488,7 @@
             });
         };
 
-    function GroupOptionsCtrl($scope, $routeParams, GroupOptions, $alert, ChangePermissionsInGroup) {
+    function GroupOptionsCtrl($scope, $routeParams, GroupOptions, $alert, ChangePermissionsInGroup, TableTranslate) {
             var alertSuccess;
             
             function showSuccessAlert(alertMessage){
@@ -504,13 +508,15 @@
             vm.add_perm_to_group = '';
             
             vm.gridOptions_groupOptions = { enableFiltering: true };
-            vm.gridOptions_groupOptions.columnDefs = [
-                { name: 'id', displayName: 'Id', enableCellEdit: false, width: '10%', enableFiltering: false },
-                { name: 'title', displayName: 'Title', width: '30%', enableCellEdit: false },
-                { name: 'description', displayName: 'Description' , width: '45%', enableFiltering: false, enableCellEdit: false },
-                { name: 'accept', displayName: 'Accept' , width: '15%', enableFiltering: false, enableCellEdit: false,
-                    cellTemplate: '<spantoggle change-action="EventChangeGroup" change-accept="{{row.entity.accept}}" change-id="{{row.entity.id}}"/>'}
-            ];
+            TableTranslate.query({phrase: ['id', 'title', 'description', 'accept']}, function(answer){
+                vm.gridOptions_groupOptions.columnDefs = [
+                    { name: 'id', displayName: answer[0]['id'], enableCellEdit: false, width: '10%', enableFiltering: false },
+                    { name: 'title', displayName: answer[0]['title'], width: '30%', enableCellEdit: false },
+                    { name: 'description', displayName: answer[0]['description'], width: '45%', enableFiltering: false, enableCellEdit: false },
+                    { name: 'accept', displayName: answer[0]['accept'], width: '15%', enableFiltering: false, enableCellEdit: false,
+                        cellTemplate: '<spantoggle change-action="EventChangeGroup" change-accept="{{row.entity.accept}}" change-id="{{row.entity.id}}"/>'}
+                ];
+            });
 
             //Получение
             GroupOptions.query({groupId: $routeParams.groupId}, function(answer){
@@ -553,7 +559,7 @@
             });    
     };
 
-    function UsersCtrl($scope, $alert, User, AddUser, RemoveUser, EditUser, SearchUsers, $modal, $rootScope, GetUserBans, RemoveBan, AddBan) {
+    function UsersCtrl($scope, $alert, User, AddUser, RemoveUser, EditUser, SearchUsers, $modal, $rootScope, GetUserBans, RemoveBan, AddBan, TableTranslate) {
             var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container-for-users'});
             var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container-for-users'});
             
@@ -601,19 +607,21 @@
                 enableFiltering: false
             };
             
-            vm.users_grid.columnDefs = [
-                { name: 'id', enableCellEdit: false, width: '8%'},
-                { name: 'email', enableCellEdit: true, width: '15%'},
-                { name: 'first_name', enableCellEdit: false, width: '10%'},
-                { name: 'last_name', enableCellEdit: false, width: '10%'},
-                { name: 'phone', enableCellEdit: false, width: '15%', enableSorting: false},
-                { name: 'ban', enableCellEdit: false, width: '5%', enableSorting: false,
-                    cellTemplate: '<span class="fa fa-ban" style="margin-left: 40%; cursor: pointer" ng-click="$emit(\'changeBan\', row.entity.id, row.entity.email)"></span>'},
-                { name: 'groups', displayName: 'Groups' , width: '8%', enableCellEdit: false,  enableSorting: false,
-                    cellTemplate: '<spanedit edit-action="EventForRedirectToUserOptions"  edit-id="{{row.entity.id}}"/>'},
-                { name: 'remove', displayName: 'Remove' , width: '8%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
-                    cellTemplate: '<spanremove remove-action="EventForDropUser" remove-id="{{row.entity.id}}"/>' }
-            ];
+            TableTranslate.query({phrase: ['id', 'email', 'first_name', 'last_name', 'phone', 'ban', 'groups', 'remove']}, function(answer){
+                vm.users_grid.columnDefs = [
+                    { name: 'id', enableCellEdit: false, width: '8%', displayName: answer[0]['id']},
+                    { name: 'email', enableCellEdit: true, width: '15%', displayName: answer[0]['email']},
+                    { name: 'first_name', enableCellEdit: false, width: '10%', displayName: answer[0]['first_name']},
+                    { name: 'last_name', enableCellEdit: false, width: '10%', displayName: answer[0]['last_name']},
+                    { name: 'phone', enableCellEdit: false, width: '15%', enableSorting: false, displayName: answer[0]['phone']},
+                    { name: 'ban', enableCellEdit: false, width: '5%', enableSorting: false, displayName: answer[0]['ban'],
+                        cellTemplate: '<span class="fa fa-ban" style="margin-left: 40%; cursor: pointer" ng-click="$emit(\'changeBan\', row.entity.id, row.entity.email)"></span>'},
+                    { name: 'groups', width: '8%', enableCellEdit: false,  enableSorting: false, displayName: answer[0]['groups'],
+                        cellTemplate: '<spanedit edit-action="EventForRedirectToUserOptions"  edit-id="{{row.entity.id}}"/>'},
+                    { name: 'remove', displayName: answer[0]['remove'] , width: '8%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
+                        cellTemplate: '<spanremove remove-action="EventForDropUser" remove-id="{{row.entity.id}}"/>' }
+                ];
+            });
             
             var offset = 0;
             var limit =  9;
@@ -987,7 +995,7 @@
             }
     };
 
-    function UserOptionsCtrl($scope, $alert, $routeParams, UserOptions, ChangeGroupByUser, $modal, $rootScope) {
+    function UserOptionsCtrl($scope, $alert, $routeParams, UserOptions, ChangeGroupByUser, $modal, $rootScope, TableTranslate) {
             var alertSuccess;
             var alertError;
             function showErrorAlert(alertMessage){
@@ -1027,14 +1035,16 @@
             vm.selfAccept = 0;
             vm.grSelfId = 0;
 
-            vm.gridOptions_userOptions = { enableFiltering: true };
-            vm.gridOptions_userOptions.columnDefs = [
-                { name: 'id', displayName: 'Id', enableCellEdit: false, width: '5%', enableFiltering: false },
-                { name: 'title', displayName: 'Title', width: '10%', enableCellEdit: false },
-                { name: 'description', displayName: 'Description' , width: '30%', enableFiltering: false, enableCellEdit: false },
-                { name: 'accept', displayName: 'Accept' , width: '5%', enableFiltering: false, enableCellEdit: false,
-                    cellTemplate: '<spantoggle  change-action="EventChangeUser" change-accept="{{row.entity.accept}}" change-id="{{row.entity.id}}"/>'}
-            ];
+            vm.gridOptions_userOptions = { enableFiltering: true }; 
+            TableTranslate.query({phrase: ['id', 'title', 'description', 'accept']}, function(answer){
+                vm.gridOptions_userOptions.columnDefs = [
+                    { name: 'id', displayName: answer[0]['id'], enableCellEdit: false, width: '5%', enableFiltering: false },
+                    { name: 'title', displayName: answer[0]['title'], width: '10%', enableCellEdit: false },
+                    { name: 'description', displayName: answer[0]['description'], width: '30%', enableFiltering: false, enableCellEdit: false },
+                    { name: 'accept', displayName: answer[0]['accept'] , width: '5%', enableFiltering: false, enableCellEdit: false,
+                        cellTemplate: '<spantoggle  change-action="EventChangeUser" change-accept="{{row.entity.accept}}" change-id="{{row.entity.id}}"/>'}
+                ];
+            });
 
             //Получение групп, в которых состоит пользователь+++
             UserOptions.query({userId: $routeParams.userId}, function(answer){
@@ -1096,7 +1106,7 @@
             });
     };
 
-    function ResourcesCtrl($scope, AddResource, AllResource, DeleteResource, $alert, $modal, $rootScope, EditResource, GetSearchResources) {
+    function ResourcesCtrl($scope, AddResource, AllResource, DeleteResource, $alert, $modal, $rootScope, EditResource, GetSearchResources, TableTranslate) {
         var alertError;
         var alertSuccess;
         function showErrorAlert(alertMessage){
@@ -1157,24 +1167,23 @@
         };
 
         vm.resources = [];
-
-        getResources();
-
         vm.gridOptions_resourcesGrid = { enableFiltering: false, rowHeight: 110 };
-
-        vm.gridOptions_resourcesGrid.columnDefs = [
-            { name: 'id', visible: false},
-            { name: 'title', displayName: 'Title', width: '20%', enableCellEdit: true, enableSorting: true },
-            { name: 'url', displayName: 'Url' , width: '30%', enableCellEdit: false, enableSorting: false,
-                cellTemplate: '<div style="position: relative"><p>{{row.entity.url.length > 50 ? row.entity.url.substr(0, 45) + "..." : row.entity.url}}</p>\n\
-                    <a clip-copy="row.entity.url" ng-click="$emit(\'EventForCopyUrl\')" class="fa fa-files-o" style="margin-left: 90%; position: absolute; \n\
-                    margin-top: -6%"></a></div>'
-            },
-            { name: 'view', displayName: 'View' , width: '15%', enableCellEdit: false, enableSorting: false, 
-                cellTemplate: '<div class="resourcePadding"><img ng-src="{{row.entity.url}}"></div>' },
-            { name: 'action', displayName: 'Remove' , width: '1%', enableCellEdit: false, enableSorting: false, 
-                cellTemplate: '<span class="fa fa-close" style="cursor: pointer; margin: 40%" ng-click="$emit(\'EventForDropResource\', row.entity.id)" style="margin-left: 25%; margin-top: 15%"></span>'}
-        ];
+        TableTranslate.query({phrase: ['id', 'title', 'url', 'view', 'action']}, function(answer){
+            vm.gridOptions_resourcesGrid.columnDefs = [
+                { name: 'id', visible: false},
+                { name: 'title', displayName: answer[0]['title'], width: '20%', enableCellEdit: true, enableSorting: true },
+                { name: 'url', displayName: answer[0]['url'], width: '30%', enableCellEdit: false, enableSorting: false,
+                    cellTemplate: '<div style="position: relative"><p>{{row.entity.url.length > 50 ? row.entity.url.substr(0, 45) + "..." : row.entity.url}}</p>\n\
+                        <a clip-copy="row.entity.url" ng-click="$emit(\'EventForCopyUrl\')" class="fa fa-files-o" style="margin-left: 90%; position: absolute; \n\
+                        margin-top: -6%"></a></div>'
+                },
+                { name: 'view', displayName: answer[0]['view'], width: '15%', enableCellEdit: false, enableSorting: false, 
+                    cellTemplate: '<div class="resourcePadding"><img ng-src="{{row.entity.url}}"></div>' },
+                { name: 'action', displayName: answer[0]['action'], width: '1%', enableCellEdit: false, enableSorting: false, 
+                    cellTemplate: '<span class="fa fa-close" style="cursor: pointer; margin: 40%" ng-click="$emit(\'EventForDropResource\', row.entity.id)" style="margin-left: 25%; margin-top: 15%"></span>'}
+            ];
+        });
+        getResources();
 
         var removeResourceId = null;
         vm.modal = $modal({
@@ -1400,7 +1409,7 @@
         }
     };  
 
-    function PagesCtrl ($scope, $alert, $modal, AddPage, Status, Pages, GetPage, DeletePage, SavePage, $window, $location, $rootScope) {
+    function PagesCtrl ($scope, $alert, $modal, AddPage, Status, Pages, GetPage, DeletePage, SavePage, $window, $location, $rootScope, TableTranslate) {
         var alertSuccess;
         function showSuccessAlert(alertMessage){
             if(alertSuccess != null){
@@ -1423,19 +1432,20 @@
         vm.createPage = createPage;
 
         vm.gridOptions_pagesGrid = { enableFiltering: true, rowHeight: 65 };
-
-        vm.gridOptions_pagesGrid.columnDefs = [
-            { name: 'title', displayName: 'Title', width: '10%', enableCellEdit: false },
-            { name: 'body', displayName: 'Short content' , width: '33%', enableFiltering: false, enableCellEdit: false },
-            { name: 'url', displayName: 'Url' , width: '5%', enableCellEdit: false},
-            { name: 'status', displayName: 'Status' , width: '5%', enableFiltering: false, enableCellEdit: false,
-                cellTemplate: '<p ng-class="{\'btn-success\': row.entity.status==\'Public\', \'btn-info\': row.entity.status==\'Private\', \n\
-                    \'btn-warning\': row.entity.status==\'Draw\'}" class="form-control btn" style="width: 50%; margin-left: 25%; margin-top: 10%">{{row.entity.status}}</p>'},
-            { name: 'actions', displayName: 'Actions' , width: '2%', enableFiltering: false, enableCellEdit: false,
-                cellTemplate: '<p ng-click="$emit(\'EventForEditPage\', row.entity.id)" class="actionCol fa fa-edit"></p><br/>\n\
-                    <p ng-click="$emit(\'EventForDropPage\', row.entity.id)" class="actionCol fa fa-close"></p><br/>\n\
-                    <p ng-click="$emit(\'EventForShowPage\', row.entity.url)" class="actionCol fa fa-file-o"></p>'
-        }];
+        TableTranslate.query({phrase: ['title', 'body', 'url', 'status', 'actions']}, function(answer){
+            vm.gridOptions_pagesGrid.columnDefs = [
+                { name: 'title', displayName: answer[0]['title'], width: '10%', enableCellEdit: false },
+                { name: 'body', displayName: answer[0]['body'], width: '33%', enableFiltering: false, enableCellEdit: false },
+                { name: 'url', displayName: answer[0]['url'], width: '5%', enableCellEdit: false},
+                { name: 'status', displayName: answer[0]['status'], width: '5%', enableFiltering: false, enableCellEdit: false,
+                    cellTemplate: '<p ng-class="{\'btn-success\': row.entity.status==\'Public\', \'btn-info\': row.entity.status==\'Private\', \n\
+                        \'btn-warning\': row.entity.status==\'Draw\'}" class="form-control btn" style="width: 50%; margin-left: 25%; margin-top: 10%">{{row.entity.status}}</p>'},
+                { name: 'actions', displayName: answer[0]['actions'], width: '2%', enableFiltering: false, enableCellEdit: false,
+                    cellTemplate: '<p ng-click="$emit(\'EventForEditPage\', row.entity.id)" class="actionCol fa fa-edit"></p><br/>\n\
+                        <p ng-click="$emit(\'EventForDropPage\', row.entity.id)" class="actionCol fa fa-close"></p><br/>\n\
+                        <p ng-click="$emit(\'EventForShowPage\', row.entity.url)" class="actionCol fa fa-file-o"></p>'
+            }];
+        });
 
        //+++
        vm.modal = $modal({
@@ -1556,7 +1566,7 @@
         };
      };
      
-    function CategoriesOfArticlesCtrl(GetCategoryOfArticle, $alert, $scope, $modal, $rootScope, RemoveCategoryOfArticle, AddCategoryOfArticle, EditCategoryOfArticle){
+    function CategoriesOfArticlesCtrl(GetCategoryOfArticle, $alert, $scope, $modal, $rootScope, RemoveCategoryOfArticle, AddCategoryOfArticle, EditCategoryOfArticle, TableTranslate){
         var alertError;
         var alertSuccess;
         function showErrorAlert(alertMessage){
@@ -1591,14 +1601,16 @@
         vm.defaultCategoryId = 0;
          
         vm.gridOptions_categoriesOptions = { enableFiltering: true, enableSorting: true, enableCellEdit: true};
-        vm.gridOptions_categoriesOptions.columnDefs = [
-            { name: 'id', displayName: 'Id', width: '10%', enableCellEdit: false,  enableSorting: false, enableFiltering: false },
-            { name: 'title', displayName: 'Title', width: '50%', enableCellEdit: true,  enableSorting: true, enableFiltering: true},
-            { name: 'articles', displayName: 'Articles' , width: '20%', enableCellEdit: false,  enableSorting: false, enableFiltering: false,
-                    cellTemplate: '<spanedit edit-action="EventForRedirectToArticleOfCategory"  edit-id="{{row.entity.id}}"/>'},
-            { name: 'remove', displayName: 'Remove' , width: '20%', enableCellEdit: false,  enableSorting: false, enableFiltering: false,
-                cellTemplate: '<spanremove remove-action="EventForDropCategory" remove-id="{{row.entity.id}}"/>'}
-        ];
+        TableTranslate.query({phrase: ['id', 'title', 'articles', 'remove']}, function(answer){
+            vm.gridOptions_categoriesOptions.columnDefs = [
+                { name: 'id', displayName: answer[0]['id'], width: '10%', enableCellEdit: false,  enableSorting: false, enableFiltering: false },
+                { name: 'title', displayName: answer[0]['title'], width: '50%', enableCellEdit: true,  enableSorting: true, enableFiltering: true},
+                { name: 'articles', displayName: answer[0]['articles'], width: '20%', enableCellEdit: false,  enableSorting: false, enableFiltering: false,
+                        cellTemplate: '<spanedit edit-action="EventForRedirectToArticleOfCategory"  edit-id="{{row.entity.id}}"/>'},
+                { name: 'remove', displayName: answer[0]['remove'], width: '20%', enableCellEdit: false,  enableSorting: false, enableFiltering: false,
+                    cellTemplate: '<spanremove remove-action="EventForDropCategory" remove-id="{{row.entity.id}}"/>'}
+            ];
+        });
         
         GetCategoryOfArticle.query({}, function(answer){
             var arr = [];
@@ -1693,7 +1705,7 @@
         });
      }
      
-    function ArticleCategoryCtrl(GetArticles, $routeParams, $scope, $alert, $window, $location, $modal, $rootScope, EditArticle, SearchArticles, RemoveArticle){
+    function ArticleCategoryCtrl(GetArticles, $routeParams, $scope, $alert, $window, $location, $modal, $rootScope, EditArticle, SearchArticles, RemoveArticle, TableTranslate){
         var alertError;
         var alertSuccess;
         function showErrorAlert(alertMessage){
@@ -1751,16 +1763,18 @@
         });
         
         vm.gridOptions_articleOfCategoryOptions = { enableSorting: true, enableCellEdit: true};
-        vm.gridOptions_articleOfCategoryOptions.columnDefs = [
-            { name: 'id', displayName: 'Id', width: '5%', enableCellEdit: false,  enableSorting: true},
-            { name: 'category', displayName: 'Category', width: '15%', enableCellEdit: true,  enableSorting: false, visible: ($routeParams.categoryId === undefined) },
-            { name: 'title', displayName: 'Title', width: '20%', enableCellEdit: true,  enableSorting: true},
-            { name: 'link', displayName: 'Link', width: '5%', enableCellEdit: true,  enableSorting: false,
-                cellTemplate: '<spanedit edit-action="EventForRedirectToShowArticle"  edit-id="{{row.entity.id}}"/>'},
-            { name: 'user_email', displayName: 'Email of the author', width: '20%', enableCellEdit: false,  enableSorting: false},
-            { name: 'remove', displayName: 'Remove' , width: '5%', enableCellEdit: false,  enableSorting: false,
-                cellTemplate: '<spanremove remove-action="EventForDropArticle" remove-id="{{row.entity.id}}"/>'}
-        ];
+        TableTranslate.query({phrase: ['id', 'category', 'title', 'link', 'user_email', 'remove']}, function(answer){
+            vm.gridOptions_articleOfCategoryOptions.columnDefs = [
+                { name: 'id', displayName: answer[0]['id'], width: '5%', enableCellEdit: false,  enableSorting: true},
+                { name: 'category', displayName: answer[0]['category'], width: '15%', enableCellEdit: true,  enableSorting: false, visible: ($routeParams.categoryId === undefined) },
+                { name: 'title', displayName: answer[0]['title'], width: '20%', enableCellEdit: true,  enableSorting: true},
+                { name: 'link', displayName: answer[0]['link'], width: '5%', enableCellEdit: true,  enableSorting: false,
+                    cellTemplate: '<spanedit edit-action="EventForRedirectToShowArticle"  edit-id="{{row.entity.id}}"/>'},
+                { name: 'user_email', displayName: answer[0]['user_email'], width: '20%', enableCellEdit: false,  enableSorting: false},
+                { name: 'remove', displayName: answer[0]['remove'], width: '5%', enableCellEdit: false,  enableSorting: false,
+                    cellTemplate: '<spanremove remove-action="EventForDropArticle" remove-id="{{row.entity.id}}"/>'}
+            ];
+        });
         getArticles();
         
         $scope.$on('EventForRedirectToShowArticle', function (event, id) {
@@ -1963,7 +1977,7 @@
         }
     }
     
-    function LanguagesCtrl(GetLanguageFiles, $rootScope, $scope, $alert, EditLanguageFile){
+    function LanguagesCtrl(GetLanguageFiles, $rootScope, $scope, $alert, EditLanguageFile, TableTranslate){
         var alertError;
         var alertSuccess;
         function showErrorAlert(alertMessage){
@@ -1996,17 +2010,18 @@
         vm.file_change = '';
         
         vm.gridOptions_gridLanguagesFiles = { enableSorting: false, enableCellEdit: false};
-        vm.gridOptions_gridLanguagesFiles.columnDefs = [
-            { name: 'folder', displayName: 'Folder',
-                cellTemplate: '<p ng-click="$emit(\'selectContent\', row.entity.folder)" style="cursor: pointer">{{row.entity.folder}}</p>'}
-        ];
-        
         vm.gridOptions_gridLanguagesFile = { enableSorting: false, enableCellEdit: true};
-        vm.gridOptions_gridLanguagesFile.columnDefs = [
-            {name: 'key', displayName: 'Key', width: '24%', enableCellEdit: false},
-            {name: 'english', displayName: 'English'},
-            {name: 'russian', displayName: 'Russian'}
-        ];
+        TableTranslate.query({phrase: ['folder', 'key', 'english', 'russian']}, function(answer){
+            vm.gridOptions_gridLanguagesFiles.columnDefs = [
+                { name: 'folder', displayName: answer[0]['folder'],
+                    cellTemplate: '<p ng-click="$emit(\'selectContent\', row.entity.folder)" style="cursor: pointer">{{row.entity.folder}}</p>'}
+            ];
+            vm.gridOptions_gridLanguagesFile.columnDefs = [
+                {name: 'key', displayName: answer[0]['key'], width: '24%', enableCellEdit: false},
+                {name: 'english', displayName: answer[0]['english']},
+                {name: 'russian', displayName: answer[0]['russian']}
+            ];
+        });
         
         getContent(vm.path);
         $rootScope.$on('selectContent', function(args, content){  

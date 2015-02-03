@@ -48,7 +48,8 @@
         .factory('ChangeSection', ChangeSection)
         .factory('GetUserBans', GetUserBans)
         .factory('RemoveBan', RemoveBan)
-        .factory('AddBan', AddBan);
+        .factory('AddBan', AddBan)
+        .factory('TableTranslate', TableTranslate);
     
     Group.$inject = ['$resource'];
     AddGroup.$inject = ['$resource'];
@@ -94,6 +95,7 @@
     GetUserBans.$inject = ['$resource'];
     RemoveBan.$inject = ['$resource'];
     AddBan.$inject = ['$resource'];
+    TableTranslate.$inject = ['$resource'];
     
     function Group($resource){
         return $resource('/' + lang +  '/adm/group/show', {}, {
@@ -388,6 +390,12 @@
     function AddBan($resource, $userId, $endDate, $reason){
         return $resource('/' + lang +  '/adm/user/add-ban', {userId: $userId, endDate: $endDate, reason: $reason}, {
           query: {method:'POST', params:{}, isArray:true}
+        });
+    };
+    
+    function TableTranslate($resource, $phrase){
+        return $resource('/' + lang + '/adm/language/table-translate', {phrase: $phrase}, {
+            query: {method:'POST', params: {}, isArray:true}
         });
     };
 })();
