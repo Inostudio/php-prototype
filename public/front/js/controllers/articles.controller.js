@@ -18,7 +18,14 @@
     EditArticleCtrl.$inject = ['$routeParams', 'ShowArticle', 'GetCategory', '$alert', 'EditArticle'];
     
     function ShowCtrl(GetArticlesAndCategories, GetArticleMore, GetSearchResult, $modal, $rootScope, RemoveArticle, $alert) {
-        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
+        var alertSuccess;
+        function showSuccessAlert(alertMessage){
+            if(alertSuccess != null){
+               alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container', duration: 3});
+            alertSuccess.$promise.then(alertSuccess.show);
+        }
         var vm = this;
         vm.showMoreBtn = false;
         vm.getMoreArticles = getMoreArticles;
@@ -132,8 +139,7 @@
         $rootScope.$on('okDeleteArticle', function(){
             vm.modal.hide();
             RemoveArticle.query({removeId: vm.removeArticleId }, function(answer){
-                
-                alertSuccess = $alert({title: vm.success_remove, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                showSuccessAlert(vm.success_remove);
                 var arr = [];
                 angular.forEach(vm.articles, function(article) {
                     if(vm.removeArticleId != article.id){
@@ -161,7 +167,14 @@
     }
     
     function CreateArticleCtrl(GetCategory, CreateArticle, $alert){
-        var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-error-container'});
+        var alertError;
+        function showErrorAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            alertError = $alert({title: alertMessage, placement: 'top-right', type: 'danger', container: '#alerts-error-container'});
+            alertError.$promise.then(alertError.show);
+        }
         var vm = this;
         vm.saveArticle = saveArticle;
         vm.categorys = [];
@@ -175,7 +188,7 @@
         function saveArticle(){
             CreateArticle.query({title: vm.articleTitle, category: vm.articleCategory, body: vm.articleBody}, function(answer){
                 if(!answer[0]){
-                    alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-error-container'});
+                    showErrorAlert(answer[1]);
                 } else {
                     window.location.href = '/' + lang + '/articles';
                 }
@@ -185,8 +198,28 @@
     }
     
     function EditArticleCtrl($routeParams, ShowArticle, GetCategory, $alert, EditArticle){
-        var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-error-container'});
-        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-error-container'});
+        var alertError;
+        var alertSuccess;
+        function showErrorAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+                alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertError = $alert({title: alertMessage, placement: 'top-right', type: 'danger', container: '#alerts-error-container'});
+            alertError.$promise.then(alertError.show);
+        }
+        function showSuccessAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+               alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-error-container', duration: 3});
+            alertSuccess.$promise.then(alertSuccess.show);
+        }
         var vm = this;
         vm.disableCat = true;
         vm.saveEdit = saveEdit;
@@ -211,9 +244,9 @@
         function saveEdit(){
             EditArticle.query({title: vm.article.title, body: vm.article.body, category: vm.articleCategory, id: $routeParams.articleId}, function(answer){
                 if(!answer[0]){
-                    alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-error-container'});
+                    showErrorAlert(answer[1]);
                 } else {
-                    alertSuccess = $alert({title: vm.success_edit, placement: 'top-right', type: 'success', show: true, container: '#alerts-error-container', duration: 3});
+                    showSuccessAlert(vm.success_edit);
                 }
             });
         }

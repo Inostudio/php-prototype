@@ -66,8 +66,7 @@ class ArticlesController extends \BaseController
     }
     
     public function postRemoveArticle(){
-        
-        return \Response::json([$this->articles->removeArticle(\Input::get('removeId'))]);
+        return \Response::json([$this->articles->removeArticle(\Input::get('removeId'), 0, 'asc', 0, 1, 'article_front', 1, null, 'id')]);
     }
     
     public function getCategory(){

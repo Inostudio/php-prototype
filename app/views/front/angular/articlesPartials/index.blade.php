@@ -136,7 +136,7 @@
             <div class="articleAction col-sm-1">
                 <center><p ng-class="{'btn-action-hidden' : article.user.id != vm.currentUserId}"><a class="fa fa-edit" href="#/edit/{{article.id}}"></a></p>
                 <p><a class="fa fa-file-o" href="#/{{article.id}}"></a></p>
-                <p ng-class="{'btn-action-hidden' : article.user.id != vm.currentUserId}"><a class="fa fa-close" ng-click="vm.removeArticle(article.id)"></a></p>
+                <p ng-class="{'btn-action-hidden' : article.user.id != vm.currentUserId}"><a class="fa fa-close" ng-click="vm.removeArticle(article.id)" style="cursor: pointer"></a></p>
                 </center>
             </div>
         </div>
