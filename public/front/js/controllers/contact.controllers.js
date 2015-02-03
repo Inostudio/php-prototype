@@ -28,7 +28,7 @@
 
         function submitForm(isValid) {
             vm.submitted = true;
-            if(isValid || true) {
+            if(isValid) {
                 var success = function(data) {
                     if (data[0] === true) {
                         vm.alert = { msg: data[1], type: 'success'};

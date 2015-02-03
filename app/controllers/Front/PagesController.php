@@ -42,7 +42,7 @@ class PagesController extends \BaseController
         return \View::make('front.pages.contact', ['lang' => \App::getLocale()]);
     }
 
-    protected static $contact = [
+    protected static $contactValidation = [
         'name' => 'required',
         'email' => 'required|email',
         'message' => 'required|min:30',
@@ -50,10 +50,17 @@ class PagesController extends \BaseController
 
     public function postSendContact()
     {
-        $response = [true, 'Email success send!'];
+        $response = [true, trans('front/pages/contact.message_email_send')];
         $data = Input::only('name', 'email', 'message');
 
-        $v = \Validator::make($data, self::$contact);
+        $v = \Validator::make($data, self::$contactValidation);
+        if(\App::getLocale() == 'ru') {
+            $v->setAttributeNames([
+                'name' => 'имя',
+                'email' => 'емаил',
+                'message' => 'сообщение',
+            ]);
+        }
 
         if($v->fails()) {
             $response = [false, $v->messages()];
