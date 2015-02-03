@@ -1401,9 +1401,14 @@
     };  
 
     function PagesCtrl ($scope, $alert, $modal, AddPage, Status, Pages, GetPage, DeletePage, SavePage, $window, $location, $rootScope) {
-
-        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container_for_pages'});
-        
+        var alertSuccess;
+        function showSuccessAlert(alertMessage){
+            if(alertSuccess != null){
+               alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container_for_pages', duration: 3});
+            alertSuccess.$promise.then(alertSuccess.show);
+        }
         var vm = this;
         vm.gridOptions_pagesGrid = '';
         vm.modal = '';
@@ -1483,7 +1488,6 @@
 
 
         function save(page, valid) {
-            alertSuccess.hide();
             if(valid)
             {
                 vm.modalEditPage.hide();
@@ -1491,7 +1495,7 @@
                 if(page.id === undefined) {
                     AddPage.query({title: page.title, body: page.body, status: page.status_id, url: page.url}, function(res) {
                         arr.push({id: res[0], title: page.title, body: page.body, status: $rootScope.statuses[page.status_id - 1].title, url: page.url});
-                        alertSuccess = $alert({title: vm.add_page_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_for_pages', duration: 3});
+                        showSuccessAlert(vm.add_page_message);
                     });
                 } else {
                     SavePage.query({id: page.id, title: page.title, body: page.body, status: page.status_id, url: page.url}, function() {
@@ -1502,7 +1506,7 @@
                             }
                         }
                     });
-                    alertSuccess = $alert({title: vm.edit_page_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_for_pages', duration: 3});
+                    showSuccessAlert(vm.edit_page_message);
                 }
             }
         };
@@ -1523,10 +1527,9 @@
         };  
 
         $rootScope.$on('modal-ok', function(){
-            alertSuccess.hide();
             deletePage(vm.delId);
             vm.modal.hide();
-            alertSuccess = $alert({title: vm.remove_page_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_for_pages', duration: 3});
+            showSuccessAlert(vm.remove_page_message);
         });
 
         $rootScope.$on('modal-cancel', function(){
