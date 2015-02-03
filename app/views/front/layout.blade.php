@@ -60,7 +60,7 @@
             <input name="offer" type="text" class="form-control" placeholder="<%trans('adminMenu.search')%>">
           </form>
             @if (Auth::user())
-                <li <?=$routeName=='front.profile' ? 'class="active"' : ''; ?>><a href="<% action('front.profile', ['lang' => $lang]) %>"><i class="fa fa-user"></i> <% Auth::user()->email %></a></li>
+                <li <?=$routeName=='front.profile' ? 'class="active"' : ''; ?>><a href="<% action('front.profile', ['lang' => $lang]) %>"><i class="fa fa-user"></i> <% trans('front/navbar.profile') %></a></li>
                 <li><a href="<% action('front.logout', ['lang' => $lang]) %>"><i class="fa fa-signout"></i> <% trans('front/navbar.logout') %></a></li>
             @else
                 <li <?=$routeName=='front.signin' ? 'class="active"' : ''; ?>><a href="<% action('front.signin', ['lang' => $lang]) %>"><i class="fa fa-sign-in"></i> <% trans('front/navbar.signin') %></a></li>

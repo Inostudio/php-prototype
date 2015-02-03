@@ -12,5 +12,6 @@ return array(
     "articles"          => "Articles",
     "signin"            => "Sign in",
     "signup"            => "Sign up",
-    "logout"            => "Sign out"
+    "logout"            => "Sign out",
+    "profile"           => "Profile"
 );

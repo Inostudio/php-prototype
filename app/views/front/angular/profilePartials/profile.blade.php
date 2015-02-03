@@ -36,7 +36,7 @@
                 <tbody>
                   <tr>
                     <td><% trans('front/profile/profile.first_name') %></td>
-                    <td data-ng-init="vm.user.first_name = '<% $user->profile->first_name %>'">
+                    <td data-ng-init="vm.user.first_name = '<% $user->profile->first_name %>'" style="min-width: 125px;">
                         <span data-ng-hide="vm.editing">{{vm.user.first_name}}</span>
 
                         <div class="form-group">
@@ -90,13 +90,6 @@
                                     ['attr' => $field]) %>
                             </span>
                         </div>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td><% trans('front/profile/profile.email') %></td>
-                    <td>
-                        <a href="mailto:info@support.com"><% $user->email %></a>
                     </td>
                   </tr>
                   <tr data-ng-init="vm.user.phone = '<% $user->profile->phone %>'">

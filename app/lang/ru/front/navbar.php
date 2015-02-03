@@ -12,5 +12,6 @@ return array(
     "articles"          => "Статьи",
     "signin"            => "Вход",
     "signup"            => "Регистрация",
-    "logout"            => "Выход"
+    "logout"            => "Выход",
+    "profile"           => "Профиль"
 );
