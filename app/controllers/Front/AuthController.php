@@ -26,13 +26,13 @@ class AuthController extends \Controller
     
     protected static $signinValidation = [
         'email' => 'required|email',
-        'password' => 'required|alpha_num',
+        'password' => 'required|between:6,18',
     ];
     
     protected static $signupValidation = [
         'email' => 'required|email|unique:users',
-        'password' => 'required|alpha_num|between:4,18|confirmed',
-        'password_confirmation' => 'required|alpha_num|between:4,18',
+        'password' => 'required|between:6,18|confirmed',
+        'password_confirmation' => 'required|between:6,18',
     ];
 
     /**
@@ -59,7 +59,7 @@ class AuthController extends \Controller
         if($v->fails()){
             $response = [
                 false,
-                'Invalid form data'
+                $v->messages()
             ];
             return Response::json($response); 
         }
@@ -69,7 +69,7 @@ class AuthController extends \Controller
         if(!Auth::attempt($loginInfo, Input::get('remember'))){
             $response = [
                 false,
-                'Invalid credentials'
+                ["auth" => trans('front/auth/signin.message_invalid_credentials')]
             ];
         }
 

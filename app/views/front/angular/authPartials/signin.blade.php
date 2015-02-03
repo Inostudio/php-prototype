@@ -1,3 +1,6 @@
+<?php
+    $lang =  App::getLocale();
+?>
 <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
     <div class="panel panel-info" >
         <div class="panel-heading">
@@ -16,7 +19,7 @@
                         </alert>
                     </div>
 
-                    <div class="form-group" data-ng-class="{ 'has-error' : (signForm.email.$invalid) && vm.submitted }">
+                    <div class="form-group" data-ng-class="{ 'has-error' : (signForm.email.$invalid) && vm.submitted || vm.error.email }">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                             <input type="email" name="email" class="form-control" placeholder="<% trans('front/auth/signin.placeholder_email') %>" data-ng-model="vm.user.email"
@@ -24,31 +27,39 @@
                         </div>
 
                                 <span class="help-block" data-ng-show="(signForm.email.$error.required && vm.submitted)">
-                                    Email must be not empty
+                                    <% trans('front/auth/signin.helper_email_empty') %>
                                 </span>
 
                                 <span class="help-block" data-ng-show="(signForm.email.$invalid && !signForm.email.$error.required && vm.submitted)">
-                                    Email invalid
+                                    <% trans('front/auth/signin.helper_email_invalid') %>
+                                </span>
+
+                                <span class="help-block" data-ng-show="(vm.error.email)">
+                                    {{vm.error.email}}
                                 </span>
                     </div>
 
-                    <div class="form-group" data-ng-class="{ 'has-error' : (signForm.password.$invalid) && vm.submitted }">
+                    <div class="form-group" data-ng-class="{ 'has-error' : (signForm.password.$invalid) && vm.submitted || vm.error.password }">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                             <input type="password" name="password" class="form-control" placeholder="<% trans('front/auth/signin.placeholder_password') %>" data-ng-model="vm.user.password"
-                                   minlength="4" maxlength="32" data-ng-change="vm.closeAlert()" required>
+                                   minlength="6" maxlength="32" data-ng-change="vm.closeAlert()" required>
                         </div>
 
                                 <span class="help-block" data-ng-show="(signForm.password.$error.required) && vm.submitted">
-                                    Password must be not empty
+                                    <% trans('front/auth/signin.helper_password_empty') %>
                                 </span>
 
                                 <span class="help-block" data-ng-show="(signForm.password.$error.minlength) && vm.submitted">
-                                    Password is too short.
+                                    <% trans('front/auth/signin.helper_password_short') %>
                                 </span>
 
                                 <span class="help-block" data-ng-show="(signForm.password.$error.maxlength) && submitted">
-                                    Password is too long.
+                                    <% trans('front/auth/signin.helper_password_long') %>
+                                </span>
+
+                                <span class="help-block" data-ng-show="(vm.error.password)">
+                                    {{vm.error.password}}
                                 </span>
                     </div>
 
@@ -71,7 +82,7 @@
                         <div class="col-md-12 control">
                             <div style="padding-top:25px; font-size:80%" >
                                 <% trans('front/auth/signin.text_no_account') %>
-                                <a href="<% action('front.signup') %>"><% trans('front/auth/signin.text_remind') %></a>
+                                <a href="<% action('front.signup', ['lang' => $lang]) %>"><% trans('front/auth/signin.text_sign_up') %></a>
                             </div>
                         </div>
                     </div>

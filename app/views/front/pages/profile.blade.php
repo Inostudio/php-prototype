@@ -4,8 +4,8 @@
     <link rel="stylesheet" type="text/css" href="/front/css/profile.css">
 
 
-    <script src="/front/vendors/directives/js/ng-img-crop.js"></script>
-    <script src="/front/vendors/directives/js/ng-droplet.min.js"></script>
+    <script src="/vendor/directives/js/ng-img-crop.js"></script>
+    <script src="/vendor/directives/js/ng-droplet.min.js"></script>
 
     <!--
     <script type="text/javascript" src="/build/front/js/bundle.js"></script>
@@ -17,7 +17,7 @@
     <script type="text/javascript" src="/front/js/services/profile.services.js"></script>
 
 
-    <link rel="stylesheet" type="text/css" href="/front/vendors/directives/css/ng-img-crop.css">
+    <link rel="stylesheet" type="text/css" href="/vendor/directives/css/ng-img-crop.css">
 @stop
 
 @section('content')

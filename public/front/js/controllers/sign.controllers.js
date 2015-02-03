@@ -27,6 +27,7 @@
         vm.promise = null;
         //vm.templateUrl = '';
 
+        vm.error = {};
         ////////////
 
         function closeAlert() {
@@ -40,7 +41,9 @@
                     if(data[0] === true){
                         $window.location.href = '/';
                     } else {
-                        vm.alert = { msg: data[1], type: 'danger'};
+                        vm.error.email = data[1]['email'] ? data[1]['email'][0] : undefined;
+                        vm.error.password = data[1]['password'] ? data[1]['password'][0] : undefined;
+                        vm.alert = data[1]['auth'] ? { msg: data[1]['auth'], type: 'danger'} : undefined; ;
                     }
                 };
 

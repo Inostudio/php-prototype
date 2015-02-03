@@ -1,3 +1,7 @@
+<?php
+    $lang =  App::getLocale();
+?>
+
 @extends('front.layout')
 
 @section('include')
@@ -20,7 +24,7 @@
         <div class="panel panel-info">
             <div class="panel-heading">
                 <div class="panel-title">Sign Up</div>
-                <div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" href="<?=action('front.signin')?>" >Sign In</a></div>
+                <div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" href="<?=action('front.signin', ['lang' => $lang])?>" >Sign In</a></div>
             </div>  
             <div class="panel-body" data-ng-controller="SignUpCtrl as vm">
                 
