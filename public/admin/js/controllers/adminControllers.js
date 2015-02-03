@@ -1694,8 +1694,28 @@
      }
      
     function ArticleCategoryCtrl(GetArticles, $routeParams, $scope, $alert, $window, $location, $modal, $rootScope, EditArticle, SearchArticles, RemoveArticle){
-        var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
-        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
+        var alertError;
+        var alertSuccess;
+        function showErrorAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+                alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertError = $alert({title: alertMessage, placement: 'top-right', type: 'danger', container: '#alerts-container'});
+            alertError.$promise.then(alertError.show);
+        }
+        function showSuccessAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+               alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container', duration: 3});
+            alertSuccess.$promise.then(alertSuccess.show);
+        }
         var vm = this;
         vm.limit = 9;
         vm.offset = 0;
@@ -1744,15 +1764,11 @@
         getArticles();
         
         $scope.$on('EventForRedirectToShowArticle', function (event, id) {
-            alertError.hide();
-            alertSuccess.hide();
             $window.open('http://' + $location.host() + ':' + $location.port() + '/' + lang + '/articles#/' + id);
         });
         
         //Удаление 
         $scope.$on('EventForDropArticle', function (event, id) {
-            alertError.hide();
-            alertSuccess.hide();
             vm.removeArticleId = Number(id);
             vm.modal.show();
         });
@@ -1762,7 +1778,6 @@
         });
 
         $rootScope.$on('okDeleteArticle', function(){
-           alertSuccess.hide();
            vm.modal.hide();
            removeArticle(vm.removeArticleId);
         });
@@ -1783,7 +1798,7 @@
                     vm.gridOptions_articleOfCategoryOptions.data.push(answer[0][0][0]);
                 }
                 vm.countArticles = answer[0][1];
-                alertSuccess = $alert({title: vm.article_removed_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                showSuccessAlert(vm.article_removed_message);
                 checkNavBtnAndCheckCountPage();
             });
         }
@@ -1827,11 +1842,9 @@
 
             //Редактирование
             gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue){
-                alertError.hide();
-                alertSuccess.hide();
                 if(newValue.trim() !== oldValue.trim()){
                     if(newValue.trim() === '') {
-                        alertError = $alert({title: vm.required_field, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                        showErrorAlert(vm.required_field);
                         angular.forEach(vm.gridOptions_articleOfCategoryOptions.data, function(article) {
                             if (article.id === rowEntity.id){
                                 if(colDef.name === 'category'){
@@ -1843,9 +1856,8 @@
                         });
                     } else {
                         EditArticle.query({id: rowEntity.id, title: newValue, field:  colDef.name}, function(answer){
-                            console.log();
                             if(!answer[0]){
-                                alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                                showErrorAlert(answer[1]);
                                 angular.forEach(vm.gridOptions_articleOfCategoryOptions.data, function(article) {
                                 if (article.id === rowEntity.id){
                                         if(colDef.name === 'category'){
@@ -1856,9 +1868,8 @@
                                     } 
                                 });
                             } else {
-                                alertSuccess = $alert({title: vm.article_change_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                                showSuccessAlert(vm.article_change_message);
                             }
-                            
                         });
                     }
                 }
