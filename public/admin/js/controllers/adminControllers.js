@@ -303,9 +303,28 @@
       };
 
     function PermissionCtrl($scope, $alert, Permission, AddPermission, RemovePermission, EditPermission, $modal, $rootScope) {
-            var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container_perm'});
-            var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container_perm'});
-
+            var alertError;
+            var alertSuccess;
+            function showErrorAlert(alertMessage){
+                if(alertError != null){
+                    alertError.$promise.then(alertError.hide);
+                }
+                if(alertSuccess != null){
+                    alertSuccess.$promise.then(alertSuccess.hide);
+                }
+                alertError = $alert({title: alertMessage, placement: 'top-right', type: 'danger', container: '#alerts-container_perm'});
+                alertError.$promise.then(alertError.show);
+            }
+            function showSuccessAlert(alertMessage){
+                if(alertError != null){
+                    alertError.$promise.then(alertError.hide);
+                }
+                if(alertSuccess != null){
+                   alertSuccess.$promise.then(alertSuccess.hide);
+                }
+                alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container_perm', duration: 3});
+                alertSuccess.$promise.then(alertSuccess.show);
+            }
             var vm = this;
             vm.addPermission = addPermission;
             vm.permissionName = '';
@@ -315,6 +334,8 @@
             vm.modal = '';
             vm.edit_permission_message = '';
             vm.remove_permission_message = '';
+            vm.title_already_taken = '';
+            vm.title_empty = '';
             
             vm.gridOptions_perm = { enableFiltering: true };
             vm.gridOptions_perm.columnDefs = [
@@ -333,12 +354,9 @@
             //Добавление
             function addPermission(){
               var isExists = 0;
-              alertError.hide();
-              alertSuccess.hide();
-
               angular.forEach(vm.gridOptions_perm.data, function(permission) {
-                  if (permission.title === vm.permissionName){ 
-                      alertError = $alert({title: 'The title has already been taken. ', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
+                  if (permission.title === vm.permissionName){
+                      showErrorAlert(vm.title_already_taken);
                       isExists = 1;
                   }
               });
@@ -347,7 +365,7 @@
               }
 
               if((vm.permissionName == null) || (vm.permissionName.trim() === "")){
-                    alertError = $alert({title: 'The title field is required.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
+                    showErrorAlert(vm.title_empty);
                     return;
               }
 
@@ -356,9 +374,9 @@
                     vm.gridOptions_perm.data.push({title: vm.permissionName, description: vm.permissionDescription, id: answer.id}); 
                     vm.permissionName = "";
                     vm.permissionDescription = "";
-                    alertSuccess = $alert({title: vm.add_permission_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
+                    showSuccessAlert(vm.add_permission_message);
                   } else {
-                      alertError = $alert({title: answer.message, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
+                    showErrorAlert(answer.message);
                   }
               });
             };
@@ -370,8 +388,6 @@
             });
             //Удаление
             $scope.$on('EventForDrop_perm', function (event, id) {
-                alertError.hide();
-                alertSuccess.hide();
                 removePermissionId = Number(id);
                 vm.modal.show();
             });
@@ -379,9 +395,6 @@
             //Редактирование
             vm.gridOptions_perm.onRegisterApi = function(gridApi){
                gridApi.edit.on.afterCellEdit($scope,function(rowEntity, colDef, newValue, oldValue){
-                    alertError.hide();
-                    alertSuccess.hide();
-
                     //Редактирование-----///
                     var oldPermission = '';
 
@@ -408,21 +421,21 @@
                             }   
                         });
                         if(isExistsEdit){
-                            alertError = $alert({title: 'The title has already been taken.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
+                            showErrorAlert(vm.title_already_taken);
                             vm.gridOptions_perm.data[k].title = oldValue;
                         } else {
                             if(newValue.trim() === ''){
-                                alertError = $alert({title: 'Field title is empty!', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
+                                showErrorAlert(vm.title_empty);
                                 vm.gridOptions_perm.data[k].title = oldValue;
                             } else {
                                 if(oldValue !== newValue)
                                 {
                                     EditPermission.query({permissionId: rowEntity.id, title: newValue, permissionDescription: oldPermission.description}, function(answer){
                                         if(answer[0] === false){
-                                            alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
+                                            showErrorAlert(answer[1]);
                                         } else
                                         {
-                                            alertSuccess = $alert({title: vm.edit_permission_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
+                                            showSuccessAlert(vm.edit_permission_message);
                                         }
                                     });
                                 }
@@ -434,10 +447,10 @@
                             //alert("Description");
                             EditPermission.query({permissionId: rowEntity.id, title: oldPermission.title, permissionDescription: newValue}, function(answer){
                                 if(answer[0] === false){
-                                    alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
+                                    showErrorAlert(answer[1]);
                                 } else
                                 {
-                                    alertSuccess = $alert({title: vm.edit_permission_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
+                                    showSuccessAlert(vm.edit_permission_message);
                                 }
                             });
                         }
@@ -457,7 +470,7 @@
                           if (permission.id !== id) 
                               vm.gridOptions_perm.data.push(permission);
                         });
-                        alertSuccess = $alert({title: vm.remove_permission_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
+                        showSuccessAlert(vm.remove_permission_message);
                     }
                 });
             }
@@ -467,7 +480,6 @@
             });
 
             $rootScope.$on('okDeletePermission', function(){
-                alertSuccess.hide();
                 removePermission(removePermissionId);
             });
         };

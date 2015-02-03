@@ -1,6 +1,8 @@
 <div id="alerts-container_perm" ng-init="vm.add_permission_message = '<%trans("admin/permissions.add_permission_message")%>';
      vm.remove_permission_message = '<%trans("admin/permissions.remove_permission_message")%>';
-     vm.edit_permission_message = '<%trans("admin/permissions.edit_permission_message")%>';"></div>
+     vm.edit_permission_message = '<%trans("admin/permissions.edit_permission_message")%>';
+     vm.title_already_taken = '<%trans("admin/permissions.title_already_taken")%>';
+     vm.title_empty = '<%trans("admin/permissions.title_empty")%>';"></div>
 
 <h1 class="page-header"><%trans('admin/permissions.permissions')%></h1>
 <div class="table-responsive">
