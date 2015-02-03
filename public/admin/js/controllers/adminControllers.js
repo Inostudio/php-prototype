@@ -105,9 +105,29 @@
     };
 
     function GroupCtrl($scope, Group, AddGroup, RemoveGroup, EditGroup, $alert, $modal, $rootScope){
-        var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
-        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
-
+        var alertError;
+        var alertSuccess;
+        function showErrorAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+                alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertError = $alert({title: alertMessage, placement: 'top-right', type: 'danger', container: '#alerts-container'});
+            alertError.$promise.then(alertError.show);
+        }
+        function showSuccessAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+               alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container', duration: 3});
+            alertSuccess.$promise.then(alertSuccess.show);
+        }
+        
         var vm = this;
         vm.addGroup = addGroup;
         vm.groupName = '';
@@ -118,6 +138,8 @@
         vm.add_group_message = '';
         vm.remove_group_message = '';
         vm.idAdminsGroup = 0;
+        vm.title_already_taken = '';
+        vm.title_empty = '';
 
         var removeGroupId = null;
         vm.modal = $modal({
@@ -126,8 +148,6 @@
         });
         //Удаление +++
         $scope.$on('EventForDropGroup', function (event, id) {
-            alertError.hide();
-            alertSuccess.hide();
             removeGroupId = Number(id);
             if(id != vm.idAdminsGroup){
                 vm.modal.show();
@@ -136,9 +156,6 @@
 
         //Redirect to permission
         $scope.$on('EventForRedirectToGroupOptions', function (event, id) {
-            alertError.hide();
-            alertSuccess.hide();
-
             window.location = '#/groups/' + id;
         });
         //Grid
@@ -155,9 +172,6 @@
 
         vm.gridOptions.onRegisterApi = function(gridApi){
            gridApi.edit.on.afterCellEdit($scope,function(rowEntity, colDef, newValue, oldValue){
-                alertError.hide();
-                alertSuccess.hide();
-
                 //Редактирование-----///
                 var oldGroup = '';
 
@@ -184,21 +198,21 @@
                         }
                     });
                     if(isExistsEdit){
-                        alertError = $alert({title: 'The title has already been taken.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                        showErrorAlert(vm.title_already_taken);
                         vm.gridOptions.data[k].title = oldValue;
                     } else {
                         if(newValue.trim() === ''){
-                            alertError = $alert({title: 'Field title is empty!', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                            showErrorAlert(vm.title_empty);
                             vm.gridOptions.data[k].title = oldValue;
                         } else {
                             if(oldValue !== newValue)
                             {
                                 EditGroup.query({groupId: rowEntity.id, title: newValue, groupDescription: oldGroup.description}, function(answer){
                                     if(answer[0] === false){
-                                        alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                                        showErrorAlert(answer[1]);
                                     } else
                                     {
-                                        alertSuccess = $alert({title: vm.edit_group_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                                        showSuccessAlert(vm.edit_group_message);
                                     }
                                 });
                             }
@@ -209,10 +223,10 @@
                     if((newValue !== null) && (newValue.trim() != oldValue)) {
                         EditGroup.query({groupId: rowEntity.id, title: oldGroup.title, groupDescription: newValue}, function(answer){
                             if(answer[0] === false){
-                                alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                                showErrorAlert(answer[1]);
                             } else
                             {
-                                alertSuccess = $alert({title: vm.edit_group_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                                showSuccessAlert(vm.edit_group_message);
                             }
                         });
                     }
@@ -237,12 +251,9 @@
         //Добавление
         function addGroup(){
             var isExists = 0;
-            alertError.hide();
-            alertSuccess.hide();
-
             angular.forEach(vm.gridOptions.data, function(group) {
                 if (group.title === vm.groupName){
-                    alertError = $alert({title: 'The title has already been taken. ', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                    showErrorAlert(vm.title_already_taken);
                     isExists = 1;
                 }
             });
@@ -250,7 +261,7 @@
                 return;
             }
             if((vm.groupName == null) || (vm.groupName.trim() === "")){
-                alertError = $alert({title: 'The title field is required.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                showErrorAlert(vm.title_empty);
                 return;
             }
 
@@ -259,9 +270,9 @@
                   vm.gridOptions.data.push({title: vm.groupName, description: vm.groupDescription, id: answer.id});
                   vm.groupName = "";
                   vm.groupDescription = "";
-                  alertSuccess = $alert({title: vm.add_group_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                    showSuccessAlert(vm.add_group_message);
                 } else {
-                    alertError = $alert({title: answer.message, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                    showErrorAlert(answer.message);
                 }
             });
         };
@@ -277,7 +288,7 @@
                       if (group.id !== id)
                           vm.gridOptions.data.push(group);
                     });
-                    alertSuccess = $alert({title: vm.remove_group_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                    showSuccessAlert(vm.remove_group_message);
                 }
             });
         }
@@ -287,7 +298,6 @@
         });
 
         $rootScope.$on('okDeleteGroup', function(){
-            alertSuccess.hide();
             removeGroup(removeGroupId);
         });
       };

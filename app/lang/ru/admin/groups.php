@@ -17,5 +17,7 @@ return array(
     'add_perm_to_group' => 'Право было успешно предоставлено!',
     'remove_perm_from_group' => 'Право было успешно удалено!',
     'group' => 'Группа',
-    'description' => 'Описание'
+    'description' => 'Описание',
+    'title_already_taken'  =>  'Группа с таким названием уже существует!',
+    'title_empty'  =>  'Поле названия пустое!'
 );
