@@ -43,7 +43,7 @@
                     } else {
                         vm.error.email = data[1]['email'] ? data[1]['email'][0] : undefined;
                         vm.error.password = data[1]['password'] ? data[1]['password'][0] : undefined;
-                        vm.alert = data[1]['auth'] ? { msg: data[1]['auth'], type: 'danger'} : undefined; ;
+                        vm.alert = data[1]['auth'] ? { msg: data[1]['auth'], type: 'danger'} : undefined;
                     }
                 };
 
@@ -179,10 +179,13 @@
         vm.promise = null;
         //vm.templateUrl = '';
 
+        vm.error = {};
+
         ////////////
 
         function closeAlert() {
             vm.alert = undefined;
+            vm.error = {};
         }
 
         function submitForm(isValid) {
@@ -194,7 +197,10 @@
                     if(data[0] === true){
                         $window.location.href = '/';
                     } else {
-                        vm.alert = { msg: data[1], type: 'danger'};
+                        vm.error.email = data[1]['email'] ? data[1]['email'][0] : undefined;
+                        vm.error.password = data[1]['password'] ? data[1]['password'][0] : undefined;
+                        vm.error.password_confirm = data[1]['password_confirmation'] ? data[1]['password_confirmation'][0] : undefined;
+                        vm.alert = data[1]['auth'] ? { msg: data[1]['auth'], type: 'danger'} : undefined;
                     }
                 };
 

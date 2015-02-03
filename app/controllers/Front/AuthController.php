@@ -26,13 +26,13 @@ class AuthController extends \Controller
     
     protected static $signinValidation = [
         'email' => 'required|email',
-        'password' => 'required|between:6,18',
+        'password' => 'required|between:6,32',
     ];
     
     protected static $signupValidation = [
         'email' => 'required|email|unique:users',
-        'password' => 'required|between:6,18|confirmed',
-        'password_confirmation' => 'required|between:6,18',
+        'password' => 'required|between:6,32|confirmed',
+        'password_confirmation' => 'required|between:6,32',
     ];
 
     /**
@@ -55,6 +55,12 @@ class AuthController extends \Controller
         $response = [true, 'Success'];
 
         $v = Validator::make(Input::all(), self::$signinValidation);
+        if(\App::getLocale() == 'ru') {
+            $v->setAttributeNames([
+                'email' => 'емаил',
+                'password' => 'пароль'
+            ]);
+        }
 
         if($v->fails()){
             $response = [
@@ -96,26 +102,24 @@ class AuthController extends \Controller
         $response = [true, 'Success'];
 
         $v = Validator::make(Input::all(), self::$signupValidation);
-        
-        if($messages = $v->fails()){
+        if(\App::getLocale() == 'ru') {
+            $v->setAttributeNames([
+                'email' => 'емаил',
+                'password' => 'пароль',
+                'password_confirmation' => 'подтверждение пароля',
+            ]);
+        }
+
+        if($v->fails()){
             $response = [
                 false,
-                'Invalid form data'
+                $v->messages()
             ];
             return Response::json($response); 
-        }
-        
-        
-        if(($this->users->existUser(Input::get('email'))) === false) {
-            $user = $this->users->registerUser(Input::get('email'), Input::get('password'));
-            Auth::login($user);    
         } else {
-            $response = [
-                false,
-                'This user already is exists'
-            ];   
+            $user = $this->users->registerUser(Input::get('email'), Input::get('password'));
+            Auth::login($user);
         }
-                
         
         return Response::json($response);        
     }
