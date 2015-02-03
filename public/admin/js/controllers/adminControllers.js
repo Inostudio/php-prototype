@@ -1964,8 +1964,28 @@
     }
     
     function LanguagesCtrl(GetLanguageFiles, $rootScope, $scope, $alert, EditLanguageFile){
-        var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
-        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
+        var alertError;
+        var alertSuccess;
+        function showErrorAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+                alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertError = $alert({title: alertMessage, placement: 'top-right', type: 'danger', container: '#alerts-container'});
+            alertError.$promise.then(alertError.show);
+        }
+        function showSuccessAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+               alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container', duration: 3});
+            alertSuccess.$promise.then(alertSuccess.show);
+        }
         var vm = this;
         vm.path = '/';
         vm.isFile = -1;
@@ -2030,7 +2050,9 @@
                         vm.gridOptions_gridLanguagesFiles.data = [{folder: '...'}];
                     }
                     angular.forEach(answer[0], function(content){
-                        vm.gridOptions_gridLanguagesFiles.data.push({folder: content});
+                        if(content != 'validation.php'){
+                            vm.gridOptions_gridLanguagesFiles.data.push({folder: content});
+                        }
                     });
                 }
                 else{
@@ -2059,11 +2081,9 @@
         
         vm.gridOptions_gridLanguagesFile.onRegisterApi = function(gridApi){
             gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue){
-                alertError.hide();
-                alertSuccess.hide();
                 if(newValue.trim() !== oldValue.trim()){
                     if(newValue.trim() === '') {
-                        alertError = $alert({title: vm.required_field, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                        showErrorAlert(vm.required_field);
                         angular.forEach(vm.gridOptions_gridLanguagesFile.data, function(phrase) {
                             if (phrase.key === rowEntity.key){
                                 if(colDef.name === 'english'){
@@ -2076,9 +2096,9 @@
                     } else {
                         EditLanguageFile.query({path: vm.path, file: vm.editFile, language: colDef.name.slice(0, 2), key: rowEntity.key, value: newValue}, function(answer){
                             if(!answer[0]){
-                                alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                                showErrorAlert(answer[1]);
                             } else {
-                                alertSuccess = $alert({title: vm.file_change, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                                showSuccessAlert(vm.file_change);
                             }
                         });
                     }
