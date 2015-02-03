@@ -1557,8 +1557,28 @@
      };
      
     function CategoriesOfArticlesCtrl(GetCategoryOfArticle, $alert, $scope, $modal, $rootScope, RemoveCategoryOfArticle, AddCategoryOfArticle, EditCategoryOfArticle){
-        var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
-        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
+        var alertError;
+        var alertSuccess;
+        function showErrorAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+                alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertError = $alert({title: alertMessage, placement: 'top-right', type: 'danger', container: '#alerts-container'});
+            alertError.$promise.then(alertError.show);
+        }
+        function showSuccessAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+               alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container', duration: 3});
+            alertSuccess.$promise.then(alertSuccess.show);
+        }
         var vm = this;  
         vm.gridOptionsOfCategories = {};
         vm.categoryTitle = '';
@@ -1596,8 +1616,6 @@
         //Удаление 
         $scope.$on('EventForDropCategory', function (event, id) {
             if(id != vm.defaultCategoryId){
-                alertError.hide();
-                alertSuccess.hide();
                 vm.removeCategoryId = Number(id);
                 vm.modal.show();
             }
@@ -1608,14 +1626,13 @@
         });
 
         $rootScope.$on('okDeleteCategory', function(){
-           alertSuccess.hide();
            removeCategory(vm.removeCategoryId);
         });
         
         function removeCategory(removeId){
             RemoveCategoryOfArticle.query({categoryId: removeId}, function(answer){
                 vm.modal.hide();
-                alertSuccess = $alert({title: vm.remove_category_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                showSuccessAlert(vm.remove_category_message);
                 var i = 0;
                 angular.forEach(vm.gridOptions_categoriesOptions.data, function(category) {
                     if(category.id == removeId){
@@ -1627,13 +1644,11 @@
         }
         
         function addCategory(){
-            alertError.hide();
-            alertSuccess.hide();
             AddCategoryOfArticle.query({title: vm.categoryTitle}, function(answer){
                 if(!answer[0]){
-                    alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
-                } else {      
-                    alertSuccess = $alert({title: vm.add_category_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                    showErrorAlert(answer[1]);
+                } else { 
+                    showSuccessAlert(vm.add_category_message);
                     var newCategory = {
                         id: answer[3],
                         title: vm.categoryTitle
@@ -1649,11 +1664,9 @@
         vm.gridOptions_categoriesOptions.onRegisterApi = function(gridApi){
 
             gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue){
-                alertError.hide();
-                alertSuccess.hide();
                 if(newValue.trim() !== oldValue.trim()){
                     if(newValue.trim() === ''){
-                        alertError = $alert({title: vm.field_name_required, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                        showErrorAlert(vm.field_name_required);
                         angular.forEach(vm.gridOptions_categoriesOptions.data, function(category) {
                             if (category.id === rowEntity.id) 
                                 category.title = oldValue;
@@ -1661,13 +1674,13 @@
                     } else{
                         EditCategoryOfArticle.query({title: newValue, id: rowEntity.id}, function(answer){
                             if(!answer[0]){
-                                alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                                showErrorAlert(answer[1]);
                                 angular.forEach(vm.gridOptions_categoriesOptions.data, function(category) {
                                     if (category.id === rowEntity.id) 
                                         category.title = oldValue;
                                 });
                             } else{
-                                alertSuccess = $alert({title: vm.update_category_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                                showSuccessAlert(vm.update_category_message);
                             }
                         });
                     }
@@ -1676,8 +1689,6 @@
         };
         
         $scope.$on('EventForRedirectToArticleOfCategory', function (event, id) {
-            alertError.hide();
-            alertSuccess.hide();
             window.location = '#/categories_of_articles/' + id;
         });
      }
