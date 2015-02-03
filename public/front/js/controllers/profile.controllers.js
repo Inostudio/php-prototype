@@ -139,10 +139,12 @@
         vm.cleanForm = cleanForm;
         vm.confirm = confirm;
 
+        vm.error = {};
         ////////////
 
         function closeAlert() {
             vm.alert = undefined;
+            vm.error = {};
         }
 
         function submitForm(isValid) {
@@ -153,7 +155,10 @@
                         vm.alert = { msg: data[1], type: 'success'};
                         vm.cleanForm();
                     } else {
-                        vm.alert = { msg: data[1], type: 'danger'};
+                        vm.error.old_password = data[1]['old_password'] ? data[1]['old_password'][0] : undefined;
+                        vm.error.new_password = data[1]['new_password'] ? data[1]['new_password'][0] : undefined;
+                        vm.error.new_password_confirmation = data[1]['new_password_confirmation'] ? data[1]['new_password_confirmation'][0] : undefined;
+                        vm.alert = data[1]['error'] ? { msg: data[1]['error'], type: 'danger'} : undefined;
                     }
                 };
 

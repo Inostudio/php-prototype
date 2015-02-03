@@ -6,6 +6,8 @@
  * Time: 10:54
  */
 return array(
+    "title_change_password"                     => "Change password",
+
     "placeholder_old_password"                  => "Old password",
     "placeholder_default_password"              => "Your password default is 'password'",
     "placeholder_new_password"                  => "New password",

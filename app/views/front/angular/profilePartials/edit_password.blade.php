@@ -10,13 +10,13 @@
 
 <div class="panel panel-info">
     <div class="panel-heading">
-        <h3 class="panel-title">Change password</h3>
+        <h3 class="panel-title"><% trans('front/profile/change_password.title_change_password') %></h3>
     </div>
     <form name="passwordForm" class="form-vertical" novalidate data-ng-submit="vm.submitForm(passwordForm.$valid && vm.confirm())">
         <div class="panel-body">
 
             <div class="form-group">
-                <div class="input-group" data-ng-class="{ 'has-error' : (passwordForm.oldPassword.$invalid) && vm.submitted }">
+                <div class="input-group" data-ng-class="{ 'has-error' : (passwordForm.oldPassword.$invalid) && vm.submitted || vm.error.old_password}">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                     <input type="password"
                            name="oldPassword"
@@ -32,10 +32,14 @@
                 <span class="help-block" data-ng-show="(passwordForm.oldPassword.$error.required && vm.submitted)">
                     <% trans('front/profile/change_password.help_block_old_password_empty') %>
                 </span>
+
+                <span class="help-block" data-ng-show="(vm.error.old_password)">
+                    {{vm.error.old_password}}
+                </span>
             </div>
 
             <div class="form-group">
-                <div class="input-group" data-ng-class="{ 'has-error' : (passwordForm.password.$invalid) && vm.submitted }">
+                <div class="input-group" data-ng-class="{ 'has-error' : (passwordForm.password.$invalid) && vm.submitted || vm.error.new_password}">
 
                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                     <input type="password"
@@ -43,7 +47,7 @@
                            class="form-control"
                            placeholder="<% trans('front/profile/change_password.placeholder_new_password') %>"
                            data-ng-model="vm.user.new_password"
-                           minlength="4" maxlength="32" data-ng-change="vm.closeAlert()" required>
+                           minlength="6" maxlength="32" data-ng-change="vm.closeAlert()" required>
                 </div>
 
                 <span class="help-block"
@@ -58,10 +62,14 @@
                 <span class="help-block" data-ng-show="(passwordForm.password.$error.maxlength) && vm.submitted">
                     <% trans('front/profile/change_password.help_block_new_password_long') %>
                 </span>
+
+                <span class="help-block" data-ng-show="(vm.error.new_password)">
+                    {{vm.error.new_password}}
+                </span>
             </div>
 
             <div class="form-group">
-                <div class="input-group" data-ng-class="{ 'has-error' : !vm.confirm() && vm.submitted }">
+                <div class="input-group" data-ng-class="{ 'has-error' : !vm.confirm() && vm.submitted || vm.error.new_password_confirmation}">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                     <input type="password"
                            name="password_confirm"
@@ -74,6 +82,10 @@
 
                 <span class="help-block" data-ng-show="vm.submitted && !vm.confirm()">
                     <% trans('front/profile/change_password.help_block_new_password_confirm_wrong') %>
+                </span>
+
+                <span class="help-block" data-ng-show="(vm.error.new_password_confirmation)">
+                    {{vm.error.new_password_confirmation}}
                 </span>
             </div>
         </div>

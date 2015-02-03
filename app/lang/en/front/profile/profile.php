@@ -19,6 +19,8 @@ return array(
     "message_change_success"                    => "Changes have been saved",
     "message_upload_success"                    => "The photo successfully uploaded",
     "message_select_thumbnail_success"          => "The thumbnail successfully changed",
+    "message_image_deleted"                     => "Photo success removed",
+    "message_image_not_deleted"                 => "Fail. Photo don't removed.",
 
     "button_save"                               => "Save",
     "button_cancel"                             => "Cancel",
@@ -27,6 +29,8 @@ return array(
     "button_choose_file"                        => "Choose a local file",
     "button_upload"                             => "Upload",
     "button_back"                               => "Back",
+    "button_change_image"                       => "Change image",
+    "button_upload_image"                       => "Upload image",
 
     "title_choose_thumbnail"                    => "Choose a new thumbnail",
     "title_upload_new_photo"                    => "Choose a new photo",

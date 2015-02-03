@@ -19,6 +19,8 @@ return array(
     "message_change_success"                    => "Изменения сохранены",
     "message_upload_success"                    => "Фотография успешно загружена",
     "message_select_thumbnail_success"          => "Миниатюра успешно выбрана",
+    "message_image_deleted"                     => "Фотография успешно удалена.",
+    "message_image_not_deleted"                 => "Неудача. Фотграфия не была удалена.",
 
     "button_save"                               => "Сохранить",
     "button_cancel"                             => "Отмена",
@@ -27,6 +29,8 @@ return array(
     "button_choose_file"                        => "Выбрать файл",
     "button_upload"                             => "Загрузить",
     "button_back"                               => "Назад",
+    "button_change_image"                       => "Изменить изображение",
+    "button_upload_image"                       => "Загрузить изображение",
 
     "title_choose_thumbnail"                    => "Выберите миниатюру",
     "title_upload_new_photo"                    => "Выберите новую фотографию",

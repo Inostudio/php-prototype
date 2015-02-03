@@ -6,6 +6,8 @@
  * Time: 10:54
  */
 return array(
+    "title_change_password"                     => "Смена пароля",
+
     "placeholder_old_password"                  => "Старый пароль",
     "placeholder_default_password"              => "Ваш пароль по умолчанию 'password'",
     "placeholder_new_password"                  => "Новый пароль",

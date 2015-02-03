@@ -42,8 +42,8 @@ class ProfileController extends \BaseController
      */
     protected static $changePasswordValidation = [
         'old_password' => 'required|alpha_num',
-        'new_password' => 'required|alpha_num|between:4,18|confirmed',
-        'new_password_confirmation' => 'required|alpha_num|between:4,18'
+        'new_password' => 'required|alpha_num|between:6,18|confirmed',
+        'new_password_confirmation' => 'required|alpha_num|between:6,18'
     ];
 
     /**
@@ -61,7 +61,7 @@ class ProfileController extends \BaseController
     protected static $changeEmailValidation = [
         'old_email' => 'required|email|exists:users,email',
         'new_email' => 'required|email|unique:users,email',
-        'password' => 'required|alpha_num|between:4,18'
+        'password' => 'required|alpha_num|between:6,18'
     ];
 
     /**
@@ -117,16 +117,23 @@ class ProfileController extends \BaseController
         $response = [true, trans('front/profile/profile.message_change_success')];
 
         $v = Validator::make(Input::all(), self::$changePasswordValidation);
+        if(\App::getLocale() == 'ru') {
+            $v->setAttributeNames([
+                'old_password' => 'старый пароль',
+                'new_password' => 'новый пароль',
+                'new_password_confirmation' => 'подтверждение пароля'
+            ]);
+        }
 
         if($v->fails()){
             $response = [
                 false,
-                trans('front/profile/change_password.message_data_invalid')
+                $v->messages()
             ];
         } else if (!\Hash::check(Input::get('old_password'), Auth::user()->password)) {
             $response = [
                 false,
-                trans('front/profile/change_password.message_old_password_wrong')
+                ["error" => trans('front/profile/change_password.message_old_password_wrong')]
             ];
         } else {
             $this->users->changePassword(Auth::user()->id, Input::get('new_password'));
@@ -146,6 +153,13 @@ class ProfileController extends \BaseController
         $response = [true, trans('front/profile/profile.message_change_success')];
 
         $v = Validator::make(Input::all(), self::$changeEmailValidation);
+        if(\App::getLocale() == 'ru') {
+            $v->setAttributeNames([
+                'old_email' => 'старый емаил',
+                'new_email' => 'емаил',
+                'password' => 'пароль'
+            ]);
+        }
 
         if($v->fails()){
             $response = [
@@ -191,13 +205,15 @@ class ProfileController extends \BaseController
 
                     $user->email = $email->new_email;
                     $response[0] = $user->save();
-                    $response[1] = 'You change email success!';
+                    $response[1] = trans('front/profile/change_email.message_change_success_done');
 
                     \DB::table('email_change')->where('token', $token)->delete();
                 } else {
                     \DB::table('email_change')->where('token', $token)->delete();
-                    $response[1] = 'This email is exists! Please try again.';
+                    $response[1] = trans('front/profile/change_email.message_change_email_is_busy');
                 }
+
+                return View::make('front.pages.static', ['response' => $response]);
             } else {
                 \DB::table('email_change')->where('token', $token)->delete();
                 throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -208,7 +224,7 @@ class ProfileController extends \BaseController
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
         }
 
-        return Response::json($response);
+        //return Response::json($response);
         //return dd($token, $email->new_email);
     }
 
@@ -238,7 +254,7 @@ class ProfileController extends \BaseController
         $response = [
             $result,
             Auth::user()->getCroppedPhoto(),
-            $result ? 'Photo success removed' : 'Fail'
+            $result ? trans('front/profile/profile.message_image_deleted') : trans('front/profile/profile.message_image_not_deleted')
         ];
         return Response::json($response);
     }

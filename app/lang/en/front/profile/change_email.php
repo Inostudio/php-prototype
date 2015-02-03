@@ -22,6 +22,9 @@ return array(
     "button_change"                             => "Change",
 
     "message_password_wrong"                => "The selected password is invalid.",
-    "message_change_success_send"                      => "On your current e-mail sent the letter. To confirm the change of Email go to send the link.",
+    "message_change_success_send"                      => "On your current e-mail sent the letter for confirmation the change of email.",
+    "message_change_success_done" => "You change email success!",
+    "message_change_email_is_busy" => "This email is exists! Please try again.",
+
     "title"                      => "Change email",
 );
