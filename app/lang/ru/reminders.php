@@ -13,14 +13,14 @@ return array(
 	|
 	*/
 
-	"password" => "Passwords must be at least six characters and match the confirmation.",
+	"password" => "Пароль должен быть не менее шести символов.",
 
 	"user" => "Пользотователь с таким емаил'ом не найден.",
 
-	"token" => "This password reset token is invalid.",
+	"token" => "Токен для восстановления пароля недействителен.",
 
-	"sent" => "Password reminder sent!",
+	"sent" => "Для восстановления пароля отправлено вам письмо!",
 
-	"reset" => "Password has been reset!",
+	"reset" => "Новый пароль установлен!",
 
 );

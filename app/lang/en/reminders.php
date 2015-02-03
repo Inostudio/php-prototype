@@ -19,7 +19,7 @@ return array(
 
 	"token" => "This password reset token is invalid.",
 
-	"sent" => "Password reminder sent!",
+	"sent" => "The remind your password sent you an email!",
 
 	"reset" => "Password has been reset!",
 

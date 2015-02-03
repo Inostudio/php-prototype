@@ -84,6 +84,8 @@
                 var success = function(data) {
                     if(data[0] === true){
                         vm.alert = { msg: data[1], type: 'success'};
+                        vm.user = {};
+                        vm.submitted = false;
                         //$window.location.href = '/';
                     } else {
                         vm.alert = { msg: data[1], type: 'danger'};
@@ -134,6 +136,8 @@
                     console.log(data);
                     if(data[0] === true){
                         vm.alert = { msg: data[1], type: 'success'};
+                        vm.user = {};
+                        vm.submitted = false;
                         //$window.location.href = '/';
                     } else {
                         vm.alert = { msg: data[1], type: 'danger'};

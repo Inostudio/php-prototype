@@ -1,12 +1,12 @@
 @extends('front.layout')
 
 @section('include')
-    <link href="/front/vendors/angular-busy/angular-busy.min.css" rel="stylesheet">
+    <link href="/vendor/angular-busy/angular-busy.min.css" rel="stylesheet">
 
     <script type="text/javascript" src="/front/js/signApp.module.js"></script>
 
-    <script type="text/javascript" src="/front/vendors/angular-animate/angular-animate.min.js"></script>
-    <script type="text/javascript" src="/front/vendors/angular-busy/angular-busy.min.js"></script>
+    <script type="text/javascript" src="/vendor/angular-animate/angular-animate.min.js"></script>
+    <script type="text/javascript" src="/vendor/angular-busy/angular-busy.min.js"></script>
 
     <script type="text/javascript" src="/front/js/controllers/sign.controllers.js"></script>
     <script type="text/javascript" src="/front/js/services/sign.services.js"></script>
@@ -20,8 +20,7 @@
         <div id="signupbox" style="margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <div class="panel-title">Sign Up</div>
-                    <div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" href="<?=action('front.signin')?>" >Sign In</a></div>
+                    <div class="panel-title"><% trans('front/auth/remind.title_reset_password') %></div>
                 </div>
                 <div class="panel-body" data-ng-controller="ResetCtrl as vm">
 
@@ -39,33 +38,37 @@
                                 <div class="input-group" data-ng-class="{ 'has-error' : (signForm.password.$invalid) && vm.submitted }">
 
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                    <input type="password" name="password" class="form-control" placeholder="Password" data-ng-model="vm.user.password"
-                                           minlength="4" maxlength="32" data-ng-change="vm.closeAlert()" required>
+                                    <input type="password" name="password" class="form-control"
+                                           placeholder="<% trans('front/auth/remind.placeholder_password') %>"
+                                           data-ng-model="vm.user.password"
+                                           minlength="6" maxlength="32" data-ng-change="vm.closeAlert()" required>
                                 </div>
 
                             <span class="help-block"
                                   data-ng-show="(signForm.password.$error.required) && vm.submitted">
-                                Password must be not empty
+                                <% trans('front/auth/remind.helper_password_empty') %>
                             </span>
 
                             <span class="help-block" data-ng-show="(signForm.password.$error.minlength) && vm.submitted">
-                                Password is too short.
+                                <% trans('front/auth/remind.helper_password_short') %>
                             </span>
 
                             <span class="help-block" data-ng-show="(signForm.password.$error.maxlength) && vm.submitted">
-                                Password is too long.
+                                <% trans('front/auth/remind.helper_password_long') %>
                             </span>
                             </div>
 
                             <div class="form-group">
                                 <div class="input-group" data-ng-class="{ 'has-error' : !vm.confirm() && vm.submitted }">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                    <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm password" data-ng-model="vm.user.password_confirmation" data-ng-change="vm.closeAlert()">
+                                    <input type="password" name="password_confirmation" class="form-control"
+                                           placeholder="<% trans('front/auth/remind.placeholder_password_confirm') %>"
+                                           data-ng-model="vm.user.password_confirmation" data-ng-change="vm.closeAlert()">
                                 </div>
 
-                            <span class="help-block" data-ng-show="vm.submitted && !vm.confirm()">
-                                Password and password confirm don't match.
-                            </span>
+                                <span class="help-block" data-ng-show="vm.submitted && !vm.confirm()">
+                                    <% trans('front/auth/remind.helper_password_confirm_wrong') %>
+                                </span>
                             </div>
 
                             <div class="form-group">
@@ -73,7 +76,7 @@
 
                                     <button id="btn-signup" type="submit" class="btn btn-info"
                                             data-ng-disabled="signForm.$invalid && vm.submitted ||
-                                    !vm.confirm() && vm.submitted"><i class="fa fa-sign-in"></i> &nbsp Reset Password
+                                    !vm.confirm() && vm.submitted"><i class="fa fa-sign-in"></i> &nbsp <% trans('front/auth/remind.title_reset_password') %>
                                     </button>
                                 </div>
                             </div>

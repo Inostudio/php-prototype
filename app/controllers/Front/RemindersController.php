@@ -82,7 +82,7 @@ class RemindersController extends \Controller {
 				//return Redirect::back()->with('error', Lang::get($response));
 
 			case Password::PASSWORD_RESET:
-				return Response::json([true, 'Ok']);
+				return Response::json([true, Lang::get($response)]);
 				//return Redirect::to('/');
 		}
 	}
