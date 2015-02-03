@@ -1097,9 +1097,28 @@
     };
 
     function ResourcesCtrl($scope, AddResource, AllResource, DeleteResource, $alert, $modal, $rootScope, EditResource, GetSearchResources) {
-        var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
-        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
-        
+        var alertError;
+        var alertSuccess;
+        function showErrorAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+                alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertError = $alert({title: alertMessage, placement: 'top-right', type: 'danger', container: '#alerts-container'});
+            alertError.$promise.then(alertError.show);
+        }
+        function showSuccessAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+               alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container', duration: 3});
+            alertSuccess.$promise.then(alertSuccess.show);
+        }
         var vm = this;
         vm.gridOptions_resourcesGrid = [];
         vm.modal = {};
@@ -1164,9 +1183,7 @@
         });
         
         $scope.$on('EventForCopyUrl', function (event) {
-            alertSuccess.hide();
-            alertError.hide();
-            $alert({title: vm.copy_url, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+            showSuccessAlert(vm.copy_url);
         });
         
         $scope.$on('EventForDropResource', function (event, id) {
@@ -1175,14 +1192,12 @@
         });
 
         function add(resource) {
-            alertSuccess.hide();
-            alertError.hide();
             if(resource.file === '') {
-                $alert({title: vm.select_file, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
+                showErrorAlert(vm.select_file);
             } else {
                 AddResource.query({title: resource.title, file: resource.file}, function(answer) {
                     if(answer[0]) {
-                        $alert({title: vm.add_resource_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                        showSuccessAlert(vm.add_resource_message);
                         vm.resource = {
                             title: '',
                             file: ''
@@ -1197,7 +1212,6 @@
                             } else {    //С поиском
                                 getSearchResources();
                             }
-                            console.log('1-й');
                         } else if(((vm.currentPage < vm.totalPage) || (vm.currentPage == vm.totalPage)) && (vm.limit * vm.totalPage < vm.countResources)){
                             vm.offset = vm.limit * vm.totalPage;
                             vm.currentPage = vm.totalPage + 1;
@@ -1206,14 +1220,12 @@
                             } else {    //С поиском
                                 getSearchResources();
                             }
-                            console.log('2-й');
                         }
                         else {
                             vm.gridOptions_resourcesGrid.data.push(answer[1]);
-                            console.log('3-й');
                         }
                     } else {
-                        $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
+                        showErrorAlert(answer[1]);
                     }
                 });
             }
@@ -1236,9 +1248,9 @@
                     vm.gridOptions_resourcesGrid.data = [];
                     vm.gridOptions_resourcesGrid.data = arr;
                     checkNavBtnAndCountTotalPage();
-                    $alert({title: vm.remove_resource_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                    showSuccessAlert(vm.remove_resource_message);
                 } else {
-                    $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
+                    showErrorAlert(answer[1]);
                 }
             });
         };
@@ -1259,7 +1271,6 @@
         });
 
         $rootScope.$on('okDeleteResource', function(){
-            alertSuccess.hide();
             vm.deleteResource(removeResourceId);
         });
         
@@ -1315,11 +1326,9 @@
         vm.gridOptions_resourcesGrid.onRegisterApi = function(gridApi){
             //Редактирование
             gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue){
-                alertError.hide();
-                alertSuccess.hide();
                 if(newValue.trim() != oldValue.trim()){
                     if(newValue.trim() === ''){
-                        alertError = $alert({title: vm.empty_field, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                        showErrorAlert(vm.empty_field);
                         angular.forEach(vm.gridOptions_resourcesGrid.data, function(resource) {
                             if (resource.id === rowEntity.id) 
                                 resource.title = oldValue;
@@ -1327,9 +1336,9 @@
                     } else {
                         EditResource.query({id: rowEntity.id, title: newValue}, function(answer){
                             if(answer[0]){
-                                alertSuccess = $alert({title: vm.success_changed_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                                showSuccessAlert(vm.success_changed_message);
                             } else {
-                                alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                                showErrorAlert(answer[1]);
                                 angular.forEach(vm.gridOptions_resourcesGrid.data, function(resource) {
                                     if (resource.id === rowEntity.id) 
                                         resource.title = oldValue;
