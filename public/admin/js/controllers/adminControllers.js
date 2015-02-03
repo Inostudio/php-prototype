@@ -988,8 +988,28 @@
     };
 
     function UserOptionsCtrl($scope, $alert, $routeParams, UserOptions, ChangeGroupByUser, $modal, $rootScope) {
-            var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container_option_for_users'});
-            var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container_option_for_users'});
+            var alertSuccess;
+            var alertError;
+            function showErrorAlert(alertMessage){
+                if(alertError != null){
+                    alertError.$promise.then(alertError.hide);
+                }
+                if(alertSuccess != null){
+                    alertSuccess.$promise.then(alertSuccess.hide);
+                }
+                alertError = $alert({title: alertMessage, placement: 'top-right', type: 'danger', container: '#alerts-container_option_for_users'});
+                alertError.$promise.then(alertError.show);
+            }
+            function showSuccessAlert(alertMessage){
+                if(alertError != null){
+                    alertError.$promise.then(alertError.hide);
+                }
+                if(alertSuccess != null){
+                   alertSuccess.$promise.then(alertSuccess.hide);
+                }
+                alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container_option_for_users', duration: 3});
+                alertSuccess.$promise.then(alertSuccess.show);
+            }
             var vm = this;
             var deleteSelfFromAdmin = false;
             vm.userEmail = '';
@@ -1018,7 +1038,6 @@
 
             //Получение групп, в которых состоит пользователь+++
             UserOptions.query({userId: $routeParams.userId}, function(answer){
-                //console.log(answer);
                 vm.userEmail = answer[0].email;
                 vm.lastName = answer[0].profile.last_name;
                 vm.firstName = answer[0].profile.first_name;
@@ -1034,13 +1053,10 @@
                 });
 
                 vm.gridOptions_userOptions.data = answer[2][0];
-                //console.log(answer);
             });
 
             //Включение/исключение пользователя из группы+++
             $scope.$on('EventChangeUser', function (event, id, accept) {
-                alertSuccess.hide();
-                alertError.hide();
                 if((id == 1) && (vm.currentAdminId == $routeParams.userId) && (!deleteSelfFromAdmin)){
                    vm.modal.show(); 
                    vm.selfAccept = accept;
@@ -1048,17 +1064,16 @@
                    return;
                 };
                 ChangeGroupByUser.query({userId: vm.userId, accept : accept, groupId: id}, function(answer){
-                    console.log(answer);
                     if(answer[0]){
                         angular.forEach(vm.gridOptions_userOptions.data, function(group) {    //Проверяем, существует ли право с таким именем
                             if(group.id == id){
                                 if(accept){
                                     group.accept = 0;
-                                    alertSuccess = $alert({title: vm.remove_user_from_group, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option_for_users', duration: 3});
+                                    showSuccessAlert(vm.remove_user_from_group);
                                 }
                                 else {
                                     group.accept = 1;
-                                    alertSuccess = $alert({title: vm.add_user_to_group, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option_for_users', duration: 3});
+                                    showSuccessAlert(vm.add_user_to_group);
                                 }
                             }
                         });
@@ -1066,7 +1081,7 @@
                             window.location.href = '/';
                         }
                     } else {
-                        alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_option_for_users'});
+                        showErrorAlert(answer[1]);
                     }
                 });
                 
