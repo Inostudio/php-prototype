@@ -2108,7 +2108,14 @@
     };
     
     function SettingsCtrl(GetSections, ChangeSection, $alert, $scope){
-        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
+        var alertSuccess;
+        function showSuccessAlert(alertMessage){
+            if(alertSuccess != null){
+               alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container', duration: 3});
+            alertSuccess.$promise.then(alertSuccess.show);
+        }
         var vm = this;
         vm.sections = [];
         vm.toggleSection = toggleSection;
@@ -2129,12 +2136,11 @@
         });
         
         function toggleSection($id, $disable){
-            alertSuccess.hide();
             ChangeSection.query({id: $id, disable: $disable}, function(answer){
                 if($disable){
-                    alertSuccess = $alert({title: vm.section_disable, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                    showSuccessAlert(vm.section_disable);
                 } else {
-                    alertSuccess = $alert({title: vm.section_enable, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                    showSuccessAlert(vm.section_enable);
                 }
             });
         }
