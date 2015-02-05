@@ -6,7 +6,7 @@
     
     <script src="/front/js/articlesApp.module.js" type="text/javascript"></script>
     <script src="/front/js/routes/articles.routes.js" type="text/javascript"></script>
-    <script src="/front/js/controllers/articles.controller.js" type="text/javascript"></script>
+    <script src="/front/js/controllers/articles.controllers.js" type="text/javascript"></script>
     <script src="/front/js/services/articles.services.js" type="text/javascript"></script>
     <script src="/vendor/angular-resource/angular-resource.min.js" type="text/javascript"></script>
     <script src="/vendor/angular-strap/angular-strap.min.js" type="text/javascript"></script>

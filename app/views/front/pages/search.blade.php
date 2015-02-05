@@ -7,22 +7,54 @@
     <script src="/front/js/searchApp.module.js" type="text/javascript"></script>
     <script src="/front/js/routes/search.routes.js" type="text/javascript"></script>
     <script src="/front/js/controllers/search.controller.js" type="text/javascript"></script>
-    <script src="/admin/vendors/angular/angular-resource.min.js" type="text/javascript"></script>
-    <script src="/admin/vendors/angular/angular-strap.min.js" type="text/javascript"></script>
-    <script src="/admin/vendors/angular/angular-strap.tpl.js" type="text/javascript"></script>
-    <script src="/admin/vendors/angular/angular-animate.js" type="text/javascript"></script>
+    <script src="/front/js/services/search.services.js" type="text/javascript"></script>
+    <script src="/vendor/angular-resource/angular-resource.min.js" type="text/javascript"></script>
+    <script src="/vendor/angular-strap/angular-strap.min.js" type="text/javascript"></script>
+    <script src="/vendor/angular-strap/angular-strap.tpl.js" type="text/javascript"></script>
+    <script src="/vendor/angular-animate/angular-animate.min.js" type="text/javascript"></script>
     <script src="/vendor/loading-bar/js/loading-bar.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/libraries.min.css">
 @stop
 
 @section('content')
 
-    <div class="container" data-ng-app="searchApp">
-        <div data-ng-init="$rootScope.search = <% $offer %>">
+    <style>
+        .user-row {
+            margin-bottom: 14px;
+        }
 
-            <div data-ng-view>
-                <% $offer %>
-            </div>
+        .user-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .dropdown-user {
+            margin: 13px 0;
+            padding: 5px;
+            height: 100%;
+        }
+
+        .dropdown-user:hover {
+            cursor: pointer;
+        }
+
+        .table-user-information > tbody > tr {
+            border-top: 1px solid rgb(221, 221, 221);
+        }
+
+        .table-user-information > tbody > tr:first-child {
+            border-top: 0;
+        }
+
+
+        .table-user-information > tbody > tr > td {
+            border-top: 0;
+        }
+    </style>
+    <div class="container" data-ng-app="searchApp">
+
+        <div data-ng-init="search = '<% $search %>'" data-ng-view>
+
+
 
         </div>
     </div>

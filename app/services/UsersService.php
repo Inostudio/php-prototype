@@ -203,7 +203,7 @@ class UsersService
                 ->orderBy('pr.'.$field, $direction)
                 ->skip($offset)->take($limit)
                 ->select('users.*')
-                ->with('profile')
+                ->with('profile', 'groups')
                 ->get();
             
             return [$users, $users1];
@@ -217,7 +217,7 @@ class UsersService
             })
                     ->orWhere('email', 'like', '%'.$text.'%')
                     ->orWhere('id', 'like', '%'.$text.'%')
-                    ->with('profile');
+                    ->with('profile', 'groups');
             $users1 = $users->count();
             
             $users2 = $users->skip($offset)

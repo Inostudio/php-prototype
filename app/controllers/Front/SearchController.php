@@ -9,9 +9,29 @@ use \Input;
 
 class SearchController extends \BaseController {
 
+    private $users = null;
+
+    public function __construct(\UsersService $us)
+    {
+        $this->users = $us;
+    }
+    
     public function getIndex()
     {
         return \View::make('front.pages.search',
-            ['offer' => Input::get('offer')]);
+            ['search' => Input::get('offer')]);
+    }
+
+    public function postUsers()
+    {
+        $findText = Input::get('offer');
+        $offset = Input::get('offset');
+        $limit = Input::get('limit');
+
+        $users = $this->users->searchUsers($findText, $limit, $offset, 'desc', 'id');
+        foreach($users[0] as $user){
+            $user->photo = $user->getCroppedPhoto();
+        }
+        return \Response::json($users);
     }
 }

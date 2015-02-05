@@ -9,23 +9,8 @@
     function config($routeProvider) {
         $routeProvider.
             when('/', {
-                templateUrl: '/angular/?ns=front&id=userPartials.users',
+                templateUrl: '/angular/?ns=front&id=profilePartials.users',
                 controller: 'IndexCtrl',
-                controllerAs: 'vm'
-            })./*
-            when('/create', {
-                templateUrl:  '/angular/?ns=front&id=articlesPartials.create',
-                controller: 'CreateArticleCtrl',
-                controllerAs: 'vm'
-            }).
-            when('/edit/:articleId', {
-                templateUrl:  '/angular/?ns=front&id=articlesPartials.edit',
-                controller: 'EditArticleCtrl',
-                controllerAs: 'vm'
-            }).
-            when('/:articleId', {
-                templateUrl:  '/angular/?ns=front&id=articlesPartials.show',
-                controller: 'ShowArticleCtrl',
                 controllerAs: 'vm'
             }).
             when('/user/:userId', {
@@ -33,7 +18,6 @@
                 controller: 'ShowUserCtrl',
                 controllerAs: 'vm'
             }).
-*/
             otherwise({
                 redirectTo: '/'
             });
