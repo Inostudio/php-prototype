@@ -146,7 +146,7 @@
             <li ng-class="{'active' : vm.isActive('/personalization')}"><a href="#/personalization"><i class="fa fa-css3"></i> <%trans('admin/adminMenu.personalization')%></a></li>
           </ul>
         </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-view></div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main slide" ng-view></div>
       </div>
     </div>
   </body>
