@@ -118,10 +118,6 @@
                             <td>{{vm.user.last_name}}</td>
                         </tr>
                         <tr>
-                            <td>Email</td>
-                            <td>{{vm.user.email}}</td>
-                        </tr>
-                        <tr>
                             <td>Phone Number</td>
                             <td>{{vm.user.phone}}
                             </td>
