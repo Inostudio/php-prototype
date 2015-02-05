@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('articlesApp')
+        .module('searchApp')
         .factory('GetArticlesAndCategories', GetArticlesAndCategories)
         .factory('GetArticleMore', GetArticleMore)
         .factory('GetSearchResult', GetSearchResult)
@@ -10,8 +10,7 @@
         .factory('RemoveArticle', RemoveArticle)
         .factory('GetCategory', GetCategory)
         .factory('CreateArticle', CreateArticle)
-        .factory('EditArticle', EditArticle)
-        .factory('ShowUser', ShowUser);
+        .factory('EditArticle', EditArticle);
 
         GetArticlesAndCategories.$inject = ['$resource'];
         GetArticleMore.$inject = ['$resource'];
@@ -21,7 +20,6 @@
         GetCategory.$inject = ['$resource'];
         CreateArticle.$inject = ['$resource'];
         EditArticle.$inject = ['$resource'];
-        ShowUser.$inject = ['$http'];
 
        
         function GetArticlesAndCategories($resource, lim){
@@ -72,26 +70,4 @@
             });
         }
 
-        function ShowUser($http){
-            var service = {
-                getUser: getUser
-            };
-
-            return service;
-
-            ////////////
-
-            function getUser(data, success, error) {
-                return $http({
-                    url: '/profile/user',
-                    method: 'POST',
-                    data: JSON.stringify({
-                        id: data.id
-                    }),
-                    headers: {'Content-Type': 'application/json'}
-                })
-                    .success(success)
-                    .error(error);
-            }
-        }
 })();

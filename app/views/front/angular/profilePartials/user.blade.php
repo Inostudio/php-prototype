@@ -130,7 +130,6 @@
                                 </span>
                             </td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -154,11 +153,24 @@
                 </div>
             </div>
             <div class="articleAction col-sm-1">
-                <center><p ng-class="{'btn-action-hidden' : article.user.id != vm.currentUserId}"><a class="fa fa-edit" href="#/edit/{{article.id}}"></a></p>
-                    <p><a class="fa fa-file-o" href="#/{{article.id}}"></a></p>
+                <center><p ng-class="{'btn-action-hidden' : article.user.id != vm.currentUserId}"><a class="fa fa-edit" href="#/articles/edit/{{article.id}}"></a></p>
+                    <p><a class="fa fa-file-o" href="#/articles/{{article.id}}"></a></p>
                     <p ng-class="{'btn-action-hidden' : article.user.id != vm.currentUserId}"><a class="fa fa-close" ng-click="vm.removeArticle(article.id)"></a></p>
                 </center>
             </div>
         </div>
     </div>
 </div>
+
+<script type="text/ng-template" id="ConfirmDelete.html">
+    <div class="modal-header">
+        <h3 class="modal-title"><%trans('/front/articles/index.deliting')%></h3>
+    </div>
+    <div class="modal-body">
+        <%trans('/front/articles/index.deliting_text')%>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="$emit('okDeleteArticle')"><%trans('/front/articles/index.ok')%></button>
+        <button class="btn btn-warning" ng-click="$emit('cancelDeleteArticle')"><%trans('/front/articles/index.cancel')%></button>
+    </div>
+</script>

@@ -5,6 +5,10 @@
 (function(){
     angular
         .module('searchApp', [
-            'ngRoute'
+            'ngRoute',
+            'ngResource',
+            'mgcrea.ngStrap',
+            'ngAnimate',
+            'angular-loading-bar'
         ]);
 })();

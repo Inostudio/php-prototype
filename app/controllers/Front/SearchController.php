@@ -16,10 +16,12 @@ class SearchController extends \BaseController {
         $this->users = $us;
     }
     
-    public function getIndex()
+    public function getIndex($lang)
     {
+        $whereSearch = Input::get('search');
+        $all = Input::all();
         return \View::make('front.pages.search',
-            ['search' => Input::get('offer')]);
+            ['search' => Input::get('offer'), 'where' => $whereSearch]);
     }
 
     public function postUsers()

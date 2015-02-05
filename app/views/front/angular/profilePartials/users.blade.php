@@ -9,14 +9,14 @@
 
                 <div class="row user-row">
                     <div class="col-xs-3 col-sm-2 col-md-1 col-lg-1">
-                        <a href="#/user/{{user.id}}">
+                        <a href="#/users/{{user.id}}">
                             <img class="img-circle"
                                  ng-src="{{user.photo}}"
                                  alt="User Pic" style="width: 50px; height: 50px;">
                         </a>
                     </div>
                     <div class="col-xs-8 col-sm-9 col-md-10 col-lg-10">
-                        <a href="#/user/{{user.id}}"><strong>{{user.profile.first_name + " " + user.profile.last_name}}</strong></a>
+                        <a href="#/users/{{user.id}}"><strong>{{user.profile.first_name + " " + user.profile.last_name}}</strong></a>
                     </div>
                     <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 dropdown-user">
                         <i class="glyphicon text-muted" data-ng-click="vm.show(user.id)" data-ng-class="vm.shows[user.id] !== undefined ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'" style="margin: 0px;"></i>
@@ -64,5 +64,5 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-primary" data-ng-click="vm.next()" data-ng-show="vm.download.count > vm.download.downloaded">More</button>
+    <button class="btn btn-primary" data-ng-click="vm.next()" data-ng-show="vm.download.count > vm.download.downloaded" style="margin-left: 45%;min-width: 75px;">More</button>
 </div>

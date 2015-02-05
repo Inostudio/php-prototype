@@ -115,7 +115,7 @@
                   </form>
               </div>
             </div>
-            <a class="btn btn-success btn-block" href="#/create"><%trans('/front/articles/index.add')%></a>
+            <a class="btn btn-success btn-block" href="#/articles/create"><%trans('/front/articles/index.add')%></a>
         </div>
     </div>
     <div class="col-sm-6">
@@ -129,13 +129,13 @@
                 </div>
                 <div class="articleMetaInfo">
                     <p><span class="grenSpan"><%trans('/front/articles/index.category')%>:</span> {{article.category.title}}</p>
-                    <p><span class="grenSpan"><%trans('/front/articles/index.author')%>:</span> <a href="#/user/{{article.user.id}}">{{article.user.profile.first_name +  " " + article.user.profile.last_name}}</a></p>
+                    <p><span class="grenSpan"><%trans('/front/articles/index.author')%>:</span> <a href="#/users/{{article.user.id}}">{{article.user.profile.first_name +  " " + article.user.profile.last_name}}</a></p>
                     <p><span class="grenSpan"><%trans('/front/articles/index.creation_date')%>:</span> {{article.created_at}}</p>
                 </div>
             </div>
             <div class="articleAction col-sm-1">
-                <center><p ng-class="{'btn-action-hidden' : article.user.id != vm.currentUserId}"><a class="fa fa-edit" href="#/edit/{{article.id}}"></a></p>
-                <p><a class="fa fa-file-o" href="#/{{article.id}}"></a></p>
+                <center><p ng-class="{'btn-action-hidden' : article.user.id != vm.currentUserId}"><a class="fa fa-edit" href="#/articles/edit/{{article.id}}"></a></p>
+                <p><a class="fa fa-file-o" href="#/articles/{{article.id}}"></a></p>
                 <p ng-class="{'btn-action-hidden' : article.user.id != vm.currentUserId}"><a class="fa fa-close" ng-click="vm.removeArticle(article.id)"></a></p>
                 </center>
             </div>
@@ -152,7 +152,7 @@
                   <div class="newArticleMetaInfo">
                       <p><span class="grenSpan"><%trans('/front/articles/index.creation_date')%>:</span> {{newArticle.created_at}}</p>
                       <p><span class="grenSpan"><%trans('/front/articles/index.category')%>:</span> {{newArticle.category.title}}</p>
-                      <p style="text-align: right"><a href="#/{{newArticle.id}}"><%trans('/front/articles/index.more_link')%>...</a></p>  
+                      <p style="text-align: right"><a href="#/articles/{{newArticle.id}}"><%trans('/front/articles/index.more_link')%>...</a></p>
                   </div>
               </div>
           </div>

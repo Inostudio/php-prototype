@@ -6,8 +6,10 @@
 
     <script src="/front/js/searchApp.module.js" type="text/javascript"></script>
     <script src="/front/js/routes/search.routes.js" type="text/javascript"></script>
-    <script src="/front/js/controllers/search.controller.js" type="text/javascript"></script>
+    <script src="/front/js/controllers/search.controllers.js" type="text/javascript"></script>
+    <script src="/front/js/controllers/articles.controllers.js" type="text/javascript"></script>
     <script src="/front/js/services/search.services.js" type="text/javascript"></script>
+    <script src="/front/js/services/articles.services.js" type="text/javascript"></script>
     <script src="/vendor/angular-resource/angular-resource.min.js" type="text/javascript"></script>
     <script src="/vendor/angular-strap/angular-strap.min.js" type="text/javascript"></script>
     <script src="/vendor/angular-strap/angular-strap.tpl.js" type="text/javascript"></script>
@@ -52,7 +54,7 @@
     </style>
     <div class="container" data-ng-app="searchApp">
 
-        <div data-ng-init="search = '<% $search %>'" data-ng-view>
+        <div data-ng-init="search = '<% $search %>'; where = '<% $where %>'" data-ng-view>
 
 
 

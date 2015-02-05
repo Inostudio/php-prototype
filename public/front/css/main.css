@@ -97,3 +97,18 @@ div.dropClass droplet comment:after {
 div.dropClass droplet.event-dragover comment:after {
     content: "...And Drop!";
 }
+
+.btn-oops {
+    border: 0;background: 0;padding-top: 7px;padding-bottom: 7px;padding-left: 1px;padding-right: 1px;color: #777;
+
+}
+
+input.btn-oops:focus {
+    outline: none;
+    background-color: transparent;
+}
+
+.btn-oops:hover{
+ color: #000000;
+}
+

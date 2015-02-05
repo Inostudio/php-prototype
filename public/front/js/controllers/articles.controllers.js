@@ -6,7 +6,7 @@
     'use strict';
 
     angular
-        .module('articlesApp')
+        .module('searchApp')
         .controller('ShowCtrl', ShowCtrl)
         .controller('ShowArticleCtrl', ShowArticleCtrl)
         .controller('ShowUserCtrl', ShowUserCtrl)
@@ -168,6 +168,7 @@
         vm.saveArticle = saveArticle;
         vm.categorys = [];
         vm.disableCat = true;
+        vm.back = back;
         
         GetCategory.query({}, function(answer){
             vm.categorys = answer[0];
@@ -179,10 +180,14 @@
                 if(!answer[0]){
                     alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-error-container'});
                 } else {
-                    window.location.href = '/articles';
+                    window.location.href = '#/articles';
                 }
             });
             
+        }
+
+        function back() {
+            window.history.back();
         }
     }
     
@@ -195,6 +200,7 @@
         vm.article = {};
         vm.articleCategory = 0;
         vm.success_edit = '';
+        vm.back = back;
         
         GetCategory.query({}, function(answer){
             vm.categorys = answer[0];
@@ -219,10 +225,15 @@
                 }
             });
         }
+
+        function back() {
+            window.history.back();
+        }
     }
 
-    ShowUserCtrl.$injcet = ['ShowUser', '$routeParams'];
-    function ShowUserCtrl(ShowUser, $routeParams){
+    ShowUserCtrl.$injcet = ['ShowUser', '$routeParams', 'RemoveArticle', '$modal', '$alert', '$rootScope'];
+    function ShowUserCtrl(ShowUser, $routeParams, RemoveArticle, $modal, $alert, $rootScope){
+        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
         var vm = this;
         vm.user = {
         };
@@ -230,6 +241,11 @@
         vm.found = true;
         vm.message = '';
         vm.back = back;
+        vm.removeArticle = removeArticle;
+        vm.modal = $modal({
+            show: false,
+            contentTemplate: 'ConfirmDelete.html'
+        });
 
         function getUser(id) {
             function success(data) {
@@ -264,5 +280,29 @@
         function back() {
             window.history.back();
         }
+
+        function removeArticle(id){
+            vm.modal.show();
+            vm.removeArticleId = id;
+        }
+
+        $rootScope.$on('cancelDeleteArticle', function(){
+            vm.modal.hide();
+        });
+
+        $rootScope.$on('okDeleteArticle', function(){
+            vm.modal.hide();
+            RemoveArticle.query({removeId: vm.removeArticleId }, function(answer){
+
+                alertSuccess = $alert({title: vm.success_remove, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                var arr = [];
+                angular.forEach(vm.user.articles, function(article) {
+                    if(vm.removeArticleId != article.id){
+                        arr.push(article);
+                    }
+                });
+                vm.user.articles = arr;
+            });
+        });
     }
 })();

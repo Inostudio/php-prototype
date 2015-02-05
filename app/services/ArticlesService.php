@@ -25,7 +25,7 @@ class ArticlesService
             
            $countArticles = $articles->count();
             
-           $articles = $articles->with('user')->with('category')->skip($offset)->take($limit)->get();
+           $articles = $articles->with('user', 'user.profile')->with('category')->skip($offset)->take($limit)->get();
         } else {
             
             $articles = Article::where('title', 'like', '%'.$phrase.'%');
@@ -34,7 +34,7 @@ class ArticlesService
                 $query->where('title', '=', $category);
             });         
             $countArticles = $articles->count();
-            $articles = $articles->with('user')->skip($offset)->take($limit)->get();
+            $articles = $articles->with('user', 'user.profile', 'category')->skip($offset)->take($limit)->get();
             
         }
         return [$articles, $countArticles];
