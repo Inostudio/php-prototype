@@ -64,6 +64,10 @@
     <script type='text/javascript' src='/admin/vendors/angular/ng-toggle.js'></script>
     <link href="/admin/vendors/angular/ng-toggle.css" rel="stylesheet">
     
+    <!--Colorpicker-->
+    <script type='text/javascript' src='/admin/vendors/colorpicker/bootstrap-colorpicker-module.min.js'></script>
+    <link href="/admin/vendors/colorpicker/colorpicker.min.css" rel="stylesheet">
+    
     @section('include')
 
     @show
@@ -96,9 +100,10 @@
     
     <!-- Custom styles for this template -->
     <link href="/admin/css/main.css" rel="stylesheet">
+    <script type='text/javascript' src='/admin/vendors/js/cookie.js'></script>
   </head>
   <body ng-controller="activCtrl as vm">
-
+      
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -138,6 +143,7 @@
             <li ng-class="{'active' : vm.isActive('/resources')}"><a href="#/resources"><i class="fa fa-file-image-o"></i> <%trans('admin/adminMenu.resources')%></a></li>
             <li ng-class="{'active' : vm.isActive('/languages')}"><a href="#/languages"><i class="fa fa-language"></i> <%trans('admin/adminMenu.languages')%></a></li>
             <li ng-class="{'active' : vm.isActive('/settings')}"><a href="#/settings"><i class="fa fa-gear"></i> <%trans('admin/adminMenu.settings')%></a></li>
+            <li ng-class="{'active' : vm.isActive('/personalization')}"><a href="#/personalization"><i class="fa fa-css3"></i> <%trans('admin/adminMenu.personalization')%></a></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-view></div>

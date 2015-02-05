@@ -15,7 +15,8 @@
             .controller('CategoriesOfArticlesCtrl', CategoriesOfArticlesCtrl)
             .controller('ArticleCategoryCtrl', ArticleCategoryCtrl)
             .controller('LanguagesCtrl', LanguagesCtrl)
-            .controller('SettingsCtrl', SettingsCtrl);
+            .controller('SettingsCtrl', SettingsCtrl)
+            .controller('PersonalizationCtrl', PersonalizationCtrl);
             
 
     DashboardCtrl.$inject = ['GetStatistics'];
@@ -31,6 +32,7 @@
     ArticleCategoryCtrl.$inject = ['GetArticles', '$routeParams', '$scope', '$alert', '$window', '$location', '$modal', '$rootScope', 'EditArticle', 'SearchArticles', 'RemoveArticle', 'TableTranslate'];
     LanguagesCtrl.$inject = ['GetLanguageFiles', '$rootScope', '$scope', '$alert', 'EditLanguageFile', 'TableTranslate'];
     SettingsCtrl.$inject = ['GetSections', 'ChangeSection', '$alert', '$scope'];
+    PersonalizationCtrl.$inject = ['$scope'];
     
     function activCtrl($scope, $location, CheckLang) {
         var vm = this;
@@ -2158,6 +2160,202 @@
                     showSuccessAlert(vm.section_enable);
                 }
             });
+        }
+    }
+    
+    function PersonalizationCtrl($scope){
+        var vm = this;
+        vm.defaultActive = defaultActive;
+        vm.defaultBtnPrimary = defaultBtnPrimary;
+        vm.defaultNavbarInverse = defaultNavbarInverse;
+        vm.defaultSidebar = defaultSidebar;
+        vm.defaultA = defaultA;
+        vm.defaultPageHeader = defaultPageHeader;
+        vm.defaultSubHeader = defaultSubHeader;
+        vm.cookieEnable = false;
+        vm.colors = {
+            activeClass: '',
+            btnPrimary: '',
+            navbarInverse:  '',
+            sidebar: '',
+            a: '',
+            pageHeader: '',
+            subHeader: ''
+        };
+        
+        
+        // Работа с cookie
+        function getCookie(name) {
+          var matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+          ));
+          return matches ? decodeURIComponent(matches[1]) : undefined;
+        }
+
+        function setCookie(name, value, options) {
+            options = options || {};
+
+            var expires = options.expires;
+
+            if (typeof expires == "number" && expires) {
+              var d = new Date();
+              d.setTime(d.getTime() + expires*1000);
+              expires = options.expires = d;
+            }
+            if (expires && expires.toUTCString) { 
+                  options.expires = expires.toUTCString();
+            }
+
+            value = encodeURIComponent(value);
+
+            var updatedCookie = name + "=" + value;
+
+            for(var propName in options) {
+              updatedCookie += "; " + propName;
+              var propValue = options[propName];    
+              if (propValue !== true) { 
+                updatedCookie += "=" + propValue;
+               }
+            }
+
+            document.cookie = updatedCookie;
+        }
+
+        function deleteCookie(name) {
+            var date = new Date(0);
+            document.cookie = name + "=; path=/; expires="+date.toUTCString();
+        }
+        //////
+        
+        if(navigator.cookieEnabled){
+            vm.cookieEnable = true;
+            if(getCookie('active') != undefined){
+                vm.colors.activeClass = getCookie('active');
+            }  
+            if(getCookie('btn-primary') != undefined){
+                vm.colors.btnPrimary = getCookie('btn-primary');
+            } 
+            if(getCookie('navbar-inverse') != undefined){
+                vm.colors.navbarInverse = getCookie('navbar-inverse');
+            } 
+            if(getCookie('sidebar') != undefined){
+                vm.colors.sidebar = getCookie('sidebar');
+            } 
+            if(getCookie('a') != undefined){
+                vm.colors.a = getCookie('a');
+            }
+            if(getCookie('page-header') != undefined){
+                vm.colors.pageHeader = getCookie('page-header');
+            } 
+            if(getCookie('sub-header') != undefined){
+                vm.colors.subHeader = getCookie('sub-header');
+            } 
+        }
+        
+        $scope.$watch('vm.colors.activeClass', changeActive);
+        $scope.$watch('vm.colors.btnPrimary', changeBtnPrimary);
+        $scope.$watch('vm.colors.navbarInverse', changeNavbarInverse);
+        $scope.$watch('vm.colors.sidebar', changeSidebar);
+        $scope.$watch('vm.colors.a', changeA);
+        $scope.$watch('vm.colors.pageHeader', changePageHeader);
+        $scope.$watch('vm.colors.subHeader', changeSubHeader);
+        
+        function changeActive(){   
+            if(vm.colors.activeClass != ''){
+                changeInput('active', 'background-color', 1, vm.colors.activeClass);
+            }
+        }
+        
+        function defaultActive(){
+            vm.colors.activeClass = '';
+            defaultInput('active', 1);  
+        }
+        
+        function changeBtnPrimary(){
+            if(vm.colors.btnPrimary != ''){
+                changeInput('btn-primary', 'background-color', 2, vm.colors.btnPrimary);
+            }
+        }
+        
+        function defaultBtnPrimary(){
+            vm.colors.btnPrimary = '';
+            defaultInput('btn-primary', 2);  
+        }
+        
+        function changeNavbarInverse(){
+            if(vm.colors.navbarInverse != ''){
+                changeInput('navbar-inverse', 'background-color', 3, vm.colors.navbarInverse);
+            }
+        }
+        
+        function defaultNavbarInverse(){
+            vm.colors.navbarInverse = '';
+            defaultInput('navbar-inverse', 3); 
+        }
+        
+        function changeSidebar(){
+            if(vm.colors.sidebar != ''){
+                changeInput('sidebar', 'background-color', 4, vm.colors.sidebar);
+            }
+        }
+        
+        function defaultSidebar(){
+            vm.colors.sidebar = '';
+            defaultInput('sidebar', 4); 
+        }
+        
+        function changeA(){
+            if(vm.colors.a != ''){
+                changeInput('a', 'color', 5, vm.colors.a);
+            }
+        }
+        
+        function defaultA(){
+            vm.colors.a = '';
+            defaultInput('a', 5); 
+        }
+        
+        function changePageHeader(){
+            if(vm.colors.pageHeader != ''){
+                changeInput('page-header', 'color', 6, vm.colors.pageHeader);
+            }
+        }
+        
+        function defaultPageHeader(){
+            vm.colors.pageHeader = '';
+            defaultInput('page-header', 6); 
+        }
+        
+        function changeSubHeader(){
+            if(vm.colors.subHeader != ''){
+                changeInput('sub-header', 'color', 7, vm.colors.subHeader);
+            }
+        }
+        
+        function defaultSubHeader(){
+            vm.colors.subHeader = '';
+            defaultInput('sub-header', 7); 
+        }
+        
+        function changeInput($class, $property, $posttion, $properyValue){
+            var style = document.createElement('style');
+            style.type = 'text/css';
+            if($class == 'active'){
+                style.innerHTML = '.active a {background-color: ' + $properyValue +' !important}';
+            } else if($class == 'a') {
+                style.innerHTML = $class +' {'+ $property + ': ' + $properyValue +' !important}';
+            } else {
+                style.innerHTML = '.' + $class +' {'+ $property + ': ' + $properyValue +' !important}';
+            }   
+            document.head.replaceChild(style, document.head.children[document.head.children.length - $posttion]);
+            setCookie($class, $properyValue, {expires: 21600, path: '/'});
+        }
+        
+        function defaultInput($class, $position){
+            var style = document.createElement('style');
+            style.type = 'text/css';
+            deleteCookie($class);
+            document.head.replaceChild(style, document.head.children[document.head.children.length - $position]);
         }
     }
  })();

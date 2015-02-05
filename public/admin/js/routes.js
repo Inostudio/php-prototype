@@ -76,6 +76,11 @@
             templateUrl:  '/' + lang + '/angular/?ns=admin&id=adminPartials.settings',
             controller: 'SettingsCtrl',
             controllerAs: 'vm'
+          }).
+          when('/personalization', {
+            templateUrl:  '/' + lang + '/angular/?ns=admin&id=adminPartials.personalization',
+            controller: 'PersonalizationCtrl',
+            controllerAs: 'vm'
           });
       }]);
 })();

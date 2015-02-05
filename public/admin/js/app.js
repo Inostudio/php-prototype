@@ -13,7 +13,8 @@
         'angular-loading-bar',
         'angularCharts',
         'ngClipboard',
-        'ngToggle'
+        'ngToggle',
+        'colorpicker.module'
     ]);
     
     angular

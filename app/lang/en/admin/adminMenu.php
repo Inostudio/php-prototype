@@ -11,4 +11,5 @@ return array(
     'logout'  =>  'Logout',
     'languages'  =>  'Languages',
     'settings'  =>  'Settings',
+    'personalization'  =>  'Personalization'
 );
