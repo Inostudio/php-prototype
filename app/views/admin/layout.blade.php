@@ -83,9 +83,6 @@
             <li><a href="#/allArticle"><i class="fa fa-file-o"></i> <%trans('adminMenu.articles')%></a></li>
             <li><a href="<% action('admin.logout', ['lang' => $lang]) %>"><i class="fa fa-suitcase"></i> <%trans('adminMenu.logout')%></a></li>
           </ul>
-          <form class="navbar-form navbar-right">
-              <input type="text" class="form-control" placeholder="<%trans('adminMenu.search')%>">
-          </form>
             <div class='lang'>
                 <a href="<% action($routeName, ['lang' => 'ru']) %>" class="<% $lang === 'ru' ? 'active-block' : '' %>">RUS</a>
                 <a href="<% action($routeName, ['lang' => 'en']) %>" class="<% $lang === 'en' ? 'active-block' : '' %>">ENG</a>

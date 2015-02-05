@@ -56,7 +56,7 @@
       <div class="container">
 
         <ul class="nav navbar-nav pull-right">
-          <form class="navbar-form" style="float: left" method="get" action="<% action('front.search', ['lang' => $lang, 'some' => 'search']) %>">
+          <form class="navbar-form" style="float: left" method="post" action="<% action('front.search', ['lang' => $lang]) %>">
             <input name="offer" type="text" class="form-control" placeholder="<%trans('adminMenu.search')%>">
             <input type="hidden" name="search" value="users" />
           </form>
@@ -87,7 +87,7 @@
 
             <li <?=$routeName=='front.articles' ? 'class="active"' : ''; ?>>
 
-              <a href="/search?search=articles" ><% trans('front/navbar.articles') %></a>
+              <a href="<% action('front.articles', ['lang' => $lang]) %>" ><% trans('front/navbar.articles') %></a>
               <!--<form name="articleFrom" class="navbar-form" style="float: left" method="get" action="<% action('front.search', ['lang' => $lang]) %>">
                 <input type="submit" value="<% trans('front/navbar.articles') %>" class="btn btn-oops" />
                 <input type="hidden" name="search" value="articles" />

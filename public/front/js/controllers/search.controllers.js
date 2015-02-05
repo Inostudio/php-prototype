@@ -10,7 +10,6 @@
 
     UsersCtrl.$inject = ['Search', '$rootScope'];
     function UsersCtrl(Search, $rootScope) {
-        console.log($rootScope.where);
         var vm = this;
         vm.search = $rootScope.search;
         vm.show = show;

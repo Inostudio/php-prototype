@@ -110,19 +110,19 @@
                     <table class="table table-user-information">
                         <tbody>
                         <tr>
-                            <td>First name:</td>
+                            <td><% trans('front/profile/profile.first_name') %>:</td>
                             <td>{{vm.user.first_name}}</td>
                         </tr>
                         <tr>
-                            <td>Last name:</td>
+                            <td><% trans('front/profile/profile.last_name') %>:</td>
                             <td>{{vm.user.last_name}}</td>
                         </tr>
                         <tr>
-                            <td>Phone Number</td>
+                            <td><% trans('front/profile/profile.phone') %></td>
                             <td>{{vm.user.phone}}
                             </td>
                         </tr>
-                        <tr ng-hide="vm.user.groups === undefined">
+                        <tr ng-hide="vm.user.groups === undefined || vm.user.groups.length === 0">
                             <td>Groups</td>
                             <td>
                                 <span ng-repeat="group in vm.user.groups" class="btn btn-primary" style="margin: 5px">
@@ -137,9 +137,9 @@
         </div>
 
     </div>
-    <div ng-show="vm.found" class="col-sm-12" ng-hide="vm.user.articles === undefined">
+    <div class="col-sm-12" ng-hide="vm.user.articles === undefined || vm.user.articles.length === 0">
         <div class="panel panel-default row" style="margin-bottom: 0">
-            <div class="panel-heading"><center class="headerTextSize"><span style="color: #009926">{{vm.user.last_name}}'s articles:<span></center></div>
+            <div class="panel-heading"><center class="headerTextSize"><span style="color: #009926"><% trans('front/profile/profile.title_articles') %>:<span></center></div>
         </div>
         <div class="articleContainer row" ng-repeat="article in vm.user.articles">
             <div class="articleContent col-sm-11" style="padding-right: 0">

@@ -34,4 +34,5 @@ return array(
 
     "title_choose_thumbnail"                    => "Choose a new thumbnail",
     "title_upload_new_photo"                    => "Choose a new photo",
+    "title_articles"                            => "Articles",
 );

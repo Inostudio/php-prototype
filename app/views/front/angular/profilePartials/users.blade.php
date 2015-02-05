@@ -1,10 +1,13 @@
 <div>
     <div class="container">
-        <div style="margin: 0 auto">
-            Result of search:
-        </div>
+        <h4 style="text-align: center;margin-bottom: 20px;">
+            <% trans('front/search/search.text_result') %> "{{vm.search}}":
+        </h4>
 
         <div class="well col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
+            <div ng-if="vm.users.length === 0">
+                <% trans('front/search/search.text_result_null') %>
+            </div>
             <div data-ng-repeat="user in vm.users">
 
                 <div class="row user-row">

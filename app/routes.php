@@ -44,7 +44,7 @@ Route::group(array(
     Route::group(['namespace' => 'Front'], function () {
 
         Route::controller('search', 'SearchController', [
-            'getIndex' => 'front.search'
+            'postIndex' => 'front.search'
         ]);
 
         //Login in Facebook
@@ -83,17 +83,6 @@ Route::group(array(
             ]
         ]);
 
-        /*Route::resource('articles', 'ArticlesController', [
-            'names' => [
-                //'create' => 'front.articles.create',
-                'index' => 'front.articles.index',
-                //'show' => 'front.articles.show',
-                //'destroy' => 'front.articles.destroy',
-                //'update' => 'front.articles.update',
-                //'edit' => 'front.articles.edit',
-                //'store' => 'front.articles.store'
-            ]
-        ]);*/
         Route::controller('page', 'PagesController', [
             'showPage' => 'front.page',
             'postSendContact' => 'front.contact.send'
@@ -103,7 +92,6 @@ Route::group(array(
         Route::controller('articles', 'ArticlesController', [
             'getIndex' => 'front.articles'
         ]);
-//        Route::controller('articles', 'ArticlesController');
 
         //Route for static pages
         Route::get('{namePage}', ['as' => 'front.static','uses' => 'PagesController@showPage'])->where(['namePage' => '[-a-z0-9/]+']);

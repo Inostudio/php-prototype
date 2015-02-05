@@ -34,4 +34,5 @@ return array(
 
     "title_choose_thumbnail"                    => "Выберите миниатюру",
     "title_upload_new_photo"                    => "Выберите новую фотографию",
+    "title_articles"                            => "Статьи",
 );

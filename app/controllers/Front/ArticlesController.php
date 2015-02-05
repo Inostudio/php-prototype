@@ -40,7 +40,8 @@ class ArticlesController extends \BaseController
      */
     public function getIndex()
     {
-        return View::make('front.pages.articles');
+        return \View::make('front.pages.search',
+            ['search' => Input::get('offer'), 'where' => "articles"]);
     }
     
     public function getArticlesAndCategories(){

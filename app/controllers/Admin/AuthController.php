@@ -1,6 +1,4 @@
-<?php
-
-namespace Admin;
+<?php namespace Admin;
 
 use \Auth;
 use \View;
@@ -67,7 +65,7 @@ class AuthController extends \Controller
     public function getLogout()
     {
         Auth::logout();
-        return Redirect::route('admin.signin');
+        return Redirect::route('admin.signin', ['lang' => \App::getLocale()]);
     }
     
 }

@@ -16,10 +16,9 @@ class SearchController extends \BaseController {
         $this->users = $us;
     }
     
-    public function getIndex($lang)
+    public function postIndex($lang)
     {
         $whereSearch = Input::get('search');
-        $all = Input::all();
         return \View::make('front.pages.search',
             ['search' => Input::get('offer'), 'where' => $whereSearch]);
     }
