@@ -940,7 +940,7 @@
                 scope: $scope
             });
             
-            $rootScope.$on('changeBan', function(args, id, user){
+            $scope.$on('changeBan', function(args, id, user){
                 if(id != vm.myId)
                 {
                     vm.userBan = user;
