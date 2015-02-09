@@ -35,6 +35,7 @@
 
     <!-- Custom styles for this template -->
     <link href="/front/css/main.css" rel="stylesheet">
+    <link href="/front/css/profileStyle.css" rel="stylesheet">
 
     <script type="text/javascript" src="/vendor/angular/angular.min.js"></script>
     <script type="text/javascript" src="/vendor/angular-route/angular-route.min.js"></script>

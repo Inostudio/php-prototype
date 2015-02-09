@@ -1,16 +1,3 @@
-<style>
-    .form-control{
-        margin-bottom: 5px;
-    }
-    .loader{
-        width: 70px;
-        height: 70px;
-        visibility: visible;
-    }
-    .loader-hidden{
-        visibility: hidden;
-    }
-</style>
 <div id="alerts-error-container"></div>
 <div class="container">
     <div class="row">        

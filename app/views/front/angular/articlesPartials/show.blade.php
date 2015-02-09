@@ -1,16 +1,3 @@
-<style>
-    h2{
-        text-indent: 40px;
-        text-align: justify;
-    }
-    .articleBody{
-        text-indent: 40px;
-        text-align: justify;
-    }
-    .greenSpan{
-        color: green;
-    }
-</style>
 <div class="container">
     <a class="btn btn-default" href="#/articles" style="float: right"><%trans('/front/articles/show.all_articles')%></a>
     <div class="row">        
