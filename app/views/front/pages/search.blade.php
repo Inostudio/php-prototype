@@ -15,7 +15,7 @@
     <script src="/vendor/angular-strap/angular-strap.tpl.js" type="text/javascript"></script>
     <script src="/vendor/angular-animate/angular-animate.min.js" type="text/javascript"></script>
     <script src="/vendor/loading-bar/js/loading-bar.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/libraries.min.css">
+    <link rel="stylesheet" href="/vendor/angular-strap/libraries.min.css">
 @stop
 
 @section('content')

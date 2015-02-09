@@ -17,10 +17,10 @@
 
     <link rel="stylesheet" type="text/css" href="/vendor/directives/css/ng-img-crop.css">
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/libraries.min.css">    <!---Эта штука нужна для анимации всплывающих окон-->
+    <link href="/vendor/angular-strap/libraries.min.css" rel="stylesheet">
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/vendor/loading-bar/css/loading-bar.min.css" rel="stylesheet">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/vendor/font-awesome/font-awesome.min.css" rel="stylesheet">
 
     
     <script type="text/javascript">
@@ -66,7 +66,7 @@
     <script type='text/javascript' src='/admin/vendors/angular/ng-toggle.js'></script>
     <link href="/admin/vendors/angular/ng-toggle.css" rel="stylesheet">
     
-    <!--Colorpicker-->
+    <<f></f>
     <script type='text/javascript' src='/admin/vendors/colorpicker/bootstrap-colorpicker-module.min.js'></script>
     <link href="/admin/vendors/colorpicker/colorpicker.min.css" rel="stylesheet">
     
