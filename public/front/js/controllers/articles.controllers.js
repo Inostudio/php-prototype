@@ -120,6 +120,8 @@
         }
         
         function resetSearch(){
+            vm.searchCategoryTitle = 'All';
+            vm.searchCategory = 'All';
             if(action){
                 vm.showMoreBtn = true;
                 action = 0;
