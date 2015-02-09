@@ -713,7 +713,7 @@
                             offset = limit * (vm.totalPage-1);
                             vm.currentPage = vm.totalPage;
                             getUsers(limit, offset, 'asc', 'id');              
-                        }*/git 
+                        }*/git
 
                         vm.email = "";
                         vm.userConfirmPassword = "";
@@ -1208,7 +1208,7 @@
                         };
                         angular.element(document.querySelector('#fileInput')).val(null);
                         vm.countResources++;
-                        if((vm.currentPage < vm.totalPage) && (vm.limit * vm.totalPage >= vm.countResources)){
+                        /*if((vm.currentPage < vm.totalPage) && (vm.limit * vm.totalPage >= vm.countResources)){
                             vm.offset = vm.limit * vm.totalPage - vm.limit;
                             vm.currentPage = vm.totalPage;
                             if(!vm.action) {    //Обычная навигация
@@ -1227,7 +1227,7 @@
                         }
                         else {
                             vm.gridOptions_resourcesGrid.data.push(answer[1]);
-                        }
+                        }*/
                     } else {
                         showErrorAlert(answer[1]);
                     }
