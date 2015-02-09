@@ -92,7 +92,7 @@
         <div class="panel-footer">
             <div style="text-align: center">
                 <button id="btn-signup" type="submit" class="btn btn-info"
-                    data-ng-disabled="emailForm.$invalid && vm.submitted"><i class="fa fa-sign-in"></i> &nbsp <% trans('front/profile/change_email.title') %>
+                    data-ng-disabled="emailForm.$invalid && vm.submitted"><i class="fa fa-sign-in"></i> &nbsp <% trans('front/profile/change_email.button_change') %>
                 </button>
             </div>
         </div>

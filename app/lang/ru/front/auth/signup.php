@@ -6,21 +6,21 @@
  * Time: 11:01 AM
  */
 return array(
-    "placeholder_email"                  => "Емаил",
+    "placeholder_email"                  => "E-mail",
     "placeholder_password"              => "Пароль",
     "placeholder_password_confirm"              => "Подтверждение пароля",
 
-    "button_signup"                  => "Зарегестрироваться",
+    "button_signup"                  => "Зарегистрироваться",
 
     "title_singin"             => "Вход",
     "title_singup"             => "Регистрация",
 
-    "helper_email_invalid" => "Некорректный емаил",
-    "helper_email_empty" => "Емаил не может быть пустым",
-    "helper_password_empty" => "Пароль не может быть пустым",
+    "helper_email_invalid" => "Некорректный e-mail",
+    "helper_email_empty" => "Поле E-mail не может быть пустым",
+    "helper_password_empty" => "Поле Пароль не может быть пустым",
     "helper_password_short" => "Пароль слишком короткий.",
     "helper_password_long" => "Пароль превышает максимальную длину.",
-    "helper_password_confirm_wrong" => "Пароль и подтверждение пароля не совпадают.",
+    "helper_password_confirm_wrong" => "Пароли не совпадают.",
 
-    "message_user_exists" => "Такой пользователь уже зарегестрирован",
+    "message_user_exists" => "Пользователь с таким e-mail уже зарегистрирован",
 );

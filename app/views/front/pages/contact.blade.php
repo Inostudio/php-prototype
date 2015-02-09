@@ -93,7 +93,7 @@
                                 <div class="col-md-12 text-right">
                                     <button type="submit" class="btn btn-primary btn-lg"
                                             data-ng-disabled="contactForm.$invalid && vm.submitted">
-                                        Submit
+                                        <% trans('front/pages/contact.button_submit') %>
                                     </button>
                                 </div>
                             </div>

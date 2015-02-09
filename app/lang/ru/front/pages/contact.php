@@ -7,20 +7,20 @@
  */
 return array(
     "name"                                      => "Имя",
-    "email"                                     => "Ваш емаил",
+    "email"                                     => "Ваш e-mail",
     "message"                                   => "Сообщение",
 
     "placeholder_name"                          => "Ваше имя",
-    "placeholder_email"                         => "Вам емаил",
-    "placeholder_message"                       => "Пожалуйста, введите ваше сообщение здесь...",
+    "placeholder_email"                         => "Ваш e-mail",
+    "placeholder_message"                       => "Пожалуйста, введите Ваше сообщение здесь...",
 
     "help_block_name_empty"                     => "Имя не может быть пустым",
-    "help_block_email_empty"                    => "Емаил не может быть пустым",
+    "help_block_email_empty"                    => "E-mail не может быть пустым",
     "help_block_message_empty"                  => "Сообщение не может быть пустым",
 
-    "message_email_send"                        => "Пиьсмо успешно отправлено!",
+    "message_email_send"                        => "Письмо успешно отправлено!",
 
-    "button_save"                               => "Сохранить",
+    "button_submit"                             => "Отправить",
 
     "title_contact"                             => "Свяжитесь с нами",
 );

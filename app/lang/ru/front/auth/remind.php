@@ -9,7 +9,7 @@ return array(
     "button_send"                  => "Отправить восстановление",
     "button_reset" => "Сбросить пароль",
 
-    "placeholder_email"                  => "Емаил",
+    "placeholder_email"                  => "E-mail",
     "placeholder_password" => "Пароль",
     "placeholder_password_confirm" => "Подтверждение пароля",
 

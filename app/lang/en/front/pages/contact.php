@@ -20,7 +20,7 @@ return array(
 
     "message_email_send"                        => "The letter has been sent successfully!",
 
-    "button_save"                               => "Сохранить",
+    "button_submit"                             => "Send",
 
     "title_contact"                             => "Contact us",
 );

@@ -119,9 +119,9 @@ class ProfileController extends \BaseController
         $v = Validator::make(Input::all(), self::$changePasswordValidation);
         if(\App::getLocale() == 'ru') {
             $v->setAttributeNames([
-                'old_password' => 'старый пароль',
-                'new_password' => 'новый пароль',
-                'new_password_confirmation' => 'подтверждение пароля'
+                'old_password' => 'Старый пароль',
+                'new_password' => 'Новый пароль',
+                'new_password_confirmation' => 'Подтверждение пароля'
             ]);
         }
 
@@ -155,9 +155,9 @@ class ProfileController extends \BaseController
         $v = Validator::make(Input::all(), self::$changeEmailValidation);
         if(\App::getLocale() == 'ru') {
             $v->setAttributeNames([
-                'old_email' => 'старый емаил',
-                'new_email' => 'емаил',
-                'password' => 'пароль'
+                'old_email' => 'Старый e-mail',
+                'new_email' => 'E-mail',
+                'password' => 'Пароль'
             ]);
         }
 

@@ -8,5 +8,5 @@
 return array(
     "profile"           => "Профиль",
     "changePassword"    => "Смена пароля",
-    "changeEmail"       => "Смена емаила",
+    "changeEmail"       => "Смена e-mail'а",
 );
