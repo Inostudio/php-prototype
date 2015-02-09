@@ -2,6 +2,9 @@
 
     use Illuminate\Support\Str;
     $routeName = Route::getCurrentRoute()->getName();
+    if($routeName === NULL) {
+        $routeName = "front.home";
+    }
     $lang =  App::getLocale();
     $lang = $lang === NULL ? "en" : $lang;
     
@@ -114,7 +117,7 @@
 
       </div>
     </nav>
-    
+
     @section('content')
         Here should be a content
     @show
