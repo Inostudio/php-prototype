@@ -13,5 +13,6 @@ return array(
     "signin"            => "Вход",
     "signup"            => "Регистрация",
     "logout"            => "Выход",
-    "profile"           => "Профиль"
+    "profile"           => "Профиль",
+    "search"            => "Поиск",
 );

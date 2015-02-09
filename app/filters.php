@@ -113,7 +113,7 @@ Route::filter('localization', function() {
 });
 
 Route::filter('checkSection', function() {
-    $section = Request::segment(2);
+    $section = Request::segment(1);
     
     $section = Section::where('title', '=', $section)->first();
     if($section){

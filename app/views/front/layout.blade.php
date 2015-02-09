@@ -60,7 +60,7 @@
 
         <ul class="nav navbar-nav pull-right">
           <form class="navbar-form" style="float: left" method="post" action="<% action('front.search', ['lang' => $lang]) %>">
-            <input name="offer" type="text" class="form-control" placeholder="<%trans('adminMenu.search')%>">
+            <input name="offer" type="text" class="form-control" placeholder="<%trans('front/navbar.search')%>">
             <input type="hidden" name="search" value="users" />
           </form>
             @if (Auth::user())

@@ -13,5 +13,6 @@ return array(
     "signin"            => "Sign in",
     "signup"            => "Sign up",
     "logout"            => "Sign out",
-    "profile"           => "Profile"
+    "profile"           => "Profile",
+    "search"            => "Search",
 );

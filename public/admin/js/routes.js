@@ -68,17 +68,17 @@
               controllerAs: 'vm'
           }).
           when('/languages', {
-              templateUrl:  '/' + lang + '/angular/?ns=admin&id=adminPartials.languages',
+              templateUrl: '/angular/?ns=admin&id=adminPartials.languages',
               controller: 'LanguagesCtrl',
               controllerAs: 'vm'
           }).
         when('/settings', {
-            templateUrl:  '/' + lang + '/angular/?ns=admin&id=adminPartials.settings',
+            templateUrl: '/angular/?ns=admin&id=adminPartials.settings',
             controller: 'SettingsCtrl',
             controllerAs: 'vm'
           }).
           when('/personalization', {
-            templateUrl:  '/' + lang + '/angular/?ns=admin&id=adminPartials.personalization',
+            templateUrl: '/angular/?ns=admin&id=adminPartials.personalization',
             controller: 'PersonalizationCtrl',
             controllerAs: 'vm'
           });

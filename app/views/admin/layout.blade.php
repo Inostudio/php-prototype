@@ -93,7 +93,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><i class="fa fa-dashboard"></i> <%trans('admin/adminMenu.dashboard')%></a></li>
+            <li><a href="#/"><i class="fa fa-dashboard"></i> <%trans('admin/adminMenu.dashboard')%></a></li>
             <li><a href="#/allArticle"><i class="fa fa-file-o"></i> <%trans('admin/adminMenu.articles')%></a></li>
             <li><a href="<% action('admin.logout', ['lang' => $lang]) %>"><i class="fa fa-suitcase"></i> <%trans('admin/adminMenu.logout')%></a></li>
           </ul>

@@ -30,6 +30,8 @@ Route::group(array(
             Route::controller('page', 'StaticPageController');
             Route::controller('article', 'ArticleController');
             Route::controller('dashboard', 'DashboardController');
+            Route::controller('language', 'LanguageController');
+            Route::controller('setting', 'SettingController');
         });
 
 

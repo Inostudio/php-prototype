@@ -1,7 +1,8 @@
 <?php
     $message = null;
-    if (Auth::user()->facebook_user_id !== null)
+    if (Auth::user()->facebook_user_id !== "0") {
         $message = 'You password default is \'password\'!';
+    }
 ?>
 
 <alert data-ng-show="(vm.alert !== undefined)" type="{{vm.alert.type}}" close="vm.closeAlert()">
