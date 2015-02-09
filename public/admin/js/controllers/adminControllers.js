@@ -697,7 +697,7 @@
                         alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
                     } else {
                         alertSuccess = $alert({title: vm.add_user_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
-                        if((vm.currentPage === vm.totalPage) &&(vm.currentPage * limit > vm.countUsers)){
+                        /*if((vm.currentPage === vm.totalPage) &&(vm.currentPage * limit > vm.countUsers)){
                             var newUser = {
                                 id: answer[2],
                                 email: vm.email
@@ -713,7 +713,7 @@
                             offset = limit * (vm.totalPage-1);
                             vm.currentPage = vm.totalPage;
                             getUsers(limit, offset, 'asc', 'id');              
-                        }
+                        }*/git 
 
                         vm.email = "";
                         vm.userConfirmPassword = "";
