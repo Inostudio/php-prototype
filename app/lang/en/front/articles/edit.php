@@ -5,5 +5,6 @@ return array(
     'category' => 'Category',
     'description' => 'Description',
     'save' => 'Save',
-    'success_edit' => 'Article successfully changed!'
+    'success_edit' => 'Article successfully changed!',
+    "back" => "Back"
 );

@@ -59,15 +59,19 @@
       <div class="container">
 
         <ul class="nav navbar-nav pull-right">
-          <form class="navbar-form" style="float: left" method="post" action="<% action('front.search', ['lang' => $lang]) %>">
-            <input name="offer" type="text" class="form-control" placeholder="<%trans('front/navbar.search')%>">
-            <input type="hidden" name="search" value="users" />
-          </form>
+            @if(!$result['articles'] && !$result['auth'])
+              <form class="navbar-form" style="float: left" method="post" action="<% action('front.search', ['lang' => $lang]) %>">
+                <input name="offer" type="text" class="form-control" placeholder="<%trans('front/navbar.search')%>">
+                <input type="hidden" name="search" value="users" />
+              </form>
+            @endif
             @if (Auth::user())
                 @if(!$result['profile'])
                     <li <?=$routeName=='front.profile' ? 'class="active"' : ''; ?>><a href="<% action('front.profile', ['lang' => $lang]) %>"><i class="fa fa-user"></i> <% trans('front/navbar.profile') %></a></li>
                 @endif
-                <li><a href="<% action('front.logout', ['lang' => $lang]) %>"><i class="fa fa-signout"></i> <% trans('front/navbar.logout') %></a></li>
+                @if(!$result['auth'])
+                    <li><a href="<% action('front.logout', ['lang' => $lang]) %>"><i class="fa fa-signout"></i> <% trans('front/navbar.logout') %></a></li>
+                @endif
             @else
                 @if(!$result['auth'])
                     <li <?=$routeName=='front.signin' ? 'class="active"' : ''; ?>><a href="<% action('front.signin', ['lang' => $lang]) %>"><i class="fa fa-sign-in"></i> <% trans('front/navbar.signin') %></a></li>
@@ -93,7 +97,7 @@
             <li <?=$routeName=='front.about' ? 'class="active"' : ''; ?>><a href="<?=action('front.about', ['lang' => $lang]);?>"><% trans('front/navbar.about') %></a></li>
             <li <?=$routeName=='front.contact' ? 'class="active"' : ''; ?>><a href="<?=action('front.contact', ['lang' => $lang]);?>"><% trans('front/navbar.contact') %></a></li>
 
-            @if(!$result['articles'])
+            @if(!$result['articles'] && !$result['auth'])
               <li <?=$routeName=='front.articles' ? 'class="active"' : ''; ?>>
                   <a href="<% action('front.articles', ['lang' => $lang]) %>" ><% trans('front/navbar.articles') %></a>
               </li>

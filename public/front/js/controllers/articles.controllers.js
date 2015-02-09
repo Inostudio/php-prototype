@@ -93,6 +93,7 @@
         function getArticles(limit){
             articles = [];
             GetArticlesAndCategories.query({lim: limit}, function(answer){
+                console.log(answer);
                 vm.categorys = answer[0];
                 vm.currentUserId = answer[3];
                 if(limit < answer[2]){
@@ -282,6 +283,7 @@
 
         function getUser(id) {
             function success(data) {
+                console.log(data);
                 if(data[0] != 0) {
                     vm.user.photo = data[1];
                     if (data[0].groups.length !== 0) {

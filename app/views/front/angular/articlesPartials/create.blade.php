@@ -32,7 +32,7 @@
                 </div>
                 <%trans('/front/articles/create.description')%>: <textarea class="form-control" ng-model="vm.articleBody" required="" rows="8"></textarea>
                 <button class="btn btn-success" ng-click="vm.saveArticle()" style="margin-top: 5px;" ng-disabled="createAct.$invalid"><%trans('/front/articles/create.save')%></button>
-                <button class="btn btn-success" data-ng-click="vm.back();" style="margin-top: 5px;">Back</button>
+                <button class="btn btn-success" data-ng-click="vm.back();" style="margin-top: 5px;"><%trans('/front/articles/create.back')%></button>
             </form>
         </div>
     </div>

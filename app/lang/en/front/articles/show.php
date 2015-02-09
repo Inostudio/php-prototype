@@ -5,5 +5,6 @@ return array(
     'date_of_creation' => 'Date of creation',
     'date_of_last_change' => 'Date of last change',
     'email' => 'Email',
-    'phone' => 'Phone'
+    'phone' => 'Phone',
+    "all_articles" => "All articles"
 );

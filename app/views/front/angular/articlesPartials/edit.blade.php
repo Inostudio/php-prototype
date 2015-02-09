@@ -19,7 +19,7 @@
                 </div>
                 <%trans('/front/articles/edit.description')%>: <textarea class="form-control" required="" rows="8" ng-model="vm.article.body"></textarea>
                 <button class="btn btn-success" ng-disabled="createAct.$invalid" style="margin-top: 5px;" ng-click="vm.saveEdit()"><%trans('/front/articles/edit.save')%></button>
-                <button class="btn btn-success" data-ng-click="vm.back();" style="margin-top: 5px;">Back</button>
+                <button class="btn btn-success" data-ng-click="vm.back();" style="margin-top: 5px;"><%trans('/front/articles/edit.back')%></button>
             </form>
 
 

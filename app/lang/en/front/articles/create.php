@@ -4,5 +4,6 @@ return array(
     'title' => 'Title',
     'category' => 'Category',
     'description' => 'Description',
-    'save' => 'Save'
+    'save' => 'Save',
+    "back" => "Back"
 );

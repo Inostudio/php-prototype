@@ -13,6 +13,7 @@ class SearchController extends \BaseController {
 
     public function __construct(\UsersService $us)
     {
+        $this->beforeFilter('auth');
         $this->users = $us;
     }
     

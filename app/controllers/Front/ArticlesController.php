@@ -23,6 +23,7 @@ class ArticlesController extends \BaseController
 
     public function __construct(\ArticlesService $articles)
     {
+        $this->beforeFilter('auth');
         $this->articles = $articles;
     }
     

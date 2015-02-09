@@ -12,7 +12,7 @@
     }
 </style>
 <div class="container">
-    <a class="btn btn-default" href="#/articles" style="float: right">All articles</a>
+    <a class="btn btn-default" href="#/articles" style="float: right"><%trans('/front/articles/show.all_articles')%></a>
     <div class="row">        
         <div class="col-sm-12">
             <h2>{{vm.article.title}}</h2>

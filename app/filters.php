@@ -43,7 +43,14 @@ Route::filter('auth', function()
 		}
 		else
 		{
-			return Redirect::guest('login');
+
+            $section = Section::where('title', '=', "auth")->first();
+            if($section) {
+                if ($section->disable) {
+                    throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+                }
+            }
+			return Redirect::intended('auth/signin');
 		}
 	}
 });
@@ -114,11 +121,14 @@ Route::filter('localization', function() {
 
 Route::filter('checkSection', function() {
     $section = Request::segment(1);
+    if($section === "search") {
+        $section = "articles";
+    }
     
     $section = Section::where('title', '=', $section)->first();
     if($section){
         if($section->disable){
-            return Redirect::to('/');
+            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
         }
     }
 });

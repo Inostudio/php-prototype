@@ -286,34 +286,39 @@
         ////////////
 
         function addImage(file) {
-            var reader = new FileReader();
-            reader.onload = function (evt) {
-                var img = new Image;
+            if(file.size/1024/1024 > 5) {
+                console.log("The big size of image");
+            } else if(file.type !== "image/jpeg") {
+                console.log("The file must be extension only 'image/jpeg'");
+            } else {
+                var reader = new FileReader();
+                reader.onload = function (evt) {
+                    var img = new Image;
 
-                img.onload = function() {
-                    $scope.$apply(function(){
-                        PhotoResize.init(832, 564, img.width, img.height);
+                    img.onload = function() {
+                        $scope.$apply(function(){
+                            PhotoResize.init(832, 564, img.width, img.height);
 
-                        vm.NewPhotoImageStyle = {
-                            width: PhotoResize.width() + 'px',
-                            height: PhotoResize.height() + 'px'
-                        }
+                            vm.NewPhotoImageStyle = {
+                                width: PhotoResize.width() + 'px',
+                                height: PhotoResize.height() + 'px'
+                            }
 
-                        vm.NewPhoto = evt.target.result;
+                            vm.NewPhoto = evt.target.result;
 
-                        vm.changeToUploadNewPhoto();
-                    });
+                            vm.changeToUploadNewPhoto();
+                        });
 
+                    };
+
+                    img.src = reader.result;
                 };
-
-                img.src = reader.result;
-            };
-            reader.readAsDataURL(file);
-
+                reader.readAsDataURL(file);
+            }
         }
 
         function dropletReady() {
-            $scope.interface.allowedExtensions(['png', 'jpg', 'bmp']);
+            $scope.interface.allowedExtensions(['jpg']);
             $scope.initInterface = true;
         }
 

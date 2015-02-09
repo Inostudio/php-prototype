@@ -14,7 +14,7 @@
     <div class="panel-body">
       <div class="row">
         <div class="col-md-4 col-lg-4" align="center" style="position:relative; z-index: 100" data-ng-mouseover="vm.show = true;" data-ng-mouseleave="vm.show = false;">
-            <img alt="User Pic" data-ng-init="vm.exists = '<% $user->existsPhoto() %>';vm.imageUrl = '<% $user->getPhoto() %>'; vm.imageCroppedUrl = '<% $user->getCroppedPhoto() %>'; vm.image = vm.imageCroppedUrl" src="{{vm.image}}" class="img-rounded">
+            <img alt="User Pic" data-ng-init="vm.exists = '<% $user->existsPhoto() %>';vm.imageUrl = '<% $user->getPhoto() %>'; vm.imageCroppedUrl = '<% $user->getCroppedPhoto() %>'; vm.image = vm.imageCroppedUrl" ng-src="{{vm.image}}" class="img-rounded">
             <div ng-show="vm.show">
                 <div data-ng-show="vm.exists" style="position: absolute; background: rgba(f,f,f,0.6); top: 0px; right: -12px; border-radius: 8px; width: 20px;">
                     <span data-ng-click="vm.deleteAvatar()"><i class="fa fa-times"></i></span>
@@ -161,7 +161,7 @@
                             <div style="position:absolute; width: 270px; height: 66px;" class="uploadcare-dialog-big-button" data-ng-click="vm.choose()">
                                 <% trans('front/profile/profile.button_choose_file') %>
                             </div>
-                            <input style="border-radius: 100px;position:absolute;opacity: 0; width: 270px; height: 66px;" type="file" data-ng-model="vm.fileInput" id="fileInput" data-ng-click="vm.Init()"/>
+                            <input style="border-radius: 100px;position:absolute;opacity: 0; width: 270px; height: 66px;" type="file" data-ng-model="vm.fileInput" id="fileInput" data-ng-click="vm.Init()" accept="image/jpeg"/>
                         </div>
                         <div>
                             <comment></comment>
