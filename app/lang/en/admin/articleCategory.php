@@ -16,5 +16,6 @@ return array(
     'cancel' => 'Cancel',
     'article_removed_message'   =>  'The article was removed successfully!',
     'article_change_message'  => 'The article was successfully changed!',
-    'required_field'  =>  'The field is required!'
+    'required_field'  =>  'The field is required!',
+    'category'  =>  'Category'
 );

@@ -77,20 +77,18 @@ class ResourceService {
      * @param $id
      * @return array
      */
-    public function delete($id)
-    {
-        $result = [false, 'Unknown'];
-        $notFound = false;
 
-        $resource = Resource::find($id);
+    public function delete($id, $action, $direction, $offset, $limit, $phrase, $src){
+        $result = [false, 'Unknown', []];   //$result = [false, 'Unknown'];
+        $resource = Resource::find($id);              
         if($resource) {
-            $file = new File($resource->path, $this->filesystem);
-            if($file->exists()) {
-                $file->delete();
-                $result = [$resource->delete()];
-            } else {
-                $notFound = true;
-            }
+
+            $resource = Resource::where('id', '=', $id)->delete();
+
+            //$file = new File($resource->url, $this->filesystem);    //Расцитировать при работе с реальными ресурсами!!!
+            //$file->delete();
+            $result[0] = true;
+
         } else {
             $notFound = true;
         }
@@ -98,7 +96,51 @@ class ResourceService {
         if($notFound) {
             $result[1] = 'Resource didn\'t found';
         }
-
+        if($result[0]){
+            if(!$action){   //Обычная подгрузка
+                $result[2] = $this->getResources($direction, 1, ($offset + $limit - 1));
+            } else {    //Подгрузка при поиске
+                $result[2] = $this->getSearchResources($direction, $phrase, $src, 1, ($offset + $limit - 1));
+            }
+        }
         return $result;
+    }
+    
+    public function getResources($direction, $limit, $offset){
+        $resource = Resource::orderBy('title', $direction)
+                ->skip($offset)
+                ->take($limit)
+                ->get();
+        $resourceCount = Resource::count();
+         return [$resource, $resourceCount];
+    }
+    
+    public function editResource($id, $title){
+        $resource = Resource::find($id);
+        $resource->title = $title;
+        $resource->save();
+        return;
+    }
+    
+    public function getSearchResources($direction, $phrase, $src, $limit, $offset){
+        $resources = [];
+        $resourcesCount = 0;
+        if($src == 1){  //Поиск по названию
+            $resources = Resource::where('title', 'like', '%'.$phrase.'%');
+            $resourcesCount = $resources->count();
+            $resources = $resources->orderBy('title', $direction)
+                ->skip($offset)
+                ->take($limit)
+                ->get();
+        } else {    //По url-у
+            $resources = Resource::where('url', 'like', '%'.$phrase.'%');
+            $resourcesCount = $resources->count();
+            $resources = $resources->orderBy('title', $direction)
+                ->skip($offset)
+                ->take($limit)
+                ->get();
+        }
+        
+        return [$resources, $resourcesCount];
     }
 }

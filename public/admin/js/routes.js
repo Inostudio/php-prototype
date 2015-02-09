@@ -66,6 +66,21 @@
               templateUrl:  '/angular/?ns=admin&id=adminPartials.resources',
               controller: 'ResourcesCtrl',
               controllerAs: 'vm'
+          }).
+          when('/languages', {
+              templateUrl:  '/' + lang + '/angular/?ns=admin&id=adminPartials.languages',
+              controller: 'LanguagesCtrl',
+              controllerAs: 'vm'
+          }).
+        when('/settings', {
+            templateUrl:  '/' + lang + '/angular/?ns=admin&id=adminPartials.settings',
+            controller: 'SettingsCtrl',
+            controllerAs: 'vm'
+          }).
+          when('/personalization', {
+            templateUrl:  '/' + lang + '/angular/?ns=admin&id=adminPartials.personalization',
+            controller: 'PersonalizationCtrl',
+            controllerAs: 'vm'
           });
       }]);
 })();

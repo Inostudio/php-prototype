@@ -13,20 +13,26 @@
             .controller('ResourcesCtrl', ResourcesCtrl)
             .controller('PagesCtrl', PagesCtrl)
             .controller('CategoriesOfArticlesCtrl', CategoriesOfArticlesCtrl)
-            .controller('ArticleCategoryCtrl', ArticleCategoryCtrl);
+            .controller('ArticleCategoryCtrl', ArticleCategoryCtrl)
+            .controller('LanguagesCtrl', LanguagesCtrl)
+            .controller('SettingsCtrl', SettingsCtrl)
+            .controller('PersonalizationCtrl', PersonalizationCtrl);
             
 
     DashboardCtrl.$inject = ['GetStatistics'];
-    GroupCtrl.$inject = ['$scope', 'Group', 'AddGroup', 'RemoveGroup', 'EditGroup', '$alert', '$modal', '$rootScope'];
-    PermissionCtrl.$inject = ['$scope', '$alert', 'Permission', 'AddPermission', 'RemovePermission', 'EditPermission', '$modal', '$rootScope'];
-    GroupOptionsCtrl.$inject = ['$scope', '$routeParams', 'GroupOptions', '$alert', 'ChangePermissionsInGroup'];
-    UsersCtrl.$inject = ['$scope', '$alert', 'User', 'AddUser', 'RemoveUser', 'EditUser', 'SearchUsers', '$modal', '$rootScope'];
-    UserOptionsCtrl.$inject = ['$scope', '$alert', '$routeParams', 'UserOptions', 'ChangeGroupByUser', '$modal', '$rootScope'];
-    ResourcesCtrl.$inject = ['$scope', 'AddResource', 'AllResource', 'DeleteResource', '$alert', '$modal', '$rootScope'];
-    PagesCtrl.$inject = ['$scope', '$alert', '$modal', 'AddPage', 'Status', 'Pages', 'GetPage', 'DeletePage', 'SavePage', '$window', '$location', '$rootScope'];
+    GroupCtrl.$inject = ['$scope', 'Group', 'AddGroup', 'RemoveGroup', 'EditGroup', '$alert', '$modal', '$rootScope', 'TableTranslate'];
+    PermissionCtrl.$inject = ['$scope', '$alert', 'Permission', 'AddPermission', 'RemovePermission', 'EditPermission', '$modal', '$rootScope', 'TableTranslate'];
+    GroupOptionsCtrl.$inject = ['$scope', '$routeParams', 'GroupOptions', '$alert', 'ChangePermissionsInGroup', 'TableTranslate'];
+    UsersCtrl.$inject = ['$scope', '$alert', 'User', 'AddUser', 'RemoveUser', 'EditUser', 'SearchUsers', '$modal', '$rootScope', 'GetUserBans', 'RemoveBan', 'AddBan', 'TableTranslate'];
+    UserOptionsCtrl.$inject = ['$scope', '$alert', '$routeParams', 'UserOptions', 'ChangeGroupByUser', '$modal', '$rootScope', 'TableTranslate'];
+    ResourcesCtrl.$inject = ['$scope', 'AddResource', 'AllResource', 'DeleteResource', '$alert', '$modal', '$rootScope', 'EditResource', 'GetSearchResources', 'TableTranslate'];
+    PagesCtrl.$inject = ['$scope', '$alert', '$modal', 'AddPage', 'Status', 'Pages', 'GetPage', 'DeletePage', 'SavePage', '$window', '$location', '$rootScope', 'TableTranslate'];
     activCtrl.$inject = ['$scope', '$location', 'CheckLang'];
-    CategoriesOfArticlesCtrl.$inject = ['GetCategoryOfArticle', '$alert', '$scope', '$modal', '$rootScope', 'RemoveCategoryOfArticle', 'AddCategoryOfArticle', 'EditCategoryOfArticle'];
-    ArticleCategoryCtrl.$inject = ['GetArticles', '$routeParams', '$scope', '$alert', '$window', '$location', '$modal', '$rootScope', 'EditArticle', 'SearchArticles', 'RemoveArticle'];
+    CategoriesOfArticlesCtrl.$inject = ['GetCategoryOfArticle', '$alert', '$scope', '$modal', '$rootScope', 'RemoveCategoryOfArticle', 'AddCategoryOfArticle', 'EditCategoryOfArticle', 'TableTranslate'];
+    ArticleCategoryCtrl.$inject = ['GetArticles', '$routeParams', '$scope', '$alert', '$window', '$location', '$modal', '$rootScope', 'EditArticle', 'SearchArticles', 'RemoveArticle', 'TableTranslate'];
+    LanguagesCtrl.$inject = ['GetLanguageFiles', '$rootScope', '$scope', '$alert', 'EditLanguageFile', 'TableTranslate'];
+    SettingsCtrl.$inject = ['GetSections', 'ChangeSection', '$alert', '$scope'];
+    PersonalizationCtrl.$inject = ['$scope'];
     
     function activCtrl($scope, $location) {
         var vm = this;
@@ -48,7 +54,7 @@
         vm.data2 = {};
         vm.users_in_groups = '';
         vm.articles_in_categories = '';
-        vm.config1 = {
+        vm.config2 = {
             labels: false,
             title : (lang == 'en' ? 'Users in groups' : 'Пользователи в группах'),
             legend : {
@@ -56,7 +62,7 @@
                     position:'right'
             }
 	};
-        vm.config2 = {
+        vm.config1 = {
             labels: false,
             title : (lang == 'en' ? 'Articles in categories' : 'Статьи в категориях'),
             legend : {
@@ -93,10 +99,30 @@
         });
     };
 
-    function GroupCtrl($scope, Group, AddGroup, RemoveGroup, EditGroup, $alert, $modal, $rootScope){
-        var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
-        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
-
+    function GroupCtrl($scope, Group, AddGroup, RemoveGroup, EditGroup, $alert, $modal, $rootScope, TableTranslate){
+        var alertError;
+        var alertSuccess;
+        function showErrorAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+                alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertError = $alert({title: alertMessage, placement: 'top-right', type: 'danger', container: '#alerts-container'});
+            alertError.$promise.then(alertError.show);
+        }
+        function showSuccessAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+               alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container', duration: 3});
+            alertSuccess.$promise.then(alertSuccess.show);
+        }
+        
         var vm = this;
         vm.addGroup = addGroup;
         vm.groupName = '';
@@ -106,6 +132,9 @@
         vm.edit_group_message = '';
         vm.add_group_message = '';
         vm.remove_group_message = '';
+        vm.idAdminsGroup = 0;
+        vm.title_already_taken = '';
+        vm.title_empty = '';
 
         var removeGroupId = null;
         vm.modal = $modal({
@@ -114,36 +143,32 @@
         });
         //Удаление +++
         $scope.$on('EventForDropGroup', function (event, id) {
-            alertError.hide();
-            alertSuccess.hide();
             removeGroupId = Number(id);
-            vm.modal.show();
+            if(id != vm.idAdminsGroup){
+                vm.modal.show();
+            }
         });
 
         //Redirect to permission
         $scope.$on('EventForRedirectToGroupOptions', function (event, id) {
-            alertError.hide();
-            alertSuccess.hide();
-
             window.location = '#/groups/' + id;
         });
         //Grid
         vm.gridOptions = { enableFiltering: true };
-        vm.gridOptions.columnDefs = [
-            { name: 'id', enableCellEdit: false, width: '5%', enableFiltering: false },
-            { name: 'title', displayName: 'Title', width: '20%' },
-            { name: 'description', displayName: 'Description' , width: '30%', enableFiltering: false },
-            { name: 'permissions', displayName: 'Permissions' , width: '15%', enableFiltering: false,  enableSorting: false, enableCellEdit: false,//permissioms
-              cellTemplate: '<spanedit edit-action="EventForRedirectToGroupOptions" edit-id="{{row.entity.id}}"/>'},
-            { name: 'remove', displayName: 'Remove' , width: '10%', enableCellEdit: false, enableFiltering: false, enableSorting: false, height: '15px',
-              cellTemplate: '<spanremove remove-action="EventForDropGroup" remove-id="{{row.entity.id}}"/>' }
-        ];
+        TableTranslate.query({phrase: ['id', 'title', 'description', 'permissions', 'remove']}, function(answer){
+            vm.gridOptions.columnDefs = [
+                { name: 'id', enableCellEdit: false, width: '2%', enableFiltering: false, displayName: answer[0]['id']},
+                { name: 'title', displayName: answer[0]['title'], width: '15%' },
+                { name: 'description', displayName: answer[0]['description'], width: '30%', enableFiltering: false },
+                { name: 'permissions', displayName: answer[0]['permissions'], width: '15%', enableFiltering: false,  enableSorting: false, enableCellEdit: false,//permissioms
+                  cellTemplate: '<spanedit edit-action="EventForRedirectToGroupOptions" edit-id="{{row.entity.id}}"/>'},
+                { name: 'remove', displayName: answer[0]['remove'], width: '12%', enableCellEdit: false, enableFiltering: false, enableSorting: false, height: '15px',
+                  cellTemplate: '<spanremove remove-action="EventForDropGroup" remove-id="{{row.entity.id}}" ng-hide/>' }
+            ];
+        });
 
         vm.gridOptions.onRegisterApi = function(gridApi){
            gridApi.edit.on.afterCellEdit($scope,function(rowEntity, colDef, newValue, oldValue){
-                alertError.hide();
-                alertSuccess.hide();
-
                 //Редактирование-----///
                 var oldGroup = '';
 
@@ -170,21 +195,21 @@
                         }
                     });
                     if(isExistsEdit){
-                        alertError = $alert({title: 'The title has already been taken.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                        showErrorAlert(vm.title_already_taken);
                         vm.gridOptions.data[k].title = oldValue;
                     } else {
                         if(newValue.trim() === ''){
-                            alertError = $alert({title: 'Field title is empty!', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                            showErrorAlert(vm.title_empty);
                             vm.gridOptions.data[k].title = oldValue;
                         } else {
                             if(oldValue != newValue)
                             {
                                 EditGroup.query({groupId: rowEntity.id, title: newValue, groupDescription: oldGroup.description}, function(answer){
                                     if(answer[0] === false){
-                                        alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                                        showErrorAlert(answer[1]);
                                     } else
                                     {
-                                        alertSuccess = $alert({title: vm.edit_group_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                                        showSuccessAlert(vm.edit_group_message);
                                     }
                                 });
                             }
@@ -195,10 +220,10 @@
                     if((newValue != null) && (newValue.trim() != oldValue)) {
                         EditGroup.query({groupId: rowEntity.id, title: oldGroup.title, groupDescription: newValue}, function(answer){
                             if(answer[0] === false){
-                                alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                                showErrorAlert(answer[1]);
                             } else
                             {
-                                alertSuccess = $alert({title: vm.edit_group_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                                showSuccessAlert(vm.edit_group_message);
                             }
                         });
                     }
@@ -212,18 +237,20 @@
 
         //Получение +++
         Group.queryInfo(function(res){
-          vm.gridOptions.data = res;
+            angular.forEach(res, function(elem){
+                if(elem.isAdmin){
+                    vm.idAdminsGroup = elem.id;
+                }
+            });
+            vm.gridOptions.data = res;
         });
 
         //Добавление
         function addGroup(){
             var isExists = 0;
-            alertError.hide();
-            alertSuccess.hide();
-
             angular.forEach(vm.gridOptions.data, function(group) {
                 if (group.title === vm.groupName){
-                    alertError = $alert({title: 'The title has already been taken. ', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                    showErrorAlert(vm.title_already_taken);
                     isExists = 1;
                 }
             });
@@ -231,7 +258,7 @@
                 return;
             }
             if((vm.groupName == null) || (vm.groupName.trim() === "")){
-                alertError = $alert({title: 'The title field is required.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                showErrorAlert(vm.title_empty);
                 return;
             }
 
@@ -240,9 +267,9 @@
                   vm.gridOptions.data.push({title: vm.groupName, description: vm.groupDescription, id: answer.id});
                   vm.groupName = "";
                   vm.groupDescription = "";
-                  alertSuccess = $alert({title: vm.add_group_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                    showSuccessAlert(vm.add_group_message);
                 } else {
-                    alertError = $alert({title: answer.message, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                    showErrorAlert(answer.message);
                 }
             });
         };
@@ -258,7 +285,7 @@
                       if (group.id != id)
                           vm.gridOptions.data.push(group);
                     });
-                    alertSuccess = $alert({title: vm.remove_group_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                    showSuccessAlert(vm.remove_group_message);
                 }
             });
         }
@@ -268,15 +295,33 @@
         });
 
         $rootScope.$on('okDeleteGroup', function(){
-            alertSuccess.hide();
             removeGroup(removeGroupId);
         });
       };
 
-    function PermissionCtrl($scope, $alert, Permission, AddPermission, RemovePermission, EditPermission, $modal, $rootScope) {
-            var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container_perm'});
-            var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container_perm'});
-
+    function PermissionCtrl($scope, $alert, Permission, AddPermission, RemovePermission, EditPermission, $modal, $rootScope, TableTranslate) {
+            var alertError;
+            var alertSuccess;
+            function showErrorAlert(alertMessage){
+                if(alertError != null){
+                    alertError.$promise.then(alertError.hide);
+                }
+                if(alertSuccess != null){
+                    alertSuccess.$promise.then(alertSuccess.hide);
+                }
+                alertError = $alert({title: alertMessage, placement: 'top-right', type: 'danger', container: '#alerts-container_perm'});
+                alertError.$promise.then(alertError.show);
+            }
+            function showSuccessAlert(alertMessage){
+                if(alertError != null){
+                    alertError.$promise.then(alertError.hide);
+                }
+                if(alertSuccess != null){
+                   alertSuccess.$promise.then(alertSuccess.hide);
+                }
+                alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container_perm', duration: 3});
+                alertSuccess.$promise.then(alertSuccess.show);
+            }
             var vm = this;
             vm.addPermission = addPermission;
             vm.permissionName = '';
@@ -286,15 +331,19 @@
             vm.modal = '';
             vm.edit_permission_message = '';
             vm.remove_permission_message = '';
+            vm.title_already_taken = '';
+            vm.title_empty = '';
             
             vm.gridOptions_perm = { enableFiltering: true };
-            vm.gridOptions_perm.columnDefs = [
-                { name: 'id', enableCellEdit: false, width: '2%', enableFiltering: false },
-                { name: 'title', displayName: 'Title', width: '20%' },
-                { name: 'description', displayName: 'Description' , width: '30%', enableFiltering: false },
-                { name: 'remove', displayName: 'Remove' , width: '5%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
-                  cellTemplate: '<spanremove remove-action="EventForDrop_perm" remove-id="{{row.entity.id}}"/>' }
-            ];
+            TableTranslate.query({phrase: ['id', 'title', 'description', 'remove']}, function(answer){
+                vm.gridOptions_perm.columnDefs = [
+                    { name: 'id', enableCellEdit: false, displayName: answer[0]['id'], width: '2%', enableFiltering: false },
+                    { name: 'title', displayName: answer[0]['title'], width: '20%' },
+                    { name: 'description', displayName: answer[0]['description'], width: '30%', enableFiltering: false },
+                    { name: 'remove', displayName: answer[0]['remove'], width: '10%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
+                      cellTemplate: '<spanremove remove-action="EventForDrop_perm" remove-id="{{row.entity.id}}"/>' }
+                ];
+            });
 
             //Получение
             Permission.queryInfo(function(res){
@@ -304,12 +353,9 @@
             //Добавление
             function addPermission(){
               var isExists = 0;
-              alertError.hide();
-              alertSuccess.hide();
-
               angular.forEach(vm.gridOptions_perm.data, function(permission) {
-                  if (permission.title === vm.permissionName){ 
-                      alertError = $alert({title: 'The title has already been taken. ', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
+                  if (permission.title === vm.permissionName){
+                      showErrorAlert(vm.title_already_taken);
                       isExists = 1;
                   }
               });
@@ -318,7 +364,7 @@
               }
 
               if((vm.permissionName == null) || (vm.permissionName.trim() === "")){
-                    alertError = $alert({title: 'The title field is required.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
+                    showErrorAlert(vm.title_empty);
                     return;
               }
 
@@ -327,9 +373,9 @@
                     vm.gridOptions_perm.data.push({title: vm.permissionName, description: vm.permissionDescription, id: answer.id}); 
                     vm.permissionName = "";
                     vm.permissionDescription = "";
-                    alertSuccess = $alert({title: vm.add_permission_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
+                    showSuccessAlert(vm.add_permission_message);
                   } else {
-                      alertError = $alert({title: answer.message, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
+                    showErrorAlert(answer.message);
                   }
               });
             };
@@ -341,8 +387,6 @@
             });
             //Удаление
             $scope.$on('EventForDrop_perm', function (event, id) {
-                alertError.hide();
-                alertSuccess.hide();
                 removePermissionId = Number(id);
                 vm.modal.show();
             });
@@ -350,9 +394,6 @@
             //Редактирование
             vm.gridOptions_perm.onRegisterApi = function(gridApi){
                gridApi.edit.on.afterCellEdit($scope,function(rowEntity, colDef, newValue, oldValue){
-                    alertError.hide();
-                    alertSuccess.hide();
-
                     //Редактирование-----///
                     var oldPermission = '';
 
@@ -379,21 +420,21 @@
                             }   
                         });
                         if(isExistsEdit){
-                            alertError = $alert({title: 'The title has already been taken.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
+                            showErrorAlert(vm.title_already_taken);
                             vm.gridOptions_perm.data[k].title = oldValue;
                         } else {
                             if(newValue.trim() === ''){
-                                alertError = $alert({title: 'Field title is empty!', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
+                                showErrorAlert(vm.title_empty);
                                 vm.gridOptions_perm.data[k].title = oldValue;
                             } else {
                                 if(oldValue != newValue)
                                 {
                                     EditPermission.query({permissionId: rowEntity.id, title: newValue, permissionDescription: oldPermission.description}, function(answer){
                                         if(answer[0] === false){
-                                            alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
+                                            showErrorAlert(answer[1]);
                                         } else
                                         {
-                                            alertSuccess = $alert({title: vm.edit_permission_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
+                                            showSuccessAlert(vm.edit_permission_message);
                                         }
                                     });
                                 }
@@ -405,10 +446,10 @@
                             //alert("Description");
                             EditPermission.query({permissionId: rowEntity.id, title: oldPermission.title, permissionDescription: newValue}, function(answer){
                                 if(answer[0] === false){
-                                    alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container_perm'});
+                                    showErrorAlert(answer[1]);
                                 } else
                                 {
-                                    alertSuccess = $alert({title: vm.edit_permission_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
+                                    showSuccessAlert(vm.edit_permission_message);
                                 }
                             });
                         }
@@ -428,7 +469,7 @@
                           if (permission.id != id) 
                               vm.gridOptions_perm.data.push(permission);
                         });
-                        alertSuccess = $alert({title: vm.remove_permission_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_perm', duration: 3});
+                        showSuccessAlert(vm.remove_permission_message);
                     }
                 });
             }
@@ -438,13 +479,21 @@
             });
 
             $rootScope.$on('okDeletePermission', function(){
-                alertSuccess.hide();
                 removePermission(removePermissionId);
             });
         };
 
-    function GroupOptionsCtrl($scope, $routeParams, GroupOptions, $alert, ChangePermissionsInGroup) {
-            var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container_option'});
+    function GroupOptionsCtrl($scope, $routeParams, GroupOptions, $alert, ChangePermissionsInGroup, TableTranslate) {
+            var alertSuccess;
+            
+            function showSuccessAlert(alertMessage){
+                if(alertSuccess != null){
+                    alertSuccess.$promise.then(alertSuccess.hide);
+                }
+                alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container_option', duration: 3});
+                alertSuccess.$promise.then(alertSuccess.show);
+            }
+            
             var vm = this;
             vm.groupTitle = '';
             vm.groupDescription = '';
@@ -454,13 +503,15 @@
             vm.add_perm_to_group = '';
             
             vm.gridOptions_groupOptions = { enableFiltering: true };
-            vm.gridOptions_groupOptions.columnDefs = [
-                { name: 'id', displayName: 'Id', enableCellEdit: false, width: '5%', enableFiltering: false },
-                { name: 'title', displayName: 'Title', width: '10%', enableCellEdit: false },
-                { name: 'description', displayName: 'Description' , width: '30%', enableFiltering: false, enableCellEdit: false },
-                { name: 'accept', displayName: 'Accept' , width: '5%', enableFiltering: false, enableCellEdit: false,
-                    cellTemplate: '<spantoggle change-action="EventChangeGroup" change-accept="{{row.entity.accept}}" change-id="{{row.entity.id}}"/>'}
-            ];
+            TableTranslate.query({phrase: ['id', 'title', 'description', 'accept']}, function(answer){
+                vm.gridOptions_groupOptions.columnDefs = [
+                    { name: 'id', displayName: answer[0]['id'], enableCellEdit: false, width: '10%', enableFiltering: false },
+                    { name: 'title', displayName: answer[0]['title'], width: '30%', enableCellEdit: false },
+                    { name: 'description', displayName: answer[0]['description'], width: '45%', enableFiltering: false, enableCellEdit: false },
+                    { name: 'accept', displayName: answer[0]['accept'], width: '15%', enableFiltering: false, enableCellEdit: false,
+                        cellTemplate: '<spantoggle change-action="EventChangeGroup" change-accept="{{row.entity.accept}}" change-id="{{row.entity.id}}"/>'}
+                ];
+            });
 
             //Получение
             GroupOptions.query({groupId: $routeParams.groupId}, function(answer){
@@ -483,18 +534,17 @@
 
             //Изменение разрешений группы
             $scope.$on('EventChangeGroup', function (event, id, accept) {
-                alertSuccess.hide();
                 ChangePermissionsInGroup.query({groupId: vm.groupId, accept : accept, permId: id}, function(answer){
                     if(answer[0]){
                         angular.forEach(vm.gridOptions_groupOptions.data, function(permission) {    //Проверяем, существует ли право с таким именем
                             if(permission.id == id){
                                 if(accept){
                                     permission.accept = 0;
-                                    alertSuccess = $alert({title: vm.remove_perm_from_group, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option', duration: 3});
+                                    showSuccessAlert(vm.remove_perm_from_group);
                                 }
                                 else {
                                     permission.accept = 1;
-                                    alertSuccess = $alert({title: vm.add_perm_to_group, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option', duration: 3});
+                                    showSuccessAlert(vm.add_perm_to_group);
                                 }
                             }
                         });
@@ -504,7 +554,7 @@
             });    
     };
 
-    function UsersCtrl($scope, $alert, User, AddUser, RemoveUser, EditUser, SearchUsers, $modal, $rootScope) {
+    function UsersCtrl($scope, $alert, User, AddUser, RemoveUser, EditUser, SearchUsers, $modal, $rootScope, GetUserBans, RemoveBan, AddBan, TableTranslate) {
             var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container-for-users'});
             var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container-for-users'});
             
@@ -516,8 +566,8 @@
             vm.totalPage = 0;
             vm.dirFindSort = '';
             vm.fieldFindSort = '';
-            vm.direction = '';
-            vm.field = '';
+            vm.direction = 'asc';
+            vm.field = 'id';
             vm.email = '';
             vm.userConfirmPassword = '';
             vm.userPassword = '';
@@ -533,24 +583,40 @@
             vm.modal = '';
             vm.edit_user_message = '';
             vm.remove_user_message = '';
-
+            vm.myId = 0;
+            vm.invalid_email_message = '';
+            vm.userBan = null;
+            vm.modalBan = {};
+            vm.hideCurrentBan = true;
+            vm.ban = {};
+            vm.confirmDeleteBan = true;
+            vm.acceptRemoveBan = acceptRemoveBan;
+            vm.banDate = "";
+            vm.banTime = "";
+            vm.banReason = "";
+            vm.banUserId = 0;
+            vm.errorDate = false;
+            vm.successfully_blocked_message = '';
+            
             vm.users_grid = {
                 enableFiltering: false
             };
-
-            vm.users_grid.columnDefs = [
-                { name: 'id', enableCellEdit: false, width: '8%'},
-                { name: 'email', enableCellEdit: true, width: '15%'},
-                { name: 'first_name', enableCellEdit: false, width: '10%'},
-                { name: 'last_name', enableCellEdit: false, width: '10%'},
-                { name: 'phone', enableCellEdit: false, width: '20%', enableSorting: false},
-                { name: 'groups', displayName: 'Groups' , width: '8%', enableCellEdit: false,  enableSorting: false,
-                    cellTemplate: '<spanedit edit-action="EventForRedirectToUserOptions"  edit-id="{{row.entity.id}}"/>'},
-                { name: 'remove', displayName: 'Remove' , width: '8%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
-                    cellTemplate: '<spanremove remove-action="EventForDropUser" remove-id="{{row.entity.id}}"/>' }
-            ];
-
-            //Получение +++
+            
+            TableTranslate.query({phrase: ['id', 'email', 'first_name', 'last_name', 'phone', 'ban', 'groups', 'remove']}, function(answer){
+                vm.users_grid.columnDefs = [
+                    { name: 'id', enableCellEdit: false, width: '8%', displayName: answer[0]['id']},
+                    { name: 'email', enableCellEdit: true, width: '15%', displayName: answer[0]['email']},
+                    { name: 'first_name', enableCellEdit: false, width: '10%', displayName: answer[0]['first_name']},
+                    { name: 'last_name', enableCellEdit: false, width: '10%', displayName: answer[0]['last_name']},
+                    { name: 'phone', enableCellEdit: false, width: '15%', enableSorting: false, displayName: answer[0]['phone']},
+                    { name: 'ban', enableCellEdit: false, width: '5%', enableSorting: false, displayName: answer[0]['ban'],
+                        cellTemplate: '<span class="fa fa-ban" style="margin-left: 40%; cursor: pointer" ng-click="$emit(\'changeBan\', row.entity.id, row.entity.email)"></span>'},
+                    { name: 'groups', width: '8%', enableCellEdit: false,  enableSorting: false, displayName: answer[0]['groups'],
+                        cellTemplate: '<spanedit edit-action="EventForRedirectToUserOptions"  edit-id="{{row.entity.id}}"/>'},
+                    { name: 'remove', displayName: answer[0]['remove'] , width: '8%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
+                        cellTemplate: '<spanremove remove-action="EventForDropUser" remove-id="{{row.entity.id}}"/>' }
+                ];
+            });
             
             var offset = 0;
             var limit =  9;
@@ -558,33 +624,26 @@
             var searchText = '';
 
             getUsers(limit, offset, 'asc', 'id');
-
+            
             function nextPage(){
                 if((vm.currentPage + 1) <= vm.totalPage) {
                     vm.unavailableNext = true;
                     vm.unavailablePrev = true;
+                    offset += limit;
+                    vm.currentPage++;
                     if(vm.action === 0) {   //Обычный просмотр
-                        vm.currentPage++;
-                        offset += limit;
                         getUsers(limit, offset, 'asc', 'id');
                     } else if(vm.action === 1){     //Поиск
-                        vm.currentPage++;
-                        offset += limit;
                         getFindUsers(searchText, limit, offset, 'asc', 'id');
                     } else if(vm.action === 2){         //сортировка
-                        vm.currentPage++;
-                        offset += limit; 
                         getUsers(limit, offset, vm.direction, vm.field);
                     } else if (vm.action === 3) {   //Сортировка с поиском
-                        vm.currentPage++;
-                        offset += limit;
                         getFindUsers(searchText, limit, offset, vm.dirFindSort, vm.fieldFindSort);
                     }
                 }
             };
 
             function prevPage(){
-
                 if((vm.currentPage - 1) >= 1) {
                     vm.unavailableNext = true;
                     vm.unavailablePrev = true;
@@ -600,7 +659,6 @@
                     } else if(vm.action === 2) {            //сортировка
                         vm.currentPage--;
                         offset -= limit;
-                        console.log(offset, limit);
                         getUsers(limit, offset, vm.direction, vm.field); 
                     } else if (vm.action === 3) {   //Сортировка с поиском
                         vm.currentPage--;
@@ -640,7 +698,6 @@
                     } else {
                         alertSuccess = $alert({title: vm.add_user_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
                         if((vm.currentPage === vm.totalPage) &&(vm.currentPage * limit > vm.countUsers)){
-                            //console.log(vm.countUsers);
                             var newUser = {
                                 id: answer[2],
                                 email: vm.email
@@ -648,7 +705,6 @@
                             vm.users_grid.data.push(newUser);
 
                             vm.countUsers++;
-                            //console.log(vm.countUsers);
                             vm.totalPage = Math.ceil(vm.countUsers / limit);
                         } else {
                             vm.countUsers++;
@@ -676,8 +732,11 @@
             $scope.$on('EventForDropUser', function (event, id) {
                 alertError.hide();
                 alertSuccess.hide();
-                userRemoveId = Number(id);
-                vm.modal.show();
+                if(id != vm.myId)
+                {
+                    userRemoveId = Number(id);
+                    vm.modal.show();
+                }
             });
 
             //Редактирование +++
@@ -688,7 +747,7 @@
                     alertSuccess.hide();
 
                     if(newValue.trim() === ''){
-                        alertError = $alert({title: 'Field email is empty!', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                        alertError = $alert({title: vm.invalid_email_message, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
                         angular.forEach(vm.users_grid.data, function(user) {
                             if (user.id === rowEntity.id) 
                                 user.email = oldValue;
@@ -697,13 +756,21 @@
                         var str = newValue;
                         var a = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,6})+$/;
                         if(str.search(a) === -1){
-                            alertError = $alert({title: 'Email is invalid!', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                            alertError = $alert({title: vm.invalid_email_message, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                            angular.forEach(vm.users_grid.data, function(user) {
+                                if (user.id === rowEntity.id) 
+                                    user.email = oldValue;
+                            }); 
                         } else {
                             if(newValue.trim() != oldValue)
                             {
                                 EditUser.query({userId: rowEntity.id, email: newValue}, function(answer){
                                     if(answer[0] === false){
                                         alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                                        angular.forEach(vm.users_grid.data, function(user) {
+                                            if (user.id === rowEntity.id) 
+                                                user.email = oldValue;
+                                        }); 
                                     } else
                                     {
                                         alertSuccess = $alert({title: vm.edit_user_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
@@ -720,9 +787,11 @@
                         if((vm.action === 1) || (vm.action === 3)){    //Сортировка с поиском
                             vm.currentPage = 1;
                             vm.action = 3;
+                            
                             vm.dirFindSort = arg2[0].sort.direction;
                             vm.fieldFindSort = arg2[0].name;
-
+                            vm.field = vm.fieldFindSort;
+                            vm.direction = vm.dirFindSort;
                             offset = 0;
                             getFindUsers(searchText, limit, offset, vm.dirFindSort, vm.fieldFindSort);                      
                         } else {
@@ -817,14 +886,13 @@
                     vm.unavailablePrev = true;
 
                 }
-
                 if (vm.currentPage >= vm.totalPage) {
                     vm.unavailableNext = true;
                 }
             }
 
             function removeUser(id) {
-                RemoveUser.query({userId: id}, function(answer){
+                RemoveUser.query({userId: id, field: vm.field, direction: vm.direction, action: vm.action, off: (offset + limit - 1), text: vm.searchText}, function(answer){
                     if(answer[0])
                     {
                         vm.modal.hide();
@@ -838,6 +906,15 @@
                         });
                         vm.countUsers--;
                     }
+                    vm.totalPage = Math.ceil(vm.countUsers / limit);
+                    checkNavigationButton();
+                    if(answer[1][0].length != 0){
+                        if((vm.action == 1) || (vm.action == 3)) {
+                            vm.users_grid.data.push(answer[1][0][0]);
+                        } else {
+                            vm.users_grid.data.push(answer[1][0]);
+                        }
+                    }
                 });
             }
 
@@ -849,10 +926,93 @@
                 alertSuccess.hide();
                 removeUser(userRemoveId);
             });
+            
+            vm.modalBan = $modal({
+                show: false,
+                contentTemplate: 'Ban.html',
+                scope: $scope
+            });
+            
+            $scope.$on('changeBan', function(args, id, user){
+                if(id != vm.myId)
+                {
+                    vm.userBan = user;
+                    vm.banUserId = id;
+                    vm.hideCurrentBan = true;
+                    vm.confirmDeleteBan = true;
+                    vm.ban = {};
+                    GetUserBans.query({userId: id}, function(answer){
+                        if(answer[0]){  //Уже забанен
+                            vm.hideCurrentBan = false;
+                            vm.ban = answer[0];
+                        }
+                        vm.modalBan.show();
+                    });
+                }
+            });
+            
+            $rootScope.$on('cancelBan', function(){
+                vm.modalBan.hide();
+            });
+            
+            $rootScope.$on('okBan', function(){
+                var oldValueDate = new Date(vm.banDate);
+                var oldValueTime = new Date(vm.banTime);
+                vm.banDate.setHours(vm.banDate.getHours() + vm.banTime.toString().slice(16, 18));
+                vm.banDate.setMinutes(vm.banDate.getMinutes() + vm.banTime.toString().slice(19, 21));
+                var currentDate = new Date();
+                if(vm.banDate.getTime() <= currentDate.getTime()){   //Ошибка
+                    vm.errorDate = true;
+                } else{ //Всё норм
+                    AddBan.query({userId: vm.banUserId, endDate: vm.banDate, reason: vm.banReason}, function(answer){
+                        vm.banDate = '';
+                        vm.banTime = '';
+                        vm.banReason = '';
+                        vm.modalBan.hide();
+                        alertSuccess = $alert({title: vm.successfully_blocked_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
+                    });
+                    vm.errorDate = false;
+                }
+                vm.banDate = oldValueDate;
+                vm.banTime = oldValueTime;
+            }); 
+            
+            $rootScope.$on('showConfirmDeleteBan', function(){
+                vm.confirmDeleteBan = false;
+            }); 
+            
+            function acceptRemoveBan(id){
+                RemoveBan.query({id: id}, function(answer){
+                    vm.confirmDeleteBan = true;
+                    vm.hideCurrentBan = false;
+                    vm.hideCurrentBan = true;
+                });
+            }
     };
 
-    function UserOptionsCtrl($scope, $alert, $routeParams, UserOptions, ChangeGroupByUser, $modal, $rootScope) {
-            var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container_option_for_users'});
+    function UserOptionsCtrl($scope, $alert, $routeParams, UserOptions, ChangeGroupByUser, $modal, $rootScope, TableTranslate) {
+            var alertSuccess;
+            var alertError;
+            function showErrorAlert(alertMessage){
+                if(alertError != null){
+                    alertError.$promise.then(alertError.hide);
+                }
+                if(alertSuccess != null){
+                    alertSuccess.$promise.then(alertSuccess.hide);
+                }
+                alertError = $alert({title: alertMessage, placement: 'top-right', type: 'danger', container: '#alerts-container_option_for_users'});
+                alertError.$promise.then(alertError.show);
+            }
+            function showSuccessAlert(alertMessage){
+                if(alertError != null){
+                    alertError.$promise.then(alertError.hide);
+                }
+                if(alertSuccess != null){
+                   alertSuccess.$promise.then(alertSuccess.hide);
+                }
+                alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container_option_for_users', duration: 3});
+                alertSuccess.$promise.then(alertSuccess.show);
+            }
             var vm = this;
             var deleteSelfFromAdmin = false;
             vm.userEmail = '';
@@ -870,18 +1030,19 @@
             vm.selfAccept = 0;
             vm.grSelfId = 0;
 
-            vm.gridOptions_userOptions = { enableFiltering: true };
-            vm.gridOptions_userOptions.columnDefs = [
-                { name: 'id', displayName: 'Id', enableCellEdit: false, width: '5%', enableFiltering: false },
-                { name: 'title', displayName: 'Title', width: '10%', enableCellEdit: false },
-                { name: 'description', displayName: 'Description' , width: '30%', enableFiltering: false, enableCellEdit: false },
-                { name: 'accept', displayName: 'Accept' , width: '5%', enableFiltering: false, enableCellEdit: false,
-                    cellTemplate: '<spantoggle  change-action="EventChangeUser" change-accept="{{row.entity.accept}}" change-id="{{row.entity.id}}"/>'}
-            ];
+            vm.gridOptions_userOptions = { enableFiltering: true }; 
+            TableTranslate.query({phrase: ['id', 'title', 'description', 'accept']}, function(answer){
+                vm.gridOptions_userOptions.columnDefs = [
+                    { name: 'id', displayName: answer[0]['id'], enableCellEdit: false, width: '5%', enableFiltering: false },
+                    { name: 'title', displayName: answer[0]['title'], width: '10%', enableCellEdit: false },
+                    { name: 'description', displayName: answer[0]['description'], width: '30%', enableFiltering: false, enableCellEdit: false },
+                    { name: 'accept', displayName: answer[0]['accept'] , width: '5%', enableFiltering: false, enableCellEdit: false,
+                        cellTemplate: '<spantoggle  change-action="EventChangeUser" change-accept="{{row.entity.accept}}" change-id="{{row.entity.id}}"/>'}
+                ];
+            });
 
             //Получение групп, в которых состоит пользователь+++
             UserOptions.query({userId: $routeParams.userId}, function(answer){
-                //console.log(answer);
                 vm.userEmail = answer[0].email;
                 vm.lastName = answer[0].profile.last_name;
                 vm.firstName = answer[0].profile.first_name;
@@ -897,12 +1058,10 @@
                 });
 
                 vm.gridOptions_userOptions.data = answer[2][0];
-                //console.log(answer);
             });
 
             //Включение/исключение пользователя из группы+++
             $scope.$on('EventChangeUser', function (event, id, accept) {
-                alertSuccess.hide();
                 if((id == 1) && (vm.currentAdminId == $routeParams.userId) && (!deleteSelfFromAdmin)){
                    vm.modal.show(); 
                    vm.selfAccept = accept;
@@ -910,25 +1069,27 @@
                    return;
                 };
                 ChangeGroupByUser.query({userId: vm.userId, accept : accept, groupId: id}, function(answer){
-                    //console.log(answer);
                     if(answer[0]){
                         angular.forEach(vm.gridOptions_userOptions.data, function(group) {    //Проверяем, существует ли право с таким именем
                             if(group.id == id){
                                 if(accept){
                                     group.accept = 0;
-                                    alertSuccess = $alert({title: vm.remove_user_from_group, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option_for_users', duration: 3});
+                                    showSuccessAlert(vm.remove_user_from_group);
                                 }
                                 else {
                                     group.accept = 1;
-                                    alertSuccess = $alert({title: vm.add_user_to_group, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_option_for_users', duration: 3});
+                                    showSuccessAlert(vm.add_user_to_group);
                                 }
                             }
                         });
+                        if(deleteSelfFromAdmin){
+                            window.location.href = '/';
+                        }
+                    } else {
+                        showErrorAlert(answer[1]);
                     }
                 });
-                if(deleteSelfFromAdmin){
-                    window.location.href = '/';
-                }
+                
             });
             $rootScope.$on('cancelDeleteGroup', function(){
                 vm.modal.hide();
@@ -940,10 +1101,29 @@
             });
     };
 
-    function ResourcesCtrl($scope, AddResource, AllResource, DeleteResource, $alert, $modal, $rootScope) {
-
-        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
-        
+    function ResourcesCtrl($scope, AddResource, AllResource, DeleteResource, $alert, $modal, $rootScope, EditResource, GetSearchResources, TableTranslate) {
+        var alertError;
+        var alertSuccess;
+        function showErrorAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+                alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertError = $alert({title: alertMessage, placement: 'top-right', type: 'danger', container: '#alerts-container'});
+            alertError.$promise.then(alertError.show);
+        }
+        function showSuccessAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+               alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container', duration: 3});
+            alertSuccess.$promise.then(alertSuccess.show);
+        }
         var vm = this;
         vm.gridOptions_resourcesGrid = [];
         vm.modal = {};
@@ -951,6 +1131,30 @@
         vm.add_resource_message = '';
         vm.deleteResource = deleteResource;
         vm.remove_resource_message = '';
+        vm.direction = 'asc';
+        vm.totalPage = 0;
+        vm.currentPage = 1;
+        vm.limit = 5;
+        vm.offset = 0;
+        vm.unavailablePrev = false;
+        vm.unavailableNext = false;
+        vm.prevPage = prevPage;
+        vm.nextPage = nextPage;
+        vm.action = 0;
+        vm.search = search;
+        vm.countResources = 0;
+        vm.reset = reset;
+        vm.empty_field = '';
+        vm.success_changed_message = '';
+        vm.select_file = '';
+        vm.copy_url = '';
+        vm.searchText2 = '';
+        vm.src2 = '';
+        /*
+         * action - режим навигации
+         * 0 - обыная навигация или навигация с упорядочиванием
+         * 1 - поиск или поиск с упорядочиванием
+         */
         
         vm.resource = {
             title: '',
@@ -958,33 +1162,34 @@
         };
 
         vm.resources = [];
-
-
-
-        function getAllResources() {
-            vm.resources = AllResource.query(function(res){
-                vm.gridOptions_resourcesGrid.data = res;
-            });
-        };
-        getAllResources();
-
-        vm.gridOptions_resourcesGrid = { enableFiltering: true, rowHeight: 110 };
-
-        vm.gridOptions_resourcesGrid.columnDefs = [
-            { name: 'title', displayName: 'Title', width: '2%', enableCellEdit: false },
-            { name: 'url', displayName: 'Url' , width: '15%', enableFiltering: false, enableCellEdit: false, enableSorting: false },
-            { name: 'view', displayName: 'View' , width: '15%', enableCellEdit: false, enableFiltering: false, enableSorting: false, 
-                cellTemplate: '<div class="resourcePadding"><img ng-src="{{row.entity.url}}"></div>' },
-            { name: 'action', displayName: 'Action' , width: '5%', enableCellEdit: false, enableFiltering: false, enableSorting: false, 
-                cellTemplate: '<button class="btn" ng-click="$emit(\'EventForDropResource\', row.entity.id)" style="margin-left: 25%; margin-top: 20%">Delete</button>'}
-        ];
+        vm.gridOptions_resourcesGrid = { enableFiltering: false, rowHeight: 110 };
+        TableTranslate.query({phrase: ['id', 'title', 'url', 'view', 'action']}, function(answer){
+            vm.gridOptions_resourcesGrid.columnDefs = [
+                { name: 'id', visible: false},
+                { name: 'title', displayName: answer[0]['title'], width: '20%', enableCellEdit: true, enableSorting: true },
+                { name: 'url', displayName: answer[0]['url'], width: '30%', enableCellEdit: false, enableSorting: false,
+                    cellTemplate: '<div style="position: relative"><p>{{row.entity.url.length > 50 ? row.entity.url.substr(0, 45) + "..." : row.entity.url}}</p>\n\
+                        <a clip-copy="row.entity.url" ng-click="$emit(\'EventForCopyUrl\')" class="fa fa-files-o" style="margin-left: 90%; position: absolute; \n\
+                        margin-top: -6%"></a></div>'
+                },
+                { name: 'view', displayName: answer[0]['view'], width: '15%', enableCellEdit: false, enableSorting: false, 
+                    cellTemplate: '<div class="resourcePadding"><img ng-src="{{row.entity.url}}"></div>' },
+                { name: 'action', displayName: answer[0]['action'], width: '1%', enableCellEdit: false, enableSorting: false, 
+                    cellTemplate: '<span class="fa fa-close" style="cursor: pointer; margin: 40%" ng-click="$emit(\'EventForDropResource\', row.entity.id)" style="margin-left: 25%; margin-top: 15%"></span>'}
+            ];
+        });
+        getResources();
 
         var removeResourceId = null;
         vm.modal = $modal({
             show: false,
             contentTemplate: 'ConfirmDelete.html'
         });
-
+        
+        $scope.$on('EventForCopyUrl', function (event) {
+            showSuccessAlert(vm.copy_url);
+        });
+        
         $scope.$on('EventForDropResource', function (event, id) {
             removeResourceId = id;
             vm.modal.show();
@@ -992,43 +1197,64 @@
 
         function add(resource) {
             if(resource.file === '') {
-                $alert({title: 'Please select a file', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
+                showErrorAlert(vm.select_file);
             } else {
-                AddResource.query({
-                    title: resource.title,
-                    file: resource.file
-                }, function(res) {
-                    if(res[0] === true) {
-                        vm.resources.push(res[1]);
-                        $alert({title: vm.add_resource_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
-
+                AddResource.query({title: resource.title, file: resource.file}, function(answer) {
+                    if(answer[0]) {
+                        showSuccessAlert(vm.add_resource_message);
                         vm.resource = {
                             title: '',
                             file: ''
                         };
                         angular.element(document.querySelector('#fileInput')).val(null);
+                        vm.countResources++;
+                        if((vm.currentPage < vm.totalPage) && (vm.limit * vm.totalPage >= vm.countResources)){
+                            vm.offset = vm.limit * vm.totalPage - vm.limit;
+                            vm.currentPage = vm.totalPage;
+                            if(!vm.action) {    //Обычная навигация
+                                getResources();
+                            } else {    //С поиском
+                                getSearchResources();
+                            }
+                        } else if(((vm.currentPage < vm.totalPage) || (vm.currentPage == vm.totalPage)) && (vm.limit * vm.totalPage < vm.countResources)){
+                            vm.offset = vm.limit * vm.totalPage;
+                            vm.currentPage = vm.totalPage + 1;
+                            if(!vm.action) {    //Обычная навигация
+                                getResources();
+                            } else {    //С поиском
+                                getSearchResources();
+                            }
+                        }
+                        else {
+                            vm.gridOptions_resourcesGrid.data.push(answer[1]);
+                        }
                     } else {
-                        $alert({title: res[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
+                        showErrorAlert(answer[1]);
                     }
                 });
             }
         };
 
         function deleteResource(id) {
-            DeleteResource.query({id: id}, function (res) {
+            DeleteResource.query({id: id, direction: vm.direction, offset: vm.offset, action: vm.action, limit: vm.limit, phrase: vm.searchText, src: vm.src}, function (answer) {
                 vm.modal.hide();
-                if(res[0] === true) {
-                    var index = 0;
-                    for(var i = 0; i < vm.resources.length; i++) {
-                        if(vm.resources[i].id == id) {
-                            index = i;
-                            break;
+                if(answer[0]) {
+                    vm.countResources = answer[0][2][1];
+                    var arr = [];
+                    angular.forEach(vm.gridOptions_resourcesGrid.data, function(elem){
+                        if(elem.id != id){
+                            arr.push(elem);
                         }
+                    });
+                    if(answer[0][2][0][0] != undefined){
+                        arr.push(answer[0][2][0][0]);
                     }
-                    vm.resources.splice(index, 1);
-                    $alert({title: vm.remove_resource_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                    vm.gridOptions_resourcesGrid.data = [];
+                    vm.gridOptions_resourcesGrid.data = arr;
+                    checkNavBtnAndCountTotalPage();
+                    showSuccessAlert(vm.remove_resource_message);
                 } else {
-                    $alert({title: res[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container', duration: 3});
+                    showErrorAlert(answer[1]);
                 }
             });
         };
@@ -1049,15 +1275,144 @@
         });
 
         $rootScope.$on('okDeleteResource', function(){
-            alertSuccess.hide();
             vm.deleteResource(removeResourceId);
         });
+        
+        function getResources(){
+            vm.resources = AllResource.query({limit: vm.limit, offset: vm.offset, direction: vm.direction}, function(answer){
+                vm.gridOptions_resourcesGrid.data = [];
+                angular.forEach(answer[0], function(resource){
+                    vm.gridOptions_resourcesGrid.data.push(resource);
+                });
+                vm.countResources = answer[1];
+                checkNavBtnAndCountTotalPage();
+            });
+        }
+        
+        function checkNavBtnAndCountTotalPage(){
+            vm.totalPage = Math.ceil(vm.countResources/vm.limit);
+            vm.unavailablePrev = false;
+            vm.unavailableNext = false;
+            if(vm.currentPage == 1){
+                vm.unavailablePrev = true;
+            }
+            
+            if(vm.currentPage == vm.totalPage){
+                vm.unavailableNext = true;
+            }
+        }
+        
+        function prevPage(){
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            vm.offset -= vm.limit;
+            vm.currentPage--;
+            if(!vm.action){
+                getResources();
+            } else {
+                getSearchResources();
+            }
+        }
+        
+        function nextPage(){
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            vm.offset += vm.limit;
+            vm.currentPage++;
+            if(!vm.action){
+                getResources();
+            } else {
+                getSearchResources();
+            }
+        }
+        
+        
+        vm.gridOptions_resourcesGrid.onRegisterApi = function(gridApi){
+            //Редактирование
+            gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue){
+                if(newValue.trim() != oldValue.trim()){
+                    if(newValue.trim() === ''){
+                        showErrorAlert(vm.empty_field);
+                        angular.forEach(vm.gridOptions_resourcesGrid.data, function(resource) {
+                            if (resource.id === rowEntity.id) 
+                                resource.title = oldValue;
+                        });
+                    } else {
+                        EditResource.query({id: rowEntity.id, title: newValue}, function(answer){
+                            if(answer[0]){
+                                showSuccessAlert(vm.success_changed_message);
+                            } else {
+                                showErrorAlert(answer[1]);
+                                angular.forEach(vm.gridOptions_resourcesGrid.data, function(resource) {
+                                    if (resource.id === rowEntity.id) 
+                                        resource.title = oldValue;
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+
+            //Сортировка
+            gridApi.core.on.sortChanged($scope, function(arg1, arg2) {
+                if(arg2.length !== 0){
+                    vm.unavailablePrev = true;
+                    vm.unavailableNext = true;
+                    vm.direction = arg2[0].sort.direction;;
+                    vm.currentPage = 1;
+                    vm.offset = 0;
+                    if(!vm.action){    //Обычная сортировка
+                        getResources();                    
+                    } else {    //Сортировка с поиском
+                        getSearchResources();
+                    }
+                }
+            });                       
+        };
+        
+        function search(){
+            vm.direction = 'asc';
+            vm.offset = 0;
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            vm.currentPage = 1;
+            vm.action = 1;
+            vm.searchText2 = vm.searchText;
+            vm.src2 = vm.src;
+            getSearchResources();
+        }
+        
+        function getSearchResources(){
+            GetSearchResources.query({phrase: vm.searchText2, src: vm.src2, direction: vm.direction, limit: vm.limit, offset: vm.offset}, function(answer){
+                vm.gridOptions_resourcesGrid.data = [];
+                angular.forEach(answer[0], function(resource){
+                    vm.gridOptions_resourcesGrid.data.push(resource);
+                });
+                vm.countResources = answer[1];
+                checkNavBtnAndCountTotalPage();
+            });
+        }
+        
+        function reset(){
+            vm.action = 0;
+            vm.currentPage = 1;
+            vm.offset = 0;
+            vm.direction = 'asc';
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            getResources();
+        }
     };  
 
-    function PagesCtrl ($scope, $alert, $modal, AddPage, Status, Pages, GetPage, DeletePage, SavePage, $window, $location, $rootScope) {
-
-        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container_for_pages'});
-        
+    function PagesCtrl ($scope, $alert, $modal, AddPage, Status, Pages, GetPage, DeletePage, SavePage, $window, $location, $rootScope, TableTranslate) {
+        var alertSuccess;
+        function showSuccessAlert(alertMessage){
+            if(alertSuccess != null){
+               alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container_for_pages', duration: 3});
+            alertSuccess.$promise.then(alertSuccess.show);
+        }
         var vm = this;
         vm.gridOptions_pagesGrid = '';
         vm.modal = '';
@@ -1072,19 +1427,20 @@
         vm.createPage = createPage;
 
         vm.gridOptions_pagesGrid = { enableFiltering: true, rowHeight: 65 };
-
-        vm.gridOptions_pagesGrid.columnDefs = [
-            { name: 'title', displayName: 'Title', width: '10%', enableCellEdit: false },
-            { name: 'body', displayName: 'Short content' , width: '30%', enableFiltering: false, enableCellEdit: false },
-            { name: 'url', displayName: 'Url' , width: '5%', enableCellEdit: false},
-            { name: 'status', displayName: 'Status' , width: '5%', enableFiltering: false, enableCellEdit: false,
-                cellTemplate: '<p ng-class="{\'btn-success\': row.entity.status==\'Public\', \'btn-info\': row.entity.status==\'Private\', \n\
-                    \'btn-warning\': row.entity.status==\'Draw\'}" class="form-control btn" style="width: 50%; margin-left: 25%; margin-top: 10%">{{row.entity.status}}</p>'},
-            { name: 'actions', displayName: 'Actions' , width: '5%', enableFiltering: false, enableCellEdit: false,
-                cellTemplate: '<p ng-click="$emit(\'EventForEditPage\', row.entity.id)" class="actionCol" style="margin-left: 30%">Edit</p>\n\
-                    <p ng-click="$emit(\'EventForDropPage\', row.entity.id)" class="actionCol" style="margin-left: 25%">Delete</p>\n\
-                    <p ng-click="$emit(\'EventForShowPage\', row.entity.url)" class="actionCol" style="margin-left: 28%">Show</p>'
-        }];
+        TableTranslate.query({phrase: ['title', 'body', 'url', 'status', 'actions']}, function(answer){
+            vm.gridOptions_pagesGrid.columnDefs = [
+                { name: 'title', displayName: answer[0]['title'], width: '10%', enableCellEdit: false },
+                { name: 'body', displayName: answer[0]['body'], width: '33%', enableFiltering: false, enableCellEdit: false },
+                { name: 'url', displayName: answer[0]['url'], width: '5%', enableCellEdit: false},
+                { name: 'status', displayName: answer[0]['status'], width: '5%', enableFiltering: false, enableCellEdit: false,
+                    cellTemplate: '<p ng-class="{\'btn-success\': row.entity.status==\'Public\', \'btn-info\': row.entity.status==\'Private\', \n\
+                        \'btn-warning\': row.entity.status==\'Draw\'}" class="form-control btn" style="width: 50%; margin-left: 25%; margin-top: 10%">{{row.entity.status}}</p>'},
+                { name: 'actions', displayName: answer[0]['actions'], width: '2%', enableFiltering: false, enableCellEdit: false,
+                    cellTemplate: '<p ng-click="$emit(\'EventForEditPage\', row.entity.id)" class="actionCol fa fa-edit"></p><br/>\n\
+                        <p ng-click="$emit(\'EventForDropPage\', row.entity.id)" class="actionCol fa fa-close"></p><br/>\n\
+                        <p ng-click="$emit(\'EventForShowPage\', row.entity.url)" class="actionCol fa fa-file-o"></p>'
+            }];
+        });
 
        //+++
        vm.modal = $modal({
@@ -1137,7 +1493,6 @@
 
 
         function save(page, valid) {
-            alertSuccess.hide();
             if(valid)
             {
                 vm.modalEditPage.hide();
@@ -1145,7 +1500,7 @@
                 if(page.id === undefined) {
                     AddPage.query({title: page.title, body: page.body, status: page.status_id, url: page.url}, function(res) {
                         arr.push({id: res[0], title: page.title, body: page.body, status: $rootScope.statuses[page.status_id - 1].title, url: page.url});
-                        alertSuccess = $alert({title: vm.add_page_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_for_pages', duration: 3});
+                        showSuccessAlert(vm.add_page_message);
                     });
                 } else {
                     SavePage.query({id: page.id, title: page.title, body: page.body, status: page.status_id, url: page.url}, function() {
@@ -1156,7 +1511,7 @@
                             }
                         }
                     });
-                    alertSuccess = $alert({title: vm.edit_page_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_for_pages', duration: 3});
+                    showSuccessAlert(vm.edit_page_message);
                 }
             }
         };
@@ -1177,10 +1532,9 @@
         };  
 
         $rootScope.$on('modal-ok', function(){
-            alertSuccess.hide();
             deletePage(vm.delId);
             vm.modal.hide();
-            alertSuccess = $alert({title: vm.remove_page_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container_for_pages', duration: 3});
+            showSuccessAlert(vm.remove_page_message);
         });
 
         $rootScope.$on('modal-cancel', function(){
@@ -1207,9 +1561,29 @@
         };
      };
      
-    function CategoriesOfArticlesCtrl(GetCategoryOfArticle, $alert, $scope, $modal, $rootScope, RemoveCategoryOfArticle, AddCategoryOfArticle, EditCategoryOfArticle){
-        var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
-        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
+    function CategoriesOfArticlesCtrl(GetCategoryOfArticle, $alert, $scope, $modal, $rootScope, RemoveCategoryOfArticle, AddCategoryOfArticle, EditCategoryOfArticle, TableTranslate){
+        var alertError;
+        var alertSuccess;
+        function showErrorAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+                alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertError = $alert({title: alertMessage, placement: 'top-right', type: 'danger', container: '#alerts-container'});
+            alertError.$promise.then(alertError.show);
+        }
+        function showSuccessAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+               alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container', duration: 3});
+            alertSuccess.$promise.then(alertSuccess.show);
+        }
         var vm = this;  
         vm.gridOptionsOfCategories = {};
         vm.categoryTitle = '';
@@ -1219,16 +1593,19 @@
         vm.add_category_message = '';
         vm.field_name_required = '';
         vm.update_category_message = '';
+        vm.defaultCategoryId = 0;
          
         vm.gridOptions_categoriesOptions = { enableFiltering: true, enableSorting: true, enableCellEdit: true};
-        vm.gridOptions_categoriesOptions.columnDefs = [
-            { name: 'id', displayName: 'Id', width: '10%', enableCellEdit: false,  enableSorting: false, enableFiltering: false },
-            { name: 'title', displayName: 'Title', width: '50%', enableCellEdit: true,  enableSorting: true, enableFiltering: true},
-            { name: 'articles', displayName: 'Articles' , width: '20%', enableCellEdit: false,  enableSorting: false, enableFiltering: false,
-                    cellTemplate: '<spanedit edit-action="EventForRedirectToArticleOfCategory"  edit-id="{{row.entity.id}}"/>'},
-            { name: 'remove', displayName: 'Remove' , width: '20%', enableCellEdit: false,  enableSorting: false, enableFiltering: false,
-                cellTemplate: '<spanremove remove-action="EventForDropCategory" remove-id="{{row.entity.id}}" ng-hide="{{row.entity.id == 1}}"/>'}
-        ];
+        TableTranslate.query({phrase: ['id', 'title', 'articles', 'remove']}, function(answer){
+            vm.gridOptions_categoriesOptions.columnDefs = [
+                { name: 'id', displayName: answer[0]['id'], width: '10%', enableCellEdit: false,  enableSorting: false, enableFiltering: false },
+                { name: 'title', displayName: answer[0]['title'], width: '50%', enableCellEdit: true,  enableSorting: true, enableFiltering: true},
+                { name: 'articles', displayName: answer[0]['articles'], width: '20%', enableCellEdit: false,  enableSorting: false, enableFiltering: false,
+                        cellTemplate: '<spanedit edit-action="EventForRedirectToArticleOfCategory"  edit-id="{{row.entity.id}}"/>'},
+                { name: 'remove', displayName: answer[0]['remove'], width: '20%', enableCellEdit: false,  enableSorting: false, enableFiltering: false,
+                    cellTemplate: '<spanremove remove-action="EventForDropCategory" remove-id="{{row.entity.id}}"/>'}
+            ];
+        });
         
         GetCategoryOfArticle.query({}, function(answer){
             var arr = [];
@@ -1245,10 +1622,10 @@
         
         //Удаление 
         $scope.$on('EventForDropCategory', function (event, id) {
-            alertError.hide();
-            alertSuccess.hide();
-            vm.removeCategoryId = Number(id);
-            vm.modal.show();
+            if(id != vm.defaultCategoryId){
+                vm.removeCategoryId = Number(id);
+                vm.modal.show();
+            }
         });
         
         $rootScope.$on('cancelDeleteCategory', function(){
@@ -1256,14 +1633,13 @@
         });
 
         $rootScope.$on('okDeleteCategory', function(){
-           alertSuccess.hide();
            removeCategory(vm.removeCategoryId);
         });
         
         function removeCategory(removeId){
             RemoveCategoryOfArticle.query({categoryId: removeId}, function(answer){
                 vm.modal.hide();
-                alertSuccess = $alert({title: vm.remove_category_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                showSuccessAlert(vm.remove_category_message);
                 var i = 0;
                 angular.forEach(vm.gridOptions_categoriesOptions.data, function(category) {
                     if(category.id == removeId){
@@ -1275,13 +1651,11 @@
         }
         
         function addCategory(){
-            alertError.hide();
-            alertSuccess.hide();
             AddCategoryOfArticle.query({title: vm.categoryTitle}, function(answer){
                 if(!answer[0]){
-                    alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
-                } else {      
-                    alertSuccess = $alert({title: vm.add_category_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                    showErrorAlert(answer[1]);
+                } else { 
+                    showSuccessAlert(vm.add_category_message);
                     var newCategory = {
                         id: answer[3],
                         title: vm.categoryTitle
@@ -1297,11 +1671,10 @@
         vm.gridOptions_categoriesOptions.onRegisterApi = function(gridApi){
 
             gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue){
-                alertError.hide();
-                alertSuccess.hide();
-                if(newValue.trim() != oldValue.trim()){
+
+                if(newValue.trim() !== oldValue.trim()){
                     if(newValue.trim() === ''){
-                        alertError = $alert({title: vm.field_name_required, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                        showErrorAlert(vm.field_name_required);
                         angular.forEach(vm.gridOptions_categoriesOptions.data, function(category) {
                             if (category.id === rowEntity.id) 
                                 category.title = oldValue;
@@ -1309,13 +1682,13 @@
                     } else{
                         EditCategoryOfArticle.query({title: newValue, id: rowEntity.id}, function(answer){
                             if(!answer[0]){
-                                alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                                showErrorAlert(answer[1]);
                                 angular.forEach(vm.gridOptions_categoriesOptions.data, function(category) {
                                     if (category.id === rowEntity.id) 
                                         category.title = oldValue;
                                 });
                             } else{
-                                alertSuccess = $alert({title: vm.update_category_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                                showSuccessAlert(vm.update_category_message);
                             }
                         });
                     }
@@ -1324,20 +1697,38 @@
         };
         
         $scope.$on('EventForRedirectToArticleOfCategory', function (event, id) {
-            alertError.hide();
-            alertSuccess.hide();
             window.location = '#/categories_of_articles/' + id;
         });
      }
      
-    function ArticleCategoryCtrl(GetArticles, $routeParams, $scope, $alert, $window, $location, $modal, $rootScope, EditArticle, SearchArticles, RemoveArticle){
-        var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container'});
-        var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container'});
+    function ArticleCategoryCtrl(GetArticles, $routeParams, $scope, $alert, $window, $location, $modal, $rootScope, EditArticle, SearchArticles, RemoveArticle, TableTranslate){
+        var alertError;
+        var alertSuccess;
+        function showErrorAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+                alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertError = $alert({title: alertMessage, placement: 'top-right', type: 'danger', container: '#alerts-container'});
+            alertError.$promise.then(alertError.show);
+        }
+        function showSuccessAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+               alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container', duration: 3});
+            alertSuccess.$promise.then(alertSuccess.show);
+        }
         var vm = this;
         vm.limit = 9;
         vm.offset = 0;
-        var direction = 'asc';
-        var field = 'id';
+        vm.direction = 'asc';
+        vm.field = 'id';
         vm.categoryTitle = '';
         vm.unavailablePrev = true;
         vm.unavailableNext = true;
@@ -1368,28 +1759,26 @@
         });
         
         vm.gridOptions_articleOfCategoryOptions = { enableSorting: true, enableCellEdit: true};
-        vm.gridOptions_articleOfCategoryOptions.columnDefs = [
-            { name: 'id', displayName: 'Id', width: '5%', enableCellEdit: false,  enableSorting: true},
-            { name: 'category', displayName: 'Category', width: '15%', enableCellEdit: true,  enableSorting: false, visible: ($routeParams.categoryId === undefined) },
-            { name: 'title', displayName: 'Title', width: '20%', enableCellEdit: true,  enableSorting: true},
-            { name: 'link', displayName: 'Link', width: '5%', enableCellEdit: true,  enableSorting: false,
-                cellTemplate: '<spanedit edit-action="EventForRedirectToShowArticle"  edit-id="{{row.entity.id}}"/>'},
-            { name: 'user_email', displayName: 'Email of the author', width: '20%', enableCellEdit: false,  enableSorting: false},
-            { name: 'remove', displayName: 'Remove' , width: '5%', enableCellEdit: false,  enableSorting: false,
-                cellTemplate: '<spanremove remove-action="EventForDropArticle" remove-id="{{row.entity.id}}"/>'}
-        ];
-        getArticles(vm.limit, vm.offset);
+        TableTranslate.query({phrase: ['id', 'category', 'title', 'link', 'user_email', 'remove']}, function(answer){
+            vm.gridOptions_articleOfCategoryOptions.columnDefs = [
+                { name: 'id', displayName: answer[0]['id'], width: '5%', enableCellEdit: false,  enableSorting: true},
+                { name: 'category', displayName: answer[0]['category'], width: '15%', enableCellEdit: true,  enableSorting: false, visible: ($routeParams.categoryId === undefined) },
+                { name: 'title', displayName: answer[0]['title'], width: '20%', enableCellEdit: true,  enableSorting: true},
+                { name: 'link', displayName: answer[0]['link'], width: '5%', enableCellEdit: true,  enableSorting: false,
+                    cellTemplate: '<spanedit edit-action="EventForRedirectToShowArticle"  edit-id="{{row.entity.id}}"/>'},
+                { name: 'user_email', displayName: answer[0]['user_email'], width: '20%', enableCellEdit: false,  enableSorting: false},
+                { name: 'remove', displayName: answer[0]['remove'], width: '5%', enableCellEdit: false,  enableSorting: false,
+                    cellTemplate: '<spanremove remove-action="EventForDropArticle" remove-id="{{row.entity.id}}"/>'}
+            ];
+        });
+        getArticles();
         
         $scope.$on('EventForRedirectToShowArticle', function (event, id) {
-            alertError.hide();
-            alertSuccess.hide();
             $window.open('http://' + $location.host() + ':' + $location.port() + '/articles#/' + id);
         });
         
         //Удаление 
         $scope.$on('EventForDropArticle', function (event, id) {
-            alertError.hide();
-            alertSuccess.hide();
             vm.removeArticleId = Number(id);
             vm.modal.show();
         });
@@ -1399,98 +1788,61 @@
         });
 
         $rootScope.$on('okDeleteArticle', function(){
-           alertSuccess.hide();
            vm.modal.hide();
            removeArticle(vm.removeArticleId);
         });
         
         function removeArticle(removeId){
-            alertSuccess = $alert({title: vm.article_removed_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
-            RemoveArticle.query({id: removeId}, function(answer){
-                var i = 0;
-                angular.forEach(vm.gridOptions_articleOfCategoryOptions.data, function(article) {
-                    if(article.id == removeId){
-                        vm.gridOptions_articleOfCategoryOptions.data.splice(i, 1);
-                    }
-                  i++;
-                });
-                if(!vm.action){     //Обыная навигация и сортировка
-                    GetArticles.query({categoryId: $routeParams.categoryId, lim: 1, off: (vm.offset + 8), dir: direction, fiel: field}, function(answer){
-                    if(answer[2] != undefined){
-                        vm.categoryTitle = answer[2].title;
-                    }
-                    vm.countArticles = answer[1];
-                    var arr = [];
-                    angular.forEach(answer[0], function(article) {
-                        var art = {};
-                        if($routeParams.categoryId === undefined){
-                            article.category = article.category.title;
-                            article.user_email = article.user.email;
-                        } else {
-                            article.user_email = article.user.email;
-                        }
+            RemoveArticle.query({id: removeId, direction: vm.direction, offset: vm.offset, action: vm.action, limit: vm.limit, phrase: vm.searchPhrase2, src: vm.src2, category: $routeParams.categoryId, field: vm.field}, function(answer){
+                var arr = [];
+                angular.forEach(vm.gridOptions_articleOfCategoryOptions.data, function(article){
+                    if(article.id != removeId)
                         arr.push(article);
-                    });
-                vm.gridOptions_articleOfCategoryOptions.data = vm.gridOptions_articleOfCategoryOptions.data.concat(arr);
-                checkNavBtnAndCheckCountPage();
-            });
-                } else if (vm.action === 1){    //Поиск
-                    SearchArticles.query({categoryId: $routeParams.categoryId, lim: 1, off: (vm.offset + 8), dir: direction, fiel: field, phrase: vm.searchPhrase2, src: vm.src2}, function(answer){
-                        vm.countArticles = answer[1];
-                        var arr = [];
-                        angular.forEach(answer[0], function(article) {
-                            var art = {};
-                            if($routeParams.categoryId === undefined){
-                                article.category = article.category.title;
-                                article.user_email = article.user.email;
-                            } else {
-                                article.user_email = article.user.email;
-                            }
-                            arr.push(article);
-                        });
-                        vm.gridOptions_articleOfCategoryOptions.data = vm.gridOptions_articleOfCategoryOptions.data.concat(arr);
-                        checkNavBtnAndCheckCountPage();
-                    });
+                });
+                vm.gridOptions_articleOfCategoryOptions.data = arr;
+                if(answer[0][0].length != 0){
+                    if($routeParams.categoryId == undefined){
+                        answer[0][0][0].category = answer[0][0][0].category.title;
+                    }
+                    answer[0][0][0].user_email = answer[0][0][0].user == null ? 'deleted' : answer[0][0][0].user.email;
+                    vm.gridOptions_articleOfCategoryOptions.data.push(answer[0][0][0]);
                 }
+                vm.countArticles = answer[0][1];
+                showSuccessAlert(vm.article_removed_message);
+                checkNavBtnAndCheckCountPage();
             });
         }
         
         function checkNavBtnAndCheckCountPage(){
-            //Проверка кнопки "назад"
-            if(vm.currentPage === 1){
-                vm.unavailablePrev = true;
-            } else {
-                vm.unavailablePrev = false;
-            }
-            //Проверка кнопки "вперед"
-            if((vm.offset + vm.limit) >= vm.countArticles){
-                vm.unavailableNext = true;
-            } else {
-                vm.unavailableNext = false;
-            }
-            //Подсчет количества страниц
+            vm.unavailablePrev = false;
+            vm.unavailableNext = false;
             vm.totalPage = Math.ceil(vm.countArticles / vm.limit);
-            //vm.currentPage = Math.ceil(vm.offset / vm.limit) + 1;
+            if(vm.currentPage == 1){
+                vm.unavailablePrev = true;
+            }
+            
+            if(vm.currentPage == vm.totalPage){
+                vm.unavailableNext = true;
+            }
         }
         
-        function getArticles($lim, $off){
-            GetArticles.query({categoryId: $routeParams.categoryId, lim: $lim, off: $off, dir: direction, fiel: field}, function(answer){
+        function getArticles(){
+            GetArticles.query({categoryId: $routeParams.categoryId, lim: vm.limit, off: vm.offset, dir: vm.direction, fiel: vm.field}, function(answer){
                 if(answer[2] != undefined){
                     vm.categoryTitle = answer[2].title;
                 }
-                vm.countArticles = answer[1];
-                var arr = [];
+                
+                vm.gridOptions_articleOfCategoryOptions.data = [];
                 angular.forEach(answer[0], function(article) {
-                    var art = {};
                     if($routeParams.categoryId === undefined){
                         article.category = article.category.title;
-                        article.user_email = article.user.email;
+                        article.user_email = article.user == null ? 'deleted' : article.user.email;
                     } else {
-                        article.user_email = article.user.email;
+                        article.user_email = article.user == null ? 'deleted' : article.user.email;
                     }
-                    arr.push(article);
+                    vm.gridOptions_articleOfCategoryOptions.data.push(article);
                 });
-                vm.gridOptions_articleOfCategoryOptions.data = arr;
+                vm.countArticles = answer[1];
                 checkNavBtnAndCheckCountPage();
             });
         }
@@ -1500,11 +1852,9 @@
 
             //Редактирование
             gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue){
-                alertError.hide();
-                alertSuccess.hide();
-                if(newValue.trim() != oldValue.trim()){
+                if(newValue.trim() !== oldValue.trim()){
                     if(newValue.trim() === '') {
-                        alertError = $alert({title: vm.required_field, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                        showErrorAlert(vm.required_field);
                         angular.forEach(vm.gridOptions_articleOfCategoryOptions.data, function(article) {
                             if (article.id === rowEntity.id){
                                 if(colDef.name === 'category'){
@@ -1516,9 +1866,8 @@
                         });
                     } else {
                         EditArticle.query({id: rowEntity.id, title: newValue, field:  colDef.name}, function(answer){
-                            console.log();
                             if(!answer[0]){
-                                alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container'});
+                                showErrorAlert(answer[1]);
                                 angular.forEach(vm.gridOptions_articleOfCategoryOptions.data, function(article) {
                                 if (article.id === rowEntity.id){
                                         if(colDef.name === 'category'){
@@ -1529,9 +1878,8 @@
                                     } 
                                 });
                             } else {
-                                alertSuccess = $alert({title: vm.article_change_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container', duration: 3});
+                                showSuccessAlert(vm.article_change_message);
                             }
-                            
                         });
                     }
                 }
@@ -1539,22 +1887,20 @@
             
             //Сортировка
             gridApi.core.on.sortChanged($scope, function(arg1, arg2) {
-                vm.currentPage = 1;
-                //Сортировка с поиском
-                if(!vm.action){     //Обычная сортировка
-                    if(arg2[0] != undefined){
-                        vm.offset = 0;
-                        direction = arg2[0].sort.direction;
-                        field = arg2[0].name;
-                        getArticles(vm.limit, vm.offset);
-                    }
-                } else if(vm.action === 1){
-                    console.log('Search with sorting');
-                    if(arg2[0] != undefined){
-                        vm.offset = 0;
-                        direction = arg2[0].sort.direction;
-                        field = arg2[0].name;
-                        searchArticles(vm.limit, vm.offset);
+
+                if(arg2.length !== 0){
+                    vm.unavailablePrev = true;
+                    vm.unavailableNext = true;
+                    vm.currentPage = 1;
+                    vm.direction = arg2[0].sort.direction;
+                    vm.field = arg2[0].name;
+                    vm.offset = 0;
+                    
+                    //Сортировка с поиском
+                    if(!vm.action){     //Обычная сортировка
+                        getArticles();
+                    } else if(vm.action === 1){ //С поиском
+                        searchArticles();
                     }
                 }
             });
@@ -1565,64 +1911,446 @@
             vm.unavailablePrev = true;
             vm.unavailableNext = true;
             vm.offset += vm.limit;
-            if(!vm.action){     //Обыная навигация и сортировка
-                getArticles(vm.limit, vm.offset);
-            } else if (vm.action === 1){    //Поиск
-                searchArticles(vm.limit, vm.offset);
-            }
             vm.currentPage++;
+            if(!vm.action){     //Обыная навигация и сортировка
+                getArticles();
+            } else if (vm.action === 1){    //Поиск
+                searchArticles();
+            }
         }
         
         function prevPage(){
             vm.unavailablePrev = true;
             vm.unavailableNext = true;
             vm.offset -= vm.limit;
-            if(!vm.action){     //Обыная навигация и сортировка
-                getArticles(vm.limit, vm.offset);
-            } else if (vm.action === 1) {   //Поиск
-                searchArticles(vm.limit, vm.offset);
-            }
             vm.currentPage--;
+            if(!vm.action){     //Обыная навигация и сортировка
+                getArticles();
+            } else if (vm.action === 1) {   //Поиск
+                searchArticles();
+            }
         }
         
         function search(){
-            vm.currentPage = 1;
-            direction = 'asc';
-            field = 'id';
+            vm.direction = 'asc';
+            vm.field = 'id';
             vm.offset = 0;
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            vm.currentPage = 1;
             vm.searchPhrase2 = vm.searchPhrase;
             vm.src2 = vm.src;
             vm.action = 1;
-            searchArticles(vm.limit, vm.offset);
+            searchArticles();
         }
         
-        function searchArticles($lim, $off){
-            SearchArticles.query({categoryId: $routeParams.categoryId, lim: $lim, off: $off, dir: direction, fiel: field, phrase: vm.searchPhrase2, src: vm.src2}, function(answer){
-                vm.countArticles = answer[1];
-                var arr = [];
+        function searchArticles(){
+            SearchArticles.query({categoryId: $routeParams.categoryId, lim: vm.limit, off: vm.offset, dir: vm.direction, fiel: vm.field, phrase: vm.searchPhrase2, src: vm.src2}, function(answer){
+                vm.gridOptions_articleOfCategoryOptions.data = [];
                 angular.forEach(answer[0], function(article) {
-                    var art = {};
                     if($routeParams.categoryId === undefined){
                         article.category = article.category.title;
-                        article.user_email = article.user.email;
+                        article.user_email = article.user == null ? 'deleted' : article.user.email;
                     } else {
-                        article.user_email = article.user.email;
+                        article.user_email = article.user == null ? 'deleted' : article.user.email;
                     }
-                    arr.push(article);
+                    vm.gridOptions_articleOfCategoryOptions.data.push(article);
                 });
-                vm.gridOptions_articleOfCategoryOptions.data = arr;
+                vm.countArticles = answer[1];
                 checkNavBtnAndCheckCountPage();
             });
         }
         
         function reset(){
+            vm.action = 0;
             vm.currentPage = 1;
             vm.offset = 0;
-            direction = 'asc';
-            field = 'id';
+            vm.direction = 'asc';
+            vm.field = 'id';
             vm.searchPhrase = '';
-            vm.action = 0;
-            getArticles(vm.limit, vm.offset);
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            getArticles();
+        }
+    }
+    
+    function LanguagesCtrl(GetLanguageFiles, $rootScope, $scope, $alert, EditLanguageFile, TableTranslate){
+        var alertError;
+        var alertSuccess;
+        function showErrorAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+                alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertError = $alert({title: alertMessage, placement: 'top-right', type: 'danger', container: '#alerts-container'});
+            alertError.$promise.then(alertError.show);
+        }
+        function showSuccessAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+               alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container', duration: 3});
+            alertSuccess.$promise.then(alertSuccess.show);
+        }
+        var vm = this;
+        vm.path = '/';
+        vm.isFile = -1;
+        vm.hideLangFiles = false;
+        vm.editFile = '';
+        vm.selectFile = selectFile;
+        vm.required_field = '';
+        vm.file_change = '';
+        
+        vm.gridOptions_gridLanguagesFiles = { enableSorting: false, enableCellEdit: false};
+        vm.gridOptions_gridLanguagesFile = { enableSorting: false, enableCellEdit: true};
+        TableTranslate.query({phrase: ['folder', 'key', 'english', 'russian']}, function(answer){
+            vm.gridOptions_gridLanguagesFiles.columnDefs = [
+                { name: 'folder', displayName: answer[0]['folder'],
+                    cellTemplate: '<p ng-click="$emit(\'selectContent\', row.entity.folder)" style="cursor: pointer">{{row.entity.folder}}</p>'}
+            ];
+            vm.gridOptions_gridLanguagesFile.columnDefs = [
+                {name: 'key', displayName: answer[0]['key'], width: '24%', enableCellEdit: false},
+                {name: 'english', displayName: answer[0]['english']},
+                {name: 'russian', displayName: answer[0]['russian']}
+            ];
+        });
+        
+        getContent(vm.path);
+        $rootScope.$on('selectContent', function(args, content){  
+            if(content == '...'){ 
+                var position = 0;
+                for(var i = 0; i<vm.path.length; i++){
+                    if(vm.path[i] == '/'){
+                        position = i;
+                    }
+                }
+                vm.path = vm.path.slice(0, position);
+            } else {
+                if(content.search('.php') == -1)
+                {
+                    if(vm.path == '/'){
+                        vm.path += content;
+                    }else{
+                        vm.path += '/' + content;
+                    }
+                } else{
+                    vm.editFile = content;
+                    vm.hideLangFiles = true;
+                }
+            }
+            if(vm.path == ''){
+                vm.path = '/';
+            }
+            vm.isFile = content.search('.php');
+            if(vm.isFile == -1 ){
+               getContent(vm.path); 
+            } else {
+                getContent(vm.path + '/' + content);
+            }
+        });
+        
+        function getContent(path){
+            GetLanguageFiles.query({path: path}, function(answer){
+                if(vm.isFile == -1)
+                {
+                    if(vm.path != '\\'){
+                        vm.gridOptions_gridLanguagesFiles.data = [{folder: '...'}];
+                    }
+                    angular.forEach(answer[0], function(content){
+                        if(content != 'validation.php'){
+                            vm.gridOptions_gridLanguagesFiles.data.push({folder: content});
+                        }
+                    });
+                }
+                else{
+                    var arr = [];
+                    angular.forEach(answer[1][0], function(value, key1){
+                        var obj = {
+                          key: key1,
+                          english: value
+                        };
+                        arr.push(obj);
+                    });
+                    var i = 0;
+                    angular.forEach(answer[1][1], function(value){
+                        arr[i].russian = value;
+                        i++;
+                    });
+                    vm.gridOptions_gridLanguagesFile.data = arr;
+                }
+            });
+        }
+        
+        function selectFile(){
+            vm.hideLangFiles = false;
+            vm.gridOptions_gridLanguagesFile.data = [];
+        }
+        
+        vm.gridOptions_gridLanguagesFile.onRegisterApi = function(gridApi){
+            gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue){
+                if(newValue.trim() !== oldValue.trim()){
+                    if(newValue.trim() === '') {
+                        showErrorAlert(vm.required_field);
+                        angular.forEach(vm.gridOptions_gridLanguagesFile.data, function(phrase) {
+                            if (phrase.key === rowEntity.key){
+                                if(colDef.name === 'english'){
+                                    phrase.english = oldValue;
+                                } else {
+                                    phrase.russian = oldValue;
+                                }
+                            } 
+                        });
+                    } else {
+                        EditLanguageFile.query({path: vm.path, file: vm.editFile, language: colDef.name.slice(0, 2), key: rowEntity.key, value: newValue}, function(answer){
+                            if(!answer[0]){
+                                showErrorAlert(answer[1]);
+                            } else {
+                                showSuccessAlert(vm.file_change);
+                            }
+                        });
+                    }
+                }
+            });   
+        };
+    };
+    
+    function SettingsCtrl(GetSections, ChangeSection, $alert, $scope){
+        var alertSuccess;
+        function showSuccessAlert(alertMessage){
+            if(alertSuccess != null){
+               alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container', duration: 3});
+            alertSuccess.$promise.then(alertSuccess.show);
+        }
+        var vm = this;
+        vm.sections = [];
+        vm.toggleSection = toggleSection;
+        vm.section_disable = '';
+        vm.section_enable = '';
+        
+        GetSections.query({}, function(answer){
+           angular.forEach(answer[0], function(elem){
+               var item = {id: elem.id, title: elem.title};
+               if(elem.disable){
+                   item.disable = 0;
+               } else {
+                   item.disable = 1;
+               }
+               vm.sections.push(item);
+               
+           });
+        });
+        
+        function toggleSection($id, $disable){
+            ChangeSection.query({id: $id, disable: $disable}, function(answer){
+                if($disable){
+                    showSuccessAlert(vm.section_disable);
+                } else {
+                    showSuccessAlert(vm.section_enable);
+                }
+            });
+        }
+    }
+    
+    function PersonalizationCtrl($scope){
+        var vm = this;
+        vm.defaultActive = defaultActive;
+        vm.defaultBtnPrimary = defaultBtnPrimary;
+        vm.defaultNavbarInverse = defaultNavbarInverse;
+        vm.defaultSidebar = defaultSidebar;
+        vm.defaultA = defaultA;
+        vm.defaultPageHeader = defaultPageHeader;
+        vm.defaultSubHeader = defaultSubHeader;
+        vm.cookieEnable = false;
+        vm.colors = {
+            activeClass: '',
+            btnPrimary: '',
+            navbarInverse:  '',
+            sidebar: '',
+            a: '',
+            pageHeader: '',
+            subHeader: ''
+        };
+        
+        
+        // Работа с cookie
+        function getCookie(name) {
+          var matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+          ));
+          return matches ? decodeURIComponent(matches[1]) : undefined;
+        }
+
+        function setCookie(name, value, options) {
+            options = options || {};
+
+            var expires = options.expires;
+
+            if (typeof expires == "number" && expires) {
+              var d = new Date();
+              d.setTime(d.getTime() + expires*1000);
+              expires = options.expires = d;
+            }
+            if (expires && expires.toUTCString) { 
+                  options.expires = expires.toUTCString();
+            }
+
+            value = encodeURIComponent(value);
+
+            var updatedCookie = name + "=" + value;
+
+            for(var propName in options) {
+              updatedCookie += "; " + propName;
+              var propValue = options[propName];    
+              if (propValue !== true) { 
+                updatedCookie += "=" + propValue;
+               }
+            }
+
+            document.cookie = updatedCookie;
+        }
+
+        function deleteCookie(name) {
+            var date = new Date(0);
+            document.cookie = name + "=; path=/; expires="+date.toUTCString();
+        }
+        //////
+        
+        if(navigator.cookieEnabled){
+            vm.cookieEnable = true;
+            if(getCookie('active') != undefined){
+                vm.colors.activeClass = getCookie('active');
+            }  
+            if(getCookie('btn-primary') != undefined){
+                vm.colors.btnPrimary = getCookie('btn-primary');
+            } 
+            if(getCookie('navbar-inverse') != undefined){
+                vm.colors.navbarInverse = getCookie('navbar-inverse');
+            } 
+            if(getCookie('sidebar') != undefined){
+                vm.colors.sidebar = getCookie('sidebar');
+            } 
+            if(getCookie('a') != undefined){
+                vm.colors.a = getCookie('a');
+            }
+            if(getCookie('page-header') != undefined){
+                vm.colors.pageHeader = getCookie('page-header');
+            } 
+            if(getCookie('sub-header') != undefined){
+                vm.colors.subHeader = getCookie('sub-header');
+            } 
+        }
+        
+        $scope.$watch('vm.colors.activeClass', changeActive);
+        $scope.$watch('vm.colors.btnPrimary', changeBtnPrimary);
+        $scope.$watch('vm.colors.navbarInverse', changeNavbarInverse);
+        $scope.$watch('vm.colors.sidebar', changeSidebar);
+        $scope.$watch('vm.colors.a', changeA);
+        $scope.$watch('vm.colors.pageHeader', changePageHeader);
+        $scope.$watch('vm.colors.subHeader', changeSubHeader);
+        
+        function changeActive(){   
+            if(vm.colors.activeClass != ''){
+                changeInput('active', 'background-color', 1, vm.colors.activeClass);
+            }
+        }
+        
+        function defaultActive(){
+            vm.colors.activeClass = '';
+            defaultInput('active', 1);  
+        }
+        
+        function changeBtnPrimary(){
+            if(vm.colors.btnPrimary != ''){
+                changeInput('btn-primary', 'background-color', 2, vm.colors.btnPrimary);
+            }
+        }
+        
+        function defaultBtnPrimary(){
+            vm.colors.btnPrimary = '';
+            defaultInput('btn-primary', 2);  
+        }
+        
+        function changeNavbarInverse(){
+            if(vm.colors.navbarInverse != ''){
+                changeInput('navbar-inverse', 'background-color', 3, vm.colors.navbarInverse);
+            }
+        }
+        
+        function defaultNavbarInverse(){
+            vm.colors.navbarInverse = '';
+            defaultInput('navbar-inverse', 3); 
+        }
+        
+        function changeSidebar(){
+            if(vm.colors.sidebar != ''){
+                changeInput('sidebar', 'background-color', 4, vm.colors.sidebar);
+            }
+        }
+        
+        function defaultSidebar(){
+            vm.colors.sidebar = '';
+            defaultInput('sidebar', 4); 
+        }
+        
+        function changeA(){
+            if(vm.colors.a != ''){
+                changeInput('a', 'color', 5, vm.colors.a);
+            }
+        }
+        
+        function defaultA(){
+            vm.colors.a = '';
+            defaultInput('a', 5); 
+        }
+        
+        function changePageHeader(){
+            if(vm.colors.pageHeader != ''){
+                changeInput('page-header', 'color', 6, vm.colors.pageHeader);
+            }
+        }
+        
+        function defaultPageHeader(){
+            vm.colors.pageHeader = '';
+            defaultInput('page-header', 6); 
+        }
+        
+        function changeSubHeader(){
+            if(vm.colors.subHeader != ''){
+                changeInput('sub-header', 'color', 7, vm.colors.subHeader);
+            }
+        }
+        
+        function defaultSubHeader(){
+            vm.colors.subHeader = '';
+            defaultInput('sub-header', 7); 
+        }
+        
+        function changeInput($class, $property, $posttion, $properyValue){
+            var style = document.createElement('style');
+            style.type = 'text/css';
+            if($class == 'active'){
+                style.innerHTML = '.active a {background-color: ' + $properyValue +' !important}';
+            } else if($class == 'a') {
+                style.innerHTML = $class +' {'+ $property + ': ' + $properyValue +' !important}';
+            } else {
+                style.innerHTML = '.' + $class +' {'+ $property + ': ' + $properyValue +' !important}';
+            }   
+            document.head.replaceChild(style, document.head.children[document.head.children.length - $posttion]);
+            setCookie($class, $properyValue, {expires: 21600, path: '/'});
+        }
+        
+        function defaultInput($class, $position){
+            var style = document.createElement('style');
+            style.type = 'text/css';
+            deleteCookie($class);
+            document.head.replaceChild(style, document.head.children[document.head.children.length - $position]);
         }
     }
  })();

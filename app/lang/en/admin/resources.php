@@ -11,5 +11,14 @@ return array(
     'cancel' => 'cancel',
     'add_resource_message' => 'The resource has been successfully added!',
     'remove_resource_message' => 'Resource has been successfully removed!',
-    'delete' => 'Delete'
+    'delete' => 'Delete',
+    'empty_field'   =>  'The field can not be empty!',
+    'success_changed_message'  =>  'Resource has been successfully changed!',
+    'select_file'  =>  'Please select a file',
+    'copy_url'  =>  'Link copied to clipboard!',
+    'search_phrase' =>  'Search phrase',
+    'search' =>  'Search',
+    'reset' =>  'Reset',
+    'previous' =>  'Previous',
+    'next' =>  'Next'
 );

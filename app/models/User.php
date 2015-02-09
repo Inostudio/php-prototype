@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletingTrait;
  */
 class User extends Eloquent implements UserInterface, RemindableInterface {
 
-	use UserTrait, RemindableTrait;
+    use UserTrait, RemindableTrait;
     use FacebookableTrait;
     use SoftDeletingTrait;
 
@@ -53,7 +53,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
     ];
 
     public function IsAdmin() {
-        return $this->groups()->where('title', 'admins')->first();
+        return $this->groups()->where('isAdmin', 1)->first() ? true : false;
     }
 
     public function getFullName()

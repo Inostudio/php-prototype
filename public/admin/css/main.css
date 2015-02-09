@@ -113,7 +113,9 @@ body {
 .glyphicon { margin-right:5px; }
 
 .actionCol {
-    margin-bottom: 0;
+    margin-bottom: 2px;
+    margin-top: 2px;
+    margin-left: 37%;
 }
 
 .actionCol:hover {
@@ -206,4 +208,40 @@ body {
     overflow: hidden;
     width:500px;
     height:350px;
+}
+
+.groupOptionTable{
+    width: 600px;
+}
+
+.resourcesGrid{
+    height: 630px;
+}
+
+.error-border{
+    border: 1px solid red;
+}
+
+/*Angular-slide*/
+.slide {
+    position: absolute;
+}
+.slide.ng-enter,
+.slide.ng-leave {
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
+}
+.slide.ng-enter {
+    left: 100%;
+}
+.slide.ng-enter-active {
+    left: 0;
+}
+.slide.ng-leave {
+    left: 0;
+}
+.slide.ng-leave-active {
+    left: -100%;
 }

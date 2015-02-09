@@ -11,5 +11,14 @@ return array(
     'cancel' => 'Отмена',
     'add_resource_message' => 'Ресурс был успешно добавлен!',
     'remove_resource_message' => 'Ресурс был успешно удален!',
-    'delete' => 'Удалить'
+    'delete' => 'Удалить',
+    'empty_field'   =>  'Поле не может быть пустым!',
+    'success_changed_message'  =>  'Ресурс был успешно изменен!',
+    'select_file'  =>  'Выберите файл!',
+    'copy_url'  =>  'Ссылка скопирована в буфер обмена!',
+    'search_phrase' =>  'Слово для поиска',
+    'search' =>  'Поиск',
+    'reset' =>  'Сброс',
+    'previous' =>  'Предыдущая',
+    'next' =>  'Следующая'
 );

@@ -1,32 +1,33 @@
-<div id="alerts-container"  ng-init="vm.remove_category_message = '<%trans("articles.remove_category_message")%>';
-     vm.add_category_message = '<%trans("articles.add_category_message")%>';
-     vm.field_name_required = '<%trans("articles.field_name_required")%>';
-     vm.update_category_message = '<%trans("articles.update_category_message")%>';"></div>
+<div id="alerts-container"  ng-init="vm.remove_category_message = '<%trans("admin/articles.remove_category_message")%>';
+     vm.add_category_message = '<%trans("admin/articles.add_category_message")%>';
+     vm.field_name_required = '<%trans("admin/articles.field_name_required")%>';
+     vm.update_category_message = '<%trans("admin/articles.update_category_message")%>';
+     vm.defaultCategoryId = '<%Category::where('isDefault', '=', '1')->first()->id%>'"></div>
 
-<h1 class="page-header"><%trans('articles.categories_of_articles')%></h1>
+<h1 class="page-header"><%trans('admin/articles.categories_of_articles')%></h1>
 <div class="table-responsive">
-    <h3 class="sub-header"><%trans('articles.add_category')%></h3>
+    <h3 class="sub-header"><%trans('admin/articles.add_category')%></h3>
     <form name="createCat" novalidate>
         <div class="form-inline">
             <div class="input-group">
-                <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('articles.category_name')%>" required="" ng-model="vm.categoryTitle">
+                <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/articles.category_name')%>" required="" ng-model="vm.categoryTitle">
             </div>
-            <button type="submit" class="btn btn-default" ng-disabled="createCat.$invalid" ng-click="vm.addCategory()"><%trans('articles.add')%></button>
+            <button type="submit" class="btn btn-default" ng-disabled="createCat.$invalid" ng-click="vm.addCategory()"><%trans('admin/articles.add')%></button>
         </div>
     </form>
-    <h3 class="sub-header"><%trans('articles.list_of_categories')%></h3>
+    <h3 class="sub-header"><%trans('admin/articles.list_of_categories')%></h3>
     <div ui-grid="vm.gridOptions_categoriesOptions" ui-grid-edit class="gridCategories"></div> 
 </div>
 
 <script type="text/ng-template" id="ConfirmDelete.html">
     <div class="modal-header">
-        <h3 class="modal-title"><%trans('articles.deliting')%></h3>
+        <h3 class="modal-title"><%trans('admin/articles.deliting')%></h3>
     </div>
     <div class="modal-body">
-        <%trans('articles.deliting_text')%>
+        <%trans('admin/articles.deliting_text')%>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="$emit('okDeleteCategory')"><%trans('articles.ok')%></button>
-        <button class="btn btn-warning" ng-click="$emit('cancelDeleteCategory')"><%trans('articles.cancel')%></button>
+        <button class="btn btn-primary" ng-click="$emit('okDeleteCategory')"><%trans('admin/articles.ok')%></button>
+        <button class="btn btn-warning" ng-click="$emit('cancelDeleteCategory')"><%trans('admin/articles.cancel')%></button>
     </div>
 </script>

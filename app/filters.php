@@ -109,4 +109,25 @@ Route::filter('csrf', function()
 
 Route::filter('localization', function() {
     App::setLocale(Route::input('lang'));
+
+});
+
+Route::filter('checkSection', function() {
+    $section = Request::segment(2);
+    
+    $section = Section::where('title', '=', $section)->first();
+    if($section){
+        if($section->disable){
+            return Redirect::to('/');
+        }
+    }
+});
+
+Route::filter('checkBan', function() {
+    if(Auth::user()){
+        $ban = UserBans::where('user_id', '=', Auth::user()->id)->where('end', '>', date("Y-m-d H:i:s"))->first();
+        if($ban){
+            return Response::view('errors/forbidden', ['ban' => $ban], 403);
+        }
+    }
 });

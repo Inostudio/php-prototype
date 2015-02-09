@@ -11,6 +11,20 @@
         'mgcrea.ngStrap',
         'ngResource',
         'angular-loading-bar',
-        'angularCharts'
+        'angularCharts',
+        'ngClipboard',
+        'ngToggle',
+        'colorpicker.module'
     ]);
+    
+    angular
+        .module('adminApp')
+        .config(['ngClipProvider', function(ngClipProvider){
+            ngClipProvider.setPath("/admin/vendors/angular/ZeroClipboard.swf");
+        }])
+        .config(function($datepickerProvider){
+            angular.extend($datepickerProvider.defaults, {
+                autoclose: true
+            });
+        });
 })();

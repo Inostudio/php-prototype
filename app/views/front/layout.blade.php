@@ -4,7 +4,10 @@
     $routeName = Route::getCurrentRoute()->getName();
     $lang =  App::getLocale();
     $lang = $lang === NULL ? "en" : $lang;
-
+    
+    foreach (Section::all() as $key => $value) {
+        $result[$value->title] = $value->disable;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -61,11 +64,15 @@
             <input type="hidden" name="search" value="users" />
           </form>
             @if (Auth::user())
-                <li <?=$routeName=='front.profile' ? 'class="active"' : ''; ?>><a href="<% action('front.profile', ['lang' => $lang]) %>"><i class="fa fa-user"></i> <% trans('front/navbar.profile') %></a></li>
+                @if(!$result['profile'])
+                    <li <?=$routeName=='front.profile' ? 'class="active"' : ''; ?>><a href="<% action('front.profile', ['lang' => $lang]) %>"><i class="fa fa-user"></i> <% trans('front/navbar.profile') %></a></li>
+                @endif
                 <li><a href="<% action('front.logout', ['lang' => $lang]) %>"><i class="fa fa-signout"></i> <% trans('front/navbar.logout') %></a></li>
             @else
-                <li <?=$routeName=='front.signin' ? 'class="active"' : ''; ?>><a href="<% action('front.signin', ['lang' => $lang]) %>"><i class="fa fa-sign-in"></i> <% trans('front/navbar.signin') %></a></li>
-                <li <?=$routeName=='front.signup' ? 'class="active"' : ''; ?>><a href="<% action('front.signup', ['lang' => $lang]) %>"><i class="fa fa-plus-square"></i> <% trans('front/navbar.signup') %></a></li>
+                @if(!$result['auth'])
+                    <li <?=$routeName=='front.signin' ? 'class="active"' : ''; ?>><a href="<% action('front.signin', ['lang' => $lang]) %>"><i class="fa fa-sign-in"></i> <% trans('front/navbar.signin') %></a></li>
+                    <li <?=$routeName=='front.signup' ? 'class="active"' : ''; ?>><a href="<% action('front.signup', ['lang' => $lang]) %>"><i class="fa fa-plus-square"></i> <% trans('front/navbar.signup') %></a></li>
+                @endif
             @endif
 
         </ul>
@@ -81,19 +88,17 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
+
             <li <?=$routeName=='front.home' ? 'class="active"' : ''; ?> ><a href="<?=action('front.home', ['lang' => $lang]);?>"><% trans('front/navbar.home') %></a></li>
             <li <?=$routeName=='front.about' ? 'class="active"' : ''; ?>><a href="<?=action('front.about', ['lang' => $lang]);?>"><% trans('front/navbar.about') %></a></li>
             <li <?=$routeName=='front.contact' ? 'class="active"' : ''; ?>><a href="<?=action('front.contact', ['lang' => $lang]);?>"><% trans('front/navbar.contact') %></a></li>
 
-            <li <?=$routeName=='front.articles' ? 'class="active"' : ''; ?>>
+            @if(!$result['articles'])
+              <li <?=$routeName=='front.articles' ? 'class="active"' : ''; ?>>
+                  <a href="<% action('front.articles', ['lang' => $lang]) %>" ><% trans('front/navbar.articles') %></a>
+              </li>
+            @endif
 
-              <a href="<% action('front.articles', ['lang' => $lang]) %>" ><% trans('front/navbar.articles') %></a>
-              <!--<form name="articleFrom" class="navbar-form" style="float: left" method="get" action="<% action('front.search', ['lang' => $lang]) %>">
-                <input type="submit" value="<% trans('front/navbar.articles') %>" class="btn btn-oops" />
-                <input type="hidden" name="search" value="articles" />
-              </form>-->
-            </li>
-            <!--<li <?=Str::startsWith($routeName, 'front.articles') ? 'class="active"' : ''; ?>><a href="<?=action('front.articles', ['lang' => $lang]);?>"><% trans('front/navbar.articles') %></a></li>-->
           </ul>
           <div class="navbar-form navbar-left">
               <a href="<% action($routeName, ['lang' => 'ru']) %>" class="<% $lang === 'ru' ? 'active-block' : '' %>">RUS</a>

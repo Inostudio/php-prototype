@@ -15,5 +15,9 @@ return array(
     'ok' => 'OK',
     'cancel' => 'Cancel',
     'add_perm_to_group' => 'Right has been successfully accepted!',
-    'remove_perm_from_group' => 'Right has been successfully removed!'
+    'remove_perm_from_group' => 'Right has been successfully removed!',
+    'group' => 'Group',
+    'description' => 'Description',
+    'title_already_taken'  =>  'The title has already been taken!',
+    'title_empty'  =>  'Field title is empty!'
 );

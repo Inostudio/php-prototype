@@ -8,6 +8,7 @@ class GroupTableSeeder extends Seeder {
         
         DB::table('groups')->insert([
             'title' => 'admins',
+            'isAdmin'   =>  true
         ]);
     }
 

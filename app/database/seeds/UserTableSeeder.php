@@ -7,14 +7,14 @@ class UserTableSeeder extends Seeder
         DB::table('users')->delete();
 
         User::create([
-            'password' => Hash::make('1234'),
+            'password' => Hash::make('123456'),
             'email' => "dragg.ko@gmail.com"
         ]);
 
         foreach (range(2, 100) as $id){
             User::create([
                 'id' => $id,
-                'password' => Hash::make('1234'),
+                'password' => Hash::make('123456'),
                 'email' => "user$id@laravel.dev"
             ]);
         }

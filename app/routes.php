@@ -15,7 +15,7 @@ Blade::setEscapedContentTags('<%%', '%%>');    // for escaped data
 
 Route::group(array(
     'domain' => '{lang}.php-prototype.com',
-    'before' => 'localization'), function()
+    'before' => 'localization|checkBan|checkSection'), function()
 {
     Route::get('/angular/', ['uses' => 'AngularController@serve']);
 

@@ -12,5 +12,7 @@ return array(
     'deleting' => 'Deleting!',
     'deleting_text' => 'Are you sure that you want delete this permission?',
     'ok' => 'OK',
-    'cancel' => 'Cancel'
+    'cancel' => 'Cancel',
+    'title_already_taken'  =>  'The title has already been taken!',
+    'title_empty'  =>  'Field title is empty!'
 );

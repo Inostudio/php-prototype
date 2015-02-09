@@ -39,7 +39,17 @@
         .factory('EditArticle', EditArticle)
         .factory('SearchArticles', SearchArticles)
         .factory('RemoveArticle', RemoveArticle)
-        .factory('GetStatistics', GetStatistics);
+        .factory('GetStatistics', GetStatistics)
+        .factory('GetLanguageFiles', GetLanguageFiles)
+        .factory('EditLanguageFile', EditLanguageFile)
+        .factory('EditResource', EditResource)
+        .factory('GetSearchResources', GetSearchResources)
+        .factory('GetSections', GetSections)
+        .factory('ChangeSection', ChangeSection)
+        .factory('GetUserBans', GetUserBans)
+        .factory('RemoveBan', RemoveBan)
+        .factory('AddBan', AddBan)
+        .factory('TableTranslate', TableTranslate);
     
     Group.$inject = ['$resource'];
     AddGroup.$inject = ['$resource'];
@@ -76,6 +86,16 @@
     EditArticle.$inject = ['$resource'];
     SearchArticles.$inject = ['$resource'];
     RemoveArticle.$inject = ['$resource'];
+    GetLanguageFiles.$inject = ['$resource'];
+    EditLanguageFile.$inject = ['$resource'];
+    EditResource.$inject = ['$resource'];
+    GetSearchResources.$inject = ['$resource'];
+    GetSections.$inject = ['$resource'];
+    ChangeSection.$inject = ['$resource'];
+    GetUserBans.$inject = ['$resource'];
+    RemoveBan.$inject = ['$resource'];
+    AddBan.$inject = ['$resource'];
+    TableTranslate.$inject = ['$resource'];
     
     function Group($resource){
         return $resource('/adm/group/show', {}, {
@@ -149,9 +169,9 @@
         });
     };
 
-    function RemoveUser($resource, $userId){
+    function RemoveUser($resource, $userId, $field, $direction, $action, $off, $text){
         return $resource('/adm/user/remove', {}, {
-          query: {method:'POST', params:{id: $userId}, isArray:true}
+          query: {method:'POST', params:{id: $userId, field: $field, direction: $direction, action: $action, off: $off, text: $text}, isArray:true}
         });
     };
 
@@ -239,16 +259,22 @@
         });
     };
 
-    function AllResource($resource){
-        return $resource('/adm/resource/show', {}, {
+    function AllResource($resource, $limit, $offset, $direction){
+        return $resource('/adm/resource/show', {limit: $limit, offset: $offset, direction: $direction}, {
             query: {method:'POST', params:{}, isArray:true}
         });
     };
 
-    function DeleteResource($resource, $id){
+    function DeleteResource($resource, $id, $direction, $offset, $action, $limit, $phrase, $src){
         return $resource('/adm/resource/delete', {}, {
             query: {method:'POST', params:{
-                id: $id
+                id: $id,
+                direction: $direction, 
+                offset: $offset, 
+                action: $action,
+                limit: $limit,
+                phrase: $phrase,
+                src: $src
             }, isArray:true}
         });
     };
@@ -300,9 +326,9 @@
             query: {method:'GET', params:{}, isArray:true}
         });
     };
-    
-    function RemoveArticle($resource, $id){
-        return $resource('/adm/article/remove-article', {id: $id}, {
+
+    function RemoveArticle($resource, $id, $direction, $offset, $action, $limit, $phrase, $src, $category, $field){
+        return $resource('/adm/article/remove-article', {id: $id, direction: $direction, offset: $offset, action: $action, limit: $limit, phrase: $phrase, src: $src, category: $category, field: $field}, {
             query: {method:'POST', params:{}, isArray:true}
         });
     };
@@ -310,6 +336,66 @@
     function GetStatistics($resource){
         return $resource('/adm/dashboard/statistics', {}, {
             query: {method:'GET', params:{}, isArray:true}
+        });
+    };
+    
+    function GetLanguageFiles($resource, $path){
+        return $resource('/' + lang + '/adm/language/language-files', {path: $path}, {
+            query: {method:'GET', params: {}, isArray:true}
+        });
+    };
+    
+    function EditLanguageFile($resource, $path, $file, $language, $key, $value){
+        return $resource('/' + lang + '/adm/language/edit-language-file', {path: $path, file: $file, language: $language, key: $key, value: $value}, {
+            query: {method:'POST', params: {}, isArray:true}
+        });
+    };
+    
+    function EditResource($resource, $id, $title){
+        return $resource('/' + lang + '/adm/resource/edit-resource', {id: $id, title: $title}, {
+            query: {method:'POST', params: {}, isArray:true}
+        });
+    };
+    
+    function GetSearchResources($resource, $phrase, $src, $direction, $limit, $offset){
+        return $resource('/' + lang + '/adm/resource/search-resources', {phrase: $phrase, src: $src, direction: $direction, limit: $limit, offset: $offset}, {
+            query: {method:'GET', params: {}, isArray:true}
+        });
+    };
+    
+    function GetSections($resource){
+        return $resource('/' + lang + '/adm/setting/sections', {}, {
+            query: {method:'GET', params: {}, isArray:true}
+        });
+    };
+    
+    function ChangeSection($resource, $id, $disable){
+        return $resource('/' + lang + '/adm/setting/change-section', {id: $id, disable: $disable}, {
+            query: {method:'POST', params: {}, isArray:true}
+        });
+    };
+    
+    function GetUserBans($resource, $userId){
+        return $resource('/' + lang +  '/adm/user/bans', {}, {
+          query: {method:'POST', params:{id: $userId}, isArray:true}
+        });
+    };
+    
+    function RemoveBan($resource, $id){
+        return $resource('/' + lang +  '/adm/user/remove-ban', {}, {
+          query: {method:'POST', params:{id: $id}, isArray:true}
+        });
+    };
+    
+    function AddBan($resource, $userId, $endDate, $reason){
+        return $resource('/' + lang +  '/adm/user/add-ban', {userId: $userId, endDate: $endDate, reason: $reason}, {
+          query: {method:'POST', params:{}, isArray:true}
+        });
+    };
+    
+    function TableTranslate($resource, $phrase){
+        return $resource('/' + lang + '/adm/language/table-translate', {phrase: $phrase}, {
+            query: {method:'POST', params: {}, isArray:true}
         });
     };
 })();

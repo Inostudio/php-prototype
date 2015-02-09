@@ -16,6 +16,7 @@ class CreateGroupsTable extends Migration {
             $table->increments('id');
             $table->string('title')->unique();
             $table->string('description')->nullable();
+            $table->boolean('isAdmin')->nullable();
             $table->timestamps();
 
             $table->softDeletes();

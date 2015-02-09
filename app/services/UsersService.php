@@ -165,15 +165,24 @@ class UsersService
      * @param $accept
      */
     public function groupAccept($groupId, $userId, $accept){
+        $groupAdm = null;
         if($accept){
+            $groupAdm = Group::where('id', '=', $groupId)->first()->isAdmin;
+            if($groupAdm){
+               $countAdmins = UserToGroups::where('group_id', '=', $groupId)->count();
+               if($countAdmins == 1){
+                   return [false, trans('validation.remove_all_admins')];
+               }
+            }
             UserToGroups::destroy(UserToGroups::where('user_id', '=', $userId)->where('group_id', '=', $groupId)->first()->id);
+            
         }else {
             $userToGroup = new UserToGroups();
             $userToGroup->user_id = $userId;
             $userToGroup->group_id = $groupId;
             $userToGroup->save();
         }
-        return;
+        return [true, $groupAdm];
     }
 
     /**
@@ -249,4 +258,25 @@ class UsersService
         return rmdir($dir);
     }
     
+    public function getUserBans($id){
+        $bans = UserBans::where('user_id', '=', $id)->get();
+        $isBaned = UserBans::where('user_id', '=', $id)->where('end', '>', date("Y-m-d H:i:s"))->first();
+        
+        return [($isBaned == null ? false : $isBaned), $bans];
+    }
+    
+    public function removeBan($id){
+        UserBans::destroy($id);
+        return true;
+    }
+    
+    public function addBan($userId, $endDate, $reason){
+        $ban = new UserBans;
+        $ban->user_id = $userId;
+        $ban->begin = date("Y-m-d H:i:s");
+        $ban->end = $endDate;
+        $ban->reason = $reason;
+        $ban->save();
+        return true;
+    }
 }

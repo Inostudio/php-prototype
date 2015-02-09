@@ -72,7 +72,6 @@ return array(
 	"unique"               => "Такой :attribute уже имеется.",
 	"url"                  => "The :attribute format is invalid.",
 	"timezone"             => "The :attribute must be a valid zone.",
-
 	/*
 	|--------------------------------------------------------------------------
 	| Custom Validation Language Lines
@@ -83,7 +82,6 @@ return array(
 	| specify a specific custom language line for a given attribute rule.
 	|
 	*/
-
 	'custom' => array(
 		'attribute-name' => array(
 			'rule-name' => 'custom-message',
@@ -102,5 +100,5 @@ return array(
 	*/
 
 	'attributes' => array(),
-
+        'remove_all_admins' =>  'Нельзя удалить всех администраторов!'
 );
