@@ -15,7 +15,7 @@ Blade::setEscapedContentTags('<%%', '%%>');    // for escaped data
 
 Route::group(array(
     'domain' => '{lang}.php-prototype.com',
-    'before' => 'localization|checkBan|checkSection'), function()
+    'before' => 'localization|checkSection'), function()
 {
     Route::get('/angular/', ['uses' => 'AngularController@serve']);
 
@@ -85,15 +85,17 @@ Route::group(array(
             ]
         ]);
 
-        Route::controller('page', 'PagesController', [
-            'showPage' => 'front.page',
-            'postSendContact' => 'front.contact.send'
-        ]);
+        Route::group(array('before' => 'checkBan'), function(){ //Ban
+            Route::controller('page', 'PagesController', [
+                'showPage' => 'front.page',
+                'postSendContact' => 'front.contact.send'
+            ]);
 
-        //Articles
-        Route::controller('articles', 'ArticlesController', [
-            'getIndex' => 'front.articles'
-        ]);
+            //Articles
+            Route::controller('articles', 'ArticlesController', [
+                'getIndex' => 'front.articles'
+            ]);
+        });
 
         //Route for static pages
         Route::get('{namePage}', ['as' => 'front.static','uses' => 'PagesController@showPage'])->where(['namePage' => '[-a-z0-9/]+']);
