@@ -6,5 +6,5 @@
  * Time: 4:32
  */
 return array(
-    "field"             => "Field",
+    "field"                                     => "Field",
 );

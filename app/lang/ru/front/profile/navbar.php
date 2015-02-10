@@ -6,7 +6,7 @@
  * Time: 10:37
  */
 return array(
-    "profile"           => "Профиль",
-    "changePassword"    => "Смена пароля",
-    "changeEmail"       => "Смена e-mail'а",
+    "profile"                                   => "Профиль",
+    "changePassword"                            => "Смена пароля",
+    "changeEmail"                               => "Смена e-mail'а",
 );

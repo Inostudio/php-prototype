@@ -7,7 +7,7 @@
  */
 
 return array(
-    "text_result_null"          => "At your request, nothing found",
-    "text_result"               => "Result of search",
+    "text_result_null"                          => "At your request, nothing found",
+    "text_result"                               => "Result of search",
 );
 
