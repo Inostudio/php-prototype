@@ -16,7 +16,7 @@
             .controller('ArticleCategoryCtrl', ArticleCategoryCtrl);
             
 
-    DashboardCtrl.$inject = ['GetStatistics'];
+    DashboardCtrl.$inject = ['GetStatistics', '$scope'];
     GroupCtrl.$inject = ['$scope', 'Group', 'AddGroup', 'RemoveGroup', 'EditGroup', '$alert', '$modal', '$rootScope'];
     PermissionCtrl.$inject = ['$scope', '$alert', 'Permission', 'AddPermission', 'RemovePermission', 'EditPermission', '$modal', '$rootScope'];
     GroupOptionsCtrl.$inject = ['$scope', '$routeParams', 'GroupOptions', '$alert', 'ChangePermissionsInGroup'];
@@ -40,7 +40,7 @@
 
     }
     
-    function DashboardCtrl(GetStatistics) {
+    function DashboardCtrl(GetStatistics, $scope) {
         var vm = this;
         vm.chartType = 'bar';
         vm.chartType2 = 'pie';
@@ -48,25 +48,34 @@
         vm.data2 = {};
         vm.users_in_groups = '';
         vm.articles_in_categories = '';
+        vm.lang = '';
+
         vm.config1 = {
             labels: false,
-            title : (lang == 'en' ? 'Users in groups' : 'Пользователи в группах'),
             legend : {
-                    display: true,
-                    position:'right'
+                display: true,
+                position:'right'
             }
-	};
+        };
         vm.config2 = {
             labels: false,
-            title : (lang == 'en' ? 'Articles in categories' : 'Статьи в категориях'),
             legend : {
-                    display: true,
-                    position:'right'
+                display: true,
+                position:'right'
             }
-	};
-        
+        };
+
+        $scope.$watch('vm.lang', function() {
+
+            vm.config1.title = (vm.lang == 'en' ? 'Users in groups' : 'Пользователи в группах');
+
+            vm.config2.title = (vm.lang == 'en' ? 'Articles in categories' : 'Статьи в категориях');
+
+
+        });
+
         GetStatistics.query({}, function(answer){
-            
+
             var groups = [];
             var countUsers = [];
             angular.forEach(answer[0], function(groupOfUsers){
@@ -87,7 +96,7 @@
             });
             vm.data1.series = categories;
             var arr = [{
-                    y: articlesCount
+                y: articlesCount
             }];
             vm.data1.data = arr;
         });
