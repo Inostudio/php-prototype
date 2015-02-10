@@ -78,16 +78,17 @@ class AuthController extends \Controller
                 false,
                 ["auth" => trans('front/auth/signin.message_invalid_credentials')]
             ];
+        } else {
+            $ban = \UserBans::where('user_id', '=', Auth::user()->id)->where('end', '>', date("Y-m-d H:i:s"))->first();
+            if($ban){
+                Auth::logout();
+                $response = [
+                    false,
+                    ['auth' => 'Access denied. The Reason: ' . $ban->reason]
+                ];
+            }
         }
 
-        $ban = \UserBans::where('user_id', '=', Auth::user()->id)->where('end', '>', date("Y-m-d H:i:s"))->first();
-        if($ban){
-            Auth::logout();
-            $response = [
-                false,
-                ['auth' => 'Access denied. The Reason: ' . $ban->reason]
-            ];
-        }
         return Response::json($response, $code);
     }
     
