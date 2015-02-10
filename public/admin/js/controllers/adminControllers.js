@@ -1150,6 +1150,8 @@
         vm.copy_url = '';
         vm.searchText2 = '';
         vm.src2 = '';
+        //vm.big_size = '';
+        //vm.not_image = '';
         /*
          * action - режим навигации
          * 0 - обыная навигация или навигация с упорядочиванием
@@ -1261,11 +1263,19 @@
 
         var handleFileSelect=function(evt) {
             var file=evt.currentTarget.files[0];
-            var reader = new FileReader();
-            reader.onload = function (evt) {
-                vm.resource.file = evt.target.result;
-            };
-            reader.readAsDataURL(file);
+            if(file === undefined) {
+
+            } else if(file.type !== "image/jpeg") {
+                showErrorAlert(vm.not_image);
+            } else if(file.size/1024/1024 > 5) {
+                showErrorAlert(vm.big_size);
+            } else {
+                var reader = new FileReader();
+                reader.onload = function (evt) {
+                    vm.resource.file = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
         };
 
         angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);

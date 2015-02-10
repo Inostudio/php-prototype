@@ -7,6 +7,9 @@
       height:350px;
     }
 </style>
+<div data-ng-init="vm.big_size = '<%trans('admin/resources.message_image_big_size')%>'"></div>
+<div data-ng-init="vm.not_image = '<%trans('admin/resources.message_image_not_format')%>'"></div>
+
 <div id="alerts-container"></div>
 <h1 class="page-header"><%trans('admin/resources.resources')%></h1>
 <div id="alerts-container" ng-init="vm.remove_resource_message = '<%trans("admin/resources.remove_resource_message")%>';
@@ -25,7 +28,7 @@
                 <input type="text" class="form-control" name="title" placeholder="<%trans('admin/resources.title_resource')%>" ng-model="vm.resource.title" required />
             </div>
             <div class="input-group">
-                <input type="file" id="fileInput" name="file"/>
+                <input type="file" id="fileInput" name="file" accept="image/jpeg"/>
             </div>
             <button type="submit" class="btn btn-default" ng-disabled="form.$invalid"><%trans('admin/resources.add')%></button>
         </div>

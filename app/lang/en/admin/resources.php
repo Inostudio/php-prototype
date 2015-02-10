@@ -20,5 +20,7 @@ return array(
     'search' =>  'Search',
     'reset' =>  'Reset',
     'previous' =>  'Previous',
-    'next' =>  'Next'
+    'next' =>  'Next',
+    "message_image_big_size"                    => "The max image size is 5 Mb!",
+    "message_image_not_format"                  => "The file must be extension only \\'image/jpeg\\'",
 );

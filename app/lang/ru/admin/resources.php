@@ -20,5 +20,7 @@ return array(
     'search' =>  'Поиск',
     'reset' =>  'Сброс',
     'previous' =>  'Предыдущая',
-    'next' =>  'Следующая'
+    'next' =>  'Следующая',
+    "message_image_big_size"                    => "Максимальные размер фотографии 5 Mb!",
+    "message_image_not_format"                  => "Файл должен иметь расширение только \\'image/jpeg\\'",
 );
