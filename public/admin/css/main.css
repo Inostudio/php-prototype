@@ -274,3 +274,8 @@ body {
 .resonalizationMargin{
     margin-top: 25px;
 }
+
+.active-block {
+    pointer-events: none;
+    cursor: default;
+}

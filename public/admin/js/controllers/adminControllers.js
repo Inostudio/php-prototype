@@ -19,7 +19,8 @@
             .controller('PersonalizationCtrl', PersonalizationCtrl);
             
 
-    DashboardCtrl.$inject = ['GetStatistics'];
+
+    DashboardCtrl.$inject = ['GetStatistics', '$scope'];
     GroupCtrl.$inject = ['$scope', 'Group', 'AddGroup', 'RemoveGroup', 'EditGroup', '$alert', '$modal', '$rootScope', 'TableTranslate'];
     PermissionCtrl.$inject = ['$scope', '$alert', 'Permission', 'AddPermission', 'RemovePermission', 'EditPermission', '$modal', '$rootScope', 'TableTranslate'];
     GroupOptionsCtrl.$inject = ['$scope', '$routeParams', 'GroupOptions', '$alert', 'ChangePermissionsInGroup', 'TableTranslate'];
@@ -27,6 +28,8 @@
     UserOptionsCtrl.$inject = ['$scope', '$alert', '$routeParams', 'UserOptions', 'ChangeGroupByUser', '$modal', '$rootScope', 'TableTranslate'];
     ResourcesCtrl.$inject = ['$scope', 'AddResource', 'AllResource', 'DeleteResource', '$alert', '$modal', '$rootScope', 'EditResource', 'GetSearchResources', 'TableTranslate'];
     PagesCtrl.$inject = ['$scope', '$alert', '$modal', 'AddPage', 'Status', 'Pages', 'GetPage', 'DeletePage', 'SavePage', '$window', '$location', '$rootScope', 'TableTranslate'];
+
+
     activCtrl.$inject = ['$scope', '$location', 'CheckLang'];
     CategoriesOfArticlesCtrl.$inject = ['GetCategoryOfArticle', '$alert', '$scope', '$modal', '$rootScope', 'RemoveCategoryOfArticle', 'AddCategoryOfArticle', 'EditCategoryOfArticle', 'TableTranslate'];
     ArticleCategoryCtrl.$inject = ['GetArticles', '$routeParams', '$scope', '$alert', '$window', '$location', '$modal', '$rootScope', 'EditArticle', 'SearchArticles', 'RemoveArticle', 'TableTranslate'];
@@ -45,8 +48,8 @@
         };
 
     }
-    
-    function DashboardCtrl(GetStatistics) {
+
+    function DashboardCtrl(GetStatistics, $scope) {
         var vm = this;
         vm.chartType = 'bar';
         vm.chartType2 = 'pie';
@@ -54,25 +57,35 @@
         vm.data2 = {};
         vm.users_in_groups = '';
         vm.articles_in_categories = '';
-        vm.config2 = {
-            labels: false,
-            title : (lang == 'en' ? 'Users in groups' : 'Пользователи в группах'),
-            legend : {
-                    display: true,
-                    position:'right'
-            }
-	};
+        vm.lang = '';
+
         vm.config1 = {
             labels: false,
-            title : (lang == 'en' ? 'Articles in categories' : 'Статьи в категориях'),
             legend : {
-                    display: true,
-                    position:'right'
+                display: true,
+                position:'right'
             }
-	};
-        
+        };
+
+        vm.config2 = {
+            labels: false,
+            legend : {
+                display: true,
+                position:'right'
+            }
+        };
+
+        $scope.$watch('vm.lang', function() {
+
+            vm.config1.title = (vm.lang == 'en' ? 'Users in groups' : 'Пользователи в группах');
+
+            vm.config2.title = (vm.lang == 'en' ? 'Articles in categories' : 'Статьи в категориях');
+
+
+        });
+
         GetStatistics.query({}, function(answer){
-            
+
             var groups = [];
             var countUsers = [];
             angular.forEach(answer[0], function(groupOfUsers){
@@ -93,7 +106,7 @@
             });
             vm.data1.series = categories;
             var arr = [{
-                    y: articlesCount
+                y: articlesCount
             }];
             vm.data1.data = arr;
         });
