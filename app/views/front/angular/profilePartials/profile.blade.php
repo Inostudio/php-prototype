@@ -136,6 +136,26 @@
     </div>
 </div>
 
+<!-- For error at upload photo-avatar -->
+<script type="text/ng-template" id="alertCustom.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Warning!</h3>
+    </div>
+    <div class="modal-body">
+        <div data-ng-show="vm.action === 'size'">
+            <% trans('front/profile/profile.message_image_big_size') %>
+        </div>
+
+        <div data-ng-show="vm.action === 'format'">
+            <% trans('front/profile/profile.message_image_not_format') %>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="vm.ok()">OK</button>
+        <button class="btn btn-warning" ng-click="vm.cancel()">Cancel</button>
+    </div>
+</script>
+
 <script type="text/ng-template" id="editPhoto.html">
     <div style="display: inline-block; background: #efefef; width: 100%;" data-ng-style="">
         <div class="modal-header">

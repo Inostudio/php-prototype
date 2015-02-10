@@ -18,6 +18,8 @@
 
 
     <link rel="stylesheet" type="text/css" href="/vendor/directives/css/ng-img-crop.css">
+
+    <script type="text/javascript" src="/vendor/ui-bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>
 @stop
 
 @section('content')

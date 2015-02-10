@@ -11,8 +11,26 @@
         .controller('ShowCtrl', ShowCtrl)
         .controller('EditPasswordCtrl', EditPasswordCtrl)
         .controller('EditEmailCtrl', EditEmailCtrl)
-        .controller('EditPhotoCtrl', EditPhotoCtrl);
+        .controller('EditPhotoCtrl', EditPhotoCtrl)
+        .controller('AlertCtrl', AlertCtrl);
 
+    AlertCtrl.$inject = ['$modalInstance', 'msg'];
+    function AlertCtrl($modalInstance, msg) {
+        var vm = this;
+        vm.action = msg;
+
+        vm.ok = ok;
+        vm.cancel = cancel;
+
+
+        function ok() {
+            $modalInstance.close();
+        };
+
+        function cancel() {
+            $modalInstance.dismiss('cancel');
+        };
+    }
 
     NavbarCtrl.$inject = ['$location'];
     function NavbarCtrl($location){
@@ -258,10 +276,12 @@
 
     }
 
-    EditPhotoCtrl.$inject = ['$scope', '$modalInstance', 'Profile', 'imageUrl', 'exists', 'PhotoResize'];
-    function EditPhotoCtrl($scope, $modalInstance, Profile, imageUrl, exists, PhotoResize) {
+    EditPhotoCtrl.$inject = ['$scope', '$modalInstance', 'Profile', 'imageUrl', 'exists', 'PhotoResize', '$modal'];
+    function EditPhotoCtrl($scope, $modalInstance, Profile, imageUrl, exists, PhotoResize, $modal) {
         var vm = this;
 
+        vm.alert = undefined;
+        vm.closeAlert = closeAlert;
         vm.initInterface = false;
         vm.select = 'ChangeThumbnail';
         vm.myImage = "";
@@ -285,11 +305,34 @@
 
         ////////////
 
+        function closeAlert() {
+            vm.alert = undefined;
+        }
+
         function addImage(file) {
-            if(file.size/1024/1024 > 5) {
-                console.log("The big size of image");
-            } else if(file.type !== "image/jpeg") {
-                console.log("The file must be extension only 'image/jpeg'");
+            if(file.type !== "image/jpeg") {
+                $modal.open({
+                    templateUrl: 'alertCustom.html',
+                    controller: 'AlertCtrl',
+                    controllerAs: 'vm',
+                    resolve: {
+                        msg: function() {
+                            return "format";
+                        }
+                    }
+                });
+            } else if(file.size/1024/1024 > 5) {
+                $modal.open({
+                    templateUrl: 'alertCustom.html',
+                    controller: 'AlertCtrl',
+                    controllerAs: 'vm',
+                    resolve: {
+                        msg: function() {
+                            return "size";
+                        }
+                    }
+                });
+
             } else {
                 var reader = new FileReader();
                 reader.onload = function (evt) {

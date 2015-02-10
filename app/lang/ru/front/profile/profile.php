@@ -21,6 +21,8 @@ return array(
     "message_select_thumbnail_success"          => "Миниатюра успешно выбрана",
     "message_image_deleted"                     => "Фотография успешно удалена.",
     "message_image_not_deleted"                 => "Неудача. Фотография не была удалена.",
+    "message_image_big_size"                    => "Максимальные размер фотографии 5 Mb!",
+    "message_image_not_format"                  => "Файл должен иметь расширение только 'image/jpeg'",
 
     "button_save"                               => "Сохранить",
     "button_cancel"                             => "Отмена",

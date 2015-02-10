@@ -21,6 +21,8 @@ return array(
     "message_select_thumbnail_success"          => "The thumbnail successfully changed",
     "message_image_deleted"                     => "Photo success removed",
     "message_image_not_deleted"                 => "Fail. Photo don't removed.",
+    "message_image_big_size"                    => "The max image size is 5 Mb!",
+    "message_image_not_format"                  => "The file must be extension only 'image/jpeg'",
 
     "button_save"                               => "Save",
     "button_cancel"                             => "Cancel",
