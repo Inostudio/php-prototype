@@ -132,7 +132,7 @@ Route::filter('checkSection', function() {
         }
     }
 });
-
+/*
 Route::filter('checkBan', function() {
     if(Auth::user()){
         $ban = UserBans::where('user_id', '=', Auth::user()->id)->where('end', '>', date("Y-m-d H:i:s"))->first();
@@ -140,4 +140,4 @@ Route::filter('checkBan', function() {
             return Response::view('errors/forbidden', ['ban' => $ban], 403);
         }
     }
-});
+});*/

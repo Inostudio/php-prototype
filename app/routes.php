@@ -85,17 +85,15 @@ Route::group(array(
             ]
         ]);
 
-        Route::group(array('before' => 'checkBan'), function(){ //Ban
-            Route::controller('page', 'PagesController', [
-                'showPage' => 'front.page',
-                'postSendContact' => 'front.contact.send'
-            ]);
+        Route::controller('page', 'PagesController', [
+            'showPage' => 'front.page',
+            'postSendContact' => 'front.contact.send'
+        ]);
 
-            //Articles
-            Route::controller('articles', 'ArticlesController', [
-                'getIndex' => 'front.articles'
-            ]);
-        });
+        //Articles
+        Route::controller('articles', 'ArticlesController', [
+            'getIndex' => 'front.articles'
+        ]);
 
         //Route for static pages
         Route::get('{namePage}', ['as' => 'front.static','uses' => 'PagesController@showPage'])->where(['namePage' => '[-a-z0-9/]+']);
