@@ -1758,7 +1758,7 @@
             contentTemplate: 'ConfirmDelete.html'
         });
         
-        vm.gridOptions_articleOfCategoryOptions = { enableSorting: true, enableCellEdit: true};
+        vm.gridOptions_articleOfCategoryOptions = { enableSorting: true, enableCellEdit: true, rowHeight: 25};
         TableTranslate.query({phrase: ['id', 'category', 'title', 'link', 'user_email', 'remove']}, function(answer){
             vm.gridOptions_articleOfCategoryOptions.columnDefs = [
                 { name: 'id', displayName: answer[0]['id'], width: '5%', enableCellEdit: false,  enableSorting: true},
