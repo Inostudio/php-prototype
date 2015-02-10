@@ -31,13 +31,14 @@
     <!-- Bootstrap core CSS -->
     <!--<link href="/front/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">-->
     <link href="/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+      <link href="/vendor/font-awesome/font-awesome.min.css" rel="stylesheet">
     <!--@codereview move into a special templatec -->
     <link rel="stylesheet" type="text/css" href="/front/css/sidebar.css">
     <link href="/vendor/loading-bar/css/loading-bar.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="/front/css/main.css" rel="stylesheet">
+    <link href="/front/css/profileStyle.css" rel="stylesheet">
 
     <script type="text/javascript" src="/vendor/angular/angular.min.js"></script>
     <script type="text/javascript" src="/vendor/angular-route/angular-route.min.js"></script>
@@ -50,8 +51,8 @@
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+          <script src="/vendor/html5shiv/html5shiv.min.js" type="text/javascript"></script>
+          <script src="/vendor/respond/respond.min.js" type="text/javascript"></script>
     <![endif]-->
   </head>
 

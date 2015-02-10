@@ -1,4 +1,4 @@
-<div id="alerts-container-for-users" ng-init="vm.add_user_message = '<%trans("admin/users.add_user_message")%>'; 
+<div id="alerts-container-for-users" ng-init="vm.add_user_message = '<%trans("admin/users.add_user_message")%>';
      vm.edit_user_message = '<%trans("admin/users.edit_user_message")%>';
      vm.remove_user_message = '<%trans("admin/users.remove_user_message")%>';
      vm.myId='<%Auth::user()->id%>';

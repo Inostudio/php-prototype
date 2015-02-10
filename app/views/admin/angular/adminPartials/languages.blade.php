@@ -1,11 +1,3 @@
-<style>
-    .gridLanguagesFiles {
-        width: 400px;
-    }
-    .fileEdit{
-        width: 820px;
-    }
-</style>
 <div id="alerts-container" ng-init="vm.required_field = '<%trans("admin/languages.required_field")%>';
         vm.file_change = '<%trans("admin/languages.file_change")%>'"></div>
 

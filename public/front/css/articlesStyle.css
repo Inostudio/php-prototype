@@ -1,0 +1,112 @@
+.form-control{
+    margin-bottom: 5px;
+}
+.loader{
+    width: 70px;
+    height: 70px;
+    visibility: visible;
+}
+.loader-hidden{
+    visibility: hidden;
+}
+h2{
+    text-indent: 40px;
+    text-align: justify;
+}
+.articleBody{
+    text-indent: 40px;
+    text-align: justify;
+}
+.greenSpan{
+    color: green;
+}
+.searchResults{
+    width: 700px;
+    border: 1px solid #D2CFC7;
+    border-radius: 5px;
+    margin-left: 25%;
+}
+
+.categorys{
+    float: left;
+}
+
+.searchHeader{
+    height: 30px;
+    background-color: #A4A4A4;
+}
+.articleContainer{
+    height: 120px;
+    border: 1px solid #D2CFC7;
+    margin-bottom: 2px;
+}
+.btn-more{
+    margin-left: 45%;
+    width: 80px;
+    margin-top: 5px;
+}
+.btn-more-hidden{
+    display: none;
+}
+.btn-action-hidden{
+    visibility: hidden;
+}
+.modal-backdrop{
+    z-index: 3000;
+}
+.modal{
+    z-index: 10000;
+}
+.newsContainer{
+    height: 180px;
+    border: 1px solid #DDDDDD;
+    padding: 5px;
+    margin-bottom: 2px;
+}
+.newsText{
+    text-align: justify;
+    font-size: 13px;
+    margin: 0;
+}
+.newsText a{
+    text-decoration: none;
+}
+.newContent{
+    height: 100px;
+}
+.newArticleMetaInfo{
+    padding-top: 10px;
+    height: 80px;
+}
+a:hover{
+    text-decoration: none;
+}
+.newArticleMetaInfo p{
+    margin-bottom: 2px;
+    font-size: 13px;
+}
+.articleText{
+    text-align: justify;
+    height: 60px;
+    font-size: 13px;
+    margin: 0;
+    line-height: 16px;
+}
+.articleMetaInfo{
+    height: 60px;
+}
+.grenSpan{
+    color: #009926;
+}
+.articleMetaInfo p{
+    margin: 0;
+    font-size: 13px;
+}
+.headerTextSize{
+    font-size: 18px;
+}
+.articleAction{
+    padding: 0;
+    vertical-align: middle;
+    padding-top: 3%
+}

@@ -52,6 +52,7 @@ class AuthController extends \Controller
      */
     public function postSignin()
     {
+        $code = 200;
         $response = [true, 'Success'];
 
         $v = Validator::make(Input::all(), self::$signinValidation);
@@ -79,7 +80,15 @@ class AuthController extends \Controller
             ];
         }
 
-        return Response::json($response);
+        $ban = \UserBans::where('user_id', '=', Auth::user()->id)->where('end', '>', date("Y-m-d H:i:s"))->first();
+        if($ban){
+            Auth::logout();
+            $response = [
+                false,
+                ['auth' => 'Access denied. The Reason: ' . $ban->reason]
+            ];
+        }
+        return Response::json($response, $code);
     }
     
     /**

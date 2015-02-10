@@ -697,7 +697,7 @@
                         alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
                     } else {
                         alertSuccess = $alert({title: vm.add_user_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
-                        if((vm.currentPage === vm.totalPage) &&(vm.currentPage * limit > vm.countUsers)){
+                        /*if((vm.currentPage === vm.totalPage) &&(vm.currentPage * limit > vm.countUsers)){
                             var newUser = {
                                 id: answer[2],
                                 email: vm.email
@@ -713,7 +713,7 @@
                             offset = limit * (vm.totalPage-1);
                             vm.currentPage = vm.totalPage;
                             getUsers(limit, offset, 'asc', 'id');              
-                        }
+                        }*/git
 
                         vm.email = "";
                         vm.userConfirmPassword = "";
@@ -1215,7 +1215,7 @@
                         };
                         angular.element(document.querySelector('#fileInput')).val(null);
                         vm.countResources++;
-                        if((vm.currentPage < vm.totalPage) && (vm.limit * vm.totalPage >= vm.countResources)){
+                        /*if((vm.currentPage < vm.totalPage) && (vm.limit * vm.totalPage >= vm.countResources)){
                             vm.offset = vm.limit * vm.totalPage - vm.limit;
                             vm.currentPage = vm.totalPage;
                             if(!vm.action) {    //Обычная навигация
@@ -1234,7 +1234,7 @@
                         }
                         else {
                             vm.gridOptions_resourcesGrid.data.push(answer[1]);
-                        }
+                        }*/
                     } else {
                         showErrorAlert(answer[1]);
                     }
@@ -1775,7 +1775,7 @@
             contentTemplate: 'ConfirmDelete.html'
         });
         
-        vm.gridOptions_articleOfCategoryOptions = { enableSorting: true, enableCellEdit: true};
+        vm.gridOptions_articleOfCategoryOptions = { enableSorting: true, enableCellEdit: true, rowHeight: 25};
         TableTranslate.query({phrase: ['id', 'category', 'title', 'link', 'user_email', 'remove']}, function(answer){
             vm.gridOptions_articleOfCategoryOptions.columnDefs = [
                 { name: 'id', displayName: answer[0]['id'], width: '5%', enableCellEdit: false,  enableSorting: true},
