@@ -1,6 +1,7 @@
 <?php
     $lang =  App::getLocale();
     $routeName = Route::getCurrentRoute()->getName();
+    $lang =  App::getLocale();
 ?>
 <!DOCTYPE html>
 <html lang="en" ng-app="adminApp">

@@ -207,3 +207,8 @@ body {
     width:500px;
     height:350px;
 }
+
+.active-block {
+    pointer-events: none;
+    cursor: default;
+}
