@@ -80,7 +80,8 @@ class ResourceService {
 
     public function delete($id, $action, $direction, $offset, $limit, $phrase, $src){
         $result = [false, 'Unknown', []];   //$result = [false, 'Unknown'];
-        $resource = Resource::find($id);              
+        $resource = Resource::find($id);
+        $notFound = false;
         if($resource) {
 
             $resource = Resource::where('id', '=', $id)->delete();
@@ -93,8 +94,9 @@ class ResourceService {
             $notFound = true;
         }
 
+        //$notFound = true;
         if($notFound) {
-            $result[1] = 'Resource didn\'t found';
+            $result[1] = trans('admin/resources.message_resource_not_found');
         }
         if($result[0]){
             if(!$action){   //Обычная подгрузка

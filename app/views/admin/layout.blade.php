@@ -1,6 +1,8 @@
 <?php
     $lang =  App::getLocale();
     $routeName = Route::getCurrentRoute()->getName();
+    $lang =  App::getLocale();
+    $lang = $lang === NULL ? "en" : $lang;
 ?>
 <!DOCTYPE html>
 <html lang="en" ng-app="adminApp">
@@ -89,7 +91,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">ino.prototype.designer</a>
+          <a class="navbar-brand" href="#/">ino.prototype.designer</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">

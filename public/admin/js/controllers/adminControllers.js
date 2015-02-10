@@ -165,6 +165,15 @@
                 { name: 'remove', displayName: answer[0]['remove'], width: '12%', enableCellEdit: false, enableFiltering: false, enableSorting: false, height: '15px',
                   cellTemplate: '<spanremove remove-action="EventForDropGroup" remove-id="{{row.entity.id}}" ng-hide/>' }
             ];
+            //Получение +++
+            Group.queryInfo(function(res){
+                angular.forEach(res, function(elem){
+                    if(elem.isAdmin){
+                        vm.idAdminsGroup = elem.id;
+                    }
+                });
+                vm.gridOptions.data = res;
+            });
         });
 
         vm.gridOptions.onRegisterApi = function(gridApi){
@@ -235,15 +244,7 @@
 
         /*Grid ---------------End*/
 
-        //Получение +++
-        Group.queryInfo(function(res){
-            angular.forEach(res, function(elem){
-                if(elem.isAdmin){
-                    vm.idAdminsGroup = elem.id;
-                }
-            });
-            vm.gridOptions.data = res;
-        });
+
 
         //Добавление
         function addGroup(){
@@ -343,12 +344,13 @@
                     { name: 'remove', displayName: answer[0]['remove'], width: '10%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
                       cellTemplate: '<spanremove remove-action="EventForDrop_perm" remove-id="{{row.entity.id}}"/>' }
                 ];
+                //Получение
+                Permission.queryInfo(function(res){
+                    vm.gridOptions_perm.data = res;
+                });
             });
 
-            //Получение
-            Permission.queryInfo(function(res){
-              vm.gridOptions_perm.data = res;
-            });
+
 
             //Добавление
             function addPermission(){
@@ -616,15 +618,13 @@
                     { name: 'remove', displayName: answer[0]['remove'] , width: '8%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
                         cellTemplate: '<spanremove remove-action="EventForDropUser" remove-id="{{row.entity.id}}"/>' }
                 ];
+                getUsers(limit, offset, 'asc', 'id');
             });
             
             var offset = 0;
             var limit =  9;
             
             var searchText = '';
-
-            getUsers(limit, offset, 'asc', 'id');
-            
             function nextPage(){
                 if((vm.currentPage + 1) <= vm.totalPage) {
                     vm.unavailableNext = true;
@@ -956,15 +956,19 @@
             });
             
             $rootScope.$on('okBan', function(){
+                debugger;
                 var oldValueDate = new Date(vm.banDate);
                 var oldValueTime = new Date(vm.banTime);
                 vm.banDate.setHours(vm.banDate.getHours() + vm.banTime.toString().slice(16, 18));
                 vm.banDate.setMinutes(vm.banDate.getMinutes() + vm.banTime.toString().slice(19, 21));
+                vm.banDate.setMinutes(vm.banDate.getMinutes() - vm.banDate.getTimezoneOffset());
                 var currentDate = new Date();
                 if(vm.banDate.getTime() <= currentDate.getTime()){   //Ошибка
                     vm.errorDate = true;
                 } else{ //Всё норм
+                    console.log(vm.banDate);
                     AddBan.query({userId: vm.banUserId, endDate: vm.banDate, reason: vm.banReason}, function(answer){
+                        console.log(answer);
                         vm.banDate = '';
                         vm.banTime = '';
                         vm.banReason = '';
@@ -1174,13 +1178,14 @@
                         <a clip-copy="row.entity.url" ng-click="$emit(\'EventForCopyUrl\')" class="fa fa-files-o" style="margin-left: 90%; position: absolute; \n\
                         margin-top: -6%"></a></div>'
                 },
-                { name: 'view', displayName: answer[0]['view'], width: '15%', enableCellEdit: false, enableSorting: false, 
+                { name: 'view', displayName: answer[0]['view'], width: '15%', enableCellEdit: false, enableSorting: false,
                     cellTemplate: '<div class="resourcePadding"><img ng-src="{{row.entity.url}}"></div>' },
-                { name: 'action', displayName: answer[0]['action'], width: '1%', enableCellEdit: false, enableSorting: false, 
+                { name: 'action', displayName: answer[0]['action'], width: '1%', enableCellEdit: false, enableSorting: false,
                     cellTemplate: '<span class="fa fa-close" style="cursor: pointer; margin: 40%" ng-click="$emit(\'EventForDropResource\', row.entity.id)" style="margin-left: 25%; margin-top: 15%"></span>'}
             ];
+            getResources();
         });
-        getResources();
+
 
         var removeResourceId = null;
         vm.modal = $modal({
@@ -1240,7 +1245,7 @@
         function deleteResource(id) {
             DeleteResource.query({id: id, direction: vm.direction, offset: vm.offset, action: vm.action, limit: vm.limit, phrase: vm.searchText, src: vm.src}, function (answer) {
                 vm.modal.hide();
-                if(answer[0]) {
+                if(answer[0][0]) {
                     vm.countResources = answer[0][2][1];
                     var arr = [];
                     angular.forEach(vm.gridOptions_resourcesGrid.data, function(elem){
@@ -1256,7 +1261,7 @@
                     checkNavBtnAndCountTotalPage();
                     showSuccessAlert(vm.remove_resource_message);
                 } else {
-                    showErrorAlert(answer[1]);
+                    showErrorAlert(answer[0][1]);
                 }
             });
         };
@@ -1450,6 +1455,7 @@
                         <p ng-click="$emit(\'EventForDropPage\', row.entity.id)" class="actionCol fa fa-close"></p><br/>\n\
                         <p ng-click="$emit(\'EventForShowPage\', row.entity.url)" class="actionCol fa fa-file-o"></p>'
             }];
+            Init();
         });
 
        //+++
@@ -1499,7 +1505,7 @@
 
                 vm.gridOptions_pagesGrid.data = arr;
             });
-        }();
+        };
 
 
         function save(page, valid) {
@@ -1615,15 +1621,16 @@
                 { name: 'remove', displayName: answer[0]['remove'], width: '20%', enableCellEdit: false,  enableSorting: false, enableFiltering: false,
                     cellTemplate: '<spanremove remove-action="EventForDropCategory" remove-id="{{row.entity.id}}"/>'}
             ];
+            GetCategoryOfArticle.query({}, function(answer){
+                var arr = [];
+                angular.forEach(answer[0], function(category) {
+                    arr.push(category);
+                });
+                vm.gridOptions_categoriesOptions.data = arr;
+            });
         });
         
-        GetCategoryOfArticle.query({}, function(answer){
-            var arr = [];
-            angular.forEach(answer[0], function(category) {
-                arr.push(category);
-            });
-            vm.gridOptions_categoriesOptions.data = arr;
-        });
+
         
         vm.modal = $modal({
             show: false,
@@ -1780,8 +1787,9 @@
                 { name: 'remove', displayName: answer[0]['remove'], width: '5%', enableCellEdit: false,  enableSorting: false,
                     cellTemplate: '<spanremove remove-action="EventForDropArticle" remove-id="{{row.entity.id}}"/>'}
             ];
+            getArticles();
         });
-        getArticles();
+
         
         $scope.$on('EventForRedirectToShowArticle', function (event, id) {
             $window.open('http://' + $location.host() + ':' + $location.port() + '/articles#/' + id);
@@ -2028,9 +2036,10 @@
                 {name: 'english', displayName: answer[0]['english']},
                 {name: 'russian', displayName: answer[0]['russian']}
             ];
+            getContent(vm.path);
         });
         
-        getContent(vm.path);
+
         $rootScope.$on('selectContent', function(args, content){  
             if(content == '...'){ 
                 var position = 0;

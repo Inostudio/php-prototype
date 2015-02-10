@@ -23,4 +23,5 @@ return array(
     'next' =>  'Следующая',
     "message_image_big_size"                    => "Максимальные размер фотографии 5 Mb!",
     "message_image_not_format"                  => "Файл должен иметь расширение только \\'image/jpeg\\'",
+    "message_resource_not_found"                => "Ресурс не был найден"
 );
