@@ -38,5 +38,7 @@ return array(
     'time'    =>  'Время',
     'banned_with'    =>  'Заблокирован с',
     'to'    =>  'до',
-    'successfully_blocked_message'  =>  'Пользователь был успешно заблокирован!'
+    'successfully_blocked_message'  =>  'Пользователь был успешно заблокирован!',
+    'users2'  =>  'Пользователей',
+    'passwordError'  =>  'Пароли не совпадают'
 );

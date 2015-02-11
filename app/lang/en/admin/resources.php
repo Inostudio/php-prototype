@@ -23,5 +23,6 @@ return array(
     'next' =>  'Next',
     "message_image_big_size"                    => "The max image size is 5 Mb!",
     "message_image_not_format"                  => "The file must be extension only \\'image/jpeg\\'",
-    "message_resource_not_found"                => "Resource didn't found"
+    "message_resource_not_found"                => "Resource didn't found",
+    "resources2"    =>  "Resources"
 );

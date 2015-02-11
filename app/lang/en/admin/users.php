@@ -38,5 +38,7 @@ return array(
     'time'    =>  'Time',
     'banned_with'    =>  'Banned with',
     'to'    =>  'to',
-    'successfully_blocked_message'  =>  'User was successfully blocked!'
+    'successfully_blocked_message'  =>  'User was successfully blocked!',
+    'users2'  =>  'Users',
+    'passwordError'  =>  'Dont match confirm password!'
 );

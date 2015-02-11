@@ -612,6 +612,7 @@
             vm.banUserId = 0;
             vm.errorDate = false;
             vm.successfully_blocked_message = '';
+            vm.passwordError = '';
             
             vm.users_grid = {
                 enableFiltering: false
@@ -701,7 +702,7 @@
                 }
 
                 if((vm.userPassword != vm.userConfirmPassword)){
-                     alertError = $alert({title: 'Don\'t match confirm password.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                     alertError = $alert({title: vm.passwordError, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
                      return;
                 }
 
@@ -709,6 +710,7 @@
                     if(!answer[0]){
                         alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
                     } else {
+                        vm.countUsers++;
                         alertSuccess = $alert({title: vm.add_user_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
                         /*if((vm.currentPage === vm.totalPage) &&(vm.currentPage * limit > vm.countUsers)){
                             var newUser = {
@@ -726,7 +728,7 @@
                             offset = limit * (vm.totalPage-1);
                             vm.currentPage = vm.totalPage;
                             getUsers(limit, offset, 'asc', 'id');              
-                        }*/git
+                        }*/
 
                         vm.email = "";
                         vm.userConfirmPassword = "";
@@ -1056,25 +1058,24 @@
                     { name: 'accept', displayName: answer[0]['accept'] , width: '5%', enableFiltering: false, enableCellEdit: false,
                         cellTemplate: '<spantoggle  change-action="EventChangeUser" change-accept="{{row.entity.accept}}" change-id="{{row.entity.id}}"/>'}
                 ];
-            });
+                //Получение групп, в которых состоит пользователь+++
+                UserOptions.query({userId: $routeParams.userId}, function(answer){
+                    vm.userEmail = answer[0].email;
+                    vm.lastName = answer[0].profile.last_name;
+                    vm.firstName = answer[0].profile.first_name;
+                    vm.userId = answer[0].id;
 
-            //Получение групп, в которых состоит пользователь+++
-            UserOptions.query({userId: $routeParams.userId}, function(answer){
-                vm.userEmail = answer[0].email;
-                vm.lastName = answer[0].profile.last_name;
-                vm.firstName = answer[0].profile.first_name;
-                vm.userId = answer[0].id;
-
-                angular.forEach(answer[2][0], function(group) {
-                    group.accept = 0;
-                    angular.forEach(answer[1][0][0].groups, function(user) {
-                        if(group.id === user.id){
-                            group.accept = 1;
-                        }
+                    angular.forEach(answer[2][0], function(group) {
+                        group.accept = 0;
+                        angular.forEach(answer[1][0][0].groups, function(user) {
+                            if(group.id === user.id){
+                                group.accept = 1;
+                            }
+                        });
                     });
-                });
 
-                vm.gridOptions_userOptions.data = answer[2][0];
+                    vm.gridOptions_userOptions.data = answer[2][0];
+                });
             });
 
             //Включение/исключение пользователя из группы+++
@@ -1805,7 +1806,7 @@
 
         
         $scope.$on('EventForRedirectToShowArticle', function (event, id) {
-            $window.open('http://' + $location.host() + ':' + $location.port() + '/articles#/' + id);
+            $window.open('http://' + $location.host() + ':' + $location.port() + '/articles#/articles/' + id);
         });
         
         //Удаление 
@@ -2169,13 +2170,8 @@
         GetSections.query({}, function(answer){
            angular.forEach(answer[0], function(elem){
                var item = {id: elem.id, title: elem.title};
-               if(elem.disable){
-                   item.disable = 0;
-               } else {
-                   item.disable = 1;
-               }
+               item.disable = elem.disable == 0 ? 1 : 0;
                vm.sections.push(item);
-               
            });
         });
         

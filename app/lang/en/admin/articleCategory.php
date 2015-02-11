@@ -17,5 +17,6 @@ return array(
     'article_removed_message'   =>  'The article was removed successfully!',
     'article_change_message'  => 'The article was successfully changed!',
     'required_field'  =>  'The field is required!',
-    'category'  =>  'Category'
+    'category'  =>  'Category',
+    'articles2' =>  'Articles'
 );
