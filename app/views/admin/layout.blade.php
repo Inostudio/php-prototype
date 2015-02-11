@@ -99,8 +99,8 @@
             <li><a href="<% action('admin.logout', ['lang' => $lang]) %>"><i class="fa fa-suitcase"></i> <%trans('admin/adminMenu.logout')%></a></li>
           </ul>
             <div class='lang'>
-                <a href="<% action($routeName, ['lang' => 'ru']) %>" class="<% $lang === 'ru' ? 'active-block' : '' %>">RUS</a>
-                <a href="<% action($routeName, ['lang' => 'en']) %>" class="<% $lang === 'en' ? 'active-block' : '' %>">ENG</a>
+                <a href="javascript:window.location.href = window.location.href.replace('en', 'ru')" class="<% $lang === 'ru' ? 'active-block' : '' %>">RUS</a>
+                <a href="javascript:window.location.href = window.location.href.replace('ru', 'en')" class="<% $lang === 'en' ? 'active-block' : '' %>">ENG</a>
             </div>
         </div>
       </div>
