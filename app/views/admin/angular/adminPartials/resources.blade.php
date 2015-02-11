@@ -55,6 +55,7 @@
 <div style="margin-top: 5px;">
     <button type="button" class="btn btn-success" ng-click="vm.prevPage()" ng-disabled="vm.unavailablePrev"><%trans('admin/resources.previous')%></button>
     <button type="button" class="btn btn-success" ng-click="vm.nextPage()" ng-disabled="vm.unavailableNext"><%trans('admin/resources.next')%></button>
+    <span style="float: right"><%trans('admin/resources.resources2')%>: {{vm.countResources}}</span>
 </div>
 
 <script type="text/ng-template" id="ConfirmDelete.html">
