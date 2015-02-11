@@ -15,4 +15,5 @@ return array(
     "logout"                                    => "Выход",
     "profile"                                   => "Профиль",
     "search"                                    => "Поиск",
+    "my_articles"                               => "Мои статьи",
 );

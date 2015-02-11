@@ -63,11 +63,14 @@
       <div class="container">
 
         <ul class="nav navbar-nav pull-right">
-            @if(!$result['articles'] && !$result['auth'])
+            @if(Auth::user() && !$result['articles'] && !$result['auth'])
               <form class="navbar-form" style="float: left" method="post" action="<% action('front.search', ['lang' => $lang]) %>">
                 <input name="offer" type="text" class="form-control" placeholder="<%trans('front/navbar.search')%>">
                 <input type="hidden" name="search" value="users" />
               </form>
+                <li>
+                    <a href="/articles#/users/<% Auth::user()->id %>" ><% trans('front/navbar.my_articles') %></a>
+                </li>
             @endif
             @if (Auth::user())
                 @if(!$result['profile'])

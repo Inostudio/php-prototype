@@ -15,4 +15,5 @@ return array(
     "logout"                                    => "Sign out",
     "profile"                                   => "Profile",
     "search"                                    => "Search",
+    "my_articles"                               => "My articles",
 );
