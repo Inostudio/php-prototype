@@ -10,7 +10,7 @@
     <form name="createCat" novalidate>
         <div class="form-inline">
             <div class="input-group">
-                <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/articles.category_name')%>" required="" ng-model="vm.categoryTitle">
+                <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/articles.category_name')%>" required="" ng-model="vm.categoryTitle"  maxlength="128">
             </div>
             <button type="submit" class="btn btn-default" ng-disabled="createCat.$invalid" ng-click="vm.addCategory()"><%trans('admin/articles.add')%></button>
         </div>

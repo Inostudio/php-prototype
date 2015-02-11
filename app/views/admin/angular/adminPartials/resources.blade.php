@@ -25,7 +25,7 @@
     <form name="form" ng-submit="vm.add(vm.resource)">
         <div class="form-inline" novalidate>
             <div class="input-group">
-                <input type="text" class="form-control" name="title" placeholder="<%trans('admin/resources.title_resource')%>" ng-model="vm.resource.title" required />
+                <input type="text" class="form-control" name="title" placeholder="<%trans('admin/resources.title_resource')%>" ng-model="vm.resource.title" required maxlength="128" />
             </div>
             <div class="input-group">
                 <input type="file" id="fileInput" name="file" accept="image/jpeg"/>

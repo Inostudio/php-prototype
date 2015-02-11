@@ -24,7 +24,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group" ng-class="{ 'has-error' : pageForm.title.$invalid && submitted}">
-                                                    <input type="text" class="form-control" placeholder="<%trans('admin/pages.title')%>" name="title" required ng-model="page.title" ng-trim="true"/>
+                                                    <input type="text" class="form-control" placeholder="<%trans('admin/pages.title')%>" name="title" required ng-model="page.title" ng-trim="true" maxlength="128"/>
                                                 </div>
                                                 <div class="form-group" ng-class="{ 'has-error' : pageForm.body.$invalid && submitted}">
                                                     <textarea class="form-control" placeholder="<%trans('admin/pages.content')%>" rows="5" required ng-model="page.body" ng-trim="true" name="body" style="height: 400px"></textarea>

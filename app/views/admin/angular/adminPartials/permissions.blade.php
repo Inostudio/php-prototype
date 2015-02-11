@@ -10,10 +10,10 @@
     <form name="form" novalidate>
         <div class="form-inline">
             <div class="input-group">
-                <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/permissions.permission_name')%>" ng-model="vm.permissionName" required>
+                <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/permissions.permission_name')%>" ng-model="vm.permissionName" required  maxlength="32">
             </div>
             <div class="input-group">
-              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/permissions.permission_description')%>" ng-model="vm.permissionDescription">
+              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/permissions.permission_description')%>" ng-model="vm.permissionDescription"  maxlength="128">
             </div>
             <button type="submit" class="btn btn-default" ng-click="vm.addPermission()" ng-disabled="form.$invalid"><%trans('admin/permissions.add')%></button>
         </div>

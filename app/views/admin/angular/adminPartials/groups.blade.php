@@ -10,10 +10,10 @@
     <form name="form" novalidate>
         <div class="form-inline">
             <div class="input-group">
-                <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/groups.group_name')%>" ng-model="vm.groupName" required>
+                <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/groups.group_name')%>" ng-model="vm.groupName" required  maxlength="32">
             </div>
             <div class="input-group">
-              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/groups.group_description')%>" ng-model="vm.groupDescription">
+              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/groups.group_description')%>" ng-model="vm.groupDescription"  maxlength="128">
             </div>
             <button type="submit" class="btn btn-default" ng-click="vm.addGroup()" ng-disabled="form.$invalid"><%trans('admin/groups.add')%></button>
         </div>
