@@ -40,5 +40,7 @@ return array(
     'to'    =>  'до',
     'successfully_blocked_message'  =>  'Пользователь был успешно заблокирован!',
     'users2'  =>  'Пользователей',
-    'passwordError'  =>  'Пароли не совпадают'
+    'passwordError'  =>  'Пароли не совпадают',
+    'remove_self_message'   =>  'Нельзя удалить самого себя!',
+    'ban_self_message'  =>  'Нельзя заблокировать самого себя!'
 );

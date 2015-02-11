@@ -613,6 +613,8 @@
             vm.errorDate = false;
             vm.successfully_blocked_message = '';
             vm.passwordError = '';
+            vm.remove_self_message = '';
+            vm.ban_self_message = '';
             
             vm.users_grid = {
                 enableFiltering: false
@@ -751,6 +753,8 @@
                 {
                     userRemoveId = Number(id);
                     vm.modal.show();
+                } else {
+                    alertError = $alert({title: vm.remove_self_message, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
                 }
             });
 
@@ -949,6 +953,8 @@
             });
             
             $scope.$on('changeBan', function(args, id, user){
+                alertError.hide();
+                alertSuccess.hide();
                 if(id != vm.myId)
                 {
                     vm.userBan = user;
@@ -963,6 +969,8 @@
                         }
                         vm.modalBan.show();
                     });
+                } else {
+                    alertError = $alert({title: vm.ban_self_message, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
                 }
             });
             

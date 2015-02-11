@@ -40,5 +40,7 @@ return array(
     'to'    =>  'to',
     'successfully_blocked_message'  =>  'User was successfully blocked!',
     'users2'  =>  'Users',
-    'passwordError'  =>  'Dont match confirm password!'
+    'passwordError'  =>  'Dont match confirm password!',
+    'remove_self_message'   =>  'You can not remove yourself!',
+    'ban_self_message'  =>  'You can not lock yourself!'
 );

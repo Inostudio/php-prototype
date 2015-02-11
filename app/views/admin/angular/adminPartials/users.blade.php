@@ -4,7 +4,9 @@
      vm.myId='<%Auth::user()->id%>';
      vm.invalid_email_message='<%trans("admin/users.invalid_email_message")%>';
      vm.successfully_blocked_message='<%trans("admin/users.successfully_blocked_message")%>';
-     vm.passwordError='<%trans("admin/users.passwordError")%>'"></div>
+     vm.passwordError='<%trans("admin/users.passwordError")%>';
+     vm.remove_self_message='<%trans("admin/users.remove_self_message")%>';
+     vm.ban_self_message='<%trans("admin/users.ban_self_message")%>'"></div>
 
 <h1 class="page-header"><%trans('admin/users.users')%></h1>
 <div class="table-responsive">
