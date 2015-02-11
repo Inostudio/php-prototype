@@ -1729,7 +1729,7 @@
                             if(!answer[0]){
                                 showErrorAlert(answer[1]);
                                 angular.forEach(vm.gridOptions_categoriesOptions.data, function(category) {
-                                    if (category.id === rowEntity.id) 
+                                    if (category.id === rowEntity.id)
                                         category.title = oldValue;
                                 });
                             } else{

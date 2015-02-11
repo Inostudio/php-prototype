@@ -13,5 +13,6 @@ return array(
     'deliting_text' => 'Are you sure you want to delete this category?',
     'ok' => 'OK',
     'cancel' => 'Cancel',
-    'remove_default_cat_message'    =>  'You can not delete this category!'
+    'remove_default_cat_message'    =>  'You can not delete this category!',
+    'name_already_exists'   =>  'Category with the same name already exists!'
 );

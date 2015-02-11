@@ -3,7 +3,8 @@
      vm.field_name_required = '<%trans("admin/articles.field_name_required")%>';
      vm.update_category_message = '<%trans("admin/articles.update_category_message")%>';
      vm.defaultCategoryId = '<%Category::where('isDefault', '=', '1')->first()->id%>';
-     vm.remove_default_cat_message = '<%trans("admin/articles.remove_default_cat_message")%>'"></div>
+     vm.remove_default_cat_message = '<%trans("admin/articles.remove_default_cat_message")%>';
+     vm.name_already_exists = '<%trans("admin/articles.name_already_exists")%>'"></div>
 
 <h1 class="page-header"><%trans('admin/articles.categories_of_articles')%></h1>
 <div class="table-responsive">
