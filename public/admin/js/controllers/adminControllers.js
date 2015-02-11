@@ -612,6 +612,7 @@
             vm.banUserId = 0;
             vm.errorDate = false;
             vm.successfully_blocked_message = '';
+            vm.passwordError = '';
             
             vm.users_grid = {
                 enableFiltering: false
@@ -701,7 +702,7 @@
                 }
 
                 if((vm.userPassword != vm.userConfirmPassword)){
-                     alertError = $alert({title: 'Don\'t match confirm password.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                     alertError = $alert({title: vm.passwordError, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
                      return;
                 }
 
@@ -709,6 +710,7 @@
                     if(!answer[0]){
                         alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
                     } else {
+                        vm.countUsers++;
                         alertSuccess = $alert({title: vm.add_user_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
                         /*if((vm.currentPage === vm.totalPage) &&(vm.currentPage * limit > vm.countUsers)){
                             var newUser = {
@@ -726,7 +728,7 @@
                             offset = limit * (vm.totalPage-1);
                             vm.currentPage = vm.totalPage;
                             getUsers(limit, offset, 'asc', 'id');              
-                        }*/git
+                        }*/
 
                         vm.email = "";
                         vm.userConfirmPassword = "";

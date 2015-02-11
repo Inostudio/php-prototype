@@ -3,23 +3,24 @@
      vm.remove_user_message = '<%trans("admin/users.remove_user_message")%>';
      vm.myId='<%Auth::user()->id%>';
      vm.invalid_email_message='<%trans("admin/users.invalid_email_message")%>';
-     vm.successfully_blocked_message='<%trans("admin/users.successfully_blocked_message")%>'"></div>
+     vm.successfully_blocked_message='<%trans("admin/users.successfully_blocked_message")%>';
+     vm.passwordError='<%trans("admin/users.passwordError")%>'"></div>
 
 <h1 class="page-header"><%trans('admin/users.users')%></h1>
 <div class="table-responsive">
     <h3 class="sub-header"><%trans('admin/users.add_user')%></h3>
-    <form name="form">
+    <form name="nameForm">
         <div class="form-inline" novalidate>
             <div class="input-group">
                 <input type="email" class="form-control" name="email" id="exampleInputEmail2" placeholder="<%trans('admin/users.email')%>" ng-model="vm.email" required>
             </div>
             <div class="input-group">
-                <input type="password" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/users.password')%>" ng-model="vm.userPassword" required>
+                <input type="password" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/users.password')%>" ng-model="vm.userPassword" required minlength="6">
             </div>
             <div class="input-group">
-                <input type="password" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/users.confirm_password')%>" ng-model="vm.userConfirmPassword" required>
+                <input type="password" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/users.confirm_password')%>" ng-model="vm.userConfirmPassword" required minlength="6">
             </div>
-            <button type="submit" class="btn btn-default" ng-click="vm.addUser()" ng-disabled="form.email.$invalid"><%trans('admin/users.add')%></button>
+            <button type="submit" class="btn btn-default" ng-click="vm.addUser()" ng-disabled="nameForm.$invalid" ><%trans('admin/users.add')%></button>
         </div>
     </form>
     <h3 class="sub-header"><%trans('admin/users.list_of_users')%></h3>
@@ -37,6 +38,7 @@
     <div style="margin-top: 5px;">
         <button type="button" class="btn btn-success" ng-click="vm.prevPage()" ng-disabled="vm.unavailablePrev"><%trans('admin/users.previous_page')%></button>
         <button type="button" class="btn btn-success" ng-click="vm.nextPage()" ng-disabled="vm.unavailableNext"><%trans('admin/users.next_page')%></button>
+        <span style="float: right"><%trans('admin/users.users2')%>: {{vm.countUsers}}</span>
     </div>
 </div>
 
