@@ -1806,7 +1806,7 @@
 
         
         $scope.$on('EventForRedirectToShowArticle', function (event, id) {
-            $window.open('http://' + $location.host() + ':' + $location.port() + '/articles#/' + id);
+            $window.open('http://' + $location.host() + ':' + $location.port() + '/articles#/articles/' + id);
         });
         
         //Удаление 
