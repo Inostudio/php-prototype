@@ -77,9 +77,9 @@
 
         $scope.$watch('vm.lang', function() {
 
-            vm.config1.title = (vm.lang == 'en' ? 'Users in groups' : 'Пользователи в группах');
+            vm.config2.title = (vm.lang == 'en' ? 'Users in groups' : 'Пользователи в группах');
 
-            vm.config2.title = (vm.lang == 'en' ? 'Articles in categories' : 'Статьи в категориях');
+            vm.config1.title = (vm.lang == 'en' ? 'Articles in categories' : 'Статьи в категориях');
 
 
         });
