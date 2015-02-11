@@ -1,6 +1,7 @@
-<div id="alerts-container" ng-init="vm.article_removed_message = '<%trans("admin/articleCategory.article_removed_message")%>';
+<div id="alerts-container"
+     ng-init="vm.article_removed_message = '<%trans("admin/articleCategory.article_removed_message")%>';
      vm.article_change_message = '<%trans("admin/articleCategory.article_change_message")%>';
-     vm.required_field = '<%trans("admin/articleCategory.required_field")%>'"></div>
+     vm.required_field = '<%trans("admin/articleCategory.required_field")%>'" xmlns="http://www.w3.org/1999/html"></div>
 
 <h1 class="page-header" align='center'>{{vm.categoryTitle == '' ? '<%trans("admin/articleCategory.all_categories")%>' : ('<%trans("admin/articleCategory.category")%>: ' + vm.categoryTitle)}}</h1>
 <div class="table-responsive">
@@ -23,6 +24,7 @@
     <div style="margin-top: 5px;">
         <button type="button" class="btn btn-success" ng-disabled="vm.unavailablePrev" ng-click="vm.prevPage()"><%trans('admin/articleCategory.previous')%></button>
         <button type="button" class="btn btn-success" ng-disabled="vm.unavailableNext" ng-click="vm.nextPage()"><%trans('admin/articleCategory.next')%></button>
+        <span style="float: right"><%trans('admin/articleCategory.articles2')%>: {{vm.countArticles}}</span>
     </div>
 </div>
 

@@ -17,5 +17,6 @@ return array(
     'article_removed_message'   =>  'Статья была успешно удалена!',
     'article_change_message'  => 'Статья была успешно изменена!',
     'required_field'  =>  'Поле обязательно!',
-    'category'  =>  'Категория'
+    'category'  =>  'Категория',
+    'articles2' =>  'Статей'
 );
