@@ -1058,25 +1058,24 @@
                     { name: 'accept', displayName: answer[0]['accept'] , width: '5%', enableFiltering: false, enableCellEdit: false,
                         cellTemplate: '<spantoggle  change-action="EventChangeUser" change-accept="{{row.entity.accept}}" change-id="{{row.entity.id}}"/>'}
                 ];
-            });
+                //Получение групп, в которых состоит пользователь+++
+                UserOptions.query({userId: $routeParams.userId}, function(answer){
+                    vm.userEmail = answer[0].email;
+                    vm.lastName = answer[0].profile.last_name;
+                    vm.firstName = answer[0].profile.first_name;
+                    vm.userId = answer[0].id;
 
-            //Получение групп, в которых состоит пользователь+++
-            UserOptions.query({userId: $routeParams.userId}, function(answer){
-                vm.userEmail = answer[0].email;
-                vm.lastName = answer[0].profile.last_name;
-                vm.firstName = answer[0].profile.first_name;
-                vm.userId = answer[0].id;
-
-                angular.forEach(answer[2][0], function(group) {
-                    group.accept = 0;
-                    angular.forEach(answer[1][0][0].groups, function(user) {
-                        if(group.id === user.id){
-                            group.accept = 1;
-                        }
+                    angular.forEach(answer[2][0], function(group) {
+                        group.accept = 0;
+                        angular.forEach(answer[1][0][0].groups, function(user) {
+                            if(group.id === user.id){
+                                group.accept = 1;
+                            }
+                        });
                     });
-                });
 
-                vm.gridOptions_userOptions.data = answer[2][0];
+                    vm.gridOptions_userOptions.data = answer[2][0];
+                });
             });
 
             //Включение/исключение пользователя из группы+++
