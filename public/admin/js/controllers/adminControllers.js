@@ -2170,13 +2170,8 @@
         GetSections.query({}, function(answer){
            angular.forEach(answer[0], function(elem){
                var item = {id: elem.id, title: elem.title};
-               if(elem.disable){
-                   item.disable = 0;
-               } else {
-                   item.disable = 1;
-               }
+               item.disable = elem.disable == 0 ? 1 : 0;
                vm.sections.push(item);
-               
            });
         });
         
