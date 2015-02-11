@@ -20,7 +20,7 @@
         </div>
         <span style="float: right"><%trans('admin/articleCategory.page')%>: {{vm.currentPage}}/{{vm.totalPage}}</span><br>
     </div>
-    <div ui-grid="vm.gridOptions_articleOfCategoryOptions" ui-grid-edit></div>
+    <div ui-grid="vm.gridOptions_articleOfCategoryOptions" ui-grid-edit class="articlesTable"></div>
     <div style="margin-top: 5px;">
         <button type="button" class="btn btn-success" ng-disabled="vm.unavailablePrev" ng-click="vm.prevPage()"><%trans('admin/articleCategory.previous')%></button>
         <button type="button" class="btn btn-success" ng-disabled="vm.unavailableNext" ng-click="vm.nextPage()"><%trans('admin/articleCategory.next')%></button>

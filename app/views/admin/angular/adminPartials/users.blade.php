@@ -36,7 +36,7 @@
         </div>
         <span style="float: right"><%trans('admin/users.page')%>: {{vm.currentPage}}/{{vm.totalPage}}</span><br>
     </div>
-    <div ui-grid="vm.users_grid" ui-grid-edit></div>
+    <div ui-grid="vm.users_grid" ui-grid-edit class="usersTable"></div>
     <div style="margin-top: 5px;">
         <button type="button" class="btn btn-success" ng-click="vm.prevPage()" ng-disabled="vm.unavailablePrev"><%trans('admin/users.previous_page')%></button>
         <button type="button" class="btn btn-success" ng-click="vm.nextPage()" ng-disabled="vm.unavailableNext"><%trans('admin/users.next_page')%></button>

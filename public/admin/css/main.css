@@ -283,3 +283,11 @@ body {
 .ui-grid-cell-contents {
     line-height: 21px;
 }
+
+.articlesTable{
+    height: 280px;
+}
+
+.usersTable{
+    height: 320px;
+}
