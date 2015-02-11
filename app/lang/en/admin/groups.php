@@ -19,5 +19,6 @@ return array(
     'group' => 'Group',
     'description' => 'Description',
     'title_already_taken'  =>  'The title has already been taken!',
-    'title_empty'  =>  'Field title is empty!'
+    'title_empty'  =>  'Field title is empty!',
+    'remove_admin_group_message'    =>  'You can not delete this group!'
 );

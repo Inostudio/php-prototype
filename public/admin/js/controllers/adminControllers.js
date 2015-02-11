@@ -148,6 +148,7 @@
         vm.idAdminsGroup = 0;
         vm.title_already_taken = '';
         vm.title_empty = '';
+        vm.remove_admin_group_message = '';
 
         var removeGroupId = null;
         vm.modal = $modal({
@@ -159,6 +160,8 @@
             removeGroupId = Number(id);
             if(id != vm.idAdminsGroup){
                 vm.modal.show();
+            } else {
+                showErrorAlert(vm.remove_admin_group_message);
             }
         });
 

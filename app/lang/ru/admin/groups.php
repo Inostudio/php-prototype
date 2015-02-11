@@ -19,5 +19,6 @@ return array(
     'group' => 'Группа',
     'description' => 'Описание',
     'title_already_taken'  =>  'Группа с таким названием уже существует!',
-    'title_empty'  =>  'Поле названия пустое!'
+    'title_empty'  =>  'Поле названия пустое!',
+    'remove_admin_group_message'    =>  'Нельзя удалить данную группу!'
 );

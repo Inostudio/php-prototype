@@ -2,7 +2,8 @@
      vm.remove_group_message = '<%trans("admin/groups.remove_group_message")%>';
      vm.add_group_message = '<%trans("admin/groups.add_group_message")%>';
      vm.title_already_taken = '<%trans("admin/groups.title_already_taken")%>';
-     vm.title_empty = '<%trans("admin/groups.title_empty")%>';"></div>
+     vm.title_empty = '<%trans("admin/groups.title_empty")%>';
+     vm.remove_admin_group_message = '<%trans("admin/groups.remove_admin_group_message")%>'"></div>
 
 <h1 class="page-header"><%trans('admin/groups.groups')%></h1>
 <div class="table-responsive">
