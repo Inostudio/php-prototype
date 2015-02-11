@@ -1635,6 +1635,7 @@
         vm.field_name_required = '';
         vm.update_category_message = '';
         vm.defaultCategoryId = 0;
+        vm.remove_default_cat_message = '';
          
         vm.gridOptions_categoriesOptions = { enableFiltering: true, enableSorting: true, enableCellEdit: true};
         TableTranslate.query({phrase: ['id', 'title', 'articles', 'remove']}, function(answer){
@@ -1667,6 +1668,8 @@
             if(id != vm.defaultCategoryId){
                 vm.removeCategoryId = Number(id);
                 vm.modal.show();
+            } else {
+                showErrorAlert(vm.remove_default_cat_message);
             }
         });
         

@@ -12,5 +12,6 @@ return array(
     'deliting' => 'Deliting!',
     'deliting_text' => 'Are you sure you want to delete this category?',
     'ok' => 'OK',
-    'cancel' => 'Cancel'
+    'cancel' => 'Cancel',
+    'remove_default_cat_message'    =>  'You can not delete this category!'
 );

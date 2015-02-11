@@ -2,7 +2,8 @@
      vm.add_category_message = '<%trans("admin/articles.add_category_message")%>';
      vm.field_name_required = '<%trans("admin/articles.field_name_required")%>';
      vm.update_category_message = '<%trans("admin/articles.update_category_message")%>';
-     vm.defaultCategoryId = '<%Category::where('isDefault', '=', '1')->first()->id%>'"></div>
+     vm.defaultCategoryId = '<%Category::where('isDefault', '=', '1')->first()->id%>';
+     vm.remove_default_cat_message = '<%trans("admin/articles.remove_default_cat_message")%>'"></div>
 
 <h1 class="page-header"><%trans('admin/articles.categories_of_articles')%></h1>
 <div class="table-responsive">
@@ -10,7 +11,7 @@
     <form name="createCat" novalidate>
         <div class="form-inline">
             <div class="input-group">
-                <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/articles.category_name')%>" required="" ng-model="vm.categoryTitle"  maxlength="128">
+                <input type="text" class="form-control" id="exampleInputEmail2" placeholder="<%trans('admin/articles.category_name')%>" required="" ng-model="vm.categoryTitle"  maxlength="24">
             </div>
             <button type="submit" class="btn btn-default" ng-disabled="createCat.$invalid" ng-click="vm.addCategory()"><%trans('admin/articles.add')%></button>
         </div>
