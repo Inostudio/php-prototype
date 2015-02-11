@@ -8,7 +8,7 @@
 return array(
     "home"                                      => "Главная",
     "about"                                     => "Описание",
-    "contact"                                   => "Контакты",
+    "contact"                                   => "Связаться с нами",
     "articles"                                  => "Статьи",
     "signin"                                    => "Вход",
     "signup"                                    => "Регистрация",

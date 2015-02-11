@@ -18,7 +18,7 @@ return array(
     "text_remind"                               => "Забыли пароль?",
     "text_sign_up"                              => "Зарегистрироваться",
 
-    "helper_email_invalid"                      => "Некорректный емаил",
+    "helper_email_invalid"                      => "Некорректный email",
     "helper_email_empty"                        => "E-mail не может быть пустым",
     "helper_password_empty"                     => "Пароль не может быть пустым",
     "helper_password_short"                     => "Пароль слишком короткий.",

@@ -11,9 +11,9 @@ return array(
     "email"                                     => "Электронная почта",
     "phone"                                     => "Номер телефона",
 
-    "help_block_attr_empty"                     => ":attr не может быть пустым",
-    "help_block_attr_short"                     => ":attr слишком короткое",
-    "help_block_attr_long"                      => ":attr слишком длинное",
+    "help_block_first_name"                     => "Поле Имя должно иметь длину от 2 до 20 букв",
+    "help_block_last_name"                      => "Поле Фамилия должно иметь длину от 2 до 20 букв",
+    "help_block_phone"                          => "Поле Номер телефона должно иметь длину от 9 до 20 цифр",
 
     "message_data_invalid"                      => "Неверные данные",
     "message_change_success"                    => "Изменения сохранены",

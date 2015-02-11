@@ -8,7 +8,7 @@
 return array(
     "home"                                      => "Home",
     "about"                                     => "About",
-    "contact"                                   => "Contact",
+    "contact"                                   => "Contact with us",
     "articles"                                  => "Articles",
     "signin"                                    => "Sign in",
     "signup"                                    => "Sign up",

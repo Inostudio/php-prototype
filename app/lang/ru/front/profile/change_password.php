@@ -19,7 +19,7 @@ return array(
     "help_block_new_password_long"              => "Новый пароль слишком длинный",
     "help_block_new_password_confirm_wrong"     => "Пароли не совпадают",
 
-    "button_change"                             => "Изменить",
+    "button_change"                             => "Изменить пароль",
 
     "message_old_password_wrong"                => "Неверный старый пароль",
     "message_data_invalid"                      => "Неверно введены данные",

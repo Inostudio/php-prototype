@@ -24,7 +24,7 @@
                            class="form-control"
                            placeholder="<% $message !== null ?
                         trans('front/profile/change_password.placeholder_default_password') :
-                        trans('front/profile/change_password.placeholder_new_password') %>"
+                        trans('front/profile/change_password.placeholder_old_password') %>"
                            data-ng-model="vm.user.old_password"
                            data-ng-change="vm.closeAlert()"
                            required>

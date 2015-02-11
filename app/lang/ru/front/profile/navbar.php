@@ -7,6 +7,6 @@
  */
 return array(
     "profile"                                   => "Профиль",
-    "changePassword"                            => "Смена пароля",
-    "changeEmail"                               => "Смена e-mail'а",
+    "changePassword"                            => "Сменить пароль",
+    "changeEmail"                               => "Сменить e-mail",
 );

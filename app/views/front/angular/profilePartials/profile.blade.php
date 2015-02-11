@@ -41,23 +41,12 @@
 
                         <div class="form-group">
                             <div class="input-group" data-ng-class="{ 'has-error' : (form.first_name.$invalid) && vm.submitted }">
-                                <input type="text" name="first_name" data-ng-model="vm.temp.first_name" data-ng-hide="!vm.editing" minlength="2" maxlength="32" data-ng-change="vm.closeAlert()" required>
+                                <input type="text" name="first_name" data-ng-model="vm.temp.first_name" data-ng-hide="!vm.editing" data-ng-change="vm.closeAlert()" ng-pattern="/^[a-zA-Zа-яА-Я]{2,20}$/">
                             </div>
 
                             <span class="help-block"
-                                data-ng-show="(form.first_name.$error.required) && vm.submitted">
-                                <% trans('front/profile/profile.help_block_attr_empty',
-                                    ['attr' => $field]) %>
-                            </span>
-
-                            <span class="help-block" data-ng-show="(form.first_name.$error.minlength) && vm.submitted">
-                                <% trans('front/profile/profile.help_block_attr_short',
-                                    ['attr' => $field]) %>
-                            </span>
-
-                            <span class="help-block" data-ng-show="(form.first_name.$error.maxlength) && vm.submitted">
-                                <% trans('front/profile/profile.help_block_attr_long',
-                                    ['attr' => $field]) %>
+                                data-ng-show="(form.first_name.$error.pattern) && vm.submitted">
+                                <% trans('front/profile/profile.help_block_first_name') %>
                             </span>
                         </div>
                     </td>
@@ -71,23 +60,12 @@
 
                         <div class="form-group">
                             <div class="input-group" data-ng-class="{ 'has-error' : (form.last_name.$invalid) && vm.submitted }">
-                                <input type="text" name="last_name" data-ng-model="vm.temp.last_name" data-ng-hide="!vm.editing" minlength="2" maxlength="32" data-ng-change="vm.closeAlert()" required>
+                                <input type="text" name="last_name" data-ng-model="vm.temp.last_name" data-ng-hide="!vm.editing" data-ng-change="vm.closeAlert()" ng-pattern="/^[a-zA-Zа-яА-Я]{2,20}$/">
                             </div>
 
                             <span class="help-block"
-                                data-ng-show="(form.last_name.$error.required) && vm.submitted">
-                                <% trans('front/profile/profile.help_block_attr_empty',
-                                    ['attr' => $field]) %>
-                            </span>
-
-                            <span class="help-block" data-ng-show="(form.last_name.$error.minlength) && vm.submitted">
-                                <% trans('front/profile/profile.help_block_attr_short',
-                                    ['attr' => $field]) %>
-                            </span>
-
-                            <span class="help-block" data-ng-show="(form.last_name.$error.maxlength) && vm.submitted">
-                                <% trans('front/profile/profile.help_block_attr_long',
-                                    ['attr' => $field]) %>
+                                data-ng-show="(form.last_name.$error.pattern) && vm.submitted">
+                                <% trans('front/profile/profile.help_block_last_name') %>
                             </span>
                         </div>
                     </td>
@@ -99,23 +77,12 @@
 
                         <div class="form-group">
                             <div class="input-group" data-ng-class="{ 'has-error' : (form.phone.$invalid) && vm.submitted }">
-                                <input type="text" name="phone"  data-ng-model="vm.temp.phone" data-ng-hide="!vm.editing" minlength="2" maxlength="32" data-ng-change="vm.closeAlert()" required>
+                                <input type="text" name="phone" data-ng-model="vm.temp.phone" data-ng-hide="!vm.editing" data-ng-change="vm.closeAlert()" ng-pattern="/^\d{9,20}$/">
                             </div>
 
                             <span class="help-block"
-                                data-ng-show="(form.phone.$error.required) && vm.submitted">
-                                <% trans('front/profile/profile.help_block_attr_empty',
-                                    ['attr' => $field]) %>
-                            </span>
-
-                            <span class="help-block" data-ng-show="(form.phone.$error.minlength) && vm.submitted">
-                                <% trans('front/profile/profile.help_block_attr_short',
-                                    ['attr' => $field]) %>
-                            </span>
-
-                            <span class="help-block" data-ng-show="(form.phone.$error.maxlength) && vm.submitted">
-                                <% trans('front/profile/profile.help_block_attr_long',
-                                    ['attr' => $field]) %>
+                                data-ng-show="(form.phone.$error.pattern) && vm.submitted">
+                                <% trans('front/profile/profile.help_block_phone') %>
                             </span>
                         </div>
                     </td>

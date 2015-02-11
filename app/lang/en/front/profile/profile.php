@@ -11,9 +11,9 @@ return array(
     "email"                                     => "Email",
     "phone"                                     => "Phone number",
 
-    "help_block_attr_empty"                     => ":attr must be not empty",
-    "help_block_attr_short"                     => ":attr name is too short",
-    "help_block_attr_long"                      => ":attr name is too long",
+    "help_block_first_name"                     => "Field First name must be length from 2 to 20 character",
+    "help_block_last_name"                      => "Field Last name must be length from 2 to 20 character",
+    "help_block_phone"                          => "Field Phone must be length from 9 to 20 digits",
 
     "message_data_invalid"                      => "Invalid form data",
     "message_change_success"                    => "Changes have been saved",

@@ -6,7 +6,7 @@
  * Time: 3:07 PM
  */
 return array(
-    "button_send"                               => "Отправить восстановление",
+    "button_send"                               => "Восстановить",
     "button_reset"                              => "Сбросить пароль",
 
     "placeholder_email"                         => "E-mail",

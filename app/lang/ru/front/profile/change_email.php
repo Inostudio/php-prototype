@@ -18,7 +18,7 @@ return array(
     "help_block_email_invalid"                  => "E-mail некорректный.",
 
 
-    "button_change"                             => "Изменить",
+    "button_change"                             => "Изменить e-mail",
 
     "message_password_wrong"                    => "Выбранный пароль некорректный",
     "message_change_success_send"               => "На вашу текущую почту отправлено письмо для подтверждение смены e-mail'а.",
