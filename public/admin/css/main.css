@@ -279,3 +279,7 @@ body {
     pointer-events: none;
     cursor: default;
 }
+
+.ui-grid-cell-contents {
+    line-height: 21px;
+}
