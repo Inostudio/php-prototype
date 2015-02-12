@@ -170,7 +170,7 @@
             window.location = '#/groups/' + id;
         });
         //Grid
-        vm.gridOptions = { enableFiltering: true };
+        vm.gridOptions = { enableFiltering: true, enableGridMenu: true };
         TableTranslate.query({phrase: ['id', 'title', 'description', 'permissions', 'remove']}, function(answer){
             vm.gridOptions.columnDefs = [
                 { name: 'id', enableCellEdit: false, width: '2%', enableFiltering: false, displayName: answer[0]['id']},
@@ -351,7 +351,7 @@
             vm.title_already_taken = '';
             vm.title_empty = '';
             
-            vm.gridOptions_perm = { enableFiltering: true };
+            vm.gridOptions_perm = { enableFiltering: true, enableGridMenu: true };
             TableTranslate.query({phrase: ['id', 'title', 'description', 'remove']}, function(answer){
                 vm.gridOptions_perm.columnDefs = [
                     { name: 'id', enableCellEdit: false, displayName: answer[0]['id'], width: '2%', enableFiltering: false },
@@ -520,7 +520,7 @@
             vm.remove_perm_from_group = '';
             vm.add_perm_to_group = '';
             
-            vm.gridOptions_groupOptions = { enableFiltering: true };
+            vm.gridOptions_groupOptions = { enableFiltering: true, enableGridMenu: true };
             TableTranslate.query({phrase: ['id', 'title', 'description', 'accept']}, function(answer){
                 vm.gridOptions_groupOptions.columnDefs = [
                     { name: 'id', displayName: answer[0]['id'], enableCellEdit: false, width: '10%', enableFiltering: false },
@@ -645,7 +645,7 @@
         vm.acceptRemoveBan = acceptRemoveBan;
         vm.confirmDeleteBan = true;
 
-        vm.users_grid = { enableFiltering: false };
+        vm.users_grid = { enableFiltering: false, enableGridMenu: true };
 
         TableTranslate.query({phrase: ['id', 'email', 'first_name', 'last_name', 'phone', 'ban', 'groups', 'remove']}, function(answer){
             vm.users_grid.columnDefs = [
@@ -1016,7 +1016,7 @@
             vm.selfAccept = 0;
             vm.grSelfId = 0;
 
-            vm.gridOptions_userOptions = { enableFiltering: true }; 
+            vm.gridOptions_userOptions = { enableFiltering: true, enableGridMenu: true };
             TableTranslate.query({phrase: ['id', 'title', 'description', 'accept']}, function(answer){
                 vm.gridOptions_userOptions.columnDefs = [
                     { name: 'id', displayName: answer[0]['id'], enableCellEdit: false, width: '5%', enableFiltering: false },
@@ -1149,20 +1149,19 @@
         };
 
         vm.resources = [];
-        vm.gridOptions_resourcesGrid = { enableFiltering: false, rowHeight: 110 };
+        vm.gridOptions_resourcesGrid = { enableFiltering: false, rowHeight: 110, enableGridMenu: true };
         TableTranslate.query({phrase: ['id', 'title', 'url', 'view', 'action']}, function(answer){
             vm.gridOptions_resourcesGrid.columnDefs = [
                 { name: 'id', visible: false},
                 { name: 'title', displayName: answer[0]['title'], width: '20%', enableCellEdit: true, enableSorting: true },
                 { name: 'url', displayName: answer[0]['url'], width: '30%', enableCellEdit: false, enableSorting: false,
                     cellTemplate: '<div style="position: relative"><p>{{row.entity.url.length > 50 ? row.entity.url.substr(0, 45) + "..." : row.entity.url}}</p>\n\
-                        <a clip-copy="row.entity.url" ng-click="$emit(\'EventForCopyUrl\')" class="fa fa-files-o" style="margin-left: 90%; position: absolute; \n\
-                        margin-top: -6%"></a></div>'
+                        <a clip-copy="row.entity.url" ng-click="$emit(\'EventForCopyUrl\')" class="fa fa-files-o" style="margin-left: 90%; position: absolute;"></a></div>'
                 },
                 { name: 'view', displayName: answer[0]['view'], width: '15%', enableCellEdit: false, enableSorting: false,
                     cellTemplate: '<div class="resourcePadding"><img ng-src="{{row.entity.url}}"></div>' },
                 { name: 'action', displayName: answer[0]['action'], width: '1%', enableCellEdit: false, enableSorting: false,
-                    cellTemplate: '<span class="fa fa-close" style="cursor: pointer; margin: 40%" ng-click="$emit(\'EventForDropResource\', row.entity.id)" style="margin-left: 25%; margin-top: 15%"></span>'}
+                    cellTemplate: '<span class="fa fa-close" style="cursor: pointer; margin: 38%" ng-click="$emit(\'EventForDropResource\', row.entity.id)" style="margin-left: 25%; margin-top: 15%"></span>'}
             ];
             getResources();
         });
@@ -1422,7 +1421,7 @@
         vm.create_text = '';
         vm.createPage = createPage;
 
-        vm.gridOptions_pagesGrid = { enableFiltering: true, rowHeight: 65 };
+        vm.gridOptions_pagesGrid = { enableFiltering: true, rowHeight: 65, enableGridMenu: true };
         TableTranslate.query({phrase: ['title', 'body', 'url', 'status', 'actions']}, function(answer){
             vm.gridOptions_pagesGrid.columnDefs = [
                 { name: 'title', displayName: answer[0]['title'], width: '10%', enableCellEdit: false },
@@ -1593,7 +1592,7 @@
         vm.defaultCategoryId = 0;
         vm.remove_default_cat_message = '';
          
-        vm.gridOptions_categoriesOptions = { enableFiltering: true, enableSorting: true, enableCellEdit: true};
+        vm.gridOptions_categoriesOptions = { enableFiltering: true, enableSorting: true, enableCellEdit: true, enableGridMenu: true};
         TableTranslate.query({phrase: ['id', 'title', 'articles', 'remove']}, function(answer){
             vm.gridOptions_categoriesOptions.columnDefs = [
                 { name: 'id', displayName: answer[0]['id'], width: '10%', enableCellEdit: false,  enableSorting: false, enableFiltering: false },
@@ -1759,7 +1758,7 @@
             contentTemplate: 'ConfirmDelete.html'
         });
         
-        vm.gridOptions_articleOfCategoryOptions = { enableSorting: true, enableCellEdit: true, rowHeight: 25};
+        vm.gridOptions_articleOfCategoryOptions = { enableSorting: true, enableCellEdit: true, rowHeight: 25, enableGridMenu: true};
         TableTranslate.query({phrase: ['id', 'category', 'title', 'link', 'user_email', 'remove']}, function(answer){
             vm.gridOptions_articleOfCategoryOptions.columnDefs = [
                 { name: 'id', displayName: answer[0]['id'], width: '5%', enableCellEdit: false,  enableSorting: true},
@@ -2008,8 +2007,8 @@
         vm.required_field = '';
         vm.file_change = '';
         
-        vm.gridOptions_gridLanguagesFiles = { enableSorting: false, enableCellEdit: false};
-        vm.gridOptions_gridLanguagesFile = { enableSorting: false, enableCellEdit: true};
+        vm.gridOptions_gridLanguagesFiles = { enableSorting: false, enableCellEdit: false, enableGridMenu: true};
+        vm.gridOptions_gridLanguagesFile = { enableSorting: false, enableCellEdit: true, enableGridMenu: true};
         TableTranslate.query({phrase: ['folder', 'key', 'english', 'russian']}, function(answer){
             vm.gridOptions_gridLanguagesFiles.columnDefs = [
                 { name: 'folder', displayName: answer[0]['folder'],
