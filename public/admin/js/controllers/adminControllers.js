@@ -529,25 +529,24 @@
                     { name: 'accept', displayName: answer[0]['accept'], width: '15%', enableFiltering: false, enableCellEdit: false,
                         cellTemplate: '<spantoggle change-action="EventChangeGroup" change-accept="{{row.entity.accept}}" change-id="{{row.entity.id}}"/>'}
                 ];
-            });
+                //Получение
+                GroupOptions.query({groupId: $routeParams.groupId}, function(answer){
+                    vm.groupTitle = answer[0].title;
+                    vm.groupDescription = answer[0].description;
+                    vm.groupId = answer[0].id;
 
-            //Получение
-            GroupOptions.query({groupId: $routeParams.groupId}, function(answer){
-                vm.groupTitle = answer[0].title;
-                vm.groupDescription = answer[0].description;
-                vm.groupId = answer[0].id;
-
-                angular.forEach(answer[2][0], function(permission) {
-                    permission.accept = 0;
-                    angular.forEach(answer[1][0][0].permissions, function(group) {
-                        if(group.id === permission.id){
-                            permission.accept = 1;
-                            //isAccept = 1;
-                        }
+                    angular.forEach(answer[2][0], function(permission) {
+                        permission.accept = 0;
+                        angular.forEach(answer[1][0][0].permissions, function(group) {
+                            if(group.id === permission.id){
+                                permission.accept = 1;
+                                //isAccept = 1;
+                            }
+                        });
                     });
-                });
 
-                vm.gridOptions_groupOptions.data = answer[2][0];
+                    vm.gridOptions_groupOptions.data = answer[2][0];
+                });
             });
 
             //Изменение разрешений группы
