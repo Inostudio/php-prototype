@@ -6,7 +6,10 @@
      vm.successfully_blocked_message='<%trans("admin/users.successfully_blocked_message")%>';
      vm.passwordError='<%trans("admin/users.passwordError")%>';
      vm.remove_self_message='<%trans("admin/users.remove_self_message")%>';
-     vm.ban_self_message='<%trans("admin/users.ban_self_message")%>'"></div>
+     vm.ban_self_message='<%trans("admin/users.ban_self_message")%>';
+     vm.required_email_mes='<%trans("admin/users.required_email_mes")%>';
+     vm.minPassLength_mes='<%trans("admin/users.minPassLength_mes")%>';
+     vm.pass_required='<%trans("admin/users.pass_required")%>';"></div>
 
 <h1 class="page-header"><%trans('admin/users.users')%></h1>
 <div class="table-responsive">
@@ -29,7 +32,7 @@
     <div>
         <div class="form-inline">
             <form name="form2" novalidate>
-                <input type="text" class="form-control" placeholder="<%trans('admin/users.search')%>" ng-model="vm.searchText" required>
+                <input type="text" class="form-control" placeholder="<%trans('admin/users.search')%>" ng-model="vm.searchPhrase" required>
                 <button class="btn btn-primary" ng-click="vm.search()" ng-disabled="form2.$invalid"><%trans('admin/users.search')%></button>
                 <button class="btn btn-primary" ng-click="vm.reset()"><%trans('admin/users.reset')%></button>
             </form>

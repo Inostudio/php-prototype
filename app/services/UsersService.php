@@ -134,10 +134,18 @@ class UsersService
     /**
      * @param $id
      */
-    public function removeUser($id){
+    public function removeUser($id, $direction, $field, $limit, $offset, $phrase, $action){
+
         User::destroy($id);
-                 
-        return;
+        $user = null;
+
+        if(!$action){
+            $user = $this->getPageOfUsers(($offset + $limit - 1), 1, $direction, $field);
+        } else {
+            $user = $this->searchUsers($phrase, 1, ($offset + $limit - 1), $direction, $field);
+        }
+
+        return $user;
     }
 
     /**
@@ -195,19 +203,21 @@ class UsersService
      */
     public function searchUsers($text, $limit, $offset, $direction, $field){
 
+        $users = null;
+        $countUsers = 0;
+        $users = User::whereHas('profile', function($query) use($text){
+            $query->where('last_name', 'like', '%'.$text.'%');
+        })->orWhereHas('profile', function($query) use($text){
+            $query->where('first_name', 'like', '%'.$text.'%');
+        })->orWhereHas('profile', function($query) use($text){
+            $query->where('phone', 'like', '%'.$text.'%');
+        })
+            ->orWhere('email', 'like', '%'.$text.'%')
+            ->where('deleted_at', '=', null);
+
+        $countUsers = $users->count();
+
         if(($field === 'first_name') || ($field === 'last_name')) {
-            $users = User::whereHas('profile', function($query) use($text){
-                $query->where('last_name', 'like', '%'.$text.'%');
-            })->orWhereHas('profile', function($query) use($text){
-                $query->where('first_name', 'like', '%'.$text.'%');
-            })->orWhereHas('profile', function($query) use($text){
-                $query->where('phone', 'like', '%'.$text.'%');
-            })
-                ->orWhere('email', 'like', '%'.$text.'%')
-                ->orWhere('users.id', 'like', '%'.$text.'%');
-            
-            $users1 = $users->count();
-            
            $users = $users->join('user_profile as pr', 'users.id', '=', 'pr.user_id')
                 ->orderBy('pr.'.$field, $direction)
                 ->skip($offset)->take($limit)
@@ -215,27 +225,14 @@ class UsersService
                 ->with('profile', 'groups')
                 ->get();
             
-            return [$users, $users1];
+
         } else {
-            $users = User::whereHas('profile', function($query) use($text){
-            $query->where('last_name', 'like', '%'.$text.'%');
-            })->orWhereHas('profile', function($query) use($text){
-                $query->where('first_name', 'like', '%'.$text.'%');
-            })->orWhereHas('profile', function($query) use($text){
-                $query->where('phone', 'like', '%'.$text.'%');
-            })
-                    ->orWhere('email', 'like', '%'.$text.'%')
-                    ->orWhere('id', 'like', '%'.$text.'%')
-                    ->with('profile', 'groups');
-            $users1 = $users->count();
-            
-            $users2 = $users->skip($offset)
+            $users = $users->with('profile')->skip($offset)
                 ->take($limit)
                 ->orderBy($field, $direction)
                 ->get();
-            
-            return [$users2, $users1];
         }
+        return [$users, $countUsers];
     }
 
     public function deleteAvatar()

@@ -75,15 +75,7 @@ class UserController extends \BaseController
      * @return mixed
      */
     public function postRemove(){
-        $result = true;
-        $this->users->removeUser(Input::get("userId"));
-        $user = null;
-        if((Input::get('action') == 1) || (Input::get('action') == 3)) {    //Подгрузка при поиске
-            $user = $this->users->searchUsers(Input::get('text'), 1, Input::get('off'), Input::get('direction'), Input::get('field'));
-        } else {    //Обычная подгрузка
-            $user = $this->users->getPageOfUsers(Input::get('off'), 1, Input::get('direction'), Input::get('field'));
-        }
-        return \Response::json([$result, $user]);
+        return \Response::json([$this->users->removeUser(\Input::get('userId'), \Input::get('direction'), \Input::get('field'), \Input::get('limit'), \Input::get('off'), \Input::get('text'), \Input::get('action'))]);
     }
 
     //Редактирование пользователя +++

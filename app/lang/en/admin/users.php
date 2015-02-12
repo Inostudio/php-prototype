@@ -42,5 +42,8 @@ return array(
     'users2'  =>  'Users',
     'passwordError'  =>  'Dont match confirm password!',
     'remove_self_message'   =>  'You can not remove yourself!',
-    'ban_self_message'  =>  'You can not lock yourself!'
+    'ban_self_message'  =>  'You can not lock yourself!',
+    'required_email_mes'    =>  'The email field is required!',
+    'minPassLength_mes' =>  'Minimum password length of 6 characters!',
+    'pass_required' =>  'The password field is required!'
 );

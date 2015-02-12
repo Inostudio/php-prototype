@@ -169,9 +169,9 @@
         });
     };
 
-    function RemoveUser($resource, $userId, $field, $direction, $action, $off, $text){
+    function RemoveUser($resource, $userId, $field, $direction, $action, $off, $text, $limit){
         return $resource('/adm/user/remove', {}, {
-          query: {method:'POST', params:{id: $userId, field: $field, direction: $direction, action: $action, off: $off, text: $text}, isArray:true}
+          query: {method:'POST', params:{id: $userId, field: $field, direction: $direction, action: $action, off: $off, text: $text, limit: $limit}, isArray:true}
         });
     };
 

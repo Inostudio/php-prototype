@@ -573,451 +573,408 @@
     };
 
     function UsersCtrl($scope, $alert, User, AddUser, RemoveUser, EditUser, SearchUsers, $modal, $rootScope, GetUserBans, RemoveBan, AddBan, TableTranslate) {
-            var alertError = $alert({title: '', placement: 'top-right', type: 'danger', show: false, container: '#alerts-container-for-users'});
-            var alertSuccess = $alert({title: '', placement: 'top-right', type: 'success', show: false, container: '#alerts-container-for-users'});
-            
-            var vm = this;
-            vm.unavailableNext = false;
-            vm.unavailablePrev = false;
-            vm.currentPage = 1;
-            vm.action = 0;
-            vm.totalPage = 0;
-            vm.dirFindSort = '';
-            vm.fieldFindSort = '';
-            vm.direction = 'asc';
-            vm.field = 'id';
-            vm.email = '';
-            vm.userConfirmPassword = '';
-            vm.userPassword = '';
-            vm.nextPage = nextPage;
-            vm.prevPage = prevPage;
-            vm.addUser = addUser;
-            vm.countUsers = 0;
-            vm.searchText = '';
-            vm.search = search;
-            vm.reset = reset;
-            vm.users_grid = '';
-            vm.add_user_message = '';
-            vm.modal = '';
-            vm.edit_user_message = '';
-            vm.remove_user_message = '';
-            vm.myId = 0;
-            vm.invalid_email_message = '';
-            vm.userBan = null;
-            vm.modalBan = {};
-            vm.hideCurrentBan = true;
-            vm.ban = {};
-            vm.confirmDeleteBan = true;
-            vm.acceptRemoveBan = acceptRemoveBan;
-            vm.banDate = "";
-            vm.banTime = "";
-            vm.banReason = "";
-            vm.banUserId = 0;
-            vm.errorDate = false;
-            vm.successfully_blocked_message = '';
-            vm.passwordError = '';
-            vm.remove_self_message = '';
-            vm.ban_self_message = '';
-            
-            vm.users_grid = {
-                enableFiltering: false
-            };
-            
-            TableTranslate.query({phrase: ['id', 'email', 'first_name', 'last_name', 'phone', 'ban', 'groups', 'remove']}, function(answer){
-                vm.users_grid.columnDefs = [
-                    { name: 'id', enableCellEdit: false, width: '8%', displayName: answer[0]['id']},
-                    { name: 'email', enableCellEdit: true, width: '15%', displayName: answer[0]['email']},
-                    { name: 'first_name', enableCellEdit: false, width: '10%', displayName: answer[0]['first_name']},
-                    { name: 'last_name', enableCellEdit: false, width: '10%', displayName: answer[0]['last_name']},
-                    { name: 'phone', enableCellEdit: false, width: '15%', enableSorting: false, displayName: answer[0]['phone']},
-                    { name: 'ban', enableCellEdit: false, width: '5%', enableSorting: false, displayName: answer[0]['ban'],
-                        cellTemplate: '<span class="fa fa-ban" style="margin-left: 40%; cursor: pointer" ng-click="$emit(\'changeBan\', row.entity.id, row.entity.email)"></span>'},
-                    { name: 'groups', width: '8%', enableCellEdit: false,  enableSorting: false, displayName: answer[0]['groups'],
-                        cellTemplate: '<spanedit edit-action="EventForRedirectToUserOptions"  edit-id="{{row.entity.id}}"/>'},
-                    { name: 'remove', displayName: answer[0]['remove'] , width: '8%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
-                        cellTemplate: '<spanremove remove-action="EventForDropUser" remove-id="{{row.entity.id}}"/>' }
-                ];
-                getUsers(limit, offset, 'asc', 'id');
-            });
-            
-            var offset = 0;
-            var limit =  9;
-            
-            var searchText = '';
-            function nextPage(){
-                if((vm.currentPage + 1) <= vm.totalPage) {
-                    vm.unavailableNext = true;
-                    vm.unavailablePrev = true;
-                    offset += limit;
-                    vm.currentPage++;
-                    if(vm.action === 0) {   //Обычный просмотр
-                        getUsers(limit, offset, 'asc', 'id');
-                    } else if(vm.action === 1){     //Поиск
-                        getFindUsers(searchText, limit, offset, 'asc', 'id');
-                    } else if(vm.action === 2){         //сортировка
-                        getUsers(limit, offset, vm.direction, vm.field);
-                    } else if (vm.action === 3) {   //Сортировка с поиском
-                        getFindUsers(searchText, limit, offset, vm.dirFindSort, vm.fieldFindSort);
-                    }
-                }
-            };
+        var alertError;
+        var alertSuccess;
 
-            function prevPage(){
-                if((vm.currentPage - 1) >= 1) {
-                    vm.unavailableNext = true;
-                    vm.unavailablePrev = true;
-                    if(vm.action === 0)     //Обычный просмотр
-                    {
-                        vm.currentPage--;
-                        offset -= limit;
-                        getUsers(limit, offset, 'asc', 'id');
-                    } else if (vm.action === 1){            //Поиск
-                        vm.currentPage--;
-                        offset -= limit;
-                        getFindUsers(searchText, limit, offset, 'asc', 'id');
-                    } else if(vm.action === 2) {            //сортировка
-                        vm.currentPage--;
-                        offset -= limit;
-                        getUsers(limit, offset, vm.direction, vm.field); 
-                    } else if (vm.action === 3) {   //Сортировка с поиском
-                        vm.currentPage--;
-                        offset -= limit;
-                        getFindUsers(searchText, limit, offset, vm.dirFindSort, vm.fieldFindSort);
-                    }
-                }
-            };
+        function showErrorAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+                alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertError = $alert({title: alertMessage, placement: 'top-right', type: 'danger', container: '#alerts-container-for-users'});
+            alertError.$promise.then(alertError.show);
+        }
 
-            //Добавление +++
-            function addUser(){
-                alertError.hide();
-                alertSuccess.hide();
+        function showSuccessAlert(alertMessage){
+            if(alertError != null){
+                alertError.$promise.then(alertError.hide);
+            }
+            if(alertSuccess != null){
+                alertSuccess.$promise.then(alertSuccess.hide);
+            }
+            alertSuccess = $alert({title: alertMessage, placement: 'top-right', type: 'success', container: '#alerts-container-for-users', duration: 3});
+            alertSuccess.$promise.then(alertSuccess.show);
+        }
+        var vm = this;
+        vm.unavailableNext = false;
+        vm.unavailablePrev = false;
+        vm.currentPage = 1;
+        vm.totalPage = 0;
+        /*action - навигация по страницам при поиске, сортировке, при обычной навигации
+         * 0 - обычная навигация или с сортировкой
+         * 1 - поиск и поиск с сортировкой
+         */
+        vm.action = 0;
+        vm.nextPage = nextPage;
+        vm.prevPage = prevPage;
+        vm.limit = 9;
+        vm.offset = 0;
+        vm.direction = 'asc';
+        vm.field = 'id';
+        vm.countUsers = 0;
+        vm.searchPhrase = '';
+        vm.reset = reset;
+        vm.search = search;
+        vm.searchPhrase2 = '';
+        vm.email = '';
+        vm.userConfirmPassword = '';
+        vm.userPassword = '';
+        vm.addUser = addUser;
+        vm.passwordError = '';
+        vm.required_email_mes = '';
+        vm.minPassLength_mes = '';
+        vm.pass_required = '';
+        vm.remove_self_message = '';
+        vm.modal = {};
+        vm.userRemoveId = 0;
+        vm.add_user_message = '';
+        vm.remove_user_message = '';
+        vm.modalBan = {};
+        vm.ban_self_message = '';
+        vm.userBan = '';
+        vm.banUserId = 0;
+        vm.hideCurrentBan = false;
+        vm.confirmDeleteBan = false;
+        vm.ban = {};
+        vm.banDate = '';
+        vm.errorDate = false;
+        vm.banTime = '';
+        vm.banReason = '';
+        vm.successfully_blocked_message = '';
+        vm.acceptRemoveBan = acceptRemoveBan;
+        vm.confirmDeleteBan = true;
 
-                if(vm.email === undefined){
-                    alertError = $alert({title: 'The email field is required.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
-                    return;
-                }
+        vm.users_grid = { enableFiltering: false };
 
-                if((vm.userPassword === undefined) || (vm.userPassword === "")){
-                     alertError = $alert({title: 'The password field is required.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
-                     return;
-                }
-                if((vm.userPassword.length < 4)){
-                     alertError = $alert({title: 'Minimum password length of 4 characters.', placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
-                     return;
-                }
+        TableTranslate.query({phrase: ['id', 'email', 'first_name', 'last_name', 'phone', 'ban', 'groups', 'remove']}, function(answer){
+            vm.users_grid.columnDefs = [
+                { name: 'id', enableCellEdit: false, width: '8%', displayName: answer[0]['id']},
+                { name: 'email', enableCellEdit: true, width: '15%', displayName: answer[0]['email']},
+                { name: 'first_name', enableCellEdit: false, width: '10%', displayName: answer[0]['first_name']},
+                { name: 'last_name', enableCellEdit: false, width: '10%', displayName: answer[0]['last_name']},
+                { name: 'phone', enableCellEdit: false, width: '15%', enableSorting: false, displayName: answer[0]['phone']},
+                { name: 'ban', enableCellEdit: false, width: '5%', enableSorting: false, displayName: answer[0]['ban'],
+                    cellTemplate: '<span class="fa fa-ban" style="margin-left: 40%; cursor: pointer" ng-click="$emit(\'changeBan\', row.entity.id, row.entity.email)"></span>'},
+                { name: 'groups', width: '8%', enableCellEdit: false,  enableSorting: false, displayName: answer[0]['groups'],
+                    cellTemplate: '<spanedit edit-action="EventForRedirectToUserOptions"  edit-id="{{row.entity.id}}"/>'},
+                { name: 'remove', displayName: answer[0]['remove'] , width: '8%', enableCellEdit: false, enableFiltering: false, enableSorting: false,
+                    cellTemplate: '<spanremove remove-action="EventForDropUser" remove-id="{{row.entity.id}}"/>' }
+            ];
+            getUsers();
+        });
 
-                if((vm.userPassword != vm.userConfirmPassword)){
-                     alertError = $alert({title: vm.passwordError, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
-                     return;
-                }
-
-                AddUser.query({email: vm.email, password: vm.userPassword}, function(answer){
-                    if(!answer[0]){
-                        alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
-                    } else {
-                        vm.countUsers++;
-                        alertSuccess = $alert({title: vm.add_user_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
-                        /*if((vm.currentPage === vm.totalPage) &&(vm.currentPage * limit > vm.countUsers)){
-                            var newUser = {
-                                id: answer[2],
-                                email: vm.email
-                            };
-                            vm.users_grid.data.push(newUser);
-
-                            vm.countUsers++;
-                            vm.totalPage = Math.ceil(vm.countUsers / limit);
-                        } else {
-                            vm.countUsers++;
-                            vm.totalPage = Math.ceil(vm.countUsers / limit);
-
-                            offset = limit * (vm.totalPage-1);
-                            vm.currentPage = vm.totalPage;
-                            getUsers(limit, offset, 'asc', 'id');              
-                        }*/
-
-                        vm.email = "";
-                        vm.userConfirmPassword = "";
-                        vm.userPassword = "";
-
-                    }
+        function getUsers(){
+            User.queryInfo({lim: vm.limit, off: vm.offset, direction: vm.direction, field: vm.field}, function(answer){
+                vm.users_grid.data  = [];
+                angular.forEach(answer[0], function(user) {
+                    user.first_name = user.profile.first_name;
+                    user.last_name = user.profile.last_name;
+                    user.phone = user.profile.phone;
+                    vm.users_grid.data.push(user);
                 });
-            };
-
-            var userRemoveId = null;
-            vm.modal = $modal({
-                    show: false,
-                    contentTemplate: 'ConfirmDelete.html'
+                vm.countUsers = answer[1];
+                checkNavBtnAndCheckCountPage();
             });
-            //Удаление +++
-            $scope.$on('EventForDropUser', function (event, id) {
-                alertError.hide();
-                alertSuccess.hide();
-                if(id != vm.myId)
-                {
-                    userRemoveId = Number(id);
-                    vm.modal.show();
+        }
+
+        function checkNavBtnAndCheckCountPage(){
+            vm.unavailablePrev = false;
+            vm.unavailableNext = false;
+            vm.totalPage = Math.ceil(vm.countUsers / vm.limit);
+            if(vm.currentPage == 1){
+                vm.unavailablePrev = true;
+            }
+
+            if(vm.currentPage == vm.totalPage){
+                vm.unavailableNext = true;
+            }
+        }
+
+        function nextPage(){
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            vm.offset += vm.limit;
+            vm.currentPage++;
+            if(!vm.action){     //Обыная навигация и сортировка
+                getUsers();
+            } else if (vm.action === 1){    //Поиск
+                getSearchUsers()
+            }
+        }
+
+        function prevPage(){
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            vm.offset -= vm.limit;
+            vm.currentPage--;
+            if(!vm.action){     //Обыная навигация и сортировка
+                getUsers();
+            } else if (vm.action === 1) {   //Поиск
+                getSearchUsers()
+            }
+        }
+
+        vm.users_grid.onRegisterApi = function(gridApi){
+            //Редактирование
+            gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue){
+                if(newValue.trim() === ''){
+                    showErrorAlert(vm.invalid_email_message);
+                    angular.forEach(vm.users_grid.data, function(user) {
+                        if (user.id === rowEntity.id)
+                            user.email = oldValue;
+                    });
                 } else {
-                    alertError = $alert({title: vm.remove_self_message, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
-                }
-            });
-
-            //Редактирование +++
-            vm.users_grid.onRegisterApi = function(gridApi){
-                //Редактирование
-                gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue){
-                    alertError.hide();
-                    alertSuccess.hide();
-
-                    if(newValue.trim() === ''){
-                        alertError = $alert({title: vm.invalid_email_message, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
+                    var str = newValue;
+                    var a = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,6})+$/;
+                    if(str.search(a) === -1){
+                        showErrorAlert(vm.invalid_email_message);
                         angular.forEach(vm.users_grid.data, function(user) {
-                            if (user.id === rowEntity.id) 
+                            if (user.id === rowEntity.id)
                                 user.email = oldValue;
                         });
                     } else {
-                        var str = newValue;
-                        var a = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,6})+$/;
-                        if(str.search(a) === -1){
-                            alertError = $alert({title: vm.invalid_email_message, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
-                            angular.forEach(vm.users_grid.data, function(user) {
-                                if (user.id === rowEntity.id) 
-                                    user.email = oldValue;
-                            }); 
-                        } else {
-                            if(newValue.trim() != oldValue)
-                            {
-                                EditUser.query({userId: rowEntity.id, email: newValue}, function(answer){
-                                    if(answer[0] === false){
-                                        alertError = $alert({title: answer[1], placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
-                                        angular.forEach(vm.users_grid.data, function(user) {
-                                            if (user.id === rowEntity.id) 
-                                                user.email = oldValue;
-                                        }); 
-                                    } else
-                                    {
-                                        alertSuccess = $alert({title: vm.edit_user_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
-                                    }
-                                });
-                            }
+                        if(newValue.trim() != oldValue)
+                        {
+                            EditUser.query({userId: rowEntity.id, email: newValue}, function(answer){
+                                if(answer[0] === false){
+                                    showErrorAlert(answer[1]);
+                                    angular.forEach(vm.users_grid.data, function(user) {
+                                        if (user.id === rowEntity.id)
+                                            user.email = oldValue;
+                                    });
+                                } else
+                                {
+                                    showSuccessAlert(vm.edit_user_message);
+                                }
+                            });
                         }
                     }
-                });
-
-                //Сортировка
-                gridApi.core.on.sortChanged($scope, function(arg1, arg2) {
-                    if(arg2.length != 0){
-                        if((vm.action === 1) || (vm.action === 3)){    //Сортировка с поиском
-                            vm.currentPage = 1;
-                            vm.action = 3;
-                            
-                            vm.dirFindSort = arg2[0].sort.direction;
-                            vm.fieldFindSort = arg2[0].name;
-                            vm.field = vm.fieldFindSort;
-                            vm.direction = vm.dirFindSort;
-                            offset = 0;
-                            getFindUsers(searchText, limit, offset, vm.dirFindSort, vm.fieldFindSort);                      
-                        } else {
-                            vm.currentPage = 1;
-                            vm.action = 2;
-                            vm.field = arg2[0].name;
-                            vm.direction = arg2[0].sort.direction;
-                            offset = 0;
-                            getUsers(limit, offset, vm.direction, vm.field);  
-                        }
-                    }
-                });                       
-            };
-
-            $scope.$on('EventForRedirectToUserOptions', function (event, id) {
-                alertError.hide();
-                alertSuccess.hide();
-                window.location = '#/users/' + id;
+                }
             });
 
-             function search(){
-                vm.action = 1;  //Установка действия
-                offset = 0;
-                searchText = vm.searchText;
-                SearchUsers.query({text: searchText, lim: limit, off: offset, direction: 'asc', field: 'id'}, function(res){
-                    var arr = [];
-                    angular.forEach(res[0], function(user) {
-                        user.first_name = user.profile.first_name;
-                        user.last_name = user.profile.last_name;
-                        user.phone = user.profile.phone;
-                        arr.push(user);
-                    });
-                    vm.users_grid.data = arr;
+            //Сортировка
+            gridApi.core.on.sortChanged($scope, function(arg1, arg2) {
+                    if(arg2.length != 0){
+                        vm.unavailablePrev = true;
+                        vm.unavailableNext = true;
+                        vm.currentPage = 1;
+                        vm.direction = arg2[0].sort.direction;
+                        vm.field = arg2[0].name;
+                        vm.offset = 0;
 
-                    vm.countUsers = res[1];
-                    vm.totalPage = Math.ceil(res[1] / limit);
-                });
-                vm.currentPage = 1;
-            };
-
-            function reset(){
-                vm.action = 0;  //Установка обычного просмотра
-                vm.searchText = "";
-                offset = 0;
-
-                //Делаем запрос
-                getUsers(limit, offset, 'asc', 'id');          
-                vm.currentPage = 1;
-            };
-
-            //Запрос пользователей(Просто запрос, сортировка)
-            function getUsers(limit, offset, direction, field){
-                User.queryInfo({lim: limit, off: offset, direction: direction, field: field}, function(res){
-                    var arr  = [];
-                    angular.forEach(res[0], function(user) {
-                        user.first_name = user.profile.first_name;
-                        user.last_name = user.profile.last_name;
-                        user.phone = user.profile.phone;
-                        arr.push(user);
-                    });
-                    vm.users_grid.data = arr;
-
-                    vm.countUsers = res[1];
-                    vm.totalPage = Math.ceil(res[1] / limit);
-                    vm.unavailableNext = false;
-                    vm.unavailablePrev = false;
-                    checkNavigationButton();
-                });
-            };
-
-            function getFindUsers(searchText, limit, offset, direction, field){
-                SearchUsers.query({text: searchText, lim: limit, off: offset, direction: direction, field: field}, function(res){
-                    var arr = [];
-                    angular.forEach(res[0], function(user) {
-                        user.first_name = user.profile.first_name;
-                        user.last_name = user.profile.last_name;
-                        user.phone = user.profile.phone;
-                        arr.push(user);
-                    });
-                    vm.users_grid.data = arr;
-
-                    vm.countUsers = res[1];
-                    vm.totalPage = Math.ceil(res[1] / limit);
-                    vm.unavailableNext = false;
-                    vm.unavailablePrev = false;
-                    checkNavigationButton();
-                });
-            };
-
-            function checkNavigationButton() {
-                if(vm.currentPage === 1) {
-                    vm.unavailablePrev = true;
-
-                }
-                if (vm.currentPage >= vm.totalPage) {
-                    vm.unavailableNext = true;
-                }
-            }
-
-            function removeUser(id) {
-                RemoveUser.query({userId: id, field: vm.field, direction: vm.direction, action: vm.action, off: (offset + limit - 1), text: vm.searchText}, function(answer){
-                    if(answer[0])
-                    {
-                        vm.modal.hide();
-                        alertSuccess = $alert({title: vm.remove_user_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
-                        var oldUsers = vm.users_grid.data;
-
-                        vm.users_grid.data = [];
-                        angular.forEach(oldUsers, function(user) {
-                          if (user.id != id) 
-                              vm.users_grid.data.push(user);
-                        });
-                        vm.countUsers--;
-                    }
-                    vm.totalPage = Math.ceil(vm.countUsers / limit);
-                    checkNavigationButton();
-                    if(answer[1][0].length != 0){
-                        if((vm.action == 1) || (vm.action == 3)) {
-                            vm.users_grid.data.push(answer[1][0][0]);
-                        } else {
-                            vm.users_grid.data.push(answer[1][0]);
+                        if(!vm.action){     //Обычная сортировка
+                            getUsers();
+                        } else if(vm.action === 1){ //С поиском
+                            getSearchUsers()
                         }
                     }
                 });
+            };
+
+        function reset(){
+            vm.action = 0;
+            vm.currentPage = 1;
+            vm.offset = 0;
+            vm.direction = 'asc';
+            vm.field = 'id';
+            vm.searchPhrase = '';
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            getUsers();
+        };
+
+        function search(){
+            vm.direction = 'asc';
+            vm.field = 'id';
+            vm.offset = 0;
+            vm.unavailablePrev = true;
+            vm.unavailableNext = true;
+            vm.currentPage = 1;
+            vm.searchPhrase2 = vm.searchPhrase;
+            vm.action = 1;
+            getSearchUsers();
+        };
+
+        function getSearchUsers() {
+            SearchUsers.query({
+                text: vm.searchPhrase2,
+                lim: vm.limit,
+                off: vm.offset,
+                direction: vm.direction,
+                field: vm.field
+            }, function (answer) {
+                vm.users_grid.data = [];
+                angular.forEach(answer[0], function (user) {
+                    user.first_name = user.profile.first_name;
+                    user.last_name = user.profile.last_name;
+                    user.phone = user.profile.phone;
+                    vm.users_grid.data.push(user);
+                });
+
+                vm.countUsers = answer[1];
+                checkNavBtnAndCheckCountPage();
+            });
+        }
+
+        function addUser(){
+
+            if(vm.email === undefined){
+                showErrorAlert(vm.required_email_mes);
+                return;
             }
 
-            $rootScope.$on('cancelDeleteUser', function(){
-                vm.modal.hide();
+            if((vm.userPassword === undefined) || (vm.userPassword === '')){
+                showErrorAlert(vm.pass_required);
+                return;
+            }
+            if((vm.userPassword.length < 6)){
+                showErrorAlert(vm.minPassLength_mes);
+                return;
+            }
+
+            if((vm.userPassword != vm.userConfirmPassword)){
+                showErrorAlert(vm.passwordError);
+                return;
+            }
+
+            AddUser.query({email: vm.email, password: vm.userPassword}, function(answer){
+                if(!answer[0]){
+                    showErrorAlert(answer[1]);
+                } else {
+                    vm.countUsers++;
+                    showSuccessAlert(vm.add_user_message);
+                    vm.email = "";
+                    vm.userConfirmPassword = "";
+                    vm.userPassword = "";
+
+                }
+            });
+        };
+
+        $scope.$on('EventForRedirectToUserOptions', function (event, id) {
+            window.location = '#/users/' + id;
         });
 
-            $rootScope.$on('okDeleteUser', function(){
-                alertSuccess.hide();
-                removeUser(userRemoveId);
-            });
-            
-            vm.modalBan = $modal({
-                show: false,
-                contentTemplate: 'Ban.html',
-                scope: $scope
-            });
-            
-            $scope.$on('changeBan', function(args, id, user){
-                alertError.hide();
-                alertSuccess.hide();
-                if(id != vm.myId)
-                {
-                    vm.userBan = user;
-                    vm.banUserId = id;
-                    vm.hideCurrentBan = true;
-                    vm.confirmDeleteBan = true;
-                    vm.ban = {};
-                    GetUserBans.query({userId: id}, function(answer){
-                        if(answer[0]){  //Уже забанен
-                            vm.hideCurrentBan = false;
-                            vm.ban = answer[0];
-                        }
-                        vm.modalBan.show();
-                    });
-                } else {
-                    alertError = $alert({title: vm.ban_self_message, placement: 'top-right', type: 'danger', show: true, container: '#alerts-container-for-users'});
-                }
-            });
-            
-            $rootScope.$on('cancelBan', function(){
-                vm.modalBan.hide();
-            });
-            
-            $rootScope.$on('okBan', function(){
-                debugger;
-                var oldValueDate = new Date(vm.banDate);
-                var oldValueTime = new Date(vm.banTime);
-                vm.banDate.setHours(vm.banDate.getHours() + vm.banTime.toString().slice(16, 18));
-                vm.banDate.setMinutes(vm.banDate.getMinutes() + vm.banTime.toString().slice(19, 21));
-                vm.banDate.setMinutes(vm.banDate.getMinutes() - vm.banDate.getTimezoneOffset());
-                var currentDate = new Date();
-                if(vm.banDate.getTime() <= currentDate.getTime()){   //Ошибка
-                    vm.errorDate = true;
-                } else{ //Всё норм
-                    console.log(vm.banDate);
-                    AddBan.query({userId: vm.banUserId, endDate: vm.banDate, reason: vm.banReason}, function(answer){
-                        console.log(answer);
-                        vm.banDate = '';
-                        vm.banTime = '';
-                        vm.banReason = '';
-                        vm.modalBan.hide();
-                        alertSuccess = $alert({title: vm.successfully_blocked_message, placement: 'top-right', type: 'success', show: true, container: '#alerts-container-for-users', duration: 3});
-                    });
-                    vm.errorDate = false;
-                }
-                vm.banDate = oldValueDate;
-                vm.banTime = oldValueTime;
-            }); 
-            
-            $rootScope.$on('showConfirmDeleteBan', function(){
-                vm.confirmDeleteBan = false;
-            }); 
-            
-            function acceptRemoveBan(id){
-                RemoveBan.query({id: id}, function(answer){
-                    vm.confirmDeleteBan = true;
-                    vm.hideCurrentBan = false;
-                    vm.hideCurrentBan = true;
-                });
+        vm.modal = $modal({
+            show: false,
+            contentTemplate: 'ConfirmDelete.html'
+        });
+
+        $scope.$on('EventForDropUser', function (event, id) {
+            if(id != vm.myId)
+            {
+                vm.userRemoveId = Number(id);
+                vm.modal.show();
+            } else {
+                showErrorAlert(vm.remove_self_message);
             }
+        });
+
+        $rootScope.$on('cancelDeleteUser', function(){
+            vm.modal.hide();
+        });
+
+        $rootScope.$on('okDeleteUser', function(){
+            removeUser(vm.userRemoveId);
+        });
+
+        function removeUser(id) {
+            RemoveUser.query({userId: id, field: vm.field, direction: vm.direction, action: vm.action, off: vm.offset, text: vm.searchPhrase2, limit: vm.limit}, function(answer){
+                vm.modal.hide();
+                showSuccessAlert(vm.remove_user_message);
+                var user = null;
+                vm.countUsers--;
+                if(!vm.action){
+                    user = answer[0][0];
+                } else {
+                    user = answer[0][0][0];
+                }
+
+                var oldUsers = vm.users_grid.data;
+                vm.users_grid.data = [];
+                angular.forEach(oldUsers, function(user) {
+                    if (user.id != id)
+                        vm.users_grid.data.push(user);
+                });
+
+                if(user != undefined){
+                    var user = {
+                        id: user.id,
+                        email: user.email,
+                        first_name: user.profile.first_name,
+                        last_name: user.profile.last_name,
+                        phone: user.profile.phone
+                    }
+                    vm.users_grid.data.push(user);
+                }
+            });
+        }
+
+        vm.modalBan = $modal({
+            show: false,
+            contentTemplate: 'Ban.html',
+            scope: $scope
+        });
+
+        $scope.$on('changeBan', function(args, id, user){
+            if(id != vm.myId)
+            {
+                vm.userBan = user;
+                vm.banUserId = id;
+                vm.hideCurrentBan = true;
+                vm.confirmDeleteBan = true;
+                vm.ban = {};
+                GetUserBans.query({userId: id}, function(answer){
+                    if(answer[0]){  //Уже забанен
+                        vm.hideCurrentBan = false;
+                        vm.ban = answer[0];
+                    }
+                    vm.modalBan.show();
+                });
+            } else {
+                showErrorAlert(vm.ban_self_message);
+            }
+        });
+
+        $rootScope.$on('cancelBan', function(){
+            vm.modalBan.hide();
+        });
+
+        $rootScope.$on('okBan', function(){
+            var oldValueDate = new Date(vm.banDate);
+            var oldValueTime = new Date(vm.banTime);
+            vm.banDate.setHours(vm.banDate.getHours() + vm.banTime.toString().slice(16, 18));
+            vm.banDate.setMinutes(vm.banDate.getMinutes() + vm.banTime.toString().slice(19, 21));
+            vm.banDate.setMinutes(vm.banDate.getMinutes() - vm.banDate.getTimezoneOffset());
+            var currentDate = new Date();
+            if(vm.banDate.getTime() <= currentDate.getTime()){   //Ошибка
+                vm.errorDate = true;
+            } else{ //Всё норм
+                AddBan.query({userId: vm.banUserId, endDate: vm.banDate, reason: vm.banReason}, function(answer){
+                    vm.banDate = '';
+                    vm.banTime = '';
+                    vm.banReason = '';
+                    vm.modalBan.hide();
+                    showSuccessAlert(vm.successfully_blocked_message);
+                });
+                vm.errorDate = false;
+            }
+            vm.banDate = oldValueDate;
+            vm.banTime = oldValueTime;
+        });
+
+        $rootScope.$on('showConfirmDeleteBan', function(){
+            vm.confirmDeleteBan = false;
+        });
+
+        function acceptRemoveBan(id){
+            RemoveBan.query({id: id}, function(answer){
+                vm.confirmDeleteBan = true;
+                vm.hideCurrentBan = true;
+            });
+        }
     };
 
     function UserOptionsCtrl($scope, $alert, $routeParams, UserOptions, ChangeGroupByUser, $modal, $rootScope, TableTranslate) {
