@@ -63,20 +63,20 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
     public function getCroppedPhoto()
     {
-        $path = '/users/' . $this->id . '/CroppedImage.jpeg';
-        return File::exists('public'. $path) ? ('/public'.$path) : '/public/users/NoName/Image.jpeg';
+        $path = 'users/' . $this->id . '/CroppedImage.jpeg';
+        return File::exists($path) ? ('/'.$path) : '/users/NoName/Image.jpeg';
     }
 
     public function getPhoto()
     {
-        $path = '/public/users/' . $this->id . '/FullImage.jpeg';
+        $path = '/users/' . $this->id . '/FullImage.jpeg';
         return $path;
     }
 
     public function existsPhoto()
     {
-        $path = '/users/' . $this->id . '/FullImage.jpeg';
-        return File::exists('public'. $path);
+        $path = 'users/' . $this->id . '/FullImage.jpeg';
+        return File::exists($path);
     }
 
     public function profile()

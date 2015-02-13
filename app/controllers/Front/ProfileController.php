@@ -234,7 +234,7 @@ class ProfileController extends \BaseController
             $this->uploadService->uploadImage(
                 Input::get('sourceImage'),
                 'FullImage.jpeg',
-                'public/users/'. Auth::user()->id . '/',
+                'users/'. Auth::user()->id . '/',
                 'jpeg'
             ),
             trans('front/profile/profile.message_upload_success')
@@ -251,7 +251,7 @@ class ProfileController extends \BaseController
             $this->uploadService->uploadImage(
                 Input::get('croppedImage'),
                 'CroppedImage.jpeg',
-                'public/users/'. Auth::user()->id . '/',
+                'users/'. Auth::user()->id . '/',
                 'jpeg'
             ),
             trans('front/profile/profile.message_select_thumbnail_success')
