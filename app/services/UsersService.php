@@ -237,7 +237,7 @@ class UsersService
 
     public function deleteAvatar()
     {
-        return $this->rmdirRecursive(public_path() . "/public/users/" . Auth::user()->id);
+        return $this->rmdirRecursive(public_path() . "/users/" . Auth::user()->id);
     }
 
     private function rmdirRecursive($path){

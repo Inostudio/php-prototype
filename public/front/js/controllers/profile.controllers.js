@@ -142,7 +142,6 @@
                 } else {
                     vm.alert = { msg: data[2], type: 'danger'};
                 }
-                console.log(data);
             });
         }
     }
