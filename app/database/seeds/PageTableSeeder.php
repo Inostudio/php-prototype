@@ -14,7 +14,7 @@ class PageTableSeeder extends Seeder {
 			Page::create([
                 'title' => $faker->sentence(),
                 'body' => $faker->text(800),
-                'status_id' => 1,
+                'status_id' => 2,
                 'url' => $faker->url,
                 'user_id' => 1
 			]);

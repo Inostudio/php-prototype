@@ -16,6 +16,13 @@ class ResourceTableSeeder extends Seeder
                 'path' => $faker->imageUrl($width = 640, $height = 480)
             ]);
         }
-        
+        /*foreach (range(1, 10) as $id){
+            Resource::create([
+                'id' => $id,
+                'title' => $faker->text(20),
+                'url'   =>  '/public/resources/pics/'.$id.'.jpg',
+                'path' => '/public/resources/pics/'.$id.'.jpg'
+            ]);
+        }*/
     }    
 }
